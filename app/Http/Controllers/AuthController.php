@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use App\Mail\PasswordResetMail;
 use App\Mail\EmailChangeVerificationMail;
+use App\Mail\VerificationCodeMail;
+use App\Models\EmailVerification;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -51,73 +53,42 @@ class AuthController extends Controller
             'role' => $request->role,
             'business_name' => $request->business_name,
             'phone' => $request->phone,
-            'is_verified' => $request->role === 'seller', // Sellers are auto-verified
+            'is_verified' => false,
+            'email_verified_at' => null,
         ]);
 
         event(new Registered($user));
 
-        // Notify all admins about new registration
-        $admins = User::where('role', 'admin')->get();
-        foreach ($admins as $admin) {
-            if ($user->role === 'buyer') {
-                Notification::notify(
-                    $admin,
-                    'new_buyer_registration',
-                    'New Buyer Registration',
-                    "{$user->name} ({$user->email}) has registered as a buyer and is pending verification.",
-                    [
-                        'user_id' => $user->id,
-                        'user_name' => $user->name,
-                        'user_email' => $user->email,
-                    ]
-                );
-            } elseif ($user->role === 'seller') {
-                Notification::notify(
-                    $admin,
-                    'new_seller_registration',
-                    'New Seller Registered',
-                    "{$user->name} ({$user->email}) has registered as a seller.",
-                    [
-                        'user_id' => $user->id,
-                        'user_name' => $user->name,
-                        'user_email' => $user->email,
-                        'business_name' => $user->business_name,
-                    ]
-                );
-            }
+        // Generate 6-digit verification code
+        $code = sprintf("%06d", random_int(100000, 999999));
+
+        EmailVerification::create([
+            'user_id' => $user->id,
+            'code' => $code,
+            'expires_at' => now()->addMinutes(15),
+            'used' => false,
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new VerificationCodeMail($user, $code));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Registration verification email failed: ' . $e->getMessage());
         }
 
-        // Notify seller that they registered successfully
-        if ($user->role === 'seller') {
-            Notification::notify(
-                $user,
-                'seller_registration_success',
-                'Welcome to E-Benta! 🎉',
-                'Your seller account has been created. Start creating listings to reach buyers.',
-                ['user_id' => $user->id]
-            );
-        }
+        // Set pending verification session
+        session(['pending_verification_user_id' => $user->id]);
 
-        Auth::login($user);
-        $request->session()->put('auth_via_google', false);
-
-        // Log registration
+        // Log registration attempt
         AuditLogger::log(
             action: 'register',
-            description: "User registered as {$user->role}",
+            description: "User registered as {$user->role} (pending email verification)",
             modelType: 'User',
             modelId: $user->id,
             newValues: ['email' => $user->email, 'role' => $user->role]
         );
 
-        // Redirect based on role
-        if ($user->role === 'seller') {
-            return redirect()->route('seller.dashboard')
-                ->with('success', 'Registration successful! Create your first listing.');
-        } else {
-            return redirect()->route('buyer.dashboard')
-                ->with('info', 'Registration successful! Your account is pending admin verification.');
-        }
+        return redirect()->route('verification.notice')
+            ->with('success', 'Account created! Please check your email for the 6-digit verification code.');
     }
 
     /**
