@@ -30,9 +30,9 @@ class GoogleAuthController extends Controller
         }
 
         // Force Google to show account picker (useful for logging in with different accounts)
-        return Socialite::driver('google')
-            ->with(['prompt' => 'select_account'])
-            ->redirect();
+        /** @var \Laravel\Socialite\Two\GoogleProvider $provider */
+        $provider = Socialite::driver('google');
+        return $provider->with(['prompt' => 'select_account'])->redirect();
     }
 
     /**
@@ -113,7 +113,7 @@ class GoogleAuthController extends Controller
     /**
      * Show confirmation screen for new Google users
      */
-    public function showConfirmation(): \Illuminate\View\View
+    public function showConfirmation(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         if (Auth::check()) {
             return redirect('/');

@@ -98,16 +98,22 @@
     }
     @media (max-width: 991.98px) {
         .admin-sidebar {
+            transform: translateX(-100%) !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: transform 0.25s ease, opacity 0.25s ease !important;
             z-index: 1045 !important;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+        .admin-sidebar.show-mobile {
+            transform: translateX(0) !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
         }
         .admin-sidebar-toggle-btn {
             left: 12px !important;
             top: 8px !important;
             z-index: 1025;
-        }
-        .admin-sidebar.hidden + .admin-sidebar-toggle-btn {
-            left: 12px !important;
         }
     }
 </style>
@@ -196,28 +202,28 @@
         const navbar = document.querySelector('.navbar');
         const backdrop = document.querySelector('.sidebar-backdrop');
         const isMobile = window.innerWidth < 992;
-        const isHidden = sidebar.classList.toggle('hidden');
         
         if (isMobile) {
-            if (backdrop) backdrop.style.display = isHidden ? 'none' : 'block';
+            const isOpen = sidebar.classList.toggle('show-mobile');
+            if (backdrop) backdrop.style.display = isOpen ? 'block' : 'none';
         } else {
-            if (backdrop) backdrop.style.display = 'none';
-            if (isHidden) {
-                if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
-                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
-                localStorage.setItem('adminSidebarHidden', 'true');
-            } else {
-                if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
-                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
-                localStorage.setItem('adminSidebarHidden', 'false');
+            const isHidden = sidebar.classList.toggle('hidden');
+            if (mainContent) {
+                mainContent.style.marginLeft = isHidden ? '0' : '260px';
+                mainContent.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
             }
+            if (navbar) {
+                navbar.style.left = isHidden ? '0' : '260px';
+                navbar.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
+            }
+            localStorage.setItem('adminSidebarHidden', isHidden ? 'true' : 'false');
         }
     }
 
     function closeAdminSidebar() {
         const sidebar = document.querySelector('.admin-sidebar');
         const backdrop = document.querySelector('.sidebar-backdrop');
-        if (sidebar) sidebar.classList.add('hidden');
+        if (sidebar) sidebar.classList.remove('show-mobile');
         if (backdrop) backdrop.style.display = 'none';
     }
     
@@ -228,11 +234,7 @@
         const navbar = document.querySelector('.navbar');
         const isMobile = window.innerWidth < 992;
         
-        if (isMobile) {
-            if (sidebar) sidebar.classList.add('hidden');
-            if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
-            if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
-        } else {
+        if (!isMobile) {
             const isHidden = localStorage.getItem('adminSidebarHidden') === 'true';
             if (isHidden) {
                 if (sidebar) sidebar.classList.add('hidden');
