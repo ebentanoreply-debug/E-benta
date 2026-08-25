@@ -142,10 +142,6 @@
         </a>
 
         <p class="sidebar-section-title">Management</p>
-        <a href="{{ route('admin.users') }}" class="sidebar-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-            <i class="fas fa-users"></i>
-            <span>Users</span>
-        </a>
         <a href="{{ route('admin.pending-verifications') }}" class="sidebar-link {{ request()->routeIs('admin.pending-verifications') ? 'active' : '' }}">
             <i class="fas fa-user-check"></i>
             <span>Verifications</span>
@@ -159,21 +155,29 @@
             <span>Offers</span>
         </a>
 
-        <p class="sidebar-section-title">Monitoring</p>
-        <a href="{{ route('admin.reports') }}" class="sidebar-link {{ request()->routeIs('admin.reports*') ? 'active' : '' }}">
-            <i class="fas fa-flag"></i>
-            <span>Reports</span>
-        </a>
-        <a href="{{ route('admin.audit-logs') }}" class="sidebar-link {{ request()->routeIs('admin.audit-logs*') ? 'active' : '' }}">
-            <i class="fas fa-history"></i>
-            <span>Audit Logs</span>
-        </a>
+        <p class="sidebar-section-title">Analytics & Monitoring</p>
         <a href="{{ route('admin.impact-logs') }}" class="sidebar-link {{ request()->routeIs('admin.impact-logs') ? 'active' : '' }}">
             <i class="fas fa-leaf"></i>
             <span>Impact Logs</span>
         </a>
+        <a href="{{ route('admin.reports.index') }}" class="sidebar-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+            <i class="fas fa-flag"></i>
+            <span>User Reports</span>
+        </a>
+        <a href="{{ route('admin.audit-logs.index') }}" class="sidebar-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">
+            <i class="fas fa-history"></i>
+            <span>Audit Logs</span>
+        </a>
+        <a href="{{ route('admin.generate-reports') }}" class="sidebar-link {{ request()->routeIs('admin.generate-reports') ? 'active' : '' }}">
+            <i class="fas fa-file-pdf"></i>
+            <span>Generate Reports</span>
+        </a>
 
         <p class="sidebar-section-title">System</p>
+        <a href="{{ route('profile') }}" class="sidebar-link {{ request()->routeIs('profile') ? 'active' : '' }}">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </a>
         <a href="{{ route('settings') }}" class="sidebar-link {{ request()->routeIs('settings') ? 'active' : '' }}">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
