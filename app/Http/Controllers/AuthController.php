@@ -294,34 +294,38 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user) {
-            // Generate 6-digit numeric OTP code
-            $code = sprintf("%06d", random_int(100000, 999999));
+        if (!$user) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['email' => 'We could not find an account with that email address. Please check your email or register first.']);
+        }
 
-            PasswordResetToken::where('user_id', $user->id)
-                ->where('used', false)
-                ->delete();
+        // Generate 6-digit numeric OTP code
+        $code = sprintf("%06d", random_int(100000, 999999));
 
-            PasswordResetToken::create([
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'token' => $code,
-                'expires_at' => now()->addMinutes(15),
-                'used' => false,
-            ]);
+        PasswordResetToken::where('user_id', $user->id)
+            ->where('used', false)
+            ->delete();
 
-            try {
-                Mail::to($user->email)->send(new PasswordResetMail($user, $code));
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Password reset mail failed: ' . $e->getMessage());
-                return redirect()->back()
-                    ->withInput()
-                    ->withErrors(['email' => 'Failed to send reset code email. Please check your mail configuration or try again later.']);
-            }
+        PasswordResetToken::create([
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'token' => $code,
+            'expires_at' => now()->addMinutes(15),
+            'used' => false,
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new PasswordResetMail($user, $code));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Password reset mail failed: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['email' => 'Failed to send reset code email. Please check your mail configuration or try again later.']);
         }
 
         return redirect()->route('password.reset', ['email' => $request->email])
-            ->with('success', 'If an account matches that email, a 6-digit verification code has been sent.');
+            ->with('success', 'A 6-digit verification code has been sent to your email.');
     }
 
     /**

@@ -7,11 +7,8 @@ sed -i "s/80/${PORT:-10000}/g" /etc/apache2/sites-available/000-default.conf /et
 echo "==> [Docker] Creating storage symbolic link..."
 php artisan storage:link --force || true
 
-echo "==> [Docker] Running database migrations..."
+echo "==> [Docker] Running database migrations (safe schema updates)..."
 php artisan migrate --force
-
-echo "==> [Docker] Running database seeders (once-only / idempotent)..."
-php artisan db:seed --force || true
 
 echo "==> [Docker] Optimizing application caches..."
 php artisan config:cache || true
