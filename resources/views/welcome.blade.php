@@ -781,6 +781,59 @@
             background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
         }
     }
+
+    @media (max-width: 480px) {
+        .hero {
+            padding: 3rem 0.75rem 2.5rem;
+        }
+
+        .hero h1 {
+            font-size: 1.95rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .pathways-title h2,
+        .process-title h2,
+        .impact-metrics-header h2,
+        .cta-section h2 {
+            font-size: 1.65rem;
+        }
+
+        .pathway-card {
+            padding: 1.5rem 1.15rem;
+            border-radius: 1.25rem;
+        }
+
+        .process-step {
+            padding: 1.75rem 1.15rem;
+            border-radius: 1.25rem;
+        }
+
+        .step-icon {
+            width: 76px;
+            height: 76px;
+            font-size: 1.8rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-card {
+            padding: 1.25rem 1rem;
+            border-radius: 1.25rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+        }
+
+        .cta-section {
+            padding: 3rem 1rem;
+            border-radius: 1.5rem;
+        }
+    }
 </style>
 @endsection
 

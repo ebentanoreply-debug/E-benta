@@ -139,28 +139,79 @@ class EmailVerificationController extends Controller
         // Mark code as used
         $verification->update(['used' => true]);
 
-        // Mark email as verified and auto-verify sellers
+        // Mark email as verified
         $user->update([
             'email_verified_at' => now(),
-            'is_verified' => $user->role === 'seller' ? true : $user->is_verified,
         ]);
 
         // Log the action
         \App\Services\AuditLogger::log(
             action: 'email_verified',
-            description: 'User verified their email address',
+            description: 'User verified their email address with 6-digit code',
             modelType: 'User',
             modelId: $user->id
         );
+
+        // Store user in pending set password session
+        session([
+            'pending_set_password_user_id' => $user->id,
+        ]);
+        session()->forget('pending_verification_user_id');
+
+        return redirect()->route('register.set-password')
+            ->with('success', 'Email confirmed! Now please set a password for your account.');
+    }
+
+    /**
+     * Show Set Password form after registration email verification.
+     */
+    public function showSetPasswordForm(): View|RedirectResponse
+    {
+        $userId = session('pending_set_password_user_id');
+        if (!$userId) {
+            return redirect('/login')->with('error', 'Session expired. Please sign in or register.');
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect('/login')->with('error', 'User not found.');
+        }
+
+        return view('auth.register-set-password', compact('user'));
+    }
+
+    /**
+     * Save Password and complete registration.
+     */
+    public function savePasswordAndComplete(\Illuminate\Http\Request $request): RedirectResponse
+    {
+        $userId = session('pending_set_password_user_id');
+        if (!$userId) {
+            return redirect('/login')->with('error', 'Session expired. Please sign in or register.');
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return redirect('/login')->with('error', 'User not found.');
+        }
+
+        $request->validate([
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        ]);
+
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'is_verified' => $user->role === 'seller' ? true : $user->is_verified,
+        ]);
 
         // Notify admins about verified registration
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin) {
             \App\Models\Notification::notify(
                 $admin,
-                'user_email_verified',
-                'New Verified User',
-                "{$user->name} ({$user->email}) has verified their email as a {$user->role}.",
+                'user_registration_completed',
+                'New Registered User',
+                "{$user->name} ({$user->email}) has completed registration as a {$user->role}.",
                 [
                     'user_id' => $user->id,
                     'user_name' => $user->name,
@@ -172,17 +223,17 @@ class EmailVerificationController extends Controller
 
         // Login user
         Auth::login($user);
-        session()->forget('pending_verification_user_id');
+        session()->forget('pending_set_password_user_id');
 
         if ($user->role === 'seller') {
             return redirect()->route('seller.dashboard')
-                ->with('success', 'Email verified successfully! Welcome to E-Benta.');
+                ->with('success', 'Registration complete! Welcome to E-Benta.');
         } elseif ($user->role === 'admin') {
             return redirect()->route('admin.dashboard')
-                ->with('success', 'Email verified successfully!');
+                ->with('success', 'Welcome to Admin Dashboard!');
         } else {
             return redirect()->route('buyer.dashboard')
-                ->with('success', 'Email verified successfully! Welcome to E-Benta.');
+                ->with('success', 'Registration complete! Welcome to E-Benta.');
         }
     }
 

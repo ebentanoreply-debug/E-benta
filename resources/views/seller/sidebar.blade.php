@@ -95,16 +95,35 @@
         letter-spacing: 0.05em;
         font-weight: 700;
         margin: 0;
+    @media (max-width: 991.98px) {
+        .seller-sidebar {
+            z-index: 1045 !important;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+        .seller-sidebar-toggle-btn {
+            left: 12px !important;
+            top: 8px !important;
+            z-index: 1025;
+        }
+        .seller-sidebar.hidden + .seller-sidebar-toggle-btn {
+            left: 12px !important;
+        }
     }
 </style>
-<div class="seller-sidebar" style="position: fixed; left: 0; top: 0; width: 260px; height: 100vh; display: flex; flex-direction: column; z-index: 1030; overflow-y: auto;">
+<div class="sidebar-backdrop" onclick="closeSellerSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1040; backdrop-filter: blur(3px);"></div>
+<div class="seller-sidebar" style="position: fixed; left: 0; top: 0; width: 260px; height: 100vh; display: flex; flex-direction: column; z-index: 1045; overflow-y: auto;">
     <!-- Sidebar Header -->
-    <div style="padding: 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
-        <i class="fas fa-shop" style="font-size: 1.5rem; color: #0d9488;"></i>
-        <div>
-            <h6 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.1rem;">Seller Panel</h6>
-            <small style="color: #cbd5e1; font-size: 0.75rem;">E-Benta Platform</small>
+    <div style="padding: 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-shop" style="font-size: 1.5rem; color: #0d9488;"></i>
+            <div>
+                <h6 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.1rem;">Seller Panel</h6>
+                <small style="color: #cbd5e1; font-size: 0.75rem;">E-Benta Platform</small>
+            </div>
         </div>
+        <button type="button" class="d-lg-none" onclick="closeSellerSidebar()" style="background: none; border: none; color: #cbd5e1; font-size: 1.25rem; padding: 0.25rem 0.5rem; cursor: pointer;">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
     <!-- Navigation Links -->
@@ -154,7 +173,7 @@
     <div style="padding: 0.75rem 1rem; border-top: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; background: linear-gradient(135deg, #1e293b 0%, #233651 100%); margin-top: auto;">
         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
             @csrf
-            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'">
+            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </button>
@@ -170,25 +189,31 @@
         const sidebar = document.querySelector('.seller-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
         const navbar = document.querySelector('.navbar');
+        const backdrop = document.querySelector('.sidebar-backdrop');
+        const isMobile = window.innerWidth < 992;
         const isHidden = sidebar.classList.toggle('hidden');
         
-        if (isHidden) {
-            mainContent.style.marginLeft = '0';
-            mainContent.style.width = '100%';
-            if (navbar) {
-                navbar.style.left = '0';
-                navbar.style.width = '100%';
-            }
-            localStorage.setItem('sellerSidebarHidden', 'true');
+        if (isMobile) {
+            if (backdrop) backdrop.style.display = isHidden ? 'none' : 'block';
         } else {
-            mainContent.style.marginLeft = '260px';
-            mainContent.style.width = 'calc(100% - 260px)';
-            if (navbar) {
-                navbar.style.left = '260px';
-                navbar.style.width = 'calc(100% - 260px)';
+            if (backdrop) backdrop.style.display = 'none';
+            if (isHidden) {
+                if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
+                localStorage.setItem('sellerSidebarHidden', 'true');
+            } else {
+                if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
+                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
+                localStorage.setItem('sellerSidebarHidden', 'false');
             }
-            localStorage.setItem('sellerSidebarHidden', 'false');
         }
+    }
+
+    function closeSellerSidebar() {
+        const sidebar = document.querySelector('.seller-sidebar');
+        const backdrop = document.querySelector('.sidebar-backdrop');
+        if (sidebar) sidebar.classList.add('hidden');
+        if (backdrop) backdrop.style.display = 'none';
     }
     
     // Restore sidebar state on page load
@@ -196,21 +221,22 @@
         const sidebar = document.querySelector('.seller-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
         const navbar = document.querySelector('.navbar');
-        if (sidebar && mainContent) {
+        const isMobile = window.innerWidth < 992;
+        
+        if (isMobile) {
+            if (sidebar) sidebar.classList.add('hidden');
+            if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+            if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
+        } else {
             const isHidden = localStorage.getItem('sellerSidebarHidden') === 'true';
             if (isHidden) {
-                sidebar.classList.add('hidden');
-                mainContent.style.marginLeft = '0';
-                mainContent.style.width = '100%';
-                if (navbar) {
-                    navbar.style.left = '0';
-                    navbar.style.width = '100%';
-                }
+                if (sidebar) sidebar.classList.add('hidden');
+                if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
             } else {
-                if (navbar) {
-                    navbar.style.left = '260px';
-                    navbar.style.width = 'calc(100% - 260px)';
-                }
+                if (sidebar) sidebar.classList.remove('hidden');
+                if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
+                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
             }
         }
     });

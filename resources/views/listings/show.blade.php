@@ -2,10 +2,38 @@
 
 @section('title', ($listing->category ?: ($listing->deviceType->name ?: 'Device') ) . ' - E-Benta')
 
+@section('styles')
+<style>
+    .listing-hero-img {
+        height: 480px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+    }
+    @media (max-width: 768px) {
+        .listing-hero-img {
+            height: 300px !important;
+        }
+        .listing-header-wrap {
+            padding: 1.25rem 1rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+        .listing-header-wrap h1 {
+            font-size: 1.6rem !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .listing-hero-img {
+            height: 240px !important;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container-fluid" style="padding: 0;">
     <!-- Enhanced Breadcrumb Header -->
-    <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(13, 148, 136, 0.05) 100%); border-bottom: 1px solid rgba(13, 148, 136, 0.2); padding: 2rem; margin-bottom: 3rem;">
+    <div class="listing-header-wrap" style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(13, 148, 136, 0.05) 100%); border-bottom: 1px solid rgba(13, 148, 136, 0.2); padding: 2rem; margin-bottom: 3rem;">
         <div class="container">
             <nav style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
                 <a href="{{ route('listings.index') }}" style="color: var(--light-green); text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.color='#0d9488';" onmouseout="this.style.color='var(--light-green)';">
@@ -56,7 +84,7 @@
                             <div class="carousel-inner">
                                 @foreach($listing->photos as $index => $photo)
                                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                        <img src="{{ $photo }}" class="d-block w-100" alt="Device" style="height: 500px; object-fit: cover; display: block;">
+                                        <img src="{{ $photo }}" class="d-block w-100 listing-hero-img" alt="Device">
                                     </div>
                                 @endforeach
                             </div>
