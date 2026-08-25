@@ -15,13 +15,13 @@ class PasswordResetMail extends Mailable
 
     public function __construct(
         public User $user,
-        public string $resetLink
+        public string $code
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Your E-Benta Password',
+            subject: 'Your E-Benta Password Reset Code',
         );
     }
 
@@ -31,7 +31,7 @@ class PasswordResetMail extends Mailable
             view: 'emails.password-reset',
             with: [
                 'user' => $this->user,
-                'resetLink' => $this->resetLink,
+                'code' => $this->code,
             ],
         );
     }

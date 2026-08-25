@@ -48,10 +48,14 @@ AWS_ENDPOINT=https://fa270ac2fbe07cac12ef328e8f355c72.r2.cloudflarestorage.com
 AWS_URL=https://pub-034cbfc971d6455993f7ec82c6c55771.r2.dev
 AWS_USE_PATH_STYLE_ENDPOINT=true
 
-# Resend Email Configuration (Uses HTTPS Port 443 - Works on Render Free Tier)
-MAIL_MAILER=resend
-RESEND_API_KEY=your_resend_api_key_here
-MAIL_FROM_ADDRESS=onboarding@resend.dev
+# Brevo (Sendinblue) SMTP Email Configuration
+MAIL_MAILER=smtp
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_ENCRYPTION=tls
+MAIL_USERNAME=your_brevo_login_email@example.com
+MAIL_PASSWORD=your_brevo_smtp_master_key
+MAIL_FROM_ADDRESS=your_verified_sender_email@example.com
 MAIL_FROM_NAME="E-benta"
 
 # Google OAuth Configuration
