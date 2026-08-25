@@ -461,23 +461,38 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
-        .dashboard-header-content {
-            flex-direction: column;
-            align-items: flex-start;
+        .dashboard-header {
+            padding: 1.75rem 1rem;
         }
 
-        .metrics-grid,
+        .dashboard-header-content {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .btn-export {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
         .charts-grid,
         .content-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .dashboard-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .chart-container {
-            height: 250px;
+            height: 220px;
         }
 
         .item-row {
@@ -490,16 +505,39 @@
             margin-top: 0.5rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .admin-dashboard {
+            padding: 1rem 0;
+        }
+
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .metric-card {
+            padding: 1.25rem 1rem;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+        }
+
+        .chart-card, .content-card {
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="admin-dashboard">
         <!-- Header -->
         <div class="dashboard-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="dashboard-header-content">
                     <div>
                         <h1><i class="fas fa-chart-line me-2"></i>Impact Dashboard</h1>
@@ -513,7 +551,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Metrics Grid -->
             <div class="metrics-grid">
                 <!-- Total E-waste -->

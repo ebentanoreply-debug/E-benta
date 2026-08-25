@@ -392,12 +392,17 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
+        .offers-header {
+            padding: 1.75rem 1rem;
+        }
+
         .offers-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .filter-wrapper-offers {
             flex-direction: column;
+            gap: 1rem;
         }
 
         .filter-group-offers,
@@ -413,16 +418,27 @@
             padding: 0.85rem 0.5rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .offers-wrapper {
+            padding: 1rem 0;
+        }
+
+        .filter-card-offers, .table-card-offers {
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="offers-wrapper">
         <!-- Header -->
         <div class="offers-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="offers-header-content">
                     <h1><i class="fas fa-handshake me-2"></i>All Offers</h1>
                     <p>Monitor and manage buyer offers ({{ $offers->total() }} total)</p>
@@ -431,7 +447,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Filter Section -->
             <div class="filter-card-offers">
                 <form method="GET" action="{{ route('admin.offers') }}" class="filter-wrapper-offers">

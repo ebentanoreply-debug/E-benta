@@ -427,11 +427,22 @@
 
         .filter-wrapper {
             flex-direction: column;
+        .listings-header {
+            padding: 1.75rem 1rem;
+        }
+
+        .listings-header h1 {
+            font-size: 1.5rem;
         }
 
         .filter-group,
         .filter-btn {
             width: 100%;
+        }
+
+        .filter-wrapper {
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .listings-table {
@@ -447,16 +458,27 @@
             align-items: flex-start;
         }
     }
+
+    @media (max-width: 480px) {
+        .listings-wrapper {
+            padding: 1rem 0;
+        }
+
+        .filter-card, .table-card {
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="listings-wrapper">
         <!-- Header -->
         <div class="listings-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="listings-header-content">
                     <h1><i class="fas fa-list me-2"></i>All Listings</h1>
                     <p>Monitor and manage marketplace listings ({{ $listings->total() }} total)</p>
@@ -465,7 +487,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Filter Section -->
             <div class="filter-card">
                 <form method="GET" action="{{ route('admin.listings') }}" class="filter-wrapper">

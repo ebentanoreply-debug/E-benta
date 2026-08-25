@@ -605,9 +605,17 @@
             max-width: 150px;
         }
 
+        .audit-logs-header {
+            padding: 1.75rem 1rem;
+        }
+
+        .audit-logs-header h1 {
+            font-size: 1.5rem;
+        }
+
         .filter-wrapper {
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .filter-group {
@@ -618,6 +626,7 @@
         .filter-actions {
             width: 100%;
             flex-direction: column;
+            gap: 0.5rem;
         }
 
         .filter-btn,
@@ -626,16 +635,28 @@
             justify-content: center;
         }
     }
+
+    @media (max-width: 480px) {
+        .audit-logs-wrapper {
+            padding: 1rem 0;
+        }
+
+        .stat-card-audit, .filter-card, .table-card-audit {
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
+            margin-bottom: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="audit-logs-wrapper">
         <!-- Header -->
         <div class="audit-logs-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="audit-logs-header-content">
                     <h1><i class="fas fa-history me-2"></i>Audit Logs</h1>
                     <p>Track all system actions and changes for security and compliance</p>
@@ -644,7 +665,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
 
         <!-- Statistics Cards -->
         <div class="row mb-5">
