@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+storage/*.key
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+table_images
+tests
