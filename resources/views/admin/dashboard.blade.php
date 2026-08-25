@@ -652,8 +652,8 @@
                                     @forelse($recentTransactions->take(8) as $transaction)
                                         <tr>
                                             <td><strong>{{ $transaction->device_category }}</strong></td>
-                                            <td>{{ Str::limit($transaction->seller->name, 12) }}</td>
-                                            <td>{{ Str::limit($transaction->buyer->name, 12) }}</td>
+                                            <td>{{ Str::limit($transaction->seller?->name ?? 'N/A', 12) }}</td>
+                                            <td>{{ Str::limit($transaction->buyer?->name ?? 'N/A', 12) }}</td>
                                             <td><strong style="color: #0d9488;">{{ $transaction->co2_saved }} <small>kg</small></strong></td>
                                         </tr>
                                     @empty
