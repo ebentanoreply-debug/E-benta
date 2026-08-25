@@ -414,14 +414,31 @@
 
         .report-detail-header-content {
             flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
         }
 
-        .detail-card {
-            padding: 1.5rem;
+        .main-card {
+            padding: 1.25rem 1rem;
         }
 
         .action-sidebar {
-            padding: 1.5rem;
+            padding: 1.25rem 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .report-detail-wrapper {
+            padding: 0;
+        }
+
+        .report-detail-header {
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+        }
+
+        .report-detail-header h1 {
+            font-size: 1.45rem;
         }
     }
 </style>
@@ -429,8 +446,8 @@
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box; padding: 2rem;">
-    <div class="report-detail-wrapper">
+<div class="main-content-wrapper">
+    <div class="report-detail-wrapper p-3 p-md-4">
         <!-- Back Link -->
         <a href="{{ route('admin.reports.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i>Back to Reports

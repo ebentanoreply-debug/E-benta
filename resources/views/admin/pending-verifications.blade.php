@@ -450,20 +450,44 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
+        .verifications-header {
+            padding: 1.75rem 1rem;
+        }
+
         .verifications-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .verifications-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .action-buttons {
             flex-direction: column;
+            gap: 0.5rem;
         }
 
         .action-btn {
             width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .verifications-wrapper {
+            padding: 1rem 0;
+        }
+
+        .user-card {
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+        }
+
+        .user-info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
         }
     }
 </style>
@@ -471,11 +495,11 @@
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="verifications-wrapper">
         <!-- Header -->
         <div class="verifications-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="verifications-header-content">
                     <h1><i class="fas fa-user-check me-2"></i>Pending Verifications</h1>
                     <p>Review and approve buyer applications ({{ count($pendingUsers) }} pending)</p>
@@ -484,7 +508,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             @if(count($pendingUsers) > 0)
                 <div class="verifications-grid">
                     @forelse($pendingUsers as $user)

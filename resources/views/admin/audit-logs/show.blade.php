@@ -4,10 +4,10 @@
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; overflow-y: auto; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
-    <div class="container-fluid" style="padding: 2rem;">
+<div class="main-content-wrapper">
+    <div class="container-fluid px-3 px-md-4 py-3 py-md-4">
     <!-- Back Link -->
-    <div class="row mb-4">
+    <div class="row mb-3 mb-md-4">
         <div class="col-12">
             <a href="{{ route('admin.audit-logs.index') }}" style="color: #0d9488; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.3s ease;" onmouseover="this.style.color='#06b6d4';" onmouseout="this.style.color='#0d9488';">
                 <i class="fas fa-arrow-left me-2"></i>Back to Audit Logs
@@ -20,17 +20,17 @@
         <div class="col-12">
             <div style="background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%); border: 1px solid rgba(13, 148, 136, 0.15); border-radius: 1.2rem; overflow: hidden; box-shadow: 0 8px 25px rgba(13, 148, 136, 0.08);">
                 <!-- Header Bar -->
-                <div style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); padding: 2.5rem; color: white;">
-                    <h1 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 800;">
+                <div class="p-3 p-md-4" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white;">
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 800;">
                         <i class="fas fa-history me-2"></i>{{ $auditLog->getActionLabel() }}
                     </h1>
-                    <p style="margin: 0; color: rgba(255, 255, 255, 0.9); font-weight: 500;">
+                    <p style="margin: 0; color: rgba(255, 255, 255, 0.9); font-weight: 500; font-size: 0.9rem;">
                         {{ $auditLog->created_at->format('F d, Y \a\t H:i:s') }}
                     </p>
                 </div>
 
                 <!-- Content -->
-                <div style="padding: 2.5rem;">
+                <div class="p-3 p-md-4">
                     <!-- User Info -->
                     <div style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(13, 148, 136, 0.1);">
                         <h3 style="color: #1e293b; margin-top: 0; font-weight: 800; font-size: 1.15rem; margin-bottom: 1.5rem;">

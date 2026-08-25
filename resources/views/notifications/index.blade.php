@@ -3,133 +3,376 @@
 @section('title', 'Notifications - E-Benta')
 
 @section('content')
-<div class="main-content-wrapper" style="margin-left: 0; overflow-x: hidden; min-height: 100vh;">
-<div class="container-fluid" style="padding: 2rem;">
-    <!-- Header -->
-    <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.15) 0%, rgba(155, 89, 182, 0.05) 100%); border-left: 4px solid #9b59b6; padding: 2rem; border-radius: 1rem; margin-bottom: 2.5rem; animation: slideInDown 0.4s ease;">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(155, 89, 182, 0.1)); padding: 0.75rem 1rem; border-radius: 0.8rem; border: 1px solid rgba(155, 89, 182, 0.3);">
-                    <i class="fas fa-bell" style="color: #9b59b6; font-size: 1.8rem;"></i>
+@section('content')
+<div class="main-content-wrapper">
+    <div class="container-fluid px-3 px-md-4 py-3 py-md-4" style="max-width: 900px; margin: 0 auto;">
+        <!-- Header -->
+        <div class="notif-header-card">
+            <div class="notif-header-main">
+                <div class="notif-header-info">
+                    <div class="notif-header-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div>
+                        <h1 class="notif-title">Notifications</h1>
+                        <p class="notif-subtitle">Stay updated on your activity and system events</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 style="color: var(--text-light); font-weight: 800; margin: 0; font-size: 2.2rem; letter-spacing: -0.5px;">
-                        Notifications
-                    </h1>
-                    <p style="color: #a4b8b5; margin: 0; font-size: 1rem; font-weight: 500;">
-                        Stay updated on your activity and system events
-                    </p>
-                </div>
+                @if($notifications->where('is_read', false)->count() > 0)
+                    <button id="mark-all-btn" type="button" class="btn-mark-all">
+                        <i class="fas fa-check-circle me-2"></i>Mark All as Read
+                    </button>
+                @endif
             </div>
-            @if($notifications->where('is_read', false)->count() > 0)
-                <button id="mark-all-btn" type="button" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: white; font-weight: 700; padding: 0.6rem 1.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(155, 89, 182, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(155, 89, 182, 0.25)'; this.style.transform='translateY(0)';">
-                    <i class="fas fa-check-circle me-2"></i>Mark All as Read
-                </button>
+            
+            <!-- Stats -->
+            @if($notifications->count() > 0)
+                <div class="notif-stats-row">
+                    <div>
+                        <small class="notif-stat-label">Total</small>
+                        <strong class="notif-stat-val text-purple">{{ $notifications->count() }}</strong>
+                    </div>
+                    <div>
+                        <small class="notif-stat-label">Unread</small>
+                        <strong class="notif-stat-val text-blue">{{ $notifications->where('is_read', false)->count() }}</strong>
+                    </div>
+                </div>
             @endif
         </div>
-        
-        <!-- Stats -->
-        @if($notifications->count() > 0)
-            <div style="display: flex; gap: 2rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(155, 89, 182, 0.2);">
-                <div>
-                    <small style="color: #a4b8b5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Total</small>
-                    <strong style="color: #9b59b6; font-size: 1.3rem;">{{ $notifications->count() }}</strong>
-                </div>
-                <div>
-                    <small style="color: #a4b8b5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Unread</small>
-                    <strong style="color: #3498db; font-size: 1.3rem;">{{ $notifications->where('is_read', false)->count() }}</strong>
-                </div>
-            </div>
-        @endif
-    </div>
 
-    <!-- Notifications List -->
-    <div>
-        @if($notifications->isEmpty())
-            <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.12) 0%, rgba(155, 89, 182, 0.05) 100%); border: 1px solid rgba(155, 89, 182, 0.2); padding: 4rem 2rem; border-radius: 1rem; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
-                <div style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-inbox" style="font-size: 3.5rem; color: rgba(155, 89, 182, 0.3);"></i>
-                </div>
-                <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.5rem;">No notifications yet</h4>
-                <p style="color: #a4b8b5; margin: 0;">Check back later for updates on your activity</p>
-            </div>
-        @else
-            @foreach($notifications as $notification)
-                @php
-                    $notificationIcons = [
-                        'new_buyer_registration' => 'fa-user-plus',
-                        'new_seller_registration' => 'fa-store',
-                        'account_approved' => 'fa-check-circle',
-                        'account_rejected' => 'fa-times-circle',
-                        'offer_received' => 'fa-handshake',
-                        'offer_accepted' => 'fa-smile',
-                        'offer_rejected' => 'fa-frown',
-                        'listing_created' => 'fa-clipboard-list',
-                        'seller_registration_success' => 'fa-star',
-                    ];
-                    $notificationColors = [
-                        'new_buyer_registration' => ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'],
-                        'new_seller_registration' => ['icon' => '#27ae60', 'bg' => 'rgba(39, 174, 96, 0.2)'],
-                        'account_approved' => ['icon' => '#2ecc71', 'bg' => 'rgba(46, 204, 113, 0.2)'],
-                        'account_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
-                        'offer_received' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
-                        'offer_accepted' => ['icon' => '#2ecc71', 'bg' => 'rgba(46, 204, 113, 0.2)'],
-                        'offer_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
-                        'listing_created' => ['icon' => '#9b59b6', 'bg' => 'rgba(155, 89, 182, 0.2)'],
-                        'seller_registration_success' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
-                    ];
-                    $icon = $notificationIcons[$notification->type] ?? 'fa-bell';
-                    $colors = $notificationColors[$notification->type] ?? ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'];
-                    $bgColor = $colors['bg'];
-                    $iconColor = $colors['icon'];
-                @endphp
-                <div class="notification-card" style="background: @if($notification->is_read) linear-gradient(135deg, rgba(164, 184, 181, 0.08) 0%, rgba(164, 184, 181, 0.02) 100%) @else linear-gradient(135deg, {{ $bgColor }} 0%, rgba(255,255,255,0.02) 100%) @endif; border: 1px solid @if($notification->is_read) rgba(164, 184, 181, 0.2) @else rgba(52, 152, 219, 0.2) @endif; padding: 1.75rem; border-radius: 1rem; margin-bottom: 1.5rem; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); display: flex; align-items: flex-start; gap: 1rem;" onmouseover="this.style.boxShadow='0 8px 20px rgba(0, 0, 0, 0.1)'; this.style.transform='translateX(5px)';" onmouseout="this.style.boxShadow='0 2px 10px rgba(0, 0, 0, 0.06)'; this.style.transform='translateX(0)';">
-                    <!-- Icon -->
-                    <div style="background: {{ $bgColor }}; padding: 0.75rem; border-radius: 0.8rem; border: 1px solid rgba(52, 152, 219, 0.2); flex-shrink: 0;">
-                        <i class="fas {{ $icon }}" style="color: {{ $iconColor }}; font-size: 1.3rem;"></i>
+        <!-- Notifications List -->
+        <div>
+            @if($notifications->isEmpty())
+                <div class="notif-empty-card">
+                    <div style="margin-bottom: 1.5rem;">
+                        <i class="fas fa-inbox notif-empty-icon"></i>
                     </div>
-                    
-                    <!-- Content -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
-                            <h5 style="color: var(--text-light); font-weight: 700; margin: 0; font-size: 1.05rem;">
-                                {{ $notification->title }}
-                            </h5>
-                            @if(!$notification->is_read)
-                                <span style="background: linear-gradient(135deg, {{ $iconColor }}, {{ $bgColor }}); color: white; font-size: 0.65rem; font-weight: 800; padding: 0.3rem 0.6rem; border-radius: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    New
-                                </span>
-                            @endif
+                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.5rem;">No notifications yet</h4>
+                    <p style="color: #a4b8b5; margin: 0;">Check back later for updates on your activity</p>
+                </div>
+            @else
+                @foreach($notifications as $notification)
+                    @php
+                        $notificationIcons = [
+                            'new_buyer_registration' => 'fa-user-plus',
+                            'new_seller_registration' => 'fa-store',
+                            'account_approved' => 'fa-check-circle',
+                            'account_rejected' => 'fa-times-circle',
+                            'offer_received' => 'fa-handshake',
+                            'offer_accepted' => 'fa-smile',
+                            'offer_rejected' => 'fa-frown',
+                            'listing_created' => 'fa-clipboard-list',
+                            'seller_registration_success' => 'fa-star',
+                        ];
+                        $notificationColors = [
+                            'new_buyer_registration' => ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'],
+                            'new_seller_registration' => ['icon' => '#27ae60', 'bg' => 'rgba(39, 174, 96, 0.2)'],
+                            'account_approved' => ['icon' => '#2ecc71', 'bg' => 'rgba(46, 204, 113, 0.2)'],
+                            'account_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
+                            'offer_received' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
+                            'offer_accepted' => ['icon' => '#2ecc71', 'bg' => 'rgba(46, 204, 113, 0.2)'],
+                            'offer_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
+                            'listing_created' => ['icon' => '#9b59b6', 'bg' => 'rgba(155, 89, 182, 0.2)'],
+                            'seller_registration_success' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
+                        ];
+                        $icon = $notificationIcons[$notification->type] ?? 'fa-bell';
+                        $colors = $notificationColors[$notification->type] ?? ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'];
+                        $bgColor = $colors['bg'];
+                        $iconColor = $colors['icon'];
+                    @endphp
+                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif">
+                        <!-- Icon -->
+                        <div class="notif-icon-box" style="background: {{ $bgColor }}; border-color: rgba(52, 152, 219, 0.2);">
+                            <i class="fas {{ $icon }}" style="color: {{ $iconColor }};"></i>
                         </div>
-                        <p style="color: #a4b8b5; margin: 0.5rem 0 0 0; font-size: 0.95rem; line-height: 1.5;">
-                            {{ $notification->message }}
-                        </p>
-                        <small style="color: #7f9e9a; display: block; margin-top: 0.75rem; font-weight: 600;">
-                            <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
-                        </small>
-                    </div>
-                    
-                    <!-- Actions -->
-                    <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
-                        @if(!$notification->is_read)
-                            <button type="button" class="notification-mark-read" data-notification-id="{{ $notification->id }}" title="Mark as read" style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.1)); border: 1px solid rgba(52, 152, 219, 0.3); color: #3498db; padding: 0.5rem 0.8rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease; font-weight: 600;" onmouseover="this.style.background='linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.2))'; this.style.boxShadow='0 4px 12px rgba(52, 152, 219, 0.15)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.1))'; this.style.boxShadow='none';">
-                                <i class="fas fa-check-circle"></i>
+                        
+                        <!-- Content -->
+                        <div class="notif-content-box">
+                            <div class="notif-title-row">
+                                <h5 class="notif-item-title">{{ $notification->title }}</h5>
+                                @if(!$notification->is_read)
+                                    <span class="notif-badge-new" style="background: linear-gradient(135deg, {{ $iconColor }}, {{ $bgColor }});">
+                                        New
+                                    </span>
+                                @endif
+                            </div>
+                            <p class="notif-item-msg">
+                                {{ $notification->message }}
+                            </p>
+                            <small class="notif-item-time">
+                                <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
+                            </small>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="notif-actions-box">
+                            @if(!$notification->is_read)
+                                <button type="button" class="notification-mark-read notif-action-btn notif-btn-read" data-notification-id="{{ $notification->id }}" title="Mark as read">
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                            @endif
+                            <button type="button" class="notification-delete notif-action-btn notif-btn-del" data-notification-id="{{ $notification->id }}" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
                             </button>
-                        @endif
-                        <button type="button" class="notification-delete" data-notification-id="{{ $notification->id }}" title="Delete" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1)); border: 1px solid rgba(231, 76, 60, 0.3); color: #e74c3c; padding: 0.5rem 0.8rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease; font-weight: 600;" onmouseover="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.3), rgba(231, 76, 60, 0.2))'; this.style.boxShadow='0 4px 12px rgba(231, 76, 60, 0.15)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1))'; this.style.boxShadow='none';">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        @endif
+                @endforeach
+            @endif
+        </div>
     </div>
 </div>
 
 <style>
+    .notif-header-card {
+        background: linear-gradient(135deg, rgba(155, 89, 182, 0.15) 0%, rgba(155, 89, 182, 0.05) 100%);
+        border-left: 4px solid #9b59b6;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        animation: slideInDown 0.4s ease;
+    }
+
+    .notif-header-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .notif-header-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex: 1;
+        min-width: 240px;
+    }
+
+    .notif-header-icon {
+        background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(155, 89, 182, 0.1));
+        padding: 0.75rem 1rem;
+        border-radius: 0.8rem;
+        border: 1px solid rgba(155, 89, 182, 0.3);
+        flex-shrink: 0;
+    }
+
+    .notif-header-icon i {
+        color: #9b59b6;
+        font-size: 1.8rem;
+    }
+
+    .notif-title {
+        color: var(--text-light);
+        font-weight: 800;
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: -0.5px;
+    }
+
+    .notif-subtitle {
+        color: #a4b8b5;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .btn-mark-all {
+        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        color: white;
+        font-weight: 700;
+        padding: 0.7rem 1.4rem;
+        border: none;
+        border-radius: 0.6rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(155, 89, 182, 0.25);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    .btn-mark-all:hover {
+        box-shadow: 0 8px 20px rgba(155, 89, 182, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .notif-stats-row {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(155, 89, 182, 0.2);
+    }
+
+    .notif-stat-label {
+        color: #a4b8b5;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+    }
+
+    .notif-stat-val {
+        font-size: 1.3rem;
+    }
+
+    .text-purple { color: #9b59b6; }
+    .text-blue { color: #3498db; }
+
+    .notif-empty-card {
+        background: linear-gradient(135deg, rgba(155, 89, 182, 0.12) 0%, rgba(155, 89, 182, 0.05) 100%);
+        border: 1px solid rgba(155, 89, 182, 0.2);
+        padding: 4rem 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .notif-empty-icon {
+        font-size: 3.5rem;
+        color: rgba(155, 89, 182, 0.3);
+    }
+
+    /* Notification Items */
+    .notification-card {
+        border-radius: 1rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .notification-card.notif-unread {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.12) 0%, rgba(255,255,255,0.02) 100%);
+        border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+
+    .notification-card.notif-read {
+        background: linear-gradient(135deg, rgba(164, 184, 181, 0.08) 0%, rgba(164, 184, 181, 0.02) 100%);
+        border: 1px solid rgba(164, 184, 181, 0.2);
+    }
+
+    .notif-icon-box {
+        padding: 0.75rem;
+        border-radius: 0.8rem;
+        border: 1px solid rgba(52, 152, 219, 0.2);
+        flex-shrink: 0;
+        font-size: 1.25rem;
+    }
+
+    .notif-content-box {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notif-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.35rem;
+        flex-wrap: wrap;
+    }
+
+    .notif-item-title {
+        color: var(--text-light);
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    .notif-badge-new {
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .notif-item-msg {
+        color: #a4b8b5;
+        margin: 0.4rem 0 0 0;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .notif-item-time {
+        color: #7f9e9a;
+        display: block;
+        margin-top: 0.6rem;
+        font-weight: 600;
+        font-size: 0.82rem;
+    }
+
+    .notif-actions-box {
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .notif-action-btn {
+        padding: 0.55rem 0.85rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .notif-btn-read {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.1));
+        border: 1px solid rgba(52, 152, 219, 0.3);
+        color: #3498db;
+    }
+
+    .notif-btn-del {
+        background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1));
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #e74c3c;
+    }
+
     @media (max-width: 768px) {
-        div[style*="display: flex; align-items: flex-start; justify-content: space-between"] {
+        .notif-header-card {
+            padding: 1.5rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .notif-header-main {
             flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .notif-title {
+            font-size: 1.5rem;
+        }
+
+        .btn-mark-all {
+            width: 100%;
+        }
+
+        .notification-card {
+            padding: 1.25rem 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .notif-actions-box {
+            width: 100%;
+            justify-content: flex-end;
+            margin-top: 0.25rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
     }
     

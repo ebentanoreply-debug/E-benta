@@ -428,12 +428,17 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
+        .impact-header {
+            padding: 1.75rem 1rem;
+        }
+
         .impact-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .filter-wrapper-impact {
             flex-direction: column;
+            gap: 1rem;
         }
 
         .filter-group-impact,
@@ -453,16 +458,27 @@
             font-size: 0.75rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .impact-wrapper {
+            padding: 1rem 0;
+        }
+
+        .filter-card-impact, .table-card-impact {
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="impact-wrapper">
         <!-- Header -->
         <div class="impact-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="impact-header-content">
                     <h1><i class="fas fa-leaf me-2"></i>Impact Logs</h1>
                     <p>Track environmental impact and certifications ({{ $logs->total() }} records)</p>
@@ -471,7 +487,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Filter Section -->
             <div class="filter-card-impact">
                 <form method="GET" action="{{ route('admin.impact-logs') }}" class="filter-wrapper-impact">

@@ -623,6 +623,31 @@
                 max-width: calc(100% - 1rem) !important;
             }
         }
+
+        /* Responsive Dashboard Main Content Layout */
+        .main-content-wrapper {
+            transition: margin-left 0.25s ease, width 0.25s ease;
+            box-sizing: border-box;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @media (min-width: 992px) {
+            .main-content-wrapper {
+                margin-left: 260px;
+                width: calc(100% - 260px);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .main-content-wrapper {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
     </style>
     @yield('styles')
 </head>

@@ -488,15 +488,26 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
+        .reports-mgmt-header {
+            padding: 1.75rem 1rem;
+        }
+
         .reports-mgmt-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .reports-mgmt-header-content {
             flex-direction: column;
             align-items: flex-start;
+            gap: 1rem;
         }
 
+        .filter-wrapper-mgmt {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-group-mgmt,
         .filter-btn-mgmt {
             width: 100%;
         }
@@ -505,17 +516,28 @@
             font-size: 1.5rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .reports-mgmt-wrapper {
+            padding: 1rem 0;
+        }
+
+        .stat-card-mgmt, .filter-card-mgmt, .table-card-mgmt {
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
+            margin-bottom: 1rem;
+        }
+    }
 </style>
 
 <!-- Include Sidebar -->
 @include('admin.sidebar')
 
-
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="reports-mgmt-wrapper">
         <!-- Header -->
         <div class="reports-mgmt-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="reports-mgmt-header-content">
                     <div class="reports-mgmt-icon-box">
                         <i class="fas fa-flag"></i>
@@ -529,7 +551,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Statistics Grid -->
             <div class="row mb-4">
                 <!-- Total Reports -->
