@@ -53,9 +53,9 @@ MAIL_MAILER=smtp
 MAIL_HOST=smtp-relay.brevo.com
 MAIL_PORT=587
 MAIL_ENCRYPTION=tls
-MAIL_USERNAME=your_brevo_login_email@example.com
+MAIL_USERNAME=b6a9e4001@smtp-brevo.com
 MAIL_PASSWORD=your_brevo_smtp_master_key
-MAIL_FROM_ADDRESS=your_verified_sender_email@example.com
+MAIL_FROM_ADDRESS=ebentanoreply@gmail.com
 MAIL_FROM_NAME="E-benta"
 
 # Google OAuth Configuration
