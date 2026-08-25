@@ -219,7 +219,7 @@
 
             <div class="info-text">
                 <i class="fas fa-info-circle"></i>
-                <span>Enter the email address associated with your account. We'll send you instructions to reset your password.</span>
+                <span>Enter the email address associated with your account. We'll send you a 6-digit verification code to reset your password.</span>
             </div>
 
             <form method="POST" action="{{ route('password.email') }}">
@@ -237,7 +237,7 @@
                 </div>
 
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-paper-plane me-2"></i>Send Reset Link
+                    <i class="fas fa-paper-plane me-2"></i>Send Verification Code
                 </button>
             </form>
 
