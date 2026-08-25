@@ -1,60 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your E-Benta Password Reset Code</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        @media screen and (max-width: 600px) {
+            .email-container { width: 100% !important; padding: 10px !important; }
+            .content-cell { padding: 24px 18px !important; }
+            .otp-code { font-size: 32px !important; letter-spacing: 6px !important; }
+            .header-cell { padding: 28px 18px !important; }
+        }
+    </style>
 </head>
-<body style="margin: 0; padding: 2rem 1rem; background-color: #f0fdf4; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1e293b;">
-    <div style="max-width: 580px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); overflow: hidden; border: 1px solid #e2e8f0;">
-        
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); padding: 2.5rem 2rem; text-align: center; color: #ffffff;">
-            <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">E-Benta</h1>
-            <p style="margin: 0; font-size: 1rem; opacity: 0.95;">Password Reset Request</p>
-        </div>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #0f172a;">
 
-        <!-- Body -->
-        <div style="padding: 2.5rem 2rem;">
-            <p style="margin: 0 0 1rem 0; font-size: 1rem; line-height: 1.5; color: #334155;">
-                Hello <strong>{{ $user->name }}</strong>,
-            </p>
-            <p style="margin: 0 0 1.5rem 0; font-size: 0.95rem; line-height: 1.6; color: #475569;">
-                We received a request to reset the password for your E-Benta account. Enter the verification code below on the password reset page to complete your request:
-            </p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f1f5f9; padding: 30px 15px;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 560px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0;">
+                    
+                    <!-- Header with Gradient & Branding -->
+                    <tr>
+                        <td class="header-cell" style="background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0284c7 100%); padding: 36px 30px; text-align: center;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="center">
+                                        <!-- Lock Badge Icon -->
+                                        <div style="display: inline-block; width: 56px; height: 56px; line-height: 56px; background-color: rgba(255, 255, 255, 0.2); border-radius: 50%; text-align: center; margin-bottom: 12px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);">
+                                            <span style="font-size: 26px; vertical-align: middle;">🔐</span>
+                                        </div>
+                                        <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">E-Benta</h1>
+                                        <p style="margin: 6px 0 0 0; color: #e6fffa; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;">Account Security & Verification</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-            <!-- 6-Digit Code Box -->
-            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ccfbf1 100%); border: 2px dashed #0d9488; border-radius: 12px; padding: 1.75rem 1rem; text-align: center; margin: 1.75rem 0;">
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #0f766e;">
-                    Your Password Reset Code
-                </p>
-                <div style="font-size: 2.75rem; font-weight: 800; letter-spacing: 0.25em; color: #0f766e; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; margin-left: 0.25em;">
-                    {{ $code }}
-                </div>
-            </div>
+                    <!-- Body Content -->
+                    <tr>
+                        <td class="content-cell" style="padding: 36px 32px 28px 32px; background-color: #ffffff;">
+                            <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #334155;">
+                                Hello <strong style="color: #0f172a;">{{ $user->name }}</strong>,
+                            </p>
+                            <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #475569;">
+                                We received a request to reset your password. Use the 6-digit verification code below to securely reset your password:
+                            </p>
 
-            <!-- Expiration Notice -->
-            <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 8px; margin-bottom: 1.75rem;">
-                <p style="margin: 0; font-size: 0.875rem; color: #92400e; line-height: 1.5;">
-                    ⏳ <strong>This code will expire in 15 minutes.</strong> If the code expires, you can request a new one from the login page.
-                </p>
-            </div>
+                            <!-- OTP Box -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 20px 0 28px 0;">
+                                <tr>
+                                    <td align="center" style="background: #f8fafc; border: 2px dashed #0d9488; border-radius: 12px; padding: 24px 16px;">
+                                        <span style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #0d9488; margin-bottom: 10px;">Verification Code</span>
+                                        <div class="otp-code" style="font-size: 38px; font-weight: 800; letter-spacing: 8px; color: #0f766e; font-family: 'Courier New', Courier, monospace; margin-left: 8px;">
+                                            {{ $code }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <!-- Security Note -->
-            <p style="margin: 0 0 0.5rem 0; font-size: 0.875rem; color: #64748b; line-height: 1.5;">
-                🔒 <strong>Security Tip:</strong> Never share this code with anyone. E-Benta will never ask you for your reset code or password.
-            </p>
-            <p style="margin: 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
-                If you did not request a password reset, you can safely ignore this email. Your password will remain unchanged.
-            </p>
-        </div>
+                            <!-- Action Button -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0 0 26px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{ route('password.reset', ['email' => $user->email, 'code' => $code]) }}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #0d9488 0%, #059669 100%); color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);">
+                                            Reset Password Now &rarr;
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
 
-        <!-- Footer -->
-        <div style="background-color: #f8fafc; padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; text-align: center;">
-            <p style="margin: 0; font-size: 0.8rem; color: #94a3b8;">
-                &copy; {{ date('Y') }} E-Benta Platform. All rights reserved.
-            </p>
-        </div>
-    </div>
+                            <!-- Expiry Banner -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fffbeb; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 24px;">
+                                <tr>
+                                    <td style="padding: 12px 16px;">
+                                        <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #92400e;">
+                                            ⏱️ <strong>Expires in 15 minutes.</strong> This code is single-use and will automatically expire soon.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Security Tip -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; color: #1e293b;">
+                                            🛡️ Security Warning
+                                        </p>
+                                        <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #64748b;">
+                                            Never share this verification code with anyone. E-Benta support will never ask for your password or OTP code. If you did not make this request, you can safely ignore this email.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 6px 0; font-size: 12px; color: #64748b; font-weight: 500;">
+                                E-Benta Online Marketplace & Electronics Platform
+                            </p>
+                            <p style="margin: 0; font-size: 11px; color: #94a3b8;">
+                                &copy; {{ date('Y') }} E-Benta. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- End Main Container -->
+            </td>
+        </tr>
+    </table>
+
 </body>
 </html>
+
