@@ -49,7 +49,11 @@ RUN mkdir -p /var/www/storage/framework/cache /var/www/storage/framework/session
     && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
+# Make entrypoint script executable (fix Windows CRLF line endings)
+RUN sed -i 's/\r$//' /var/www/docker/entrypoint.sh \
+    && chmod +x /var/www/docker/entrypoint.sh
+
 EXPOSE 10000
 
-# Configure port dynamically from Render's $PORT, link storage, run migration and seed-once command, cache routes/views/config, and start Apache
-CMD sh -c "sed -i \"s/80/\${PORT:-10000}/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && php artisan storage:link --force && php artisan app:init-db && php artisan config:cache && php artisan route:cache && php artisan view:cache && apache2-foreground"
+# Execute entrypoint to run migrations, seeder (once-only), caches, and launch Apache
+CMD ["/var/www/docker/entrypoint.sh"]
