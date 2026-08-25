@@ -9,6 +9,11 @@ class DeviceSeeder extends Seeder
 {
     public function run(): void
     {
+        // Skip if already seeded
+        if (DB::table('device_types')->exists()) {
+            return;
+        }
+
         // Device Types
         $deviceTypes = [
             ['name' => 'Laptop', 'icon' => 'fa-laptop', 'created_at' => now(), 'updated_at' => now()],
