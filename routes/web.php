@@ -33,8 +33,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.forgot');
     Route::post('/forgot-password', [AuthController::class, 'sendForgotPasswordEmail'])->name('password.email');
-    Route::get('/reset-password/{token?}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
-    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset.update');
+    Route::get('/reset-password/verify', [AuthController::class, 'showVerifyResetCodeForm'])->name('password.reset');
+    Route::post('/reset-password/verify', [AuthController::class, 'verifyResetCode'])->name('password.verify-code');
+    Route::get('/reset-password/new', [AuthController::class, 'showSetNewPasswordForm'])->name('password.new');
+    Route::post('/reset-password/new', [AuthController::class, 'setNewPassword'])->name('password.update-new');
+    Route::get('/reset-password/{token?}', function (\Illuminate\Http\Request $request) {
+        return redirect()->route('password.reset', $request->query());
+    });
 
     // Google OAuth routes
     Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
@@ -58,6 +63,8 @@ Route::middleware('guest')->group(function () {
 Route::get('/verify-email', [EmailVerificationController::class, 'show'])->name('verification.notice');
 Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->name('verification.verify');
 Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend');
+Route::get('/register/set-password', [EmailVerificationController::class, 'showSetPasswordForm'])->name('register.set-password');
+Route::post('/register/set-password', [EmailVerificationController::class, 'savePasswordAndComplete'])->name('register.save-password');
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 

@@ -116,37 +116,63 @@
     .offer-card-accepted { border-left: 3px solid #10b981; }
     .offer-card-rejected { border-left: 3px solid #ef4444; }
     .offer-card-pending { border-left: 3px solid #f59e0b; }
+    @media (max-width: 991.98px) {
+        .buyer-sidebar {
+            z-index: 1045 !important;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+        .sidebar-toggle-btn {
+            left: 12px !important;
+            top: 8px !important;
+            z-index: 1025;
+        }
+        .buyer-sidebar.hidden + .sidebar-toggle-btn {
+            left: 12px !important;
+        }
+    }
 </style>
-<div class="buyer-sidebar" style="position: fixed; left: 0; top: 0; width: 260px; height: 100vh; display: flex; flex-direction: column; z-index: 1030; overflow-y: auto;">
+<div class="sidebar-backdrop" onclick="closeBuyerSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1040; backdrop-filter: blur(3px);"></div>
+<div class="buyer-sidebar" style="position: fixed; left: 0; top: 0; width: 260px; height: 100vh; display: flex; flex-direction: column; z-index: 1045; overflow-y: auto;">
     <!-- Sidebar Header -->
-    <div style="padding: 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
-        <i class="fas fa-shopping-bag" style="font-size: 1.5rem; color: #0d9488;"></i>
-        <div>
-            <h6 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.1rem;">Buyer Panel</h6>
-            <small style="color: #cbd5e1; font-size: 0.75rem;">E-Benta Platform</small>
+    <div style="padding: 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-recycle" style="font-size: 1.5rem; color: #0d9488;"></i>
+            <div>
+                <h6 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.1rem;">Buyer Panel</h6>
+                <small style="color: #cbd5e1; font-size: 0.75rem;">E-Benta Platform</small>
+            </div>
         </div>
+        <button type="button" class="d-lg-none" onclick="closeBuyerSidebar()" style="background: none; border: none; color: #cbd5e1; font-size: 1.25rem; padding: 0.25rem 0.5rem; cursor: pointer;">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
     <!-- Navigation Links -->
     <nav style="flex: 1; overflow-y: auto; padding: 1rem 0;">
         <p class="sidebar-section-title">Main</p>
         <a href="{{ route('buyer.dashboard') }}" class="sidebar-link {{ request()->routeIs('buyer.dashboard') ? 'active' : '' }}">
-            <i class="fas fa-home"></i>
+            <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
         </a>
 
-        <p class="sidebar-section-title">Marketplace</p>
+        <p class="sidebar-section-title">Discover</p>
         <a href="{{ route('listings.index') }}" class="sidebar-link {{ request()->routeIs('listings.index') ? 'active' : '' }}">
-            <i class="fas fa-store"></i>
-            <span>Browse Listings</span>
-        </a>
-        <a href="{{ route('buyer.transaction-history') }}" class="sidebar-link {{ request()->routeIs('buyer.transaction-history') ? 'active' : '' }}">
-            <i class="fas fa-handshake"></i>
-            <span>My Offers</span>
+            <i class="fas fa-search"></i>
+            <span>Browse Items</span>
         </a>
         <a href="{{ route('buyer.saved-items') }}" class="sidebar-link {{ request()->routeIs('buyer.saved-items') ? 'active' : '' }}">
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-bookmark"></i>
             <span>Saved Items</span>
+        </a>
+
+        <p class="sidebar-section-title">Activity</p>
+        <a href="{{ route('buyer.transaction-history') }}" class="sidebar-link {{ request()->routeIs('buyer.transaction-history') ? 'active' : '' }}">
+            <i class="fas fa-history"></i>
+            <span>My Offers & History</span>
+        </a>
+        <a href="{{ route('addresses.index') }}" class="sidebar-link">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Manage Addresses</span>
         </a>
 
         <p class="sidebar-section-title">Settings</p>
@@ -159,24 +185,14 @@
             <span>My Profile</span>
         </a>
 
-        <!-- My Offers Section -->
-        @if(isset($offers) && $offers && $offers->count() > 0)
-            <div style="margin-top: 1rem;">
-                <p class="sidebar-section-title">Recent Offers</p>
-                @foreach($offers->take(3) as $offer)
-                    <a href="{{ route('offers.show', $offer) }}" class="offer-card {{ $offer->status === 'accepted' ? 'offer-card-accepted' : ($offer->status === 'rejected' ? 'offer-card-rejected' : 'offer-card-pending') }}">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-                            <span style="color: #334155; font-weight: 600; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px;">
-                                {{ $offer->listing->category }}
-                            </span>
-                            <span style="font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 600; text-transform: uppercase; {{ $offer->status === 'accepted' ? 'background: #d1fae5; color: #047857;' : ($offer->status === 'rejected' ? 'background: #fee2e2; color: #b91c1c;' : 'background: #fef3c7; color: #b45309;') }}">
-                                {{ $offer->status }}
-                            </span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #64748b; font-size: 0.75rem;">₱{{ number_format($offer->bid_amount, 0) }}</span>
-                            <span style="color: #94a3b8; font-size: 0.7rem;">{{ $offer->created_at->shortAbsoluteDiffForHumans() }}</span>
-                        </div>
+        <!-- Recent Offers Widget -->
+        @if(isset($recentOffers) && count($recentOffers) > 0)
+            <div style="margin: 1.5rem 1rem 0.5rem; padding: 1rem; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem;">
+                <p style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 0.75rem;">Recent Offers</p>
+                @foreach($recentOffers->take(3) as $offer)
+                    <a href="{{ route('offers.show', $offer->id) }}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0; text-decoration: none; color: inherit; font-size: 0.85rem;">
+                        <span style="max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $offer->listing->title }}</span>
+                        <span style="font-weight: 600; color: #0d9488;">₱{{ number_format($offer->amount, 2) }}</span>
                     </a>
                 @endforeach
                 <a href="{{ route('buyer.transaction-history') }}" style="display: block; text-align: center; color: #0d9488; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; text-decoration: none;">View All Offers →</a>
@@ -188,7 +204,7 @@
     <div style="padding: 0.75rem 1rem; border-top: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; background: linear-gradient(135deg, #1e293b 0%, #233651 100%); margin-top: auto;">
         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
             @csrf
-            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'">
+            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </button>
@@ -204,25 +220,31 @@
         const sidebar = document.querySelector('.buyer-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
         const navbar = document.querySelector('.navbar');
+        const backdrop = document.querySelector('.sidebar-backdrop');
+        const isMobile = window.innerWidth < 992;
         const isHidden = sidebar.classList.toggle('hidden');
         
-        if (isHidden) {
-            mainContent.style.marginLeft = '0';
-            mainContent.style.width = '100%';
-            if (navbar) {
-                navbar.style.left = '0';
-                navbar.style.width = '100%';
-            }
-            localStorage.setItem('buyerSidebarHidden', 'true');
+        if (isMobile) {
+            if (backdrop) backdrop.style.display = isHidden ? 'none' : 'block';
         } else {
-            mainContent.style.marginLeft = '260px';
-            mainContent.style.width = 'calc(100% - 260px)';
-            if (navbar) {
-                navbar.style.left = '260px';
-                navbar.style.width = 'calc(100% - 260px)';
+            if (backdrop) backdrop.style.display = 'none';
+            if (isHidden) {
+                if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
+                localStorage.setItem('buyerSidebarHidden', 'true');
+            } else {
+                if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
+                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
+                localStorage.setItem('buyerSidebarHidden', 'false');
             }
-            localStorage.setItem('buyerSidebarHidden', 'false');
         }
+    }
+
+    function closeBuyerSidebar() {
+        const sidebar = document.querySelector('.buyer-sidebar');
+        const backdrop = document.querySelector('.sidebar-backdrop');
+        if (sidebar) sidebar.classList.add('hidden');
+        if (backdrop) backdrop.style.display = 'none';
     }
     
     // Restore sidebar state on page load
@@ -230,21 +252,22 @@
         const sidebar = document.querySelector('.buyer-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
         const navbar = document.querySelector('.navbar');
-        if (sidebar && mainContent) {
+        const isMobile = window.innerWidth < 992;
+        
+        if (isMobile) {
+            if (sidebar) sidebar.classList.add('hidden');
+            if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+            if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
+        } else {
             const isHidden = localStorage.getItem('buyerSidebarHidden') === 'true';
             if (isHidden) {
-                sidebar.classList.add('hidden');
-                mainContent.style.marginLeft = '0';
-                mainContent.style.width = '100%';
-                if (navbar) {
-                    navbar.style.left = '0';
-                    navbar.style.width = '100%';
-                }
+                if (sidebar) sidebar.classList.add('hidden');
+                if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
             } else {
-                if (navbar) {
-                    navbar.style.left = '260px';
-                    navbar.style.width = 'calc(100% - 260px)';
-                }
+                if (sidebar) sidebar.classList.remove('hidden');
+                if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
+                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
             }
         }
     });

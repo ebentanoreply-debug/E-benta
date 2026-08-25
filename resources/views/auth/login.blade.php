@@ -417,6 +417,34 @@
             padding: 2.5rem 1.5rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 1.5rem 0.75rem;
+            min-height: auto;
+        }
+
+        .login-form-wrapper {
+            padding: 1.75rem 1.15rem;
+            border-radius: 1.25rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .login-header p {
+            font-size: 0.88rem;
+        }
+
+        .form-check {
+            font-size: 0.85rem;
+        }
+
+        .forgot-link {
+            font-size: 0.85rem;
+        }
+    }
 </style>
 @endsection
 

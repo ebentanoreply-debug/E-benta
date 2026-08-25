@@ -459,6 +459,33 @@
         }
     }
 
+    @media (max-width: 480px) {
+        .register-container {
+            padding: 1.5rem 0.5rem;
+            min-height: auto;
+        }
+
+        .register-card {
+            border-radius: 1.25rem;
+        }
+
+        .register-header {
+            padding: 1.75rem 1.25rem;
+        }
+
+        .register-header h2 {
+            font-size: 1.45rem;
+        }
+
+        .register-body {
+            padding: 1.5rem 1rem;
+        }
+
+        .step-indicator {
+            justify-content: center;
+        }
+    }
+
     /* Modal Styles */
     .modal {
         display: none;
@@ -727,28 +754,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Password Fields -->
-                            <div class="two-column">
-                                <div class="form-group">
-                                    <label for="password">
-                                        <i class="fas fa-key me-2" style="color: var(--light-green);"></i>Password
-                                    </label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                         id="password" name="password" placeholder="••••••••" required>
-                                    @error('password')
-                                        <span class="error-message">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="password_confirmation">
-                                        <i class="fas fa-check me-2" style="color: var(--light-green);"></i>Confirm Password
-                                    </label>
-                                    <input type="password" class="form-control" id="password_confirmation" 
-                                         name="password_confirmation" placeholder="••••••••" required>
-                                </div>
-                            </div>
-
                             <!-- Account Type -->
                             <div class="form-group">
                                 <label for="role">
@@ -758,10 +763,10 @@
                                        id="role" name="role" required onchange="toggleBusinessFields()">
                                     <option value="">Select your account type</option>
                                     <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>
-                                        <i class="fas fa-laptop me-2"></i>I have e-waste to sell or donate
+                                        🏪 Seller - I have e-waste to sell or donate
                                     </option>
                                     <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>
-                                        <i class="fas fa-recycle me-2"></i>I process or recycle e-waste
+                                        🛍️ Buyer - I process or purchase e-waste
                                     </option>
                                 </select>
                                 @error('role')
@@ -769,22 +774,20 @@
                                 @enderror
                             </div>
 
-                            <!-- Conditional Fields for Buyers -->
-                            <div id="businessFields" style="display: none;">
-                                <div class="conditional-fields">
-                                    <h6>
-                                        <i class="fas fa-building me-2" style="color: var(--light-green);"></i>Organization Details
-                                    </h6>
-
+                            <!-- Conditional Business Fields for Seller -->
+                            <div id="business-fields" class="conditional-fields" style="display: none;">
+                                <h6><i class="fas fa-store me-2" style="color: var(--light-green);"></i>Seller Information (Optional)</h6>
+                                
+                                <div class="two-column">
                                     <div class="form-group">
                                         <label for="business_name">
-                                            <i class="fas fa-briefcase me-2" style="color: var(--light-green);"></i>Organization Name
+                                            <i class="fas fa-building me-2" style="color: var(--light-green);"></i>Business Name
                                         </label>
                                         <input type="text" class="form-control" id="business_name" 
-                                             name="business_name" value="{{ old('business_name') }}" placeholder="Your Organization Name">
+                                             name="business_name" value="{{ old('business_name') }}" placeholder="Acme Recycling Co.">
                                     </div>
 
-                                    <div class="form-group" style="margin-bottom: 0;">
+                                    <div class="form-group">
                                         <label for="phone">
                                             <i class="fas fa-phone me-2" style="color: var(--light-green);"></i>Phone Number
                                         </label>
@@ -804,7 +807,7 @@
 
                             <!-- Submit Button -->
                             <button type="submit" class="register-btn">
-                                <i class="fas fa-check-circle me-2"></i>Create My Free Account
+                                <i class="fas fa-paper-plane me-2"></i>Send Verification Code & Continue
                             </button>
                         </form>
 

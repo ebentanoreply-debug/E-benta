@@ -40,7 +40,6 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:seller,buyer'],
             'business_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
@@ -49,7 +48,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make(\Illuminate\Support\Str::random(32)), // Temporary placeholder until step 2
             'role' => $request->role,
             'business_name' => $request->business_name,
             'phone' => $request->phone,
@@ -300,25 +299,24 @@ class AuthController extends Controller
     }
 
     /**
-     * Show reset password form.
+     * Step 1: Show the form to enter the 6-digit verification code.
      */
-    public function showResetPasswordForm(Request $request): View
+    public function showVerifyResetCodeForm(Request $request): View
     {
         $email = $request->email ?? session('reset_email', '');
         $code = $request->code ?? $request->route('token') ?? $request->token ?? '';
 
-        return view('auth.reset-password', compact('email', 'code'));
+        return view('auth.reset-password-verify', compact('email', 'code'));
     }
 
     /**
-     * Handle password reset with 6-digit OTP code.
+     * Step 1: Verify the 6-digit code. If correct, redirect to new password page.
      */
-    public function resetPassword(Request $request): RedirectResponse
+    public function verifyResetCode(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'string', 'email'],
             'code' => ['required', 'string', 'size:6'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
             'code.required' => 'Please enter the 6-digit verification code sent to your email.',
             'code.size' => 'The verification code must be exactly 6 digits.',
@@ -347,6 +345,57 @@ class AuthController extends Controller
                 ->withErrors(['email' => 'No account found with this email address.']);
         }
 
+        // Store validated state in session
+        session([
+            'password_reset_verified_email' => $user->email,
+            'password_reset_token_id' => $resetToken->id,
+        ]);
+
+        return redirect()->route('password.new')
+            ->with('success', 'Verification code confirmed! Please enter your new password.');
+    }
+
+    /**
+     * Step 2: Show the form to set a new password.
+     */
+    public function showSetNewPasswordForm(Request $request): View|RedirectResponse
+    {
+        $email = session('password_reset_verified_email');
+        $tokenId = session('password_reset_token_id');
+
+        if (!$email || !$tokenId) {
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Please enter your email and verify your code first.']);
+        }
+
+        return view('auth.reset-password-new', compact('email'));
+    }
+
+    /**
+     * Step 2: Save the new password.
+     */
+    public function setNewPassword(Request $request): RedirectResponse
+    {
+        $email = session('password_reset_verified_email');
+        $tokenId = session('password_reset_token_id');
+
+        if (!$email || !$tokenId) {
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Session expired. Please request a new verification code.']);
+        }
+
+        $request->validate([
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $resetToken = PasswordResetToken::find($tokenId);
+        $user = User::where('email', $email)->first();
+
+        if (!$user || !$resetToken) {
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Unable to reset password. Please start over.']);
+        }
+
         DB::transaction(function () use ($user, $request, $resetToken): void {
             $user->update([
                 'password' => Hash::make($request->password),
@@ -355,10 +404,13 @@ class AuthController extends Controller
             $resetToken->update(['used' => true]);
         });
 
+        // Clear session keys
+        session()->forget(['password_reset_verified_email', 'password_reset_token_id']);
+
         // Log the password reset
         AuditLogger::log(
             action: 'password_reset',
-            description: "User {$user->name} successfully reset password using 6-digit verification code",
+            description: "User {$user->name} successfully reset password using 2-step verification",
             modelType: 'User',
             modelId: $user->id
         );

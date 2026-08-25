@@ -482,6 +482,147 @@
             background-color: #0f0f0f !important;
             color: #e0e0e0 !important;
         }
+
+        /* ==========================================================================
+           GLOBAL MOBILE RESPONSIVE ENHANCEMENTS
+           ========================================================================== */
+        html, body {
+            overflow-x: hidden !important;
+            width: 100%;
+            max-width: 100vw;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .navbar-brand {
+            margin-left: 0 !important;
+            font-size: 1.3rem;
+        }
+
+        @media (min-width: 992px) {
+            .navbar-brand {
+                margin-left: 1.5rem !important;
+                margin-right: 2rem !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar .container-fluid {
+                padding: 0 1rem !important;
+            }
+
+            .navbar-brand {
+                margin-right: 0 !important;
+            }
+
+            .navbar-collapse {
+                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                border-radius: 1rem;
+                padding: 1.25rem 1rem;
+                margin-top: 0.75rem;
+                border: 1px solid rgba(13, 148, 136, 0.3);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            }
+
+            .navbar-nav {
+                align-items: stretch !important;
+                gap: 0.5rem;
+            }
+
+            .navbar-nav .nav-item {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+
+            .navbar-nav .nav-link {
+                padding: 0.75rem 1rem !important;
+                margin: 0 !important;
+                border-radius: 0.6rem;
+                display: flex !important;
+                align-items: center;
+            }
+
+            .navbar-nav .nav-link:hover {
+                background: rgba(13, 148, 136, 0.15);
+            }
+
+            .navbar-nav .dropdown-menu {
+                position: static !important;
+                float: none !important;
+                width: 100% !important;
+                margin-top: 0.5rem !important;
+                box-shadow: none !important;
+                background: rgba(15, 23, 42, 0.8) !important;
+            }
+
+            .navbar-nav .btn {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-top: 0.5rem;
+                padding: 0.75rem 1.25rem !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #notificationsDropdown + .dropdown-menu {
+                position: fixed !important;
+                top: 70px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 92vw !important;
+                max-width: 360px !important;
+                z-index: 1060 !important;
+            }
+        }
+
+        /* Touch target minimums and input safety */
+        button, a, input, select, textarea {
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 56px;
+            }
+
+            h1, .h1 { font-size: calc(1.4rem + 1vw) !important; }
+            h2, .h2 { font-size: calc(1.25rem + 0.8vw) !important; }
+            h3, .h3 { font-size: 1.15rem !important; }
+
+            .container, .container-fluid {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            /* Responsive tables */
+            .table-responsive {
+                -webkit-overflow-scrolling: touch;
+                border-radius: 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            /* Form inputs prevent auto-zoom on mobile */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="number"],
+            input[type="tel"],
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+
+            /* Responsive grid cards */
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            /* Modal safety on small devices */
+            .modal-dialog {
+                margin: 0.5rem;
+                max-width: calc(100% - 1rem) !important;
+            }
+        }
     </style>
     @yield('styles')
 </head>

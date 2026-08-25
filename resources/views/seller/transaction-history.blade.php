@@ -591,6 +591,26 @@
             grid-template-columns: 1fr;
         }
     }
+
+    @media (max-width: 480px) {
+        .th-wrapper {
+            padding: 1rem 0.5rem;
+        }
+
+        .th-header h1 {
+            font-size: 1.45rem;
+        }
+
+        .th-stat-card {
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+        }
+
+        .th-tx-card {
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+        }
+    }
 </style>
 
 @include('seller.sidebar')
