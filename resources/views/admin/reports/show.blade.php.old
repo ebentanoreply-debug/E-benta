@@ -1,0 +1,740 @@
+@extends('layouts.app')
+
+@section('title', 'Report Details - E-Benta Admin')
+
+@section('content')
+<style>
+    /* === REPORT DETAILS WRAPPER === */
+    .report-detail-wrapper {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    /* === BACK LINK === */
+    .back-link {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+        gap: 0.75rem;
+    }
+
+    /* === HEADER === */
+    .detail-header {
+        background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%);
+        border-left: 4px solid #dc2626;
+        padding: 2rem;
+        border-radius: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .detail-header-content {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .detail-header-icon {
+        background: rgba(220, 38, 38, 0.2);
+        padding: 0.75rem 1rem;
+        border-radius: 0.8rem;
+        font-size: 1.8rem;
+        color: #dc2626;
+    }
+
+    .detail-header h1 {
+        color: #1e293b;
+        font-weight: 800;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.8rem;
+    }
+
+    .detail-header p {
+        color: #64748b;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .detail-submitted {
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    /* === INFO CARD === */
+    .info-card {
+        background: white;
+        border-radius: 1.2rem;
+        padding: 2rem;
+        border: 1px solid rgba(220, 38, 38, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 2rem;
+    }
+
+    .info-card h5 {
+        color: #1e293b;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .info-card h5 i {
+        color: #dc2626;
+    }
+
+    .info-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .info-label {
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+
+    .info-box {
+        background: linear-gradient(135deg, rgba(220, 38, 38, 0.06) 0%, rgba(220, 38, 38, 0.03) 100%);
+        padding: 1rem;
+        border-radius: 0.8rem;
+        border-left: 3px solid #dc2626;
+    }
+
+    .info-item-title {
+        color: #1e293b;
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-item-meta {
+        color: #64748b;
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .info-item-meta a {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .info-item-meta a:hover {
+        text-decoration: underline;
+    }
+
+    .reason-box {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%);
+        border-left-color: #ef4444;
+    }
+
+    .reason-text {
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .details-box {
+        background: linear-gradient(135deg, rgba(3, 102, 214, 0.06) 0%, rgba(3, 102, 214, 0.03) 100%);
+        border-left-color: #0366d6;
+    }
+
+    .details-text {
+        color: #1e293b;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.6;
+    }
+
+    .metadata-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .metadata-item {
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(220, 38, 38, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
+        border: 1px solid rgba(220, 38, 38, 0.08);
+        border-radius: 0.8rem;
+    }
+
+    .metadata-label {
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.75rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.5px;
+    }
+
+    .metadata-value {
+        color: #1e293b;
+        margin: 0;
+        font-family: monospace;
+        font-weight: 600;
+    }
+
+    /* === ADMIN NOTES === */
+    .admin-notes-card {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%);
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        border-radius: 1.2rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .admin-notes-card h5 {
+        color: #3b82f6;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        font-size: 1.05rem;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .admin-notes-box {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.8rem;
+        border-left: 3px solid #3b82f6;
+    }
+
+    .admin-notes-text {
+        color: #1e293b;
+        margin: 0;
+        white-space: pre-wrap;
+        line-height: 1.6;
+    }
+
+    .admin-notes-meta {
+        color: #64748b;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* === ACTIONS SIDEBAR === */
+    .actions-card {
+        background: white;
+        border-radius: 1.2rem;
+        padding: 2rem;
+        border: 1px solid rgba(220, 38, 38, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        position: sticky;
+        top: 2rem;
+    }
+
+    .actions-card h5 {
+        color: #1e293b;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .actions-card h5 i {
+        color: #dc2626;
+    }
+
+    .action-form {
+        margin-bottom: 1.5rem;
+    }
+
+    .action-form:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        color: #1e293b;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.5px;
+    }
+
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid rgba(220, 38, 38, 0.15);
+        color: #1e293b;
+        padding: 0.75rem;
+        border-radius: 0.6rem;
+        font-size: 0.9rem;
+        font-family: inherit;
+        transition: all 0.2s ease;
+    }
+
+    .form-select:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: rgba(220, 38, 38, 0.4);
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.1);
+    }
+
+    .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .action-btn {
+        width: 100%;
+        font-weight: 700;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 0.6rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .btn-reviewing {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-reviewing:hover {
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .btn-resolve {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-resolve:hover {
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .btn-dismiss {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.25);
+    }
+
+    .btn-dismiss:hover {
+        box-shadow: 0 6px 20px rgba(107, 114, 128, 0.35);
+        transform: translateY(-2px);
+    }
+
+    /* === DARK MODE === */
+    body.dark-mode .report-detail-wrapper {
+        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
+    }
+
+    body.dark-mode .info-card,
+    body.dark-mode .actions-card,
+    body.dark-mode .admin-notes-card {
+        background: #2a2a2a;
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    body.dark-mode .info-card h5,
+    body.dark-mode .actions-card h5,
+    body.dark-mode .detail-header h1,
+    body.dark-mode .form-label {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .form-select,
+    body.dark-mode .form-textarea {
+        background: #333333;
+        border-color: rgba(220, 38, 38, 0.3);
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .admin-notes-box {
+        background: #333333;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+        .detail-header {
+            flex-direction: column;
+            text-align: center;
+            align-items: flex-start;
+        }
+
+        .detail-header-content {
+            width: 100%;
+        }
+
+        .metadata-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions-card {
+            position: static;
+        }
+    }
+</style>
+
+<!-- Include Sidebar -->
+@include('admin.sidebar')
+
+<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+    <div class="report-detail-wrapper">
+        <div class="container-fluid" style="padding: 2rem;">
+            <!-- Back Link -->
+            <a href="{{ route('admin.reports.index') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i>Back to Reports
+            </a>
+
+            <!-- Header -->
+            <div class="detail-header">
+                <div class="detail-header-content">
+                    <div class="detail-header-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div>
+                        <h1>Report #{{ $report->id }}</h1>
+                        <p>
+                            Status:
+                            @php
+                                $statusColor = match($report->status) {
+                                    'pending' => 'color: #f97316;',
+                                    'under_review' => 'color: #3b82f6;',
+                                    'resolved' => 'color: #22c55e;',
+                                    'dismissed' => 'color: #6b7280;',
+                                    default => 'color: #64748b;'
+                                };
+                            @endphp
+                            <strong style="{{ $statusColor }}">{{ ucfirst(str_replace('_', ' ', $report->status)) }}</strong>
+                        </p>
+                    </div>
+                </div>
+                <div class="detail-submitted">
+                    Submitted {{ $report->created_at->diffForHumans() }}
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <!-- Report Information -->
+                    <div class="info-card">
+                        <h5><i class="fas fa-info-circle"></i>Report Information</h5>
+
+                        <!-- Reporter Info -->
+                        <div class="info-section">
+                            <span class="info-label">Reported By</span>
+                            <div class="info-box">
+                                <p class="info-item-title">
+                                    <i class="fas fa-user" style="color: #dc2626;"></i>{{ $report->reporter->name }}
+                                </p>
+                                <span class="info-item-meta">{{ $report->reporter->email }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Reported Item -->
+                        <div class="info-section">
+                            <span class="info-label">Reported Item</span>
+                            <div class="info-box" style="border-left-color: #3b82f6;">
+                                @php
+                                    $type = class_basename($report->reportable_type);
+                                @endphp
+                                <p class="info-item-title" style="color: #3b82f6;">
+                                    <i class="fas fa-link"></i>{{ $type }} #{{ $report->reportable_id }}
+                                </p>
+                                @if($type === 'Listing')
+                                    <span class="info-item-meta">
+                                        <strong>{{ $report->reportable->category }}</strong><br>
+                                        Listed by: <a href="{{ route('users.show', $report->reportable->seller) }}">{{ $report->reportable->seller->name }}</a><br>
+                                        Status: {{ ucfirst($report->reportable->status) }}
+                                    </span>
+                                @elseif($type === 'Offer')
+                                    <span class="info-item-meta">
+                                        <strong>Offer for: {{ $report->reportable->listing->category }}</strong><br>
+                                        From: <a href="{{ route('users.show', $report->reportable->buyer) }}">{{ $report->reportable->buyer->name }}</a><br>
+                                        Status: {{ ucfirst($report->reportable->status) }}
+                                    </span>
+                                @else
+                                    <span class="info-item-meta">
+                                        <strong>{{ $report->reportable->email }}</strong><br>
+                                        Member since: {{ $report->reportable->created_at->format('M d, Y') }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="info-section">
+                            <span class="info-label">Reason</span>
+                            <div class="info-box reason-box">
+                                <p class="info-item-title reason-text">
+                                    <i class="fas fa-exclamation-circle"></i>{{ $report->getReasonLabel() }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Report Details -->
+                        <div class="info-section">
+                            <span class="info-label">Report Details</span>
+                            <div class="info-box details-box">
+                                <p class="details-text">{{ $description }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Metadata Grid -->
+                        <div class="metadata-grid">
+                            <div class="metadata-item">
+                                <span class="metadata-label">IP Address</span>
+                                <p class="metadata-value">{{ $report->ip_address ?? 'Not recorded' }}</p>
+                            </div>
+                            <div class="metadata-item">
+                                <span class="metadata-label">Submitted Date</span>
+                                <p class="metadata-value">{{ $report->created_at->format('M d, Y g:i A') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Notes -->
+                    @if($report->admin_notes)
+                        <div class="admin-notes-card">
+                            <h5><i class="fas fa-note-sticky"></i>Admin Notes</h5>
+                            <div class="admin-notes-box">
+                                <p class="admin-notes-text">{{ $report->admin_notes }}</p>
+                            </div>
+                            @if($report->reviewer)
+                                <p class="admin-notes-meta">
+                                    <i class="fas fa-user-shield me-1"></i>Reviewed by <strong>{{ $report->reviewer->name }}</strong> on {{ $report->reviewed_at->format('M d, Y g:i A') }}
+                                </p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Sidebar Actions -->
+                <div class="col-lg-4">
+                    <div class="actions-card">
+                        <h5><i class="fas fa-lightning-bolt"></i>Actions</h5>
+
+                        @if($report->status === 'pending')
+                            <form method="POST" action="{{ route('admin.reports.under-review', $report) }}" class="action-form">
+                                @csrf
+                                <button type="submit" class="action-btn btn-reviewing">
+                                    <i class="fas fa-magnifying-glass"></i>Mark as Reviewing
+                                </button>
+                            </form>
+                        @endif
+
+                        @if($report->status !== 'resolved' && $report->status !== 'dismissed')
+                            <!-- Resolve Form -->
+                            <form method="POST" action="{{ route('admin.reports.resolve', $report) }}" class="action-form">
+                                @csrf
+                                <div class="form-group">
+                                    <label class="form-label">Action Taken</label>
+                                    <select name="action_taken" required class="form-select">
+                                        <option value="none">No Action</option>
+                                        <option value="warning_sent">Send Warning</option>
+                                        <option value="content_removed">Remove Content</option>
+                                        <option value="user_suspended">Suspend User</option>
+                                        <option value="user_banned">Ban User</option>
+                                        <option value="listing_removed">Remove Listing</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Notes (Optional)</label>
+                                    <textarea name="admin_notes" placeholder="Add resolution notes..." class="form-textarea"></textarea>
+                                </div>
+
+                                <button type="submit" class="action-btn btn-resolve">
+                                    <i class="fas fa-check-circle"></i>Resolve Report
+                                </button>
+                            </form>
+
+                            <!-- Dismiss Form -->
+                            <form method="POST" action="{{ route('admin.reports.dismiss', $report) }}" class="action-form">
+                                @csrf
+                                <div class="form-group">
+                                    <label class="form-label">Reason (Optional)</label>
+                                    <textarea name="admin_notes" placeholder="Why is this report being dismissed?" class="form-textarea"></textarea>
+                                </div>
+
+                                <button type="submit" class="action-btn btn-dismiss">
+                                    <i class="fas fa-times-circle"></i>Dismiss Report
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+                    <div>
+                        <small style="color: #64748b; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.5rem;">Reason</small>
+                        <div style="background: rgba(231, 76, 60, 0.2); padding: 1rem; border-radius: 0.6rem; border-left: 3px solid #e74c3c;">
+                            <p style="color: #e74c3c; margin: 0; font-weight: 600;">
+                                <i class="fas fa-exclamation-circle me-2"></i>{{ $report->getReasonLabel() }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <small style="color: #a4b8b5; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.5rem;">Report Details</small>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 0.6rem;">
+                            <p style="color: var(--text-light); margin: 0; white-space: pre-wrap; word-break: break-word;">{{ $description }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <small style="color: #a4b8b5; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.5rem;">IP Address</small>
+                            <p style="color: var(--text-light); margin: 0; font-family: monospace;">{{ $report->ip_address ?? 'Not recorded' }}</p>
+                        </div>
+                        <div>
+                            <small style="color: #a4b8b5; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.5rem;">Submitted</small>
+                            <p style="color: var(--text-light); margin: 0;">{{ $report->created_at->format('M d, Y g:i A') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Notes -->
+            @if($report->admin_notes)
+                <div style="background: linear-gradient(135deg, rgba(15, 40, 24, 0.8) 0%, rgba(15, 40, 24, 0.4) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem;">
+                    <h5 style="color: #3498db; font-weight: 800; margin-bottom: 1rem;">Admin Notes</h5>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 0.6rem;">
+                        <p style="color: var(--text-light); margin: 0; white-space: pre-wrap;">{{ $report->admin_notes }}</p>
+                    </div>
+                    @if($report->reviewer)
+                        <p style="color: #a4b8b5; margin-top: 1rem; font-size: 0.85rem;">
+                            <i class="fas fa-user-shield me-1"></i>Reviewed by <strong>{{ $report->reviewer->name }}</strong> on {{ $report->reviewed_at->format('M d, Y g:i A') }}
+                        </p>
+                    @endif
+                </div>
+            @endif
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div style="background: linear-gradient(135deg, rgba(15, 40, 24, 0.8) 0%, rgba(15, 40, 24, 0.4) 100%); border: 1px solid rgba(46, 204, 113, 0.2); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; position: sticky; top: 100px;">
+                <h5 style="color: var(--light-green); font-weight: 800; margin-bottom: 1.5rem;">Actions</h5>
+
+                @if($report->status === 'pending')
+                    <form method="POST" action="{{ route('admin.reports.under-review', $report) }}" style="margin-bottom: 1rem;">
+                        @csrf
+                        <button type="submit" class="btn" style="width: 100%; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; font-weight: 700; padding: 0.8rem 1rem; border: none; border-radius: 0.6rem; cursor: pointer;">
+                            <i class="fas fa-magnifying-glass me-2"></i>Mark as Reviewing
+                        </button>
+                    </form>
+                @endif
+
+                @if($report->status !== 'resolved' && $report->status !== 'dismissed')
+                    <!-- Resolve Form -->
+                    <form method="POST" action="{{ route('admin.reports.resolve', $report) }}" style="margin-bottom: 1rem;">
+                        @csrf
+                        <div style="margin-bottom: 1rem;">
+                            <label style="color: var(--text-light); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 0.5rem;">Action</label>
+                            <select name="action_taken" required style="width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.6rem; border-radius: 0.4rem; font-size: 0.9rem;">
+                                <option value="none" style="background: #0f2818;">No Action</option>
+                                <option value="warning_sent" style="background: #0f2818;">Send Warning</option>
+                                <option value="content_removed" style="background: #0f2818;">Remove Content</option>
+                                <option value="user_suspended" style="background: #0f2818;">Suspend User</option>
+                                <option value="user_banned" style="background: #0f2818;">Ban User</option>
+                                <option value="listing_removed" style="background: #0f2818;">Remove Listing</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="color: var(--text-light); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 0.5rem;">Notes (Optional)</label>
+                            <textarea name="admin_notes" placeholder="Add resolution notes..." style="width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.6rem; border-radius: 0.4rem; font-size: 0.9rem; min-height: 80px; resize: vertical;"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); color: var(--dark-bg); font-weight: 700; padding: 0.8rem 1rem; border: none; border-radius: 0.6rem; cursor: pointer;">
+                            <i class="fas fa-check-circle me-2"></i>Resolve Report
+                        </button>
+                    </form>
+
+                    <!-- Dismiss Form -->
+                    <form method="POST" action="{{ route('admin.reports.dismiss', $report) }}" style="margin-bottom: 1rem;">
+                        @csrf
+                        <div style="margin-bottom: 1rem;">
+                            <label style="color: var(--text-light); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 0.5rem;">Reason (Optional)</label>
+                            <textarea name="admin_notes" placeholder="Why is this report being dismissed?" style="width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.6rem; border-radius: 0.4rem; font-size: 0.9rem; min-height: 80px; resize: vertical;"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; background: rgba(127, 140, 141, 0.3); color: #95a5a6; font-weight: 700; padding: 0.8rem 1rem; border: 1px solid rgba(127, 140, 141, 0.2); border-radius: 0.6rem; cursor: pointer;">
+                            <i class="fas fa-times-circle me-2"></i>Dismiss Report
+                        </button>
+                    </form>
+                @endif
+
+                <!-- Status Badge -->
+                <div style="background: rgba(46, 204, 113, 0.1); padding: 1rem; border-radius: 0.6rem; border-left: 3px solid var(--light-green);">
+                    <p style="color: #a4b8b5; margin: 0; font-size: 0.85rem; text-transform: uppercase; font-weight: 700;">Current Status</p>
+                    <p style="color: var(--light-green); margin: 0.5rem 0 0 0; font-weight: 600;">
+                        @php
+                            $statusColor = match($report->status) {
+                                'pending' => '#f39c12',
+                                'under_review' => '#3498db',
+                                'resolved' => '#27ae60',
+                                'dismissed' => '#7f8c8d',
+                                default => '#95a5a6'
+                            };
+                        @endphp
+                        <i class="fas" style="color: {{ $statusColor }};" @class([
+                            'fa-hourglass-half' => $report->status === 'pending',
+                            'fa-magnifying-glass' => $report->status === 'under_review',
+                            'fa-check-circle' => $report->status === 'resolved',
+                            'fa-trash' => $report->status === 'dismissed',
+                        ])></i>
+                        {{ ucfirst(str_replace('_', ' ', $report->status)) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+@endsection

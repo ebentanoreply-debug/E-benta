@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="E-Benta">
+  <rect width="64" height="64" rx="14" fill="#102a43"/>
+  <path d="M47 14C31 15 18 23 16 39c8 2 16-1 21-7 5-5 8-11 10-18Z" fill="#06b6d4"/>
+  <path d="M17 48c6-10 14-17 27-24" fill="none" stroke="#0d9488" stroke-width="4" stroke-linecap="round"/>
+  <path d="M23 39c-1-7 1-13 6-18" fill="none" stroke="#8bd5c7" stroke-width="3" stroke-linecap="round"/>
+</svg>

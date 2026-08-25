@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Benta DFD Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .diagram-section {
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .diagram-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .diagram-header h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-download {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-download:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-pdf {
+            background: #FF6B6B;
+            color: white;
+        }
+        
+        .btn-pdf:hover {
+            background: #ee5a52;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+        
+        .diagram-content {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 800px;
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+        
+        .mermaid {
+            max-width: 100%;
+            height: auto;
+            transform: scale(1.4);
+            transform-origin: top center;
+            min-width: 1400px;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #1565c0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 0 0 10px 10px;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            .diagram-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .btn-group {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                flex: 1;
+                min-width: 140px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>E-Benta Data Flow Diagrams</h1>
+            <p>Interactive DFD visualizations for the E-waste Marketplace System</p>
+        </div>
+        
+        <div class="info-box">
+            📊 You can download each diagram as PNG or view as interactive SVG. Click the download buttons to save the diagrams locally.
+        </div>
+        
+        <!-- DFD LEVEL 0 -->
+        <div class="diagram-section">
+            <div class="diagram-header">
+                <h2>Figure 3.3.1: DFD Level 0 - Context Diagram</h2>
+                <div class="btn-group">
+                    <button class="btn btn-download" onclick="downloadDiagram('diagram-level-0', 'DFD_Level_0_Context')">
+                        ⬇ PNG
+                    </button>
+                    <button class="btn btn-pdf" onclick="downloadSVG('diagram-level-0', 'DFD_Level_0_Context')">
+                        ⬇ SVG
+                    </button>
+                </div>
+            </div>
+            <div class="diagram-content">
+                <div id="diagram-level-0" class="mermaid">
+graph LR
+    Seller["<b>SELLER</b>"]
+    Buyer["<b>BUYER</b>"]
+    Admin["<b>ADMIN</b>"]
+    
+    System["<b>0</b><br/><br/>E-BENTA<br/>SYSTEM"]
+    
+    Seller -->|Listing Data<br/>Registration<br/>Profile Updates<br/>Transaction Info| System
+    System -->|Transaction Status<br/>Impact Metrics<br/>Notifications<br/>Certificates| Seller
+    
+    Buyer -->|Registration<br/>Search Request<br/>Offers/Bids<br/>Payment Info| System
+    System -->|Listings<br/>Transaction Updates<br/>Certificates<br/>Impact Data| Buyer
+    
+    Admin -->|User Verification<br/>System Configuration<br/>Data Management<br/>Report Query| System
+    System -->|Reports<br/>Activity Logs<br/>System Status<br/>User Data| Admin
+    
+    style System fill:#f0f0f0,stroke:#333,stroke-width:3px,color:#000
+    style Seller fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Buyer fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Admin fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+                </div>
+            </div>
+        </div>
+        
+        <!-- DFD LEVEL 1 -->
+        <div class="diagram-section">
+            <div class="diagram-header">
+                <h2>Figure 3.3.2: DFD Level 1 - Major Processes & Data Stores</h2>
+                <div class="btn-group">
+                    <button class="btn btn-download" onclick="downloadDiagram('diagram-level-1', 'DFD_Level_1_Processes')">
+                        ⬇ PNG
+                    </button>
+                    <button class="btn btn-pdf" onclick="downloadSVG('diagram-level-1', 'DFD_Level_1_Processes')">
+                        ⬇ SVG
+                    </button>
+                </div>
+            </div>
+            <div class="diagram-content">
+                <div id="diagram-level-1" class="mermaid">
+graph TD
+    Seller["SELLER"]
+    Buyer["BUYER"]
+    Admin["ADMIN"]
+    
+    P1["<b>1.0</b><br/>User<br/>Management"]
+    P2["<b>2.0</b><br/>Listing<br/>Management"]
+    P3["<b>3.0</b><br/>Transaction<br/>Processing"]
+    P4["<b>4.0</b><br/>Environmental<br/>Impact"]
+    P5["<b>5.0</b><br/>Quality<br/>Assurance"]
+    P6["<b>6.0</b><br/>System<br/>Admin"]
+    
+    D1["<b>D1</b><br/>User<br/>Data"]
+    D2["<b>D2</b><br/>Product<br/>Data"]
+    D3["<b>D3</b><br/>Order<br/>Data"]
+    D4["<b>D4</b><br/>Impact<br/>Data"]
+    D5["<b>D5</b><br/>Notification<br/>Data"]
+    D6["<b>D6</b><br/>Device<br/>Catalog"]
+    D7["<b>D7</b><br/>Audit<br/>Data"]
+    D8["<b>D8</b><br/>Review<br/>Data"]
+    
+    Seller -->|registration confirmation<br/>organization data| P1
+    Buyer -->|registration confirmation<br/>user profile data| P1
+    Admin -->|user verification data| P1
+    
+    P1 -->|user profile record<br/>registration confirmation| D1
+    D1 -->|user profile record| P1
+    D1 -->|user info| P2
+    D1 -->|user info| P3
+    D1 -->|user data| P5
+    
+    Seller -->|product details<br/>listing data| P2
+    P2 -->|product listing<br/>product record| D2
+    D2 -->|product status update| P2
+    D2 -->|product details| Buyer
+    P2 -->|product classification data| D6
+    D6 -->|device info| P2
+    
+    Buyer -->|order record<br/>offer detail| P3
+    P3 -->|order request<br/>order creation| D3
+    D3 -->|transaction data| P4
+    D3 -->|order update| P3
+    P3 -->|order confirmation<br/>order request| D5
+    D5 -->|order alert| Seller
+    D5 -->|order alert| Buyer
+    
+    Seller -->|transaction info| P4
+    P4 -->|automatically calculated<br/>impact record| D4
+    D4 -->|impact record| Seller
+    D4 -->|certificate record| Buyer
+    
+    Buyer -->|feedback| P5
+    P5 -->|reviewed record<br/>post record| D8
+    Admin -->|user profile update| P6
+    P6 -->|system status<br/>updated user record| D7
+    D7 -->|audit record<br/>user info| P1
+    D7 -->|reports| Admin
+    
+    style P1 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    style P2 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    style P3 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    style P4 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    style P5 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    style P6 fill:#e8e8e8,color:#000,stroke:#333,stroke-width:2px
+    
+    style D1 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D2 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D3 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D4 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D5 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D6 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D7 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D8 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    
+    style Seller fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Buyer fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Admin fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+                </div>
+            </div>
+        </div>
+        
+        <!-- DFD LEVEL 2 -->
+        <div class="diagram-section">
+            <div class="diagram-header">
+                <h2>Figure 3.3.3: DFD Level 2 - Detailed Sub-Processes</h2>
+                <div class="btn-group">
+                    <button class="btn btn-download" onclick="downloadDiagram('diagram-level-2', 'DFD_Level_2_Detailed')">
+                        ⬇ PNG
+                    </button>
+                    <button class="btn btn-pdf" onclick="downloadSVG('diagram-level-2', 'DFD_Level_2_Detailed')">
+                        ⬇ SVG
+                    </button>
+                </div>
+            </div>
+            <div class="diagram-content">
+                <div id="diagram-level-2" class="mermaid">
+graph TD
+    Seller["SELLER"]
+    Buyer["BUYER"]
+    Admin["ADMIN"]
+    
+    subgraph UM["1.0 USER MANAGEMENT"]
+        direction LR
+        P11["1.1<br/>Seller Reg"]
+        P12["1.2<br/>Buyer Reg"]
+        P13["1.3<br/>Profile Edit"]
+        P14["1.4<br/>Verification"]
+        P15["1.5<br/>Account<br/>Status"]
+    end
+    
+    subgraph LM["2.0 LISTING MANAGEMENT"]
+        direction LR
+        P21["2.1<br/>Add Listing"]
+        P22["2.2<br/>Update<br/>Listing"]
+        P23["2.3<br/>Classify<br/>Product"]
+        P24["2.4<br/>Retrieve<br/>Listing"]
+        P25["2.5<br/>Delete<br/>Listing"]
+    end
+    
+    subgraph TP["3.0 TRANSACTION PROCESSING"]
+        direction LR
+        P31["3.1<br/>Request<br/>Handling"]
+        P32["3.2<br/>Status<br/>Update"]
+        P33["3.3<br/>Transaction<br/>Record"]
+        P34["3.4<br/>Notification<br/>Trigger"]
+    end
+    
+    subgraph IT["4.0 ENVIRONMENTAL IMPACT"]
+        direction LR
+        P41["4.1<br/>Impact<br/>Calculate"]
+        P42["4.2<br/>Landfill<br/>Tracking"]
+        P43["4.3<br/>Certificate<br/>Generate"]
+    end
+    
+    subgraph QA["5.0 QUALITY ASSURANCE"]
+        direction LR
+        P51["5.1<br/>Review<br/>Submit"]
+        P52["5.2<br/>Rating<br/>Process"]
+    end
+    
+    subgraph SA["6.0 SYSTEM ADMINISTRATION"]
+        direction LR
+        P61["6.1<br/>Report<br/>Generate"]
+        P62["6.2<br/>System<br/>Monitor"]
+    end
+    
+    D1["D1<br/>User DB"]
+    D2["D2<br/>Listings DB"]
+    D3["D3<br/>Orders DB"]
+    D4["D4<br/>Impact DB"]
+    D5["D5<br/>Notifications"]
+    D6["D6<br/>Device Cat"]
+    D7["D7<br/>Audit Log"]
+    D8["D8<br/>Reviews DB"]
+    
+    Seller -->|seller data| P11
+    Buyer -->|buyer data| P12
+    Admin -->|verify user| P14
+    
+    P11 -->|store| D1
+    P12 -->|store| D1
+    D1 -->|retrieve| P13
+    P13 -->|update| D1
+    P14 -->|verify| D1
+    D1 -->|user status| P15
+    
+    Seller -->|listing info| P21
+    P21 -->|validate| P23
+    P23 -->|get device| D6
+    P21 -->|store| D2
+    D2 -->|retrieve| P24
+    P24 -->|send listings| Buyer
+    P22 -->|update| D2
+    P25 -->|delete| D2
+    
+    Buyer -->|offer data| P31
+    P31 -->|store| D3
+    P32 -->|update status| D3
+    D3 -->|get order| P33
+    P33 -->|record| D3
+    P34 -->|create| D5
+    D5 -->|send notification| Seller
+    D5 -->|send notification| Buyer
+    
+    P33 -->|trigger impact| P41
+    P41 -->|calculate| P42
+    P42 -->|store| D4
+    D4 -->|get data| P43
+    P43 -->|generate| Buyer
+    P43 -->|generate| Seller
+    
+    Buyer -->|feedback| P51
+    P51 -->|store| D8
+    P52 -->|process| D8
+    D8 -->|retrieve rating| P52
+    
+    Admin -->|request report| P61
+    P61 -->|query| D7
+    P61 -->|query| D4
+    P62 -->|monitor| D1
+    P62 -->|monitor| D3
+    
+    style UM fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    style LM fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    style TP fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    style IT fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    style QA fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    style SA fill:#dcdcdc,color:#000,stroke:#333,stroke-width:2px
+    
+    style P11 fill:#e8e8e8,color:#000
+    style P12 fill:#e8e8e8,color:#000
+    style P13 fill:#e8e8e8,color:#000
+    style P14 fill:#e8e8e8,color:#000
+    style P15 fill:#e8e8e8,color:#000
+    
+    style P21 fill:#e8e8e8,color:#000
+    style P22 fill:#e8e8e8,color:#000
+    style P23 fill:#e8e8e8,color:#000
+    style P24 fill:#e8e8e8,color:#000
+    style P25 fill:#e8e8e8,color:#000
+    
+    style P31 fill:#e8e8e8,color:#000
+    style P32 fill:#e8e8e8,color:#000
+    style P33 fill:#e8e8e8,color:#000
+    style P34 fill:#e8e8e8,color:#000
+    
+    style P41 fill:#e8e8e8,color:#000
+    style P42 fill:#e8e8e8,color:#000
+    style P43 fill:#e8e8e8,color:#000
+    
+    style P51 fill:#e8e8e8,color:#000
+    style P52 fill:#e8e8e8,color:#000
+    
+    style P61 fill:#e8e8e8,color:#000
+    style P62 fill:#e8e8e8,color:#000
+    
+    style D1 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D2 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D3 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D4 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D5 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D6 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D7 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    style D8 fill:#f9f9f9,color:#000,stroke:#666,stroke-width:2px
+    
+    style Seller fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Buyer fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+    style Admin fill:#ffffff,stroke:#666,stroke-width:2px,color:#000
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>E-Benta Data Flow Diagram Documentation • Generated on April 13, 2026</p>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        mermaid.contentLoaded();
+        
+        async function downloadDiagram(elementId, filename) {
+            const element = document.getElementById(elementId);
+            const canvas = await html2canvas(element, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                allowTaint: true,
+                useCORS: true
+            });
+            
+            const link = document.createElement('a');
+            link.download = filename + '.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function downloadSVG(elementId, filename) {
+            const element = document.getElementById(elementId);
+            const svg = element.querySelector('svg');
+            
+            if (!svg) {
+                alert('SVG not ready. Please wait a moment and try again.');
+                return;
+            }
+            
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svg);
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.download = filename + '.svg';
+            link.href = url;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

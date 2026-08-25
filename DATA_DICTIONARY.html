@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Benta Data Dictionary - Complete</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .toc {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .toc h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .toc-list {
+            columns: 3;
+            gap: 20px;
+        }
+        .toc-list li {
+            margin-bottom: 8px;
+            list-style-position: inside;
+        }
+        .toc-list a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .table-category {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #0066cc;
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background: white;
+        }
+        th {
+            background: #ddd;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #999;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #f0f0f0;
+        }
+        .key-badge {
+            display: inline-block;
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 3px;
+        }
+        .pk { background: #fce4ec; color: #c2185b; }
+        .fk { background: #f3e5f5; color: #512da8; }
+        .unique { background: #e1f5fe; color: #01579b; }
+        .index { background: #f1f8e9; color: #558b2f; }
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 12px;
+            border: none;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #0052a3;
+        }
+        .table-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        function downloadTableAsCSV(tableId, tableName) {
+            const table = document.getElementById(tableId);
+            let csv = [];
+            
+            // Get all rows
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                let rowData = [];
+                const cells = row.querySelectorAll('td, th');
+                cells.forEach(cell => {
+                    // Get text content and clean it
+                    let text = cell.textContent.trim().replace(/"/g, '""');
+                    rowData.push(`"${text}"`);
+                });
+                csv.push(rowData.join(','));
+            });
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${tableName}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</head>
+<body>
+    <h1>E-Benta Data Dictionary</h1>
+    <p class="subtitle">Complete Database Schema Documentation - April 13, 2026</p>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul class="toc-list">
+            <li><a href="#users">Users</a></li>
+            <li><a href="#addresses">Addresses</a></li>
+            <li><a href="#listings">Listings</a></li>
+            <li><a href="#offers">Offers</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#impact-logs">Impact Logs</a></li>
+            <li><a href="#device-types">Device Types</a></li>
+            <li><a href="#device-brands">Device Brands</a></li>
+            <li><a href="#device-models">Device Models</a></li>
+            <li><a href="#notifications">Notifications</a></li>
+            <li><a href="#email-verifications">Email Verifications</a></li>
+            <li><a href="#audit-logs">Audit Logs</a></li>
+            <li><a href="#reports">Reports</a></li>
+            <li><a href="#password-resets">Password Resets</a></li>
+            <li><a href="#sessions">Sessions</a></li>
+            <li><a href="#cache">Cache</a></li>
+            <li><a href="#jobs">Jobs System</a></li>
+        </ul>
+    </div>
+
+    <!-- CORE BUSINESS TABLES -->
+
+    <h2 id="users">1. Users Table
+    <button class="download-btn" onclick="downloadTableAsCSV('users-table', 'E-Benta_Users')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Core Application | User Accounts, Sellers, Buyers, Admins</div>
+    <table id="users-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>name</td>
+                <td>VARCHAR(255)</td>
+                <td>User's full name</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>email</td>
+                <td>VARCHAR(255)</td>
+                <td>User's email address for login</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>email_change_token</td>
+                <td>VARCHAR(255)</td>
+                <td>Token for email change verification (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>email_change_new_email</td>
+                <td>VARCHAR(255)</td>
+                <td>New email address pending verification (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>email_change_expires_at</td>
+                <td>TIMESTAMP</td>
+                <td>When email change token expires (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>role</td>
+                <td>ENUM('seller','buyer','admin')</td>
+                <td>User role. Default: 'seller'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>email_verified_at</td>
+                <td>TIMESTAMP</td>
+                <td>Timestamp when email was verified (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>password</td>
+                <td>VARCHAR(255)</td>
+                <td>Hashed password for authentication</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>remember_token</td>
+                <td>VARCHAR(100)</td>
+                <td>Token for "remember me" functionality (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>is_verified</td>
+                <td>BOOLEAN</td>
+                <td>Verification status for buyers/recyclers. Default: false</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>business_name</td>
+                <td>VARCHAR(255)</td>
+                <td>Name of the business for sellers/recyclers (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>business_description</td>
+                <td>TEXT</td>
+                <td>Description of business operations (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>phone</td>
+                <td>VARCHAR(20)</td>
+                <td>Contact phone number (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>total_impact_score</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Cumulative environmental impact score. Default: 0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>items_processed</td>
+                <td>INT</td>
+                <td>Total number of e-waste items processed. Default: 0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>total_weight_diverted</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Total weight diverted from landfill in kg. Default: 0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>total_co2_saved</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Total CO2 emissions saved in kg. Default: 0</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>google_id</td>
+                <td>VARCHAR(255)</td>
+                <td>Google OAuth provider ID (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>oauth_provider</td>
+                <td>VARCHAR(50)</td>
+                <td>OAuth provider name: 'google', 'github', etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Account creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last account update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="addresses">2. Addresses Table
+    <button class="download-btn" onclick="downloadTableAsCSV('addresses-table', 'E-Benta_Addresses')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Core Business | User Pickup & Dropoff Locations</div>
+    <table id="addresses-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>User who owns the address. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>label</td>
+                <td>VARCHAR(255)</td>
+                <td>Label for address: Home, Office, Warehouse, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>address_line_1</td>
+                <td>VARCHAR(255)</td>
+                <td>Street address</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>address_line_2</td>
+                <td>VARCHAR(255)</td>
+                <td>Apartment, suite, building number (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>city</td>
+                <td>VARCHAR(255)</td>
+                <td>City name</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>state</td>
+                <td>VARCHAR(255)</td>
+                <td>Province or region (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>postal_code</td>
+                <td>VARCHAR(20)</td>
+                <td>Postal/ZIP code</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>country</td>
+                <td>VARCHAR(255)</td>
+                <td>Country. Default: 'Philippines'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>latitude</td>
+                <td>DECIMAL(10,8)</td>
+                <td>GPS latitude coordinate (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>longitude</td>
+                <td>DECIMAL(11,8)</td>
+                <td>GPS longitude coordinate (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>special_instructions</td>
+                <td>TEXT</td>
+                <td>Gate code, buzzer, parking notes, etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>is_primary</td>
+                <td>BOOLEAN</td>
+                <td>Default address for transactions. Default: false</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>type</td>
+                <td>ENUM('pickup','dropoff','both')</td>
+                <td>Type of address. Default: 'both'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="listings">3. Listings Table
+    <button class="download-btn" onclick="downloadTableAsCSV('listings-table', 'E-Benta_Listings')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Core Business | E-Waste Items Posted for Sale/Donation</div>
+    <table id="listings-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>Seller's user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>category</td>
+                <td>VARCHAR(255)</td>
+                <td>Item category: Laptop, Smartphone, Desktop, etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>condition</td>
+                <td>ENUM('working','minor_damage','major_damage','non_functional')</td>
+                <td>Item condition. Default: 'working'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Detailed description of the item</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>estimated_weight</td>
+                <td>DECIMAL(5,2)</td>
+                <td>Estimated weight in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>intended_action</td>
+                <td>ENUM('sell','donate','recycle')</td>
+                <td>Intended action for the item. Default: 'sell'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>suggested_price</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Seller's suggested price (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>photos</td>
+                <td>JSON</td>
+                <td>Array of photo URLs/paths (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>status</td>
+                <td>ENUM('pending','available','matched','in_transit','delivered','processed')</td>
+                <td>Listing status. Default: 'pending'</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>matched_buyer_id</td>
+                <td>BIGINT</td>
+                <td>Buyer's user ID when matched. References users(id). SET NULL on delete (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>matched_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the listing was matched (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>pickup_scheduled_at</td>
+                <td>TIMESTAMP</td>
+                <td>When pickup was scheduled (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>picked_up_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the item was actually picked up (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>delivered_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the item was delivered (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>processed_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the item was processed (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>carbon_footprint</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Carbon footprint in kg CO2 (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>material_composition</td>
+                <td>VARCHAR(255)</td>
+                <td>Primary materials in the device (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Listing creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+            <tr>
+                <td>SOFT DEL</td>
+                <td>deleted_at</td>
+                <td>TIMESTAMP</td>
+                <td>Soft delete timestamp (nullable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="offers">4. Offers Table
+    <button class="download-btn" onclick="downloadTableAsCSV('offers-table', 'E-Benta_Offers')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Core Business | Bids/Offers from Buyers on Listings</div>
+    <table id="offers-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>listing_id</td>
+                <td>BIGINT</td>
+                <td>Listing ID. References listings(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>buyer_id</td>
+                <td>BIGINT</td>
+                <td>Buyer's user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>bid_amount</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Offered bid amount in currency</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>proposed_method</td>
+                <td>ENUM('repair','harvest','refine','dispose')</td>
+                <td>Processing method: repair (resale), harvest (components), refine (materials), dispose</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>notes</td>
+                <td>TEXT</td>
+                <td>Additional notes from buyer (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>proposed_pickup_date</td>
+                <td>DATETIME</td>
+                <td>Proposed date/time for item pickup</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>pickup_location</td>
+                <td>TEXT</td>
+                <td>Proposed pickup location address (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>status</td>
+                <td>ENUM('pending','accepted','rejected','cancelled','completed')</td>
+                <td>Offer status. Default: 'pending'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>responded_at</td>
+                <td>TIMESTAMP</td>
+                <td>When seller responded (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Offer creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+            <tr>
+                <td>SOFT DEL</td>
+                <td>deleted_at</td>
+                <td>TIMESTAMP</td>
+                <td>Soft delete timestamp (nullable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="reviews">5. Reviews Table
+    <button class="download-btn" onclick="downloadTableAsCSV('reviews-table', 'E-Benta_Reviews')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Core Business | User Ratings & Reviews</div>
+    <table id="reviews-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>reviewer_id</td>
+                <td>BIGINT</td>
+                <td>User leaving the review. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>reviewee_id</td>
+                <td>BIGINT</td>
+                <td>User being reviewed. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>offer_id</td>
+                <td>BIGINT</td>
+                <td>Associated transaction offer. References offers(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>rating</td>
+                <td>INT</td>
+                <td>Rating: 1-5 stars</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>title</td>
+                <td>VARCHAR(255)</td>
+                <td>Review title/headline</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>comment</td>
+                <td>TEXT</td>
+                <td>Review comment text (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>review_type</td>
+                <td>ENUM('buyer','seller')</td>
+                <td>Is reviewer a buyer or seller?</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>attributes</td>
+                <td>JSON</td>
+                <td>Detailed ratings: communication, professionalism, etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>is_verified</td>
+                <td>BOOLEAN</td>
+                <td>Verified purchase. Default: false</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Review creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="impact-logs">6. Impact Logs Table
+    <button class="download-btn" onclick="downloadTableAsCSV('impact-logs-table', 'E-Benta_ImpactLogs')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Environmental Impact | Material Recovery Metrics</div>
+    <table id="impact-logs-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>listing_id</td>
+                <td>BIGINT</td>
+                <td>Listing ID. References listings(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>seller_id</td>
+                <td>BIGINT</td>
+                <td>Seller's user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>buyer_id</td>
+                <td>BIGINT</td>
+                <td>Buyer's user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>offer_id</td>
+                <td>BIGINT</td>
+                <td>Associated offer ID. References offers(id). CASCADE on delete (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>device_category</td>
+                <td>VARCHAR(255)</td>
+                <td>Category of processed device</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>device_weight</td>
+                <td>DECIMAL(5,2)</td>
+                <td>Weight of device in kg</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>processing_method</td>
+                <td>ENUM('repair','harvest','refine','dispose')</td>
+                <td>How the device was processed</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>co2_saved</td>
+                <td>DECIMAL(10,2)</td>
+                <td>CO2 saved in kg</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>landfill_diverted_weight</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Weight diverted from landfill in kg</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>materials_recovered_weight</td>
+                <td>DECIMAL(10,2)</td>
+                <td>Total weight of recovered materials in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>gold_recovered</td>
+                <td>DECIMAL(5,4)</td>
+                <td>Gold recovered in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>copper_recovered</td>
+                <td>DECIMAL(5,2)</td>
+                <td>Copper recovered in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>plastic_recovered</td>
+                <td>DECIMAL(5,2)</td>
+                <td>Plastic recovered in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>aluminum_recovered</td>
+                <td>DECIMAL(5,2)</td>
+                <td>Aluminum recovered in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>rare_earth_recovered</td>
+                <td>DECIMAL(5,4)</td>
+                <td>Rare earth elements recovered in kg (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>certificate_path</td>
+                <td>VARCHAR(255)</td>
+                <td>Path to environmental impact certificate PDF (nullable)</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>certificate_token</td>
+                <td>VARCHAR(255)</td>
+                <td>Unique token for certificate verification (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>status</td>
+                <td>ENUM('pending','verified','certified')</td>
+                <td>Impact log status. Default: 'pending'</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>certified_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the impact was certified (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Log creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+            <tr>
+                <td>SOFT DEL</td>
+                <td>deleted_at</td>
+                <td>TIMESTAMP</td>
+                <td>Soft delete timestamp (nullable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- CATALOG & DEVICE TABLES -->
+
+    <h2 id="device-types">7. Device Types Table
+    <button class="download-btn" onclick="downloadTableAsCSV('device-types-table', 'E-Benta_DeviceTypes')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Catalog | Device Categories/Types</div>
+    <table id="device-types-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>name</td>
+                <td>VARCHAR(255)</td>
+                <td>Device type name: Laptop, Smartphone, Tablet, Desktop, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Description of the device type (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>icon</td>
+                <td>VARCHAR(255)</td>
+                <td>Font Awesome icon class (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="device-brands">8. Device Brands Table
+    <button class="download-btn" onclick="downloadTableAsCSV('device-brands-table', 'E-Benta_DeviceBrands')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Catalog | Device Manufacturers/Brands</div>
+    <table id="device-brands-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>name</td>
+                <td>VARCHAR(255)</td>
+                <td>Brand name: Apple, Samsung, Dell, HP, Lenovo, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Brand description (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>logo_url</td>
+                <td>VARCHAR(255)</td>
+                <td>URL to brand logo image (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="device-models">9. Device Models Table
+    <button class="download-btn" onclick="downloadTableAsCSV('device-models-table', 'E-Benta_DeviceModels')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Catalog | Specific Device Models</div>
+    <table id="device-models-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>device_type_id</td>
+                <td>BIGINT</td>
+                <td>Device type ID. References device_types(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>device_brand_id</td>
+                <td>BIGINT</td>
+                <td>Device brand ID. References device_brands(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>model_name</td>
+                <td>VARCHAR(255)</td>
+                <td>Model name: iPhone 13 Pro, Samsung Galaxy S21, Dell XPS 13, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Model description and specifications (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- COMMUNICATION & NOTIFICATION TABLES -->
+
+    <h2 id="notifications">10. Notifications Table
+    <button class="download-btn" onclick="downloadTableAsCSV('notifications-table', 'E-Benta_Notifications')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Communication | In-App User Notifications</div>
+    <table id="notifications-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>Recipient user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>type</td>
+                <td>VARCHAR(255)</td>
+                <td>Notification type: offer_update, listing_status, admin_alert, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>title</td>
+                <td>VARCHAR(255)</td>
+                <td>Notification title/heading</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>message</td>
+                <td>TEXT</td>
+                <td>Notification message content</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>data</td>
+                <td>JSON</td>
+                <td>Extra data: offer_id, listing_id, etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>is_read</td>
+                <td>BOOLEAN</td>
+                <td>Whether user has read the notification. Default: false</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>read_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the notification was read (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- VERIFICATION & SECURITY TABLES -->
+
+    <h2 id="email-verifications">11. Email Verifications Table
+    <button class="download-btn" onclick="downloadTableAsCSV('email-verifications-table', 'E-Benta_EmailVerifications')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Security | Email Verification Codes</div>
+    <table id="email-verifications-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>User being verified. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>code</td>
+                <td>VARCHAR(6)</td>
+                <td>6-digit verification code</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>expires_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the verification code expires</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>used</td>
+                <td>BOOLEAN</td>
+                <td>Whether code has been used for verification. Default: false</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ADMIN & AUDIT TABLES -->
+
+    <h2 id="audit-logs">12. Audit Logs Table
+    <button class="download-btn" onclick="downloadTableAsCSV('audit-logs-table', 'E-Benta_AuditLogs')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Admin | System Activity & Changes</div>
+    <table id="audit-logs-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>User who performed the action. References users(id). SET NULL on delete (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>action</td>
+                <td>VARCHAR(255)</td>
+                <td>Action performed: login, create_listing, update_offer_status, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>model_type</td>
+                <td>VARCHAR(255)</td>
+                <td>Type of model affected: Listing, Offer, User, etc. (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>model_id</td>
+                <td>BIGINT</td>
+                <td>ID of the affected resource (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Human-readable description of the action</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>old_values</td>
+                <td>JSON</td>
+                <td>Previous values before change (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>new_values</td>
+                <td>JSON</td>
+                <td>New values after change (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>ip_address</td>
+                <td>VARCHAR(45)</td>
+                <td>User's IP address (IPv4 or IPv6) (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>user_agent</td>
+                <td>TEXT</td>
+                <td>Browser/client user agent string (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Log creation timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="reports">13. Reports Table
+    <button class="download-btn" onclick="downloadTableAsCSV('reports-table', 'E-Benta_Reports')">⬇ Download CSV</button>
+    </h2>
+    <div class="table-category">Admin | User-Submitted Reports & Moderation</div>
+    <table id="reports-table">
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing unique identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>Reporter user ID. References users(id). CASCADE on delete</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>reportable_type</td>
+                <td>VARCHAR(255)</td>
+                <td>Type being reported: App\Models\Listing, App\Models\Offer, App\Models\User, etc.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>reportable_id</td>
+                <td>BIGINT</td>
+                <td>ID of the resource being reported</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>reason</td>
+                <td>ENUM (11 values)</td>
+                <td>Reason for report: inappropriate_content, scam_fraud, offensive_language, harassment_abuse, spam, false_information, fake_listing, broken_item_misrepresentation, seller_unresponsive, suspicious_behavior, other</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>description</td>
+                <td>TEXT</td>
+                <td>Detailed description of the report (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>status</td>
+                <td>ENUM('pending','under_review','resolved','dismissed')</td>
+                <td>Report status. Default: 'pending'</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>reviewed_by</td>
+                <td>BIGINT</td>
+                <td>Admin user ID who reviewed. References users(id). SET NULL on delete (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>admin_notes</td>
+                <td>TEXT</td>
+                <td>Notes from admin reviewer (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>reviewed_at</td>
+                <td>TIMESTAMP</td>
+                <td>When reviewed by admin (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>action_taken</td>
+                <td>ENUM (6 values)</td>
+                <td>Action: none, warning_sent, content_removed, user_suspended, user_banned, listing_removed (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>ip_address</td>
+                <td>VARCHAR(45)</td>
+                <td>Reporter's IP address (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>user_agent</td>
+                <td>VARCHAR(255)</td>
+                <td>Reporter's browser/client info (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Report submission timestamp</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>updated_at</td>
+                <td>TIMESTAMP</td>
+                <td>Last update timestamp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- LARAVEL FRAMEWORK TABLES -->
+
+    <h2 id="password-resets">14. Password Resets Table</h2>
+    <div class="table-category">Laravel Framework | Password Reset Tokens</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>email</td>
+                <td>VARCHAR(255)</td>
+                <td>User email address requesting password reset</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>token</td>
+                <td>VARCHAR(255)</td>
+                <td>Password reset token (hashed)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>TIMESTAMP</td>
+                <td>Token creation timestamp (nullable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="sessions">15. Sessions Table</h2>
+    <div class="table-category">Laravel Framework | User Session Tracking</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>VARCHAR(255)</td>
+                <td>Session identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge fk">FK</span></td>
+                <td>user_id</td>
+                <td>BIGINT</td>
+                <td>Associated user ID. References users(id) (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>ip_address</td>
+                <td>VARCHAR(45)</td>
+                <td>Client IP address (IPv4 or IPv6) (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>user_agent</td>
+                <td>TEXT</td>
+                <td>Browser/client user agent string (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>payload</td>
+                <td>LONGTEXT</td>
+                <td>Serialized session data</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>last_activity</td>
+                <td>INT</td>
+                <td>Unix timestamp of last activity</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="cache">16. Cache Tables</h2>
+    <div class="table-category">Laravel Framework | Caching System</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4"><strong>Cache Table</strong></td>
+            </tr>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>key</td>
+                <td>VARCHAR(255)</td>
+                <td>Cache key identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>value</td>
+                <td>MEDIUMTEXT</td>
+                <td>Cached value/data</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>expiration</td>
+                <td>INT</td>
+                <td>Unix timestamp when cache expires</td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Cache Locks Table</strong></td>
+            </tr>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>key</td>
+                <td>VARCHAR(255)</td>
+                <td>Lock key identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>owner</td>
+                <td>VARCHAR(255)</td>
+                <td>Lock owner identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>expiration</td>
+                <td>INT</td>
+                <td>Unix timestamp when lock expires</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="jobs">17. Jobs Tables</h2>
+    <div class="table-category">Laravel Framework | Job Queue System</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Keys</th>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4"><strong>Jobs Table</strong></td>
+            </tr>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing job identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>queue</td>
+                <td>VARCHAR(255)</td>
+                <td>Queue name (default, sync, notifications, etc.)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>payload</td>
+                <td>LONGTEXT</td>
+                <td>Serialized job data and parameters</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>attempts</td>
+                <td>TINYINT</td>
+                <td>Number of execution attempts</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>reserved_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when job was reserved (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>available_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when job becomes available</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when job was created</td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Job Batches Table</strong></td>
+            </tr>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>VARCHAR(255)</td>
+                <td>Batch identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>name</td>
+                <td>VARCHAR(255)</td>
+                <td>Batch name/description</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>total_jobs</td>
+                <td>INT</td>
+                <td>Total jobs in batch</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>pending_jobs</td>
+                <td>INT</td>
+                <td>Jobs still pending execution</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>failed_jobs</td>
+                <td>INT</td>
+                <td>Jobs that failed</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>failed_job_ids</td>
+                <td>LONGTEXT</td>
+                <td>IDs of failed jobs</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>options</td>
+                <td>MEDIUMTEXT</td>
+                <td>Batch options (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>cancelled_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when batch was cancelled (nullable)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>created_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when batch was created</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>finished_at</td>
+                <td>INT</td>
+                <td>Unix timestamp when batch finished (nullable)</td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Failed Jobs Table</strong></td>
+            </tr>
+            <tr>
+                <td><span class="key-badge pk">PK</span></td>
+                <td>id</td>
+                <td>BIGINT</td>
+                <td>Auto-incrementing identifier</td>
+            </tr>
+            <tr>
+                <td><span class="key-badge unique">UNIQUE</span></td>
+                <td>uuid</td>
+                <td>VARCHAR(255)</td>
+                <td>Unique job identifier</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>connection</td>
+                <td>TEXT</td>
+                <td>Queue connection name</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>queue</td>
+                <td>TEXT</td>
+                <td>Queue name</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>payload</td>
+                <td>LONGTEXT</td>
+                <td>Job payload data</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>exception</td>
+                <td>LONGTEXT</td>
+                <td>Exception/error message</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>failed_at</td>
+                <td>TIMESTAMP</td>
+                <td>When the job failed</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>
+        <p><strong>E-Benta Data Dictionary</strong> | Last Updated: April 13, 2026 | Total Tables: 17 (Core Business: 6 | Catalog: 3 | Communication: 1 | Security: 1 | Admin: 3 | Framework: 3)</p>
+        <p>Keys Legend: <span class="key-badge pk">PK</span>=Primary Key | <span class="key-badge fk">FK</span>=Foreign Key | <span class="key-badge unique">UNIQUE</span>=Unique Constraint | SOFT DEL = Soft Delete Column</p>
+        <p>For migrations and schema updates, see: database/migrations/</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Benta DFD Level 2 Viewer</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22c55e;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(160deg, #020617 0%, #0f172a 45%, #111827 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .wrap {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      color: #f8fafc;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tips {
+      margin-top: 10px;
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .canvas {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      overflow: auto;
+      min-height: 70vh;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .mermaid {
+      min-width: 1800px;
+    }
+
+    .status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>E-Benta Data Flow Diagram Level 2</h1>
+      <p class="sub">System-specific decomposition (1.1 to 5.2) based on actual E-Benta processes.</p>
+      <p class="tips">Tip: Scroll inside the diagram panel to move horizontally and vertically. Zoom your browser in/out for better readability.</p>
+    </div>
+
+    <div class="canvas">
+      <pre class="mermaid">
+flowchart TB
+    S1[SELLER]
+    P11[1.1]
+    B1[BUYER]
+    D6[[D6 Tokens Database]]
+
+    S2[SELLER]
+    P12[1.2]
+    B2[BUYER]
+    D1[[D1 Users Database]]
+
+    S3[SELLER]
+    P21[2.1]
+    B3[BUYER]
+    D2[[D2 Listings and Device Catalog Database]]
+
+    B4[BUYER]
+    P22[2.2]
+    P31[3.1]
+    S4[SELLER]
+    D3[[D3 Offers and Transactions Database]]
+
+    S5[SELLER]
+    P32[3.2]
+    B5[BUYER]
+    D5[[D5 Audit and Impact Logs Database]]
+
+    S6[SELLER]
+    P41[4.1]
+    B6[BUYER]
+    D4[[D4 Reviews, Reports, and Notifications Database]]
+
+    S7[SELLER]
+    P42[4.2]
+    B7[BUYER]
+    A1[ADMIN]
+
+    A2[ADMIN]
+    P51[5.1]
+    P52[5.2]
+
+    S1 --- P11 --- B1 --- D6
+    S2 --- P12 --- B2 --- D1
+    S3 --- P21 --- B3 --- D2
+    B4 --- P22 --- P31 --- S4 --- D3
+    S5 --- P32 --- B5 --- D5
+    S6 --- P41 --- B6 --- D4
+    S7 --- P42 --- B7 --- A1
+    A2 --- P51 --- P52
+
+    S1 -->|Registration and login data| P11
+    B1 -->|Registration and login data| P11
+    P11 -->|Authentication result| S1
+    P11 -->|Authentication result| B1
+    P11 -->|Token generation| D6
+    D6 -->|Token validation| P11
+    P11 -->|User account record| D1
+    D1 -->|User account record| P11
+
+    S2 -->|Profile, password, email, and address updates| P12
+    B2 -->|Profile, password, email, and address updates| P12
+    P12 -->|Updated account status| S2
+    P12 -->|Updated account status| B2
+    P12 -->|Updated user profile| D1
+    D1 -->|User profile record| P12
+
+    S3 -->|Create, edit, withdraw listing| P21
+    P21 -->|Listing status feedback| S3
+    P21 -->|Listing record| D2
+    D2 -->|Listing record| P21
+
+    B4 -->|Browse and filter request| P22
+    P22 -->|Listing results| B4
+    P22 -->|Matched listing data| P31
+    P22 -->|Listing query| D2
+    D2 -->|Listing query result| P22
+
+    B4 -->|Offer submission| P31
+    S4 -->|Accept or reject decision| P31
+    P31 -->|Offer outcome| B4
+    P31 -->|Offer notification| S4
+    P31 -->|Offer and transaction record| D3
+    D3 -->|Offer and transaction record| P31
+
+    S5 -->|Pickup and processing update| P32
+    B5 -->|Pickup confirmation| P32
+    P32 -->|Transaction completion update| S5
+    P32 -->|Transaction completion update| B5
+    P32 -->|Completed transaction record| D3
+    D3 -->|Completed transaction reference| P32
+    P32 -->|Impact and audit event| D5
+
+    S6 -->|Review and report content| P41
+    B6 -->|Review and report content| P41
+    P41 -->|Review/report record| D4
+    D4 -->|Review/report record| P41
+    P41 -->|Escalated report| P51
+    P41 -->|Notification trigger| P42
+
+    S7 -->|Saved item and notification actions| P42
+    B7 -->|Saved item and notification actions| P42
+    P42 -->|Notification updates| S7
+    P42 -->|Notification updates| B7
+    P42 -->|Notification data| D4
+    D4 -->|Notification data| P42
+
+    A2 -->|Verification and moderation actions| P51
+    P51 -->|Verification and moderation result| A2
+    P51 -->|User status update| D1
+    D1 -->|User status record| P51
+    P51 -->|Moderation audit event| D5
+
+    A1 -->|Analytics and report request| P52
+    P52 -->|Dashboard and analytics output| A1
+    P52 -->|Audit and impact query| D5
+    D5 -->|Audit and impact data| P52
+
+    P31 -->|Accepted offer details| P32
+    P32 -->|Completed transaction reference| P41
+    P51 -->|Moderation metrics| P52
+      </pre>
+    </div>
+
+    <div class="status">Ready: Level 2 diagram rendered in browser view.</div>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: "loose",
+      theme: "neutral",
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        curve: "linear"
+      }
+    });
+  </script>
+</body>
+</html>
