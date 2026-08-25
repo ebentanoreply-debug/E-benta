@@ -313,6 +313,7 @@ class AuthController extends Controller
             try {
                 Mail::to($user->email)->send(new PasswordResetMail($user, $code));
             } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Password reset mail failed: ' . $e->getMessage());
                 return redirect()->back()
                     ->withInput()
                     ->withErrors(['email' => 'Failed to send reset code email. Please check your mail configuration or try again later.']);

@@ -48,18 +48,14 @@ AWS_ENDPOINT=https://fa270ac2fbe07cac12ef328e8f355c72.r2.cloudflarestorage.com
 AWS_URL=https://pub-034cbfc971d6455993f7ec82c6c55771.r2.dev
 AWS_USE_PATH_STYLE_ENDPOINT=true
 
-# Brevo (Sendinblue) SMTP Email Configuration
-MAIL_MAILER=smtp
-MAIL_HOST=smtp-relay.brevo.com
-MAIL_PORT=587
-MAIL_ENCRYPTION=tls
-MAIL_USERNAME=b6a9e4001@smtp-brevo.com
-MAIL_PASSWORD=your_brevo_smtp_master_key
+# Brevo HTTP REST API Email Configuration (Never blocked by Render!)
+MAIL_MAILER=brevo
+BREVO_API_KEY=your_brevo_api_key_here
 MAIL_FROM_ADDRESS=ebentanoreply@gmail.com
 MAIL_FROM_NAME="E-benta"
 
 # Google OAuth Configuration
-GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_ID=805325775067-b2i4v6nndbip6jmth1lckn7kpca8qvrd.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your_google_client_secret_here
 GOOGLE_CALLBACK_URL=https://e-benta.onrender.com/auth/google/callback
 
