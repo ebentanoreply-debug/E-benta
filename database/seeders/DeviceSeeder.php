@@ -61,7 +61,6 @@ class DeviceSeeder extends Seeder
             ['device_type_id' => 3, 'device_brand_id' => 6, 'model_name' => 'Samsung Galaxy S21', 'created_at' => now(), 'updated_at' => now()],
             ['device_type_id' => 3, 'device_brand_id' => 6, 'model_name' => 'Samsung Galaxy S22', 'created_at' => now(), 'updated_at' => now()],
 
-            // Tablets (type_id = 4)
             ['device_type_id' => 4, 'device_brand_id' => 1, 'model_name' => 'iPad Pro 12.9"', 'created_at' => now(), 'updated_at' => now()],
             ['device_type_id' => 4, 'device_brand_id' => 1, 'model_name' => 'iPad Air', 'created_at' => now(), 'updated_at' => now()],
             ['device_type_id' => 4, 'device_brand_id' => 6, 'model_name' => 'Samsung Galaxy Tab S7', 'created_at' => now(), 'updated_at' => now()],
