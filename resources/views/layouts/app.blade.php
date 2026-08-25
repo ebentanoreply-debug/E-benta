@@ -506,12 +506,48 @@
         }
 
         @media (max-width: 991.98px) {
+            .navbar {
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
             .navbar .container-fluid {
-                padding: 0 1rem !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                max-width: 100% !important;
             }
 
             .navbar-brand {
+                margin-left: 0 !important;
+                margin-right: auto !important;
+                font-size: 1.25rem;
+                flex-shrink: 0;
+            }
+
+            .navbar-toggler {
+                margin-left: auto !important;
                 margin-right: 0 !important;
+                padding: 0.4rem 0.65rem !important;
+                border: 1.5px solid rgba(13, 148, 136, 0.5) !important;
+                border-radius: 0.5rem !important;
+                background: rgba(13, 148, 136, 0.1) !important;
+                color: #ffffff !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                flex-shrink: 0 !important;
+            }
+
+            .navbar-toggler-icon {
+                filter: brightness(1.2);
             }
 
             .navbar-collapse {
@@ -521,6 +557,7 @@
                 margin-top: 0.75rem;
                 border: 1px solid rgba(13, 148, 136, 0.3);
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+                width: 100%;
             }
 
             .navbar-nav {
@@ -569,10 +606,45 @@
                 top: 70px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
-                width: 92vw !important;
-                max-width: 360px !important;
-                z-index: 1060 !important;
+                width: calc(100vw - 2rem) !important;
+                max-width: 400px !important;
+                margin: 0 auto !important;
             }
+
+            .notification-item {
+                padding: 0.75rem !important;
+            }
+
+            .notif-nav-item,
+            .user-nav-item {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+
+            .user-display-name {
+                max-width: calc(100vw - 120px);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        .notif-nav-item,
+        .user-nav-item {
+            margin-left: 1.5rem;
+            position: relative;
+        }
+
+        .user-display-name {
+            font-weight: 700;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         /* Touch target minimums and input safety */
@@ -660,9 +732,9 @@
     </script>
     <!-- Enhanced Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <!-- Brand -->
-            <a class="navbar-brand" href="/" style="margin-right: 3rem;">
+            <a class="navbar-brand" href="/">
                 <i class="fas fa-leaf"></i>
                 <span>E-Benta</span>
             </a>
@@ -704,8 +776,15 @@
                             </li>
                         @endif
 
+                        <!-- Messages Link -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}">
+                                <i class="fas fa-comments me-1"></i>Messages
+                            </a>
+                        </li>
+
                         <!-- Notifications Dropdown -->
-                        <li class="nav-item dropdown" style="margin-left: 1.5rem; position: relative;">
+                        <li class="nav-item dropdown notif-nav-item">
                             <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.color='#27ae60';" onmouseout="this.style.color='var(--light-green)';">
                                 <i class="fas fa-bell" style="font-size: 1.3rem; color: var(--light-green); transition: all 0.3s ease; transform-origin: center; display: inline-block;" onmouseover="this.style.transform='scale(1.08)';" onmouseout="this.style.transform='scale(1)';"></i>
                                 <span id="notification-badge" style="position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 50%; min-width: 20px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3); animation: pulse 2s infinite;">0</span>
@@ -727,12 +806,12 @@
                         </li>
 
                         <!-- User Dropdown -->
-                        <li class="nav-item dropdown" style="margin-left: 1.5rem;">
+                        <li class="nav-item dropdown user-nav-item">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--dark-bg); font-weight: 800; font-size: 0.8rem;">
+                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--dark-bg); font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
                                     {{ substr(auth()->user()->name, 0, 1) }}
                                 </div>
-                                <span style="font-weight: 700;">{{ auth()->user()->name }}</span>
+                                <span class="user-display-name">{{ auth()->user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: var(--light-green);"></i>Profile</a></li>
@@ -748,7 +827,7 @@
                         </li>
                     @else
                         <!-- Login/Register -->
-                        <li class="nav-item" style="margin-left: 1rem;">
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">
                                 <i class="fas fa-sign-in-alt me-1"></i>Login
                             </a>

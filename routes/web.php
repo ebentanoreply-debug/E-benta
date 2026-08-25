@@ -15,6 +15,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavedItemController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Api\DeviceModelController;
 use Illuminate\Support\Facades\Route;
 
@@ -135,6 +136,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
     Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
     Route::post('/offers/{offer}/reject', [OfferController::class, 'reject'])->name('offers.reject');
+
+    // Chat & Messaging routes
+    Route::get('/messages', [ChatController::class, 'inbox'])->name('messages.index');
+    Route::get('/offers/{offer}/messages', [ChatController::class, 'fetch'])->name('offers.messages.fetch');
+    Route::post('/offers/{offer}/messages', [ChatController::class, 'store'])->name('offers.messages.store');
 
     // Review routes
     Route::get('/reviews/create/{offer}', [ReviewController::class, 'create'])->name('reviews.create')->middleware('auth');

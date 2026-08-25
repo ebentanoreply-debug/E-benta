@@ -203,7 +203,6 @@
     function toggleAdminSidebar() {
         const sidebar = document.querySelector('.admin-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
-        const navbar = document.querySelector('.navbar');
         const backdrop = document.querySelector('.sidebar-backdrop');
         const isMobile = window.innerWidth < 992;
         
@@ -216,10 +215,6 @@
                 mainContent.style.marginLeft = isHidden ? '0' : '260px';
                 mainContent.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
             }
-            if (navbar) {
-                navbar.style.left = isHidden ? '0' : '260px';
-                navbar.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
-            }
             localStorage.setItem('adminSidebarHidden', isHidden ? 'true' : 'false');
         }
     }
@@ -230,12 +225,18 @@
         if (sidebar) sidebar.classList.remove('show-mobile');
         if (backdrop) backdrop.style.display = 'none';
     }
+
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAdminSidebar();
+        }
+    });
     
     // Restore sidebar state on page load
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.admin-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
-        const navbar = document.querySelector('.navbar');
         const isMobile = window.innerWidth < 992;
         
         if (!isMobile) {
@@ -243,11 +244,9 @@
             if (isHidden) {
                 if (sidebar) sidebar.classList.add('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
-                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
             } else {
                 if (sidebar) sidebar.classList.remove('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
-                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
             }
         }
     });

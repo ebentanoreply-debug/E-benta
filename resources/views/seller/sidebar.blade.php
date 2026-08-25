@@ -95,6 +95,8 @@
         letter-spacing: 0.05em;
         font-weight: 700;
         margin: 0;
+    }
+
     @media (max-width: 991.98px) {
         .seller-sidebar {
             transform: translateX(-100%) !important;
@@ -119,7 +121,7 @@
 <div class="sidebar-backdrop" onclick="closeSellerSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1040; backdrop-filter: blur(3px);"></div>
 <div class="seller-sidebar" style="position: fixed; left: 0; top: 0; width: 260px; height: 100vh; display: flex; flex-direction: column; z-index: 1045; overflow-y: auto;">
     <!-- Sidebar Header -->
-    <div style="padding: 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
+    <div style="padding: 1.25rem 1.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #0d9488 100%); border-image-slice: 1; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; background: linear-gradient(135deg, #1e293b 0%, #233651 100%);">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-shop" style="font-size: 1.5rem; color: #0d9488;"></i>
             <div>
@@ -127,7 +129,7 @@
                 <small style="color: #cbd5e1; font-size: 0.75rem;">E-Benta Platform</small>
             </div>
         </div>
-        <button type="button" class="d-lg-none" onclick="closeSellerSidebar()" style="background: none; border: none; color: #cbd5e1; font-size: 1.25rem; padding: 0.25rem 0.5rem; cursor: pointer;">
+        <button type="button" class="d-lg-none" onclick="closeSellerSidebar()" aria-label="Close Sidebar" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.5rem; color: #cbd5e1; font-size: 1.25rem; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;">
             <i class="fas fa-times"></i>
         </button>
     </div>
@@ -138,6 +140,10 @@
         <a href="{{ route('seller.dashboard') }}" class="sidebar-link {{ request()->routeIs('seller.dashboard') ? 'active' : '' }}">
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
+        </a>
+        <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}">
+            <i class="fas fa-comments"></i>
+            <span>Messages</span>
         </a>
 
         <p class="sidebar-section-title">Listings</p>
@@ -159,7 +165,7 @@
             <i class="fas fa-history"></i>
             <span>Sales History</span>
         </a>
-        <a href="{{ route('addresses.index') }}" class="sidebar-link">
+        <a href="{{ route('addresses.index') }}" class="sidebar-link {{ request()->routeIs('addresses.*') ? 'active' : '' }}">
             <i class="fas fa-map-marker-alt"></i>
             <span>Manage Addresses</span>
         </a>
@@ -194,7 +200,6 @@
     function toggleSellerSidebar() {
         const sidebar = document.querySelector('.seller-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
-        const navbar = document.querySelector('.navbar');
         const backdrop = document.querySelector('.sidebar-backdrop');
         const isMobile = window.innerWidth < 992;
         
@@ -207,10 +212,6 @@
                 mainContent.style.marginLeft = isHidden ? '0' : '260px';
                 mainContent.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
             }
-            if (navbar) {
-                navbar.style.left = isHidden ? '0' : '260px';
-                navbar.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
-            }
             localStorage.setItem('sellerSidebarHidden', isHidden ? 'true' : 'false');
         }
     }
@@ -221,12 +222,18 @@
         if (sidebar) sidebar.classList.remove('show-mobile');
         if (backdrop) backdrop.style.display = 'none';
     }
+
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSellerSidebar();
+        }
+    });
     
     // Restore sidebar state on page load
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.seller-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
-        const navbar = document.querySelector('.navbar');
         const isMobile = window.innerWidth < 992;
         
         if (!isMobile) {
@@ -234,11 +241,9 @@
             if (isHidden) {
                 if (sidebar) sidebar.classList.add('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
-                if (navbar) { navbar.style.left = '0'; navbar.style.width = '100%'; }
             } else {
                 if (sidebar) sidebar.classList.remove('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
-                if (navbar) { navbar.style.left = '260px'; navbar.style.width = 'calc(100% - 260px)'; }
             }
         }
     });

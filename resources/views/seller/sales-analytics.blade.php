@@ -210,27 +210,51 @@
     }
 
     @media (max-width: 768px) {
+        .sa-header {
+            padding: 1.75rem 1rem;
+        }
+
         .sa-header h1 {
-            font-size: 1.7rem;
+            font-size: 1.5rem;
+        }
+
+        .sa-stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
         .sa-chart-wrap {
-            height: 260px;
+            height: 240px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sa-wrapper {
+            padding: 1rem 0;
+        }
+
+        .sa-stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .sa-stat-card, .sa-chart-card {
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
         }
     }
 </style>
 
 @include('seller.sidebar')
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="sa-wrapper">
         <div class="sa-header">
-            <div class="container-fluid sa-header-content">
+            <div class="container-fluid px-3 px-md-4 sa-header-content">
                 <h1><i class="fas fa-chart-bar me-2"></i>Sales Analytics</h1>
                 <p>Track your offers, completed sales, revenue trends, and category performance.</p>
             </div>
         </div>
 
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
             <div class="sa-stats-grid">
                 <div class="sa-stat-card">
                     <p class="sa-stat-label">Total Listings</p>

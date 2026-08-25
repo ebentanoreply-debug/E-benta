@@ -456,29 +456,48 @@
 
         .bd-stat-card {
             flex-direction: column;
-        }
-
         .bd-stat-icon-box {
             align-self: flex-start;
         }
+    @media (max-width: 768px) {
+        .bd-header {
+            padding: 1.75rem 1rem;
+        }
 
+        .bd-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .bd-stats-grid,
         .bd-actions-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .bd-stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .bd-wrapper {
+            padding: 1rem 0;
+        }
+
+        .bd-stat-card, .bd-table-card, .bd-action-card {
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
         }
     }
 </style>
 
 @include('buyer.sidebar')
 
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="bd-wrapper">
         <!-- Header -->
         <div class="bd-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="bd-header-content">
                     <h1><i class="fas fa-shopping-cart me-3"></i>Buyer Dashboard</h1>
                     <p>Browse listings, submit offers, and track your e-waste impact</p>
@@ -487,7 +506,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem; position: relative; z-index: 1;">
+        <div class="container-fluid px-3 px-md-4" style="position: relative; z-index: 1;">
             <!-- Verification Alert -->
             @if(!auth()->user()->is_verified)
                 <div class="bd-alert">

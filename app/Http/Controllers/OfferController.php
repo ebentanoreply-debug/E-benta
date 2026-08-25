@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use App\Models\Offer;
+use App\Models\Message;
 use App\Models\User;
 use App\Models\ImpactLog;
 use App\Models\Notification;
@@ -221,6 +222,15 @@ class OfferController extends Controller
                         'seller_name' => $offer->listing->seller->name,
                     ]
                 );
+
+                // Create initial welcome message in the chat thread
+                Message::create([
+                    'offer_id' => $offer->id,
+                    'sender_id' => $offer->listing->user_id,
+                    'receiver_id' => $offer->buyer_id,
+                    'message' => "Hello! I have accepted your offer of ₱" . number_format($offer->bid_amount, 2) . ". Let's coordinate the pickup details and location here.",
+                    'is_read' => false,
+                ]);
 
                 return redirect()->route('listings.show', $offer->listing)
                     ->with('success', 'Offer accepted! Buyer will arrange pickup.');

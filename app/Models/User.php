@@ -120,6 +120,30 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the messages sent by this user.
+     */
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get the messages received by this user.
+     */
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    /**
+     * Get unread messages count for this user.
+     */
+    public function unreadMessagesCount(): int
+    {
+        return $this->receivedMessages()->where('is_read', false)->count();
+    }
+
+    /**
      * Get the audit logs for this user.
      */
     public function auditLogs(): HasMany
