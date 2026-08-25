@@ -520,7 +520,7 @@
                 <div class="metric-card">
                     <div class="metric-icon"><i class="fas fa-dumpster"></i></div>
                     <div class="metric-label"><i class="fas fa-trash me-1"></i>Total E-waste Collected</div>
-                    <div class="metric-value">{{ number_format($analytics['total_waste_diverted'] / 1000 ?? 0, 1) }}<small>Tons</small></div>
+                    <div class="metric-value">{{ number_format((($analytics['total_waste_diverted'] ?? 0) / 1000), 1) }}<small>Tons</small></div>
                     <div class="metric-change"><i class="fas fa-arrow-up"></i>+12.4% this month</div>
                 </div>
 
@@ -528,7 +528,7 @@
                 <div class="metric-card">
                     <div class="metric-icon"><i class="fas fa-leaf"></i></div>
                     <div class="metric-label"><i class="fas fa-wind me-1"></i>Carbon Emissions Reduced</div>
-                    <div class="metric-value">{{ number_format($analytics['total_co2_saved'] / 1000 ?? 0) }}<small>k kg CO₂e</small></div>
+                    <div class="metric-value">{{ number_format((($analytics['total_co2_saved'] ?? 0) / 1000), 0) }}<small>k kg CO₂e</small></div>
                     <div class="metric-change"><i class="fas fa-arrow-up"></i>+8.2% this month</div>
                 </div>
 
@@ -536,7 +536,7 @@
                 <div class="metric-card">
                     <div class="metric-icon"><i class="fas fa-recycle"></i></div>
                     <div class="metric-label"><i class="fas fa-recycle me-1"></i>Materials Recovered</div>
-                    <div class="metric-value">{{ number_format($analytics['total_waste_diverted'] / 1000 ?? 0) }}<small>k kg</small></div>
+                    <div class="metric-value">{{ number_format((($analytics['total_waste_diverted'] ?? 0) / 1000), 0) }}<small>k kg</small></div>
                     <div class="metric-change"><i class="fas fa-arrow-up"></i>+15.7% this month</div>
                 </div>
 
