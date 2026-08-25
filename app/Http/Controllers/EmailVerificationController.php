@@ -139,8 +139,11 @@ class EmailVerificationController extends Controller
         // Mark code as used
         $verification->update(['used' => true]);
 
-        // Mark email as verified
-        $user->update(['email_verified_at' => now()]);
+        // Mark email as verified and auto-verify sellers
+        $user->update([
+            'email_verified_at' => now(),
+            'is_verified' => $user->role === 'seller' ? true : $user->is_verified,
+        ]);
 
         // Log the action
         \App\Services\AuditLogger::log(
@@ -150,13 +153,37 @@ class EmailVerificationController extends Controller
             modelId: $user->id
         );
 
-        // Login user if this was a new registration (not already logged in)
-        if (session('pending_verification_user_id')) {
-            Auth::login($user);
-            session()->forget('pending_verification_user_id');
+        // Notify admins about verified registration
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            \App\Models\Notification::notify(
+                $admin,
+                'user_email_verified',
+                'New Verified User',
+                "{$user->name} ({$user->email}) has verified their email as a {$user->role}.",
+                [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'user_email' => $user->email,
+                    'role' => $user->role,
+                ]
+            );
         }
 
-        return redirect('/dashboard')->with('success', '✅ Email verified successfully! Welcome to E-Benta.');
+        // Login user
+        Auth::login($user);
+        session()->forget('pending_verification_user_id');
+
+        if ($user->role === 'seller') {
+            return redirect()->route('seller.dashboard')
+                ->with('success', 'Email verified successfully! Welcome to E-Benta.');
+        } elseif ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Email verified successfully!');
+        } else {
+            return redirect()->route('buyer.dashboard')
+                ->with('success', 'Email verified successfully! Welcome to E-Benta.');
+        }
     }
 
     /**

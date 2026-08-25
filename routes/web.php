@@ -54,6 +54,11 @@ Route::middleware('guest')->group(function () {
     });
 });
 
+// Email verification routes (accessible by pending guest registrations & logged in users)
+Route::get('/verify-email', [EmailVerificationController::class, 'show'])->name('verification.notice');
+Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend');
+
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Authenticated user routes
@@ -67,11 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/change-email', [AuthController::class, 'sendEmailChangeRequest'])->name('email.change.send');
     Route::get('/verify-email-change/{token}', [AuthController::class, 'showVerifyEmailChangeForm'])->name('email.change.verify');
     Route::post('/verify-email-change', [AuthController::class, 'verifyEmailChange'])->name('email.change.confirm');
-
-    // Email verification routes (disabled - using admin verification instead)
-    // Route::get('/verify-email', [EmailVerificationController::class, 'show'])->name('verification.show');
-    // Route::post('/verify-email/send', [EmailVerificationController::class, 'send'])->name('verification.send');
-    // Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->name('verification.verify');
 
     // Settings routes
     Route::get('/settings', function () {

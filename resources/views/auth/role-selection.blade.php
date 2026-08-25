@@ -392,6 +392,75 @@
         animation: slideUpIn 0.4s ease-out;
     }
 
+    .custom-input-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .custom-input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    .custom-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .custom-input-icon {
+        position: absolute;
+        left: 1rem;
+        color: var(--primary);
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+    .custom-input {
+        width: 100%;
+        padding: 0.95rem 2.8rem 0.95rem 2.8rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 1rem;
+        font-size: 0.95rem;
+        color: #0f172a;
+        background-color: #f8fafc;
+        transition: all 0.25s ease;
+        outline: none;
+    }
+
+    .custom-input:focus {
+        border-color: var(--primary);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+    }
+
+    .toggle-password-btn {
+        position: absolute;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .toggle-password-btn:hover {
+        color: var(--primary);
+    }
+
+    .password-hint {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 0.35rem;
+    }
+
     .complete-btn {
         width: 100%;
         padding: 1.3rem;
@@ -571,6 +640,35 @@
                 </div>
             </div>
 
+            <!-- Password Configuration -->
+            <div class="custom-input-group">
+                <label for="password" class="custom-input-label">
+                    <i class="fas fa-lock me-1" style="color: var(--primary);"></i>Set Account Password
+                </label>
+                <div class="custom-input-wrapper">
+                    <i class="fas fa-key custom-input-icon"></i>
+                    <input type="password" name="password" id="password" class="custom-input" placeholder="Min. 8 characters" required minlength="8">
+                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password', this)" title="Show/Hide Password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-hint">You can use this password to log in directly with your email in the future.</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="custom-input-group">
+                <label for="password_confirmation" class="custom-input-label">
+                    <i class="fas fa-check-double me-1" style="color: var(--primary);"></i>Confirm Password
+                </label>
+                <div class="custom-input-wrapper">
+                    <i class="fas fa-lock custom-input-icon"></i>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="custom-input" placeholder="Re-type your password" required minlength="8">
+                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password_confirmation', this)" title="Show/Hide Password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
             <!-- Terms & Conditions -->
             <div class="form-check">
                 <input type="checkbox" id="terms" name="agree_terms" value="1" required>
@@ -586,4 +684,20 @@
         </form>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility(fieldId, button) {
+        const input = document.getElementById(fieldId);
+        const icon = button.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 @endsection

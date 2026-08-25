@@ -207,9 +207,10 @@ class GoogleAuthController extends Controller
             return redirect('/login')->with('error', 'Invalid session. Please try again.');
         }
 
-        // Validate role
+        // Validate role and password
         $validated = request()->validate([
             'role' => ['required', 'in:seller,buyer'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'agree_terms' => ['required', 'accepted'],
             'business_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
@@ -217,23 +218,27 @@ class GoogleAuthController extends Controller
             'agree_terms.required' => 'You must agree to the Terms of Service and Privacy Policy',
             'agree_terms.accepted' => 'You must agree to the Terms of Service and Privacy Policy',
             'role.required' => 'Please select a role (Seller or Buyer)',
+            'password.required' => 'Please create a password for your account',
+            'password.min' => 'Password must be at least 8 characters long',
+            'password.confirmed' => 'Password confirmation does not match',
         ]);
 
         // Check if user already exists with this email
         $existingUser = User::where('email', $googleUser['email'])->first();
 
         if ($existingUser) {
-            // User already exists
-            if (!$existingUser->google_id) {
-                // Link Google account if not already linked
-                $existingUser->update([
-                    'google_id' => $googleUser['id'],
-                    'oauth_provider' => 'google',
-                ]);
+            // User already exists - link Google and set password
+            $updateData = [
+                'google_id' => $googleUser['id'],
+                'oauth_provider' => 'google',
+                'password' => Hash::make($validated['password']),
+            ];
+            if (!$existingUser->email_verified_at) {
+                $updateData['email_verified_at'] = now();
             }
+            $existingUser->update($updateData);
             
             // Note: For existing users, we keep their existing role
-            // They should contact support if they need to change roles
             $user = $existingUser;
         } else {
             // Create new user
@@ -246,7 +251,8 @@ class GoogleAuthController extends Controller
                 'business_name' => $validated['business_name'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'is_verified' => $validated['role'] === 'seller', // Sellers auto-verified
-                'password' => Hash::make(Str::random(64)), // Generate random password for OAuth users
+                'email_verified_at' => now(), // Google OAuth emails are verified
+                'password' => Hash::make($validated['password']),
             ]);
         }
 
