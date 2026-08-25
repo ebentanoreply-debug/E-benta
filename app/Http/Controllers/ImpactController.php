@@ -287,7 +287,7 @@ HTML;
         // Monthly breakdown
         $monthlyData = ImpactLog::selectRaw('MONTH(created_at) as month, SUM(co2_saved) as co2, COUNT(*) as count')
             ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
+            ->groupByRaw('MONTH(created_at)')
             ->get();
 
         // Top materials recovered
