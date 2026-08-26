@@ -9,9 +9,13 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-auto" style="margin-bottom: 1rem;">
-                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--light-green), #0d9488); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--dark-bg); font-weight: 800; box-shadow: 0 8px 25px rgba(13, 148, 136, 0.3);">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
+                    @if($user->avatar_url)
+                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--light-green); box-shadow: 0 8px 25px rgba(13, 148, 136, 0.3);">
+                    @else
+                        <div style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--light-green), #0d9488); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--dark-bg); font-weight: 800; box-shadow: 0 8px 25px rgba(13, 148, 136, 0.3);">
+                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                        </div>
+                    @endif
                 </div>
                 <div class="col">
                     <h1 style="color: var(--text-light); font-weight: 800; margin: 0; font-size: 2.5rem;">{{ $user->name }}</h1>

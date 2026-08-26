@@ -761,7 +761,7 @@
                             <a href="{{ route('offers.show', $offer) }}" class="th-action-btn th-action-view">
                                 <i class="fas fa-eye me-2"></i>View Details
                             </a>
-                            @if($offer->status === 'pending')
+                            @if($offer->status === 'pending' && $offer->listing->status === 'available')
                                 <form method="POST" action="{{ route('offers.accept', $offer) }}" style="display: inline;">
                                     @csrf
                                     <button type="submit" class="th-action-btn th-action-accept">
@@ -774,6 +774,10 @@
                                         <i class="fas fa-times me-2"></i>Reject
                                     </button>
                                 </form>
+                            @elseif($offer->listing->status === 'withdrawn')
+                                <span class="badge" style="background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); padding: 0.5rem 0.8rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+                                    <i class="fas fa-ban me-1"></i>Item Withdrawn
+                                </span>
                             @endif
                         </div>
                     </div>

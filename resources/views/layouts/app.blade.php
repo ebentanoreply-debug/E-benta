@@ -808,13 +808,18 @@
                         <!-- User Dropdown -->
                         <li class="nav-item dropdown user-nav-item">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--dark-bg); font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
-                                    {{ substr(auth()->user()->name, 0, 1) }}
-                                </div>
+                                @if(auth()->user()->avatar_url)
+                                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--light-green); flex-shrink: 0;">
+                                @else
+                                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--dark-bg); font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
+                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <span class="user-display-name">{{ auth()->user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: var(--light-green);"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: var(--light-green);"></i>Settings</a></li>
                                 <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: var(--light-green);"></i>Change Password</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
@@ -844,67 +849,67 @@
     </nav>
 
     @if($errors->any())
-        <div style="position: fixed; top: 80px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
-                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.3); border-left: 4px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
+                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(231, 76, 60, 0.4); border-left: 5px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                        <i class="fas fa-exclamation-circle" style="color: #e74c3c; font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem;"></i>
-                        <div style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
-                            <strong style="display: block; margin-bottom: 0.25rem;">Please check the following:</strong>
+                        <i class="fas fa-exclamation-circle" style="color: #e74c3c; font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem;"></i>
+                        <div style="color: #1e293b; font-weight: 600; font-size: 0.95rem;">
+                            <strong style="display: block; margin-bottom: 0.25rem; color: #b91c1c;">Please check the following:</strong>
                             @foreach($errors->all() as $error)
-                                <div>{{ $error }}</div>
+                                <div style="color: #475569;">{{ $error }}</div>
                             @endforeach
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.7); opacity: 0.7; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(1)';" onmouseout="this.style.opacity='0.7'; this.style.filter='brightness(0.7)';"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.5); opacity: 0.8; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(0.8)';" onmouseout="this.style.opacity='0.8'; this.style.filter='brightness(0.5)';"></button>
                 </div>
             </div>
         </div>
     @endif
 
     @if(session('success'))
-        <div style="position: fixed; top: 80px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
-                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.05) 100%); border: 1px solid rgba(46, 204, 113, 0.3); border-left: 4px solid var(--light-green); padding: 1.25rem 1.5rem; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
+                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(13, 148, 136, 0.4); border-left: 5px solid #0d9488; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <i class="fas fa-check-circle" style="color: var(--light-green); font-size: 1.3rem; flex-shrink: 0;"></i>
-                        <div style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
+                        <i class="fas fa-check-circle" style="color: #0d9488; font-size: 1.4rem; flex-shrink: 0;"></i>
+                        <div style="color: #1e293b; font-weight: 600; font-size: 0.95rem;">
                             {{ session('success') }}
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.7); opacity: 0.7; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(1)';" onmouseout="this.style.opacity='0.7'; this.style.filter='brightness(0.7)';"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.5); opacity: 0.8; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(0.8)';" onmouseout="this.style.opacity='0.8'; this.style.filter='brightness(0.5)';"></button>
                 </div>
             </div>
         </div>
     @endif
 
     @if(session('error'))
-        <div style="position: fixed; top: 80px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
-                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.3); border-left: 4px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
+                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(231, 76, 60, 0.4); border-left: 5px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <i class="fas fa-exclamation-circle" style="color: #e74c3c; font-size: 1.3rem; flex-shrink: 0;"></i>
-                        <div style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
+                        <i class="fas fa-exclamation-circle" style="color: #e74c3c; font-size: 1.4rem; flex-shrink: 0;"></i>
+                        <div style="color: #1e293b; font-weight: 600; font-size: 0.95rem;">
                             {{ session('error') }}
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.7); opacity: 0.7; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(1)';" onmouseout="this.style.opacity='0.7'; this.style.filter='brightness(0.7)';"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.5); opacity: 0.8; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(0.8)';" onmouseout="this.style.opacity='0.8'; this.style.filter='brightness(0.5)';"></button>
                 </div>
             </div>
         </div>
     @endif
 
     @if(session('info'))
-        <div style="position: fixed; top: 80px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
-                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.3); border-left: 4px solid #3498db; padding: 1.25rem 1.5rem; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
+                <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(52, 152, 219, 0.4); border-left: 5px solid #3498db; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <i class="fas fa-info-circle" style="color: #3498db; font-size: 1.3rem; flex-shrink: 0;"></i>
-                        <div style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
+                        <i class="fas fa-info-circle" style="color: #3498db; font-size: 1.4rem; flex-shrink: 0;"></i>
+                        <div style="color: #1e293b; font-weight: 600; font-size: 0.95rem;">
                             {{ session('info') }}
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.7); opacity: 0.7; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(1)';" onmouseout="this.style.opacity='0.7'; this.style.filter='brightness(0.7)';"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: brightness(0.5); opacity: 0.8; transition: all 0.3s ease;" onmouseover="this.style.opacity='1'; this.style.filter='brightness(0.8)';" onmouseout="this.style.opacity='0.8'; this.style.filter='brightness(0.5)';"></button>
                 </div>
             </div>
         </div>
@@ -1146,8 +1151,10 @@
                         minute: '2-digit'
                     });
                     
+                    const targetUrl = notification.target_url || `/notifications/${notification.id}/open`;
+                    
                     html += `
-                        <a class="dropdown-item ${readClass}" href="{{ route('notifications.index') }}" ${readBgStyle} style="padding: 0.75rem 1rem; margin: 0.25rem 0.5rem; border-radius: 0.5rem; transition: all 0.2s ease; display: flex; gap: 0.75rem; align-items: flex-start;">
+                        <a class="dropdown-item ${readClass}" href="${targetUrl}" ${readBgStyle} style="padding: 0.75rem 1rem; margin: 0.25rem 0.5rem; border-radius: 0.5rem; transition: all 0.2s ease; display: flex; gap: 0.75rem; align-items: flex-start;">
                             <div style="background: ${colors.bg}; padding: 0.5rem; border-radius: 0.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
                                 <i class="fas ${icon}" style="color: ${colors.icon}; font-size: 0.9rem;"></i>
                             </div>

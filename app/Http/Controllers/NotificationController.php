@@ -33,6 +33,20 @@ class NotificationController extends Controller
     }
 
     /**
+     * Open a notification, mark as read, and redirect to target destination
+     */
+    public function open(Notification $notification)
+    {
+        if (Auth::id() !== $notification->user_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $notification->markAsRead();
+
+        return redirect($notification->target_url);
+    }
+
+    /**
      * Mark notification as read
      */
     public function markAsRead(Notification $notification)

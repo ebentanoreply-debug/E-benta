@@ -124,7 +124,8 @@ class ImpactController extends Controller
         $certificateContent = $this->generateCertificateContent($impactLog);
 
         $certificatePath = 'certificates/' . $impactLog->certificate_token . '.html';
-        Storage::put($certificatePath, $certificateContent);
+        $disk = \App\Services\CloudflareStorageService::disk();
+        Storage::disk($disk)->put($certificatePath, $certificateContent);
 
         $impactLog->update(['certificate_path' => $certificatePath]);
     }
@@ -267,7 +268,12 @@ HTML;
             return redirect('/')->with('error', 'Certificate not found');
         }
 
-        $content = Storage::get($impactLog->certificate_path);
+        $disk = \App\Services\CloudflareStorageService::disk();
+        $content = Storage::disk($disk)->exists($impactLog->certificate_path)
+            ? Storage::disk($disk)->get($impactLog->certificate_path)
+            : (Storage::disk('public')->exists($impactLog->certificate_path)
+                ? Storage::disk('public')->get($impactLog->certificate_path)
+                : Storage::get($impactLog->certificate_path));
 
         return response($content)
             ->header('Content-Type', 'text/html; charset=utf-8');

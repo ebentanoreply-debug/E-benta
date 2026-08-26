@@ -119,7 +119,7 @@ class ReviewController extends Controller
             ]
         );
 
-        return redirect()->route('listings.show', $offer->listing)
+        return redirect()->route('offers.show', $offer)
             ->with('success', 'Thank you for your review! Your feedback helps improve our community.');
     }
 

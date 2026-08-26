@@ -186,6 +186,17 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
+        // Listing must be active and not withdrawn
+        if ($offer->listing->status === 'withdrawn') {
+            return redirect()->back()
+                ->with('error', 'This listing has been withdrawn and offers can no longer be accepted.');
+        }
+
+        if (!$offer->listing->isAvailable()) {
+            return redirect()->back()
+                ->with('error', 'This listing is no longer available for offers.');
+        }
+
         // Offer must be pending
         if (!$offer->isPending()) {
             return redirect()->back()
@@ -249,6 +260,12 @@ class OfferController extends Controller
         // Only seller can reject
         if (Auth::id() !== $offer->listing->user_id) {
             return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        // Listing must not be withdrawn
+        if ($offer->listing->status === 'withdrawn') {
+            return redirect()->back()
+                ->with('error', 'This listing has been withdrawn and offers can no longer be modified.');
         }
 
         if (!$offer->isPending()) {
@@ -392,12 +409,17 @@ class OfferController extends Controller
             'material_breakdown.*.weight' => 'required|numeric|min:0|max:9999.99',
         ]);
 
+        $deviceWeight = (float) ($offer->listing->estimated_weight ?? 1.0);
+        if ($deviceWeight <= 0) {
+            $deviceWeight = 1.0;
+        }
+
         $totalRecoveredWeight = collect($validated['material_breakdown'] ?? [])
             ->sum(fn (array $material): float => (float) $material['weight']);
 
-        if ($totalRecoveredWeight > (float) $offer->listing->estimated_weight) {
+        if ($totalRecoveredWeight > $deviceWeight) {
             return redirect()->back()
-                ->withErrors(['material_breakdown' => 'Recovered material cannot exceed the device weight.'])
+                ->withErrors(['material_breakdown' => "Total recovered material ({$totalRecoveredWeight} kg) cannot exceed the estimated device weight ({$deviceWeight} kg)."])
                 ->withInput();
         }
 

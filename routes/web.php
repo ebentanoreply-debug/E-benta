@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function () {
     // Profile routes
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [AuthController::class, 'deleteAvatar'])->name('profile.avatar.delete');
     Route::get('/change-password', [AuthController::class, 'showChangePasswordForm'])->name('password.change');
     Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change.update');
     Route::get('/change-email', [AuthController::class, 'showEmailChangeRequestForm'])->name('email.change.request');
@@ -82,13 +84,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/verify-email-change', [AuthController::class, 'verifyEmailChange'])->name('email.change.confirm');
 
     // Settings routes
-    Route::get('/settings', function () {
-        return view('settings.index');
-    })->name('settings');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications'])
         ->name('settings.notifications.update');
     Route::put('/settings/privacy', [SettingsController::class, 'updatePrivacy'])
         ->name('settings.privacy.update');
+    Route::put('/settings/payments', [SettingsController::class, 'updatePayments'])
+        ->name('settings.payments.update');
+    Route::put('/settings/seller', [SettingsController::class, 'updateSellerProfile'])
+        ->name('settings.seller.update');
+    Route::put('/settings/preferences', [SettingsController::class, 'updatePreferences'])
+        ->name('settings.preferences.update');
 
     // Address management routes
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
@@ -187,6 +193,7 @@ Route::middleware('auth')->group(function () {
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
     Route::get('/notifications/recent', [NotificationController::class, 'recent'])->name('notifications.recent');
     Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');

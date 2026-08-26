@@ -195,8 +195,8 @@ class ListingController extends Controller
         $photos = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('listings', 'public');
-                $photos[] = Storage::url($path);
+                $url = \App\Services\CloudflareStorageService::upload($photo, 'listings');
+                $photos[] = \App\Services\CloudflareStorageService::url($url);
             }
         }
 
@@ -260,9 +260,20 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        // Check if listing is available or user is the seller/admin
-        if ($listing->status !== 'available' && Auth::id() !== $listing->user_id && !Auth::user()?->isAdmin()) {
-            return redirect('/')->with('error', 'Listing not found');
+        $userId = Auth::id();
+        $isOwner = $userId && $userId === $listing->user_id;
+        $isAdmin = Auth::user()?->isAdmin() ?? false;
+        $isMatchedBuyer = $userId && $userId === $listing->matched_buyer_id;
+        $isOfferParticipant = $userId && $listing->offers()->where('buyer_id', $userId)->exists();
+
+        // If listing is withdrawn, only allow owner, admin, or past offer participants to view it
+        if ($listing->status === 'withdrawn' && !$isOwner && !$isAdmin && !$isOfferParticipant) {
+            return redirect()->route('listings.index')->with('error', 'This listing has been withdrawn and is no longer accessible.');
+        }
+
+        // For non-available listings, allow owner, admin, matched buyer, participants, or logged-in users
+        if (!$listing->isAvailable() && !$isOwner && !$isAdmin && !$isMatchedBuyer && !$isOfferParticipant && !Auth::check()) {
+            return redirect()->route('listings.index')->with('error', 'Listing not found');
         }
 
         $listing->load(['seller', 'offers' => function ($query) {
@@ -356,9 +367,7 @@ class ListingController extends Controller
         foreach ($deleteIndices as $index) {
             $photo = $currentPhotos->get($index);
             if ($photo) {
-                // Extract the path from the URL and delete from storage
-                $path = str_replace('/storage/', '', $photo->photo_url);
-                Storage::disk('public')->delete($path);
+                \App\Services\CloudflareStorageService::delete($photo->photo_url);
                 $photo->delete();
             }
         }
@@ -375,9 +384,9 @@ class ListingController extends Controller
         $newPhotoRows = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('listings', 'public');
+                $url = \App\Services\CloudflareStorageService::upload($photo, 'listings');
                 $newPhotoRows[] = [
-                    'photo_url' => Storage::url($path),
+                    'photo_url' => \App\Services\CloudflareStorageService::url($url),
                     'sort_order' => $nextSortOrder++,
                 ];
             }

@@ -126,7 +126,17 @@
             </div>
 
             <!-- Seller Actions -->
-            @if($offer->status === 'pending' && auth()->id() === $offer->listing->user_id)
+            @if($offer->listing->status === 'withdrawn')
+                <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
+                    <h5 style="color: #e74c3c; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Listing Withdrawn
+                    </h5>
+                    <p style="color: #64748b; margin: 0; font-size: 0.95rem;">
+                        The item for this offer has been withdrawn (e.g. removed by moderation or seller). This offer is read-only and can no longer be accepted or rejected.
+                    </p>
+                </div>
+            @elseif($offer->status === 'pending' && auth()->id() === $offer->listing->user_id)
                 <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%); border: 1px solid rgba(243, 156, 18, 0.2); border-left: 4px solid #f39c12; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-gavel" style="color: #f39c12;"></i>
@@ -169,7 +179,7 @@
             @endif
 
             <!-- Pickup Confirmation -->
-            @if($offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status !== 'in_transit')
+            @if($offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-truck" style="color: #3498db;"></i>
@@ -186,6 +196,7 @@
                     </form>
                 </div>
             @endif
+
 
             <!-- Processing Status Form -->
             @if($offer->listing->status === 'in_transit' && auth()->id() === $offer->buyer_id)
@@ -226,47 +237,103 @@
                             </select>
                         </div>
 
-                        <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.25rem; margin-top: 2rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <i class="fas fa-chart-pie" style="color: #9b59b6;"></i>
-                            Material Recovery
-                        </h4>
+                        @php
+                            $devWeight = (float) ($offer->listing->estimated_weight ?? 1.0);
+                            if ($devWeight <= 0) $devWeight = 1.0;
+                        @endphp
+
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 1.25rem; margin-top: 2rem; gap: 0.5rem;">
+                            <h4 style="color: var(--text-light); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fas fa-chart-pie" style="color: #9b59b6;"></i>
+                                Material Recovery
+                            </h4>
+                            <span style="font-size: 0.85rem; font-weight: 700; color: #64748b; background: rgba(155, 89, 182, 0.1); border: 1px solid rgba(155, 89, 182, 0.25); padding: 0.35rem 0.85rem; border-radius: 99px;">
+                                Device Weight: <strong style="color: #9b59b6;">{{ number_format($devWeight, 2) }} kg</strong>
+                            </span>
+                        </div>
+
+                        <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 1rem;">
+                            Enter the weights of materials extracted. Total recovered weight cannot exceed <strong>{{ number_format($devWeight, 2) }} kg</strong>. (Leave as 0 if repaired or disposed without extraction).
+                        </p>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                             <div style="background: rgba(0, 0, 0, 0.1); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #f39c12;">
                                 <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
                                     <i class="fas fa-gem me-1" style="color: #f39c12;"></i>Gold Recovered (kg)
                                 </label>
-                                <input type="number" name="material_breakdown[0][weight]" step="0.0001" value="0" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
+                                <input type="number" name="material_breakdown[0][weight]" class="material-weight-input" step="0.0001" min="0" max="{{ $devWeight }}" value="{{ old('material_breakdown.0.weight', 0) }}" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
                                 <input type="hidden" name="material_breakdown[0][type]" value="gold">
                             </div>
                             <div style="background: rgba(0, 0, 0, 0.1); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #e67e22;">
                                 <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
                                     <i class="fas fa-shield me-1" style="color: #e67e22;"></i>Copper Recovered (kg)
                                 </label>
-                                <input type="number" name="material_breakdown[1][weight]" step="0.01" value="0" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
+                                <input type="number" name="material_breakdown[1][weight]" class="material-weight-input" step="0.01" min="0" max="{{ $devWeight }}" value="{{ old('material_breakdown.1.weight', 0) }}" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
                                 <input type="hidden" name="material_breakdown[1][type]" value="copper">
                             </div>
                             <div style="background: rgba(0, 0, 0, 0.1); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #3498db;">
                                 <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
                                     <i class="fas fa-cube me-1" style="color: #3498db;"></i>Plastic Recovered (kg)
                                 </label>
-                                <input type="number" name="material_breakdown[2][weight]" step="0.01" value="0" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
+                                <input type="number" name="material_breakdown[2][weight]" class="material-weight-input" step="0.01" min="0" max="{{ $devWeight }}" value="{{ old('material_breakdown.2.weight', 0) }}" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
                                 <input type="hidden" name="material_breakdown[2][type]" value="plastic">
                             </div>
                             <div style="background: rgba(0, 0, 0, 0.1); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid var(--light-green);">
                                 <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
                                     <i class="fas fa-wind me-1" style="color: var(--light-green);"></i>Aluminum Recovered (kg)
                                 </label>
-                                <input type="number" name="material_breakdown[3][weight]" step="0.01" value="0" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
+                                <input type="number" name="material_breakdown[3][weight]" class="material-weight-input" step="0.01" min="0" max="{{ $devWeight }}" value="{{ old('material_breakdown.3.weight', 0) }}" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
                                 <input type="hidden" name="material_breakdown[3][type]" value="aluminum">
                             </div>
                         </div>
 
-                        <button type="submit" style="width: 100%; background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: white; font-weight: 700; padding: 1rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.25); cursor: pointer; margin-top: 2rem;" onmouseover="this.style.boxShadow='0 8px 20px rgba(155, 89, 182, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(155, 89, 182, 0.25)'; this.style.transform='translateY(0)';">
+                        <div id="weightSummaryRow" style="margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 0.6rem; background: rgba(0, 0, 0, 0.06); display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem;">
+                            <span style="color: #64748b; font-weight: 600;">Total Entered: <strong id="totalWeightDisplay" style="color: #1e293b;">0.00 kg</strong></span>
+                            <span id="weightStatusBadge" style="font-weight: 700; color: #0d9488;">✓ Within limit</span>
+                        </div>
+
+                        <button type="submit" id="submitProcessingBtn" style="width: 100%; background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: white; font-weight: 700; padding: 1rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.25); cursor: pointer; margin-top: 1.5rem;" onmouseover="this.style.boxShadow='0 8px 20px rgba(155, 89, 182, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(155, 89, 182, 0.25)'; this.style.transform='translateY(0)';">
                             <i class="fas fa-paper-plane me-2"></i>Submit Processing Report
                         </button>
                     </form>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const maxWeight = {{ $devWeight }};
+                        const inputs = document.querySelectorAll('.material-weight-input');
+                        const totalDisplay = document.getElementById('totalWeightDisplay');
+                        const badge = document.getElementById('weightStatusBadge');
+                        const submitBtn = document.getElementById('submitProcessingBtn');
+
+                        function updateTotal() {
+                            let sum = 0;
+                            inputs.forEach(inp => {
+                                const v = parseFloat(inp.value);
+                                if (!isNaN(v) && v > 0) sum += v;
+                            });
+                            sum = Math.round(sum * 10000) / 10000;
+                            if (totalDisplay) totalDisplay.textContent = sum.toFixed(2) + ' kg';
+
+                            if (sum > maxWeight) {
+                                if (badge) {
+                                    badge.textContent = '⚠️ Exceeds ' + maxWeight.toFixed(2) + ' kg limit!';
+                                    badge.style.color = '#ef4444';
+                                }
+                                if (submitBtn) submitBtn.disabled = true;
+                            } else {
+                                if (badge) {
+                                    badge.textContent = '✓ Within limit';
+                                    badge.style.color = '#0d9488';
+                                }
+                                if (submitBtn) submitBtn.disabled = false;
+                            }
+                        }
+
+                        inputs.forEach(inp => inp.addEventListener('input', updateTotal));
+                        updateTotal();
+                    });
+                </script>
             @endif
 
             <!-- Buyer-Seller Coordination Chat -->

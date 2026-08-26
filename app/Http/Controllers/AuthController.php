@@ -19,7 +19,7 @@ use Illuminate\Validation\Rules;
 use App\Mail\PasswordResetMail;
 use App\Mail\EmailChangeVerificationMail;
 use App\Mail\VerificationCodeMail;
-use App\Models\EmailVerification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -194,12 +194,60 @@ class AuthController extends Controller
             'phone' => ['nullable', 'string', 'max:20'],
             'business_name' => ['nullable', 'string', 'max:255'],
             'business_description' => ['nullable', 'string', 'max:1000'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                \App\Services\CloudflareStorageService::delete($user->avatar);
+            }
+            $validated['avatar'] = \App\Services\CloudflareStorageService::upload($request->file('avatar'), 'avatars');
+        } else {
+            unset($validated['avatar']);
+        }
 
         $user->update($validated);
 
         return redirect()->back()
             ->with('success', 'Profile updated successfully');
+    }
+
+    /**
+     * Upload or update profile avatar directly to Cloudflare R2 / Object Storage.
+     */
+    public function updateAvatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+        ]);
+
+        $user = Auth::user();
+
+        // Delete previous avatar file from Cloudflare / Storage
+        if ($user->avatar) {
+            \App\Services\CloudflareStorageService::delete($user->avatar);
+        }
+
+        $path = \App\Services\CloudflareStorageService::upload($request->file('avatar'), 'avatars');
+        $user->update(['avatar' => $path]);
+
+        return redirect()->back()->with('success', 'Profile picture updated successfully!');
+    }
+
+    /**
+     * Remove profile avatar from Cloudflare / Storage.
+     */
+    public function deleteAvatar(): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($user->avatar) {
+            \App\Services\CloudflareStorageService::delete($user->avatar);
+        }
+
+        $user->update(['avatar' => null]);
+
+        return redirect()->back()->with('success', 'Profile picture removed.');
     }
 
     /**

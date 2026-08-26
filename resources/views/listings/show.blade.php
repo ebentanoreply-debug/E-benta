@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($listing->category ?: ($listing->deviceType->name ?: 'Device') ) . ' - E-Benta')
+@section('title', ($listing->category ?: ($listing->deviceType?->name ?: 'Device') ) . ' - E-Benta')
 
 @section('styles')
 <style>
@@ -40,7 +40,7 @@
                     <i class="fas fa-arrow-left me-1"></i>Back to Listings
                 </a>
                 <span style="color: #64748b;">/</span>
-                <span style="color: var(--text-light); font-weight: 600;">{{ $listing->category ?: ($listing->deviceType->name ?: 'Device') }}</span>
+                <span style="color: var(--text-light); font-weight: 600;">{{ $listing->category ?: ($listing->deviceType?->name ?: 'Device') }}</span>
             </nav>
             
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
@@ -49,7 +49,7 @@
                 </div>
                 <div>
                     <h1 style="color: var(--text-light); font-weight: 800; margin: 0; font-size: 2.2rem; letter-spacing: -0.5px;">
-                        {{ $listing->category ?: ($listing->deviceType->name ?: 'Device') }}
+                        {{ $listing->category ?: ($listing->deviceType?->name ?: 'Device') }}
                     </h1>
                     @if($listing->device_details || $listing->deviceBrand || $listing->deviceModel)
                         <p style="color: #64748b; margin: 0.5rem 0 0; font-size: 1rem;">
@@ -301,7 +301,7 @@
 
                 <!-- Report Listing Button -->
                 @auth
-                    @if(auth()->id() !== $listing->user_id)
+                    @if(auth()->id() !== $listing->user_id && $listing->status !== 'withdrawn')
                         <button type="button" class="btn w-100 mb-3" data-bs-toggle="modal" data-bs-target="#reportListingModal" style="background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); padding: 0.9rem 1.5rem; font-weight: 600; border-radius: 0.8rem; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(231, 76, 60, 0.25)';" onmouseout="this.style.background='rgba(231, 76, 60, 0.15)';">
                             <i class="fas fa-flag me-2"></i>Report Listing
                         </button>
@@ -309,12 +309,22 @@
                 @endauth
 
                 <!-- Status Alerts -->
-                @if($listing->isMatched())
+                @if($listing->status === 'withdrawn')
+                    <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.15) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; color: var(--text-light); padding: 1.5rem; border-radius: 0.8rem; margin-bottom: 1rem;">
+                        <strong style="color: #e74c3c; font-size: 1.05rem;"><i class="fas fa-ban me-2"></i>Listing Withdrawn</strong><br>
+                        <small style="color: #64748b; display: block; margin-top: 0.5rem; line-height: 1.5;">This listing has been withdrawn (by administrator moderation or seller cancellation) and is no longer active. Interactions, editing, and offer actions are disabled. You may still view its details and environmental history.</small>
+                    </div>
+                @elseif($listing->isMatched())
                     <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.15) 0%, rgba(243, 156, 18, 0.05) 100%); border: 1px solid rgba(243, 156, 18, 0.2); border-left: 4px solid #f39c12; color: var(--text-light); padding: 1.5rem; border-radius: 0.8rem; margin-bottom: 1rem;">
                         <strong><i class="fas fa-check-circle me-2" style="color: #f39c12;"></i>Item Matched!</strong><br>
                         <small style="color: #64748b; display: block; margin-top: 0.5rem;">This item has been matched with a buyer and is no longer available.</small>
                     </div>
-        @endif
+                @elseif($listing->status === 'completed' || $listing->status === 'processed')
+                    <div style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.05) 100%); border: 1px solid rgba(46, 204, 113, 0.2); border-left: 4px solid #2ecc71; color: var(--text-light); padding: 1.5rem; border-radius: 0.8rem; margin-bottom: 1rem;">
+                        <strong><i class="fas fa-award me-2" style="color: #2ecc71;"></i>Transaction Completed!</strong><br>
+                        <small style="color: #64748b; display: block; margin-top: 0.5rem;">This item has been successfully transacted and processed.</small>
+                    </div>
+                @endif
     </div>
 </div>
 

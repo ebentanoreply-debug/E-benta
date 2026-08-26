@@ -80,7 +80,7 @@
                         $bgColor = $colors['bg'];
                         $iconColor = $colors['icon'];
                     @endphp
-                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif">
+                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif" onclick="window.location.href='{{ route('notifications.open', $notification) }}'" style="cursor: pointer;">
                         <!-- Icon -->
                         <div class="notif-icon-box" style="background: {{ $bgColor }}; border-color: rgba(52, 152, 219, 0.2);">
                             <i class="fas {{ $icon }}" style="color: {{ $iconColor }};"></i>
@@ -99,20 +99,30 @@
                             <p class="notif-item-msg">
                                 {{ $notification->message }}
                             </p>
-                            @if(auth()->user()->isAdmin() && in_array($notification->type, ['new_buyer_registration', 'new_seller_registration', 'pending_verification']))
-                                <div style="margin-top: 0.6rem; margin-bottom: 0.4rem;">
-                                    <a href="{{ route('admin.pending-verifications') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 0.5rem; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);">
-                                        <i class="fas fa-user-check"></i> Go to Pending Verifications
-                                    </a>
-                                </div>
-                            @endif
-                            <small class="notif-item-time">
-                                <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
-                            </small>
+                            
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <small class="notif-item-time" style="margin-top: 0;">
+                                    <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
+                                </small>
+                                
+                                <span class="notif-action-link" style="color: var(--light-green); font-weight: 700; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                    @if($notification->type === 'new_message')
+                                        <i class="fas fa-comment-dots"></i> Open Chat <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                                    @elseif(str_starts_with($notification->type, 'offer_'))
+                                        <i class="fas fa-handshake"></i> View Offer <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                                    @elseif($notification->type === 'listing_created')
+                                        <i class="fas fa-box-open"></i> View Listing <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                                    @elseif(in_array($notification->type, ['new_buyer_registration', 'new_seller_registration', 'pending_verification']))
+                                        <i class="fas fa-user-check"></i> Review Verification <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                                    @else
+                                        <i class="fas fa-external-link-alt"></i> View Details <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                                    @endif
+                                </span>
+                            </div>
                         </div>
                         
                         <!-- Actions -->
-                        <div class="notif-actions-box">
+                        <div class="notif-actions-box" onclick="event.stopPropagation();">
                             @if(!$notification->is_read)
                                 <button type="button" class="notification-mark-read notif-action-btn notif-btn-read" data-notification-id="{{ $notification->id }}" title="Mark as read">
                                     <i class="fas fa-check-circle"></i>
