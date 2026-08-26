@@ -268,6 +268,9 @@
                     </form>
                 </div>
             @endif
+
+            <!-- Buyer-Seller Coordination Chat -->
+            @include('components.chat-box')
         </div>
 
         <!-- Sidebar -->

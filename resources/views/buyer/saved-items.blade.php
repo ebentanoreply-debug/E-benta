@@ -209,9 +209,9 @@
 </style>
 
 @include('buyer.sidebar')
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="si-wrapper">
-        <div class="container-fluid" style="padding: 2rem; position: relative; z-index: 1;">
+        <div class="container-fluid px-3 px-md-4 py-3 py-md-4" style="position: relative; z-index: 1;">
             <div class="si-header">
                 <h1><i class="fas fa-heart me-2"></i>Saved Items</h1>
                 <p>Quick access to listings you bookmarked for later.</p>

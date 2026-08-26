@@ -76,6 +76,36 @@ class Offer extends Model
     }
 
     /**
+     * Get all messages for this offer conversation.
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class)->orderBy('created_at', 'asc');
+    }
+
+    /**
+     * Determine if buyer-seller chat is active for this offer.
+     * Chat is ONLY active when the offer has been accepted by the seller
+     * and the transaction is not yet completed/processed or cancelled.
+     */
+    public function isChatActive(): bool
+    {
+        return $this->status === 'accepted'
+            && !in_array($this->listing?->status, ['processed', 'completed', 'cancelled']);
+    }
+
+    /**
+     * Determine if chat is locked (read-only archive).
+     * Chat is locked once transaction is finalized or cancelled.
+     */
+    public function isChatLocked(): bool
+    {
+        return $this->status === 'completed'
+            || $this->status === 'cancelled'
+            || in_array($this->listing?->status, ['processed', 'completed', 'cancelled']);
+    }
+
+    /**
      * Check if offer is pending.
      */
     public function isPending(): bool

@@ -91,6 +91,14 @@
         animation: slide-up 0.8s ease-out;
     }
 
+    .hero h1 .accent {
+        background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        display: inline-block;
+    }
+
     .hero-subtitle {
         font-size: 1.25rem;
         color: #64748b;
@@ -773,7 +781,14 @@
             font-size: 2.2rem;
         }
 
-        .hero h1 .accent,
+        .hero h1 .accent {
+            background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            display: inline-block;
+        }
+
         .pathway-icon,
         .step-icon,
         .metric-value,
@@ -843,9 +858,7 @@
         <div class="hero-graphics-2">
             <i class="fas fa-battery-full"></i>
         </div>
-        <div class="container-fluid">
-            <div class="container-fluid">
-                <div class="container-fluid">
+        <div class="container-fluid px-3 px-md-5">
             <div class="row align-items-center gx-5">
                 <div class="col-lg-6 hero-content">
                     <div style="color: var(--light-green); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.5rem;">

@@ -463,8 +463,12 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 768px) {
+        .seller-dashboard-header {
+            padding: 1.75rem 1rem;
+        }
+
         .seller-dashboard-header h1 {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
         }
 
         .stat-card-value {
@@ -480,14 +484,26 @@
             padding: 0.75rem 0.5rem;
         }
     }
+
+    @media (max-width: 480px) {
+        .seller-dashboard-wrapper {
+            padding: 1rem 0;
+        }
+
+        .stat-card, .table-card-seller {
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
+            margin-bottom: 1rem;
+        }
+    }
 </style>
 
 @include('seller.sidebar')
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="seller-dashboard-wrapper">
         <!-- Header -->
         <div class="seller-dashboard-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="seller-dashboard-header-content">
                     <h1>
                         <i class="fas fa-store me-2"></i>
@@ -503,7 +519,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
 
         @if($isRecentView ?? false)
         <!-- Statistics Cards -->

@@ -99,6 +99,13 @@
                             <p class="notif-item-msg">
                                 {{ $notification->message }}
                             </p>
+                            @if(auth()->user()->isAdmin() && in_array($notification->type, ['new_buyer_registration', 'new_seller_registration', 'pending_verification']))
+                                <div style="margin-top: 0.6rem; margin-bottom: 0.4rem;">
+                                    <a href="{{ route('admin.pending-verifications') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 0.5rem; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);">
+                                        <i class="fas fa-user-check"></i> Go to Pending Verifications
+                                    </a>
+                                </div>
+                            @endif
                             <small class="notif-item-time">
                                 <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
                             </small>

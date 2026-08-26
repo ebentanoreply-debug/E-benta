@@ -538,11 +538,11 @@
 </style>
 
 @include('buyer.sidebar')
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="th-wrapper">
         <!-- Header -->
         <div class="th-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="th-header-content">
                     <h1><i class="fas fa-history me-3"></i>Transaction History</h1>
                     <p>View all your past offers, completed transactions, and environmental impact</p>
@@ -551,7 +551,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 2rem; position: relative; z-index: 1;">
+        <div class="container-fluid px-3 px-md-4" style="position: relative; z-index: 1;">
             <!-- Filter Section -->
             <div class="th-filter">
                 <form method="GET" action="{{ route('buyer.transaction-history') }}">

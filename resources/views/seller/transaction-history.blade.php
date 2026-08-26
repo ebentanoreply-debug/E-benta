@@ -614,11 +614,11 @@
 </style>
 
 @include('seller.sidebar')
-<div class="main-content-wrapper" style="margin-left: 260px; overflow-x: hidden; min-height: 100vh; transition: margin-left 0.2s ease, width 0.2s ease; width: calc(100% - 260px); box-sizing: border-box;">
+<div class="main-content-wrapper">
     <div class="th-wrapper">
         <!-- Header -->
         <div class="th-header">
-            <div class="container-fluid">
+            <div class="container-fluid px-3 px-md-4">
                 <div class="th-header-content">
                     <h1><i class="fas fa-history me-2"></i>Sales History</h1>
                     <p>Track your offers received, completed sales, and environmental contributions</p>
@@ -627,7 +627,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container-fluid" style="padding: 0 2rem;">
+        <div class="container-fluid px-3 px-md-4">
         <!-- Filter Section -->
         <div class="th-filter-wrapper">
             <form method="GET" action="{{ route('seller.transaction-history') }}" class="th-filter-form">
