@@ -149,7 +149,7 @@
             <button type="submit" style="flex: 1; background: linear-gradient(135deg, #0d9488, #0d9488); color: white; border: none; padding: 1rem; border-radius: 0.5rem; font-weight: 700; cursor: pointer; font-size: 1rem; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(13, 148, 136, 0.3)'" onmouseout="this.style.boxShadow='none'">
                 <i class="fas fa-check me-2"></i>Submit Review
             </button>
-            <a href="{{ route('listings.show', $offer->listing) }}" style="flex: 1; background: #ecf0f1; color: #2c3e50; border: none; padding: 1rem; border-radius: 0.5rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s ease;">
+            <a href="{{ route('offers.show', $offer) }}" style="flex: 1; background: #ecf0f1; color: #2c3e50; border: none; padding: 1rem; border-radius: 0.5rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s ease;">
                 <i class="fas fa-times me-2"></i>Cancel
             </a>
         </div>

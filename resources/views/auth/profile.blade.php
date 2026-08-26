@@ -685,8 +685,17 @@
     <div class="profile-hero">
         <div class="container">
             <div class="profile-hero-content">
-                <div class="profile-avatar-large">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                <div class="profile-avatar-wrapper" style="position: relative; display: inline-block;">
+                    @if(auth()->user()->avatar_url)
+                        <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="profile-avatar-large" style="object-fit: cover;">
+                    @else
+                        <div class="profile-avatar-large">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                    @endif
+                    <button type="button" class="btn-avatar-edit" data-bs-toggle="modal" data-bs-target="#avatarModal" title="Change Profile Picture" style="position: absolute; bottom: 5px; right: 5px; background: white; color: #0d9488; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: all 0.2s ease; z-index: 2;" onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='#0d9488'; this.style.color='white';" onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='white'; this.style.color='#0d9488';">
+                        <i class="fas fa-camera"></i>
+                    </button>
                 </div>
                 <div class="profile-hero-info">
                     <h1>{{ auth()->user()->name }}</h1>
@@ -824,4 +833,86 @@
     </div>
 </div>
 
+<!-- Profile Picture Upload Modal -->
+<div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true" style="backdrop-filter: blur(6px);">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+        <div class="modal-content" style="background: #ffffff; border-radius: 1.25rem; border: 1px solid rgba(13, 148, 136, 0.2); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); overflow: hidden;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%); padding: 1.5rem 1.75rem; border-bottom: 1px solid rgba(13, 148, 136, 0.15);">
+                <h5 class="modal-title" id="avatarModalLabel" style="color: #1e293b; font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; gap: 0.6rem; margin: 0;">
+                    <i class="fas fa-camera" style="color: #0d9488;"></i>Update Profile Picture
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <form action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data" id="avatarForm">
+                @csrf
+                <div class="modal-body" style="padding: 2rem 1.75rem; text-align: center;">
+                    <!-- Preview Box -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <div id="avatarPreviewContainer" style="width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 1rem; overflow: hidden; border: 3px solid #0d9488; box-shadow: 0 6px 20px rgba(13, 148, 136, 0.2); display: flex; align-items: center; justify-content: center; background: #f1f5f9;">
+                            @if(auth()->user()->avatar_url)
+                                <img id="avatarImagePreview" src="{{ auth()->user()->avatar_url }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <div id="avatarInitialsPreview" style="font-size: 3.5rem; font-weight: 800; color: #0d9488;">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+                                <img id="avatarImagePreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            @endif
+                        </div>
+                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Supported formats: JPG, PNG, WEBP, GIF (Max 2MB)</p>
+                    </div>
+
+                    <!-- File input -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <input type="file" name="avatar" id="avatarFileInput" accept="image/jpeg,image/png,image/webp,image/gif" required class="form-control" style="border: 2px dashed rgba(13, 148, 136, 0.4); padding: 0.75rem; border-radius: 0.75rem; background: #f8fafc; font-size: 0.9rem;" onchange="previewAvatar(this)">
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="background: #f8fafc; padding: 1.25rem 1.75rem; border-top: 1px solid rgba(13, 148, 136, 0.1); display: flex; justify-content: space-between;">
+                    @if(auth()->user()->avatar)
+                        <button type="button" class="btn btn-outline-danger" style="border-radius: 0.6rem; font-weight: 700; font-size: 0.85rem;" onclick="document.getElementById('deleteAvatarForm').submit();">
+                            <i class="fas fa-trash me-1"></i>Remove
+                        </button>
+                    @else
+                        <div></div>
+                    @endif
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 0.6rem; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+                        <button type="submit" class="btn" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; border-radius: 0.6rem; font-weight: 700; font-size: 0.85rem; border: none; padding: 0.5rem 1.25rem;">
+                            <i class="fas fa-save me-1"></i>Save Picture
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if(auth()->user()->avatar)
+                <form id="deleteAvatarForm" action="{{ route('profile.avatar.delete') }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            @endif
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('avatarImagePreview');
+                const initials = document.getElementById('avatarInitialsPreview');
+                if (img) {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                if (initials) {
+                    initials.style.display = 'none';
+                }
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 @endsection

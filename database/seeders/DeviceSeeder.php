@@ -25,6 +25,7 @@ class DeviceSeeder extends Seeder
             ['name' => 'Mouse', 'icon' => 'fa-mouse', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Printer', 'icon' => 'fa-print', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Router', 'icon' => 'fa-wifi', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Cables & Wires', 'icon' => 'fa-plug', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('device_types')->insert($deviceTypes);

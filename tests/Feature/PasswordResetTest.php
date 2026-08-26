@@ -34,9 +34,14 @@ class PasswordResetTest extends TestCase
 
         $response->assertOk();
 
-        $response = $this->post(route('password.reset.update'), [
+        $response = $this->post(route('password.verify-code'), [
             'email' => $user->email,
-            'token' => $token->token,
+            'code' => $token->token,
+        ]);
+
+        $response->assertRedirect(route('password.new'));
+
+        $response = $this->post(route('password.update-new'), [
             'password' => 'NewPassword123!',
             'password_confirmation' => 'NewPassword123!',
         ]);

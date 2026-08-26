@@ -32,6 +32,7 @@ class User extends Authenticatable
         'business_name',
         'business_description',
         'phone',
+        'avatar',
         'email_notifications',
         'sms_notifications',
         'marketing_updates',
@@ -43,6 +44,17 @@ class User extends Authenticatable
         'google_id',
         'oauth_provider',
         'oauth_token',
+        // Settings fields
+        'address_city',
+        'address_province',
+        'gcash_number',
+        'bank_name',
+        'bank_account_number',
+        'preferred_action',
+        'notify_new_offer',
+        'notify_transaction_complete',
+        'notify_new_message',
+        'notify_admin_updates',
     ];
 
     /**
@@ -76,6 +88,10 @@ class User extends Authenticatable
             'total_impact_score' => 'decimal:2',
             'total_weight_diverted' => 'decimal:2',
             'total_co2_saved' => 'decimal:2',
+            'notify_new_offer' => 'boolean',
+            'notify_transaction_complete' => 'boolean',
+            'notify_new_message' => 'boolean',
+            'notify_admin_updates' => 'boolean',
         ];
     }
 
@@ -272,5 +288,25 @@ class User extends Authenticatable
     public function isBanned(): bool
     {
         return (bool) $this->is_banned;
+    }
+
+    /**
+     * Get the user's avatar URL (Cloudflare R2 CDN or external URL).
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (!$this->avatar) {
+            return null;
+        }
+
+        return \App\Services\CloudflareStorageService::url($this->avatar);
+    }
+
+    /**
+     * Check if user has an avatar.
+     */
+    public function hasAvatar(): bool
+    {
+        return !empty($this->avatar);
     }
 }

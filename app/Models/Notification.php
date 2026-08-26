@@ -23,6 +23,10 @@ class Notification extends Model
         'read_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'target_url',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -64,18 +68,83 @@ class Notification extends Model
     }
 
     /**
+     * Get the redirect target URL for this notification.
+     */
+    public function getTargetUrlAttribute(): string
+    {
+        $data = $this->data ?? [];
+
+        switch ($this->type) {
+            case 'new_message':
+                if (!empty($data['offer_id'])) {
+                    return route('messages.index', ['offer_id' => $data['offer_id']]);
+                }
+                return route('messages.index');
+
+            case 'offer_received':
+            case 'offer_accepted':
+            case 'offer_rejected':
+            case 'offer_cancelled':
+                if (!empty($data['offer_id'])) {
+                    return route('offers.show', $data['offer_id']);
+                }
+                if (!empty($data['listing_id'])) {
+                    return route('listings.show', $data['listing_id']);
+                }
+                return $this->user?->isSeller() ? route('seller.transaction-history') : route('buyer.transaction-history');
+
+            case 'listing_created':
+                if (!empty($data['listing_id'])) {
+                    return route('listings.show', $data['listing_id']);
+                }
+                return route('seller.dashboard');
+
+            case 'new_buyer_registration':
+            case 'new_seller_registration':
+            case 'pending_verification':
+                return route('admin.pending-verifications');
+
+            case 'account_approved':
+            case 'seller_registration_success':
+                return $this->user?->isSeller() ? route('seller.dashboard') : route('buyer.dashboard');
+
+            case 'account_rejected':
+                return route('settings.index');
+
+            default:
+                if (!empty($data['offer_id'])) {
+                    return route('offers.show', $data['offer_id']);
+                }
+                if (!empty($data['listing_id'])) {
+                    return route('listings.show', $data['listing_id']);
+                }
+                return route('notifications.index');
+        }
+    }
+
+    /**
      * Create a notification for a user
      */
     public static function notify(User $user, string $type, string $title, string $message, array $data = null)
     {
-        return self::create([
+        $notification = self::create([
             'user_id' => $user->id,
             'type' => $type,
             'title' => $title,
             'message' => $message,
-            'data' => $data,
         ]);
-    }
 
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                NotificationData::create([
+                    'notification_id' => $notification->id,
+                    'key' => (string) $key,
+                    'value' => is_scalar($value) ? (string) $value : json_encode($value),
+                ]);
+            }
+        }
+
+        return $notification;
+    }
 }
 

@@ -23,4 +23,12 @@ class ListingPhoto extends Model
     {
         return $this->belongsTo(Listing::class);
     }
+
+    /**
+     * Get formatted photo URL (resolves relative keys or Cloudflare URLs).
+     */
+    public function getPhotoUrlAttribute($value): ?string
+    {
+        return \App\Services\CloudflareStorageService::url($value);
+    }
 }

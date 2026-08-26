@@ -149,17 +149,13 @@ class Listing extends Model
      */
     public function getPhotosAttribute(): array
     {
-        if ($this->relationLoaded('listingPhotos')) {
-            return $this->listingPhotos
-                ->pluck('photo_url')
-                ->filter(fn ($url) => is_string($url) && $url !== '')
-                ->values()
-                ->all();
-        }
+        $photos = $this->relationLoaded('listingPhotos')
+            ? $this->listingPhotos->pluck('photo_url')
+            : $this->listingPhotos()->pluck('photo_url');
 
-        return $this->listingPhotos()
-            ->pluck('photo_url')
+        return $photos
             ->filter(fn ($url) => is_string($url) && $url !== '')
+            ->map(fn ($url) => \App\Services\CloudflareStorageService::url($url))
             ->values()
             ->all();
     }
@@ -177,6 +173,7 @@ class Listing extends Model
         $weights = [
             'Laptop' => 2.0,
             'Desktop' => 5.0,
+            'Desktop Computer' => 5.0,
             'Smartphone' => 0.2,
             'Tablet' => 0.5,
             'Monitor' => 4.0,
@@ -194,10 +191,16 @@ class Listing extends Model
             'Cooling Fan' => 0.2,
             'Case' => 3.0,
             'Cable' => 0.1,
+            'Cables & Wires' => 0.1,
+            'Cable / Wire' => 0.1,
+            'Charger & Cable' => 0.2,
             'Charger' => 0.3,
+            'Headphones' => 0.2,
+            'Speaker' => 1.0,
+            'Webcam' => 0.2,
         ];
 
-        return $weights[ucfirst(strtolower($category))] ?? 1.0;
+        return $weights[$category] ?? $weights[ucfirst(strtolower($category))] ?? 1.0;
     }
 
     /**
