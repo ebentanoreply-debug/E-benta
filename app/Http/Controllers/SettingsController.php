@@ -88,7 +88,7 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'business_name' => ['nullable', 'string', 'max:255'],
             'business_description' => ['nullable', 'string', 'max:1000'],
-            'preferred_action' => ['nullable', 'in:sell,donate,recycle'],
+            'preferred_action' => ['nullable', 'in:sell,recycle'],
             'address_city' => ['nullable', 'string', 'max:100'],
             'address_province' => ['nullable', 'string', 'max:100'],
         ]);
@@ -96,6 +96,52 @@ class SettingsController extends Controller
         $request->user()->update($validated);
 
         return redirect()->back()->with('success', 'Seller profile updated successfully.');
+    }
+
+    /**
+     * Submit government ID verification documents (Buyer & Seller).
+     */
+    public function submitIdVerification(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'id_type' => ['required', 'string', 'max:100'],
+            'id_number' => ['required', 'string', 'max:100'],
+            'id_photo' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
+            'id_selfie' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
+        ]);
+
+        $user = $request->user();
+
+        $idPhotoUrl = null;
+        if ($request->hasFile('id_photo')) {
+            $uploaded = \App\Services\CloudflareStorageService::upload($request->file('id_photo'), 'verifications');
+            $idPhotoUrl = \App\Services\CloudflareStorageService::url($uploaded);
+        }
+
+        $idSelfieUrl = null;
+        if ($request->hasFile('id_selfie')) {
+            $uploadedSelfie = \App\Services\CloudflareStorageService::upload($request->file('id_selfie'), 'verifications');
+            $idSelfieUrl = \App\Services\CloudflareStorageService::url($uploadedSelfie);
+        }
+
+        $user->update([
+            'id_type' => $validated['id_type'],
+            'id_number' => $validated['id_number'],
+            'id_photo_url' => $idPhotoUrl,
+            'id_selfie_url' => $idSelfieUrl,
+            'id_verification_status' => 'pending',
+            'id_submitted_at' => now(),
+            'id_rejection_reason' => null,
+        ]);
+
+        \App\Services\AuditLogger::log(
+            action: 'id_verification_submitted',
+            description: "User {$user->name} submitted ID verification documents ({$validated['id_type']})",
+            modelType: 'User',
+            modelId: $user->id
+        );
+
+        return redirect()->back()->with('success', 'Your Valid ID has been submitted for review. Our team will verify your account shortly.');
     }
 
     /**

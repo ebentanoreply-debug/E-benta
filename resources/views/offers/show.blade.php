@@ -159,6 +159,22 @@
                 </div>
             @endif
 
+            <!-- Cancelled Status Banner -->
+            @if($offer->status === 'cancelled')
+                <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.25); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
+                    <h5 style="color: #e74c3c; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-ban"></i>
+                        Offer Cancelled
+                    </h5>
+                    <p style="color: #64748b; margin: 0; font-size: 0.95rem;">
+                        This offer was cancelled on {{ $offer->responded_at ? $offer->responded_at->format('M d, Y H:i') : $offer->updated_at->format('M d, Y H:i') }}.
+                        @if($offer->cancellation_reason)
+                            <br><strong style="color: #1e293b;">Cancellation Reason:</strong> {{ $offer->cancellation_reason }}
+                        @endif
+                    </p>
+                </div>
+            @endif
+
             <!-- Buyer Cancel Action -->
             @if(auth()->id() === $offer->buyer_id && $offer->canBuyerCancel())
                 <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
@@ -166,15 +182,66 @@
                         <i class="fas fa-ban" style="color: #e74c3c;"></i>
                         Cancel Offer
                     </h4>
-                    <p style="color: #64748b; margin-bottom: 1rem;">
-                        You can cancel this offer while it is pending or within the grace period after acceptance.
-                    </p>
-                    <form method="POST" action="{{ route('offers.cancel', $offer) }}">
-                        @csrf
-                        <button type="submit" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(231, 76, 60, 0.25)'; this.style.transform='translateY(0)';">
-                            <i class="fas fa-times me-2"></i>Cancel Offer
+                    @if($offer->status === 'pending')
+                        <p style="color: #64748b; margin-bottom: 1rem;">
+                            The seller has not accepted your offer yet. You can cancel it immediately anytime.
+                        </p>
+                        <form method="POST" action="{{ route('offers.cancel', $offer) }}" onsubmit="return confirm('Are you sure you want to cancel this pending offer?');">
+                            @csrf
+                            <button type="submit" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25); cursor: pointer;">
+                                <i class="fas fa-times me-2"></i>Cancel Offer
+                            </button>
+                        </form>
+                    @elseif($offer->status === 'accepted')
+                        <p style="color: #64748b; margin-bottom: 1rem;">
+                            The seller has accepted your offer. If you need to cancel before handover, please provide a cancellation reason.
+                        </p>
+                        <button type="button" class="btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; cursor: pointer; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);" data-bs-toggle="modal" data-bs-target="#cancelOfferModal">
+                            <i class="fas fa-times me-2"></i>Cancel Accepted Offer
                         </button>
-                    </form>
+
+                        <!-- Cancellation Reason Modal -->
+                        <div class="modal fade" id="cancelOfferModal" tabindex="-1" aria-labelledby="cancelOfferModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content" style="border-radius: 1rem; border: 1px solid rgba(231, 76, 60, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: white;">
+                                    <form method="POST" action="{{ route('offers.cancel', $offer) }}">
+                                        @csrf
+                                        <div class="modal-header" style="background: rgba(231, 76, 60, 0.1); border-bottom: 1px solid rgba(231, 76, 60, 0.2);">
+                                            <h5 class="modal-title" id="cancelOfferModalLabel" style="font-weight: 700; color: #e74c3c;">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>Cancel Accepted Offer
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="padding: 1.5rem;">
+                                            <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.25rem;">
+                                                Please select or describe the reason why you are cancelling this transaction. The seller will be notified and the item will be restored to available.
+                                            </p>
+                                            <div class="mb-3">
+                                                <label class="form-label" style="font-weight: 700; color: #1e293b;">Primary Reason <span style="color: #e74c3c;">*</span></label>
+                                                <select class="form-select" id="cancelReasonSelect" required onchange="if(this.value !== 'Other') { document.getElementById('cancelReasonText').value = this.value; } else { document.getElementById('cancelReasonText').value = ''; }">
+                                                    <option value="">Select reason...</option>
+                                                    <option value="Found another device or deal">Found another device or deal</option>
+                                                    <option value="Seller unresponsive in chat/messages">Seller unresponsive in chat/messages</option>
+                                                    <option value="Unable to proceed with pickup or meetup schedule">Unable to proceed with pickup or meetup schedule</option>
+                                                    <option value="Item condition details or specs mismatch">Item condition details or specs mismatch</option>
+                                                    <option value="Changed mind / financial reasons">Changed mind / financial reasons</option>
+                                                    <option value="Other">Other reason (specify below)</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" style="font-weight: 700; color: #1e293b;">Additional Details / Reason <span style="color: #e74c3c;">*</span></label>
+                                                <textarea class="form-control" name="cancellation_reason" id="cancelReasonText" rows="3" required placeholder="Explain your reason in detail..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="border-top: 1px solid rgba(0,0,0,0.08);">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 0.6rem;">Keep Offer</button>
+                                            <button type="submit" class="btn btn-danger" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border: none; font-weight: 700; border-radius: 0.6rem; padding: 0.6rem 1.5rem;">Confirm Cancellation</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             @endif
 

@@ -78,35 +78,33 @@
         <div class="row g-4">
             <!-- Photo Gallery Section -->
             <div class="col-lg-6">
-                <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%); border: 1px solid rgba(13, 148, 136, 0.2); border-radius: 1rem; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);">
-                    @if($listing->photos && count($listing->photos) > 0)
-                        <div id="photoCarousel" class="carousel slide" style="background: #ffffff;">
-                            <div class="carousel-inner">
-                                @foreach($listing->photos as $index => $photo)
-                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                        <img src="{{ $photo }}" class="d-block w-100 listing-hero-img" alt="Device">
+                <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%); border: 1px solid rgba(13, 148, 136, 0.2); border-radius: 1rem; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); padding: 1rem;">
+                    @php
+                        $photosList = $listing->listingPhotos->pluck('photo_url')->toArray();
+                        if (empty($photosList) && !empty($listing->photos)) {
+                            $photosList = is_array($listing->photos) ? $listing->photos : [];
+                        }
+                    @endphp
+
+                    @if(!empty($photosList))
+                        <!-- Main Preview Image -->
+                        <div style="width: 100%; height: 380px; border-radius: 0.75rem; overflow: hidden; background: #000; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <img id="mainListingImage" src="{{ $photosList[0] }}" alt="Listing Image" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+
+                        <!-- Thumbnails Row -->
+                        @if(count($photosList) > 1)
+                            <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem;">
+                                @foreach($photosList as $idx => $photoUrl)
+                                    <div style="width: 70px; height: 70px; flex-shrink: 0; border-radius: 0.5rem; overflow: hidden; cursor: pointer; border: 2px solid {{ $idx === 0 ? 'var(--light-green)' : 'rgba(0,0,0,0.1)' }};" 
+                                         onclick="document.getElementById('mainListingImage').src='{{ $photoUrl }}'; this.parentElement.querySelectorAll('div').forEach(d => d.style.borderColor='rgba(0,0,0,0.1)'); this.style.borderColor='var(--light-green)';">
+                                        <img src="{{ $photoUrl }}" alt="thumb" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 @endforeach
                             </div>
-                            
-                            @if(count($listing->photos) > 1)
-                                <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev" style="background: linear-gradient(90deg, rgba(0,0,0,0.5), transparent); width: 15%;">
-                                    <span class="carousel-control-prev-icon" style="filter: brightness(1.5);"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next" style="background: linear-gradient(270deg, rgba(0,0,0,0.5), transparent); width: 15%;">
-                                    <span class="carousel-control-next-icon" style="filter: brightness(1.5);"></span>
-                                </button>
-                                
-                                <!-- Photo Indicators -->
-                                <div style="position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem;">
-                                    @foreach($listing->photos as $index => $photo)
-                                    <div style="width: 8px; height: 8px; border-radius: 50%; background: {{ $index === 0 ? 'var(--light-green)' : 'rgba(13, 148, 136, 0.4)' }}; cursor: pointer; transition: all 0.3s ease;" data-bs-target="#photoCarousel" data-bs-slide-to="{{ $index }}"></div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
+                        @endif
                     @else
-                        <div class="d-flex align-items-center justify-content-center" style="height: 500px; background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(52, 152, 219, 0.1));">
+                        <div class="d-flex align-items-center justify-content-center" style="height: 380px; background: linear-gradient(135deg, rgba(13, 148, 136, 0.05), rgba(52, 152, 219, 0.05)); border-radius: 0.75rem;">
                             <div style="text-align: center; color: #64748b;">
                                 <i class="fas fa-image" style="font-size: 3.5rem; color: rgba(13, 148, 136, 0.3); margin-bottom: 1rem; display: block;"></i>
                                 <span style="font-weight: 600; font-size: 1.1rem;">No photos available</span>
@@ -118,40 +116,64 @@
 
             <!-- Details Section -->
             <div class="col-lg-6">
-                <!-- Status & Condition Badges -->
-                <div style="display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <!-- Status & Badges Row -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+                    <!-- Listing Type Badge -->
+                    @if($listing->isBulkLot())
+                        <span class="badge" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border-radius: 0.5rem;">
+                            <i class="fas fa-boxes me-1"></i>BULK LOT ({{ $listing->lot_item_count ?? 'Multiple' }} Items)
+                        </span>
+                    @else
+                        <span class="badge" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem;">
+                            <i class="fas fa-mobile-alt me-1"></i>Single Item
+                        </span>
+                    @endif
+
                     <!-- Condition Badge -->
-                    <span class="badge" style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(13, 148, 136, 0.1)); color: #0d9488; font-weight: 700; padding: 0.6rem 1rem; font-size: 0.8rem; border: 1px solid rgba(13, 148, 136, 0.3); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <span class="badge" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; text-transform: uppercase;">
                         <i class="fas fa-check-circle me-1"></i>{{ ucfirst(str_replace('_', ' ', $listing->condition)) }}
                     </span>
                     
-                    <!-- Action Badge -->
-                    <span class="badge" style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.1)); color: #3498db; font-weight: 700; padding: 0.6rem 1rem; font-size: 0.8rem; border: 1px solid rgba(52, 152, 219, 0.3); text-transform: uppercase; letter-spacing: 0.5px;">
-                        <i class="fas fa-target me-1"></i>{{ ucfirst(str_replace('_', ' ', $listing->intended_action)) }}
-                    </span>
+                    <!-- Handover Badge -->
+                    @php
+                        $handover = $listing->handover_preference ?? 'both';
+                    @endphp
+                    @if($handover === 'pickup_only')
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #b45309; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 0.5rem;">
+                            <i class="fas fa-truck-loading me-1"></i>Pickup Only
+                        </span>
+                    @elseif($handover === 'meetup_only')
+                        <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #1d4ed8; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 0.5rem;">
+                            <i class="fas fa-handshake me-1"></i>Meetup Only
+                        </span>
+                    @else
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #047857; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.5rem;">
+                            <i class="fas fa-exchange-alt me-1"></i>Pickup / Meetup
+                        </span>
+                    @endif
                     
                     <!-- Status Badge -->
                     @if($listing->status == 'available')
-                        <span class="badge" style="background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: var(--dark-bg); font-weight: 700; padding: 0.6rem 1rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);">
+                        <span class="badge" style="background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: white; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border-radius: 0.5rem;">
                             <i class="fas fa-check me-1"></i>Available
                         </span>
                     @else
-                        <span class="badge" style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.8), rgba(155, 89, 182, 0.6)); color: white; font-weight: 700; padding: 0.6rem 1rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <span class="badge" style="background: #64748b; color: white; font-weight: 700; padding: 0.6rem 0.9rem; font-size: 0.8rem; border-radius: 0.5rem;">
                             <i class="fas fa-lock me-1"></i>{{ ucfirst($listing->status) }}
                         </span>
                     @endif
                 </div>
 
                 <!-- Price Display -->
-                <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.2); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <small style="color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">
-                        <i class="fas fa-tag me-1" style="color: var(--light-green);"></i>Price
+                <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.2); padding: 1.5rem 1.75rem; border-radius: 1rem; margin-bottom: 1.5rem;">
+                    <small style="color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.35rem;">
+                        <i class="fas fa-tag me-1" style="color: var(--light-green);"></i>{{ $listing->isBulkLot() ? 'Bulk Lot Price' : 'Asking Price' }}
                     </small>
-                    <h2 style="color: var(--light-green); font-weight: 800; margin: 0; font-size: 2.8rem; letter-spacing: -1px;">
+                    <h2 style="color: var(--light-green); font-weight: 800; margin: 0; font-size: 2.5rem; letter-spacing: -0.5px;">
                         @if($listing->suggested_price > 0)
                             ₱{{ number_format($listing->suggested_price, 2) }}
                         @else
-                            FREE <i class="fas fa-gift me-2" style="font-size: 0.7em;"></i>
+                            FREE (Recycle)
                         @endif
                     </h2>
                 </div>

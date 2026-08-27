@@ -221,20 +221,24 @@ class ReportController extends Controller
 
         $validated = $request->validate([
             'action_taken' => 'required|in:none,warning_sent,content_removed,user_suspended,user_banned,listing_removed',
+            'suspension_days' => 'nullable|integer|min:1|max:365',
             'admin_notes' => 'nullable|string|max:1000',
         ]);
 
+        $days = !empty($validated['suspension_days']) ? (int) $validated['suspension_days'] : null;
+
         // Take action based on selection
         match($validated['action_taken']) {
-            'user_suspended' => $this->suspendUser($report),
+            'user_suspended' => $this->suspendUser($report, $days),
+            'warning_sent' => $this->warnUser($report, $validated['admin_notes'] ?? null),
             'user_banned' => $this->banUser($report),
-            'listing_removed' => $this->removeListing($report),
+            'content_removed', 'listing_removed' => $this->removeContent($report),
             default => null
         };
 
         $report->resolve(Auth::id(), $validated['action_taken'], $validated['admin_notes']);
 
-        return redirect()->back()->with('success', 'Report resolved');
+        return redirect()->back()->with('success', 'Report resolved successfully');
     }
 
     /**
@@ -257,22 +261,143 @@ class ReportController extends Controller
     }
 
     /**
-     * Suspend user account.
+     * Find target user from reportable object.
      */
-    private function suspendUser(Report $report)
+    private function getTargetUser(Report $report): ?User
     {
         if ($report->reportable instanceof User) {
-            $report->reportable->update(['is_suspended' => true]);
+            return $report->reportable;
+        }
+        if ($report->reportable instanceof Listing) {
+            return $report->reportable->seller;
+        }
+        if ($report->reportable instanceof Offer) {
+            return $report->reportable->buyer;
+        }
+        if ($report->reportable instanceof \App\Models\Review) {
+            return $report->reportable->reviewer;
+        }
+        return null;
+    }
+
+    /**
+     * Warn user account. Auto-bans if warning count reaches 3.
+     */
+    private function warnUser(Report $report, ?string $adminNotes = null)
+    {
+        $targetUser = $this->getTargetUser($report);
+        if (!$targetUser) {
+            return;
+        }
+
+        $result = $targetUser->addWarning($adminNotes);
+        $warningCount = $result['warning_count'];
+        $isBanned = $result['is_banned'];
+
+        if ($isBanned) {
+            \App\Models\Notification::notify(
+                $targetUser,
+                'account_banned',
+                'Account Banned 🚫',
+                "Your account has been automatically banned after reaching 3 disciplinary warnings. Reason: " . ($adminNotes ?: 'Repeated policy violations'),
+                ['warning_count' => 3, 'banned_at' => now()]
+            );
+        } else {
+            \App\Models\Notification::notify(
+                $targetUser,
+                'account_warning',
+                "Warning Notice ({$warningCount}/3) ⚠️",
+                "You have received warning #{$warningCount} of 3. Note: " . ($adminNotes ?: 'Please adhere to E-Benta platform guidelines.') . " Note: Reaching 3 warnings will result in an automatic permanent account ban.",
+                ['warning_count' => $warningCount, 'admin_notes' => $adminNotes]
+            );
+        }
+
+        AuditLogger::log(
+            action: 'warn_user',
+            description: "Admin " . Auth::user()->name . " issued warning #{$warningCount} to user {$targetUser->name}" . ($isBanned ? ' (auto-banned)' : ''),
+            modelType: 'User',
+            modelId: $targetUser->id,
+            newValues: ['warning_count' => $warningCount, 'is_banned' => $isBanned]
+        );
+    }
+
+    /**
+     * Suspend user account with optional days.
+     */
+    private function suspendUser(Report $report, ?int $days = null)
+    {
+        $targetUser = $this->getTargetUser($report);
+        if (!$targetUser) {
+            return;
+        }
+
+        $targetUser->suspendForDays($days);
+        $suspensionText = $days ? "for {$days} days (until " . now()->addDays($days)->format('M d, Y') . ")" : "indefinitely";
+
+        \App\Models\Notification::notify(
+            $targetUser,
+            'account_suspended',
+            'Account Suspended ⏸️',
+            "Your account has been suspended {$suspensionText}. Please contact support for inquiries.",
+            ['suspended_until' => $targetUser->suspended_until]
+        );
+
+        AuditLogger::log(
+            action: 'suspend_user',
+            description: "Admin " . Auth::user()->name . " suspended user {$targetUser->name} {$suspensionText}",
+            modelType: 'User',
+            modelId: $targetUser->id,
+            newValues: ['is_suspended' => true, 'suspended_until' => $targetUser->suspended_until]
+        );
+    }
+
+    /**
+     * Ban user account permanently.
+     */
+    private function banUser(Report $report)
+    {
+        $targetUser = $this->getTargetUser($report);
+        if ($targetUser) {
+            $targetUser->update(['is_banned' => true]);
+
+            \App\Models\Notification::notify(
+                $targetUser,
+                'account_banned',
+                'Account Banned 🚫',
+                'Your account has been permanently banned due to violation of platform policies.',
+                ['banned_at' => now()]
+            );
+
+            AuditLogger::log(
+                action: 'ban_user',
+                description: "Admin " . Auth::user()->name . " banned user {$targetUser->name}",
+                modelType: 'User',
+                modelId: $targetUser->id,
+                newValues: ['is_banned' => true]
+            );
         }
     }
 
     /**
-     * Ban user account.
+     * Remove content / listing reported.
      */
-    private function banUser(Report $report)
+    private function removeContent(Report $report)
     {
-        if ($report->reportable instanceof User) {
-            $report->reportable->update(['is_banned' => true]);
+        if ($report->reportable instanceof Listing) {
+            $this->removeListing($report);
+        } elseif ($report->reportable instanceof \App\Models\Review) {
+            $review = $report->reportable;
+            $review->delete();
+            AuditLogger::log(
+                action: 'moderate_review',
+                description: "Review #{$review->id} removed by Admin after report resolution",
+                modelType: 'Review',
+                modelId: $review->id
+            );
+        } elseif ($report->reportable instanceof User) {
+            Listing::where('user_id', $report->reportable->id)
+                ->whereIn('status', ['pending', 'available'])
+                ->update(['status' => 'withdrawn']);
         }
     }
 
@@ -285,6 +410,17 @@ class ReportController extends Controller
             $listing = $report->reportable;
             $previousStatus = $listing->status;
             $listing->update(['status' => 'withdrawn']);
+
+            // Notify seller
+            if ($listing->seller) {
+                \App\Models\Notification::notify(
+                    $listing->seller,
+                    'listing_removed',
+                    'Listing Removed by Admin ⚠️',
+                    "Your listing #{$listing->id} ({$listing->device_details}) was withdrawn by moderators following a report.",
+                    ['listing_id' => $listing->id]
+                );
+            }
 
             AuditLogger::log(
                 action: 'moderate_listing',

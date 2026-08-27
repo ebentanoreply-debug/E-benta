@@ -132,10 +132,38 @@
                         @enderror
                     </div>
 
-                    <!-- Pickup Date -->
+                    <!-- Handover Method -->
+                    @php
+                        $pref = $listing->handover_preference ?? 'both';
+                    @endphp
                     <div style="margin-bottom: 1.75rem;">
                         <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-calendar-alt me-2" style="color: #9b59b6;"></i>Proposed Pickup Date *
+                            <i class="fas fa-truck-loading me-2" style="color: var(--light-green);"></i>Handover / Collection Method *
+                        </label>
+                        <select class="form-select @error('handover_method') is-invalid @enderror" 
+                               id="handover_method" 
+                               name="handover_method" 
+                               required
+                               style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;" onchange="updateLocationLabel(this.value)">
+                            @if($pref === 'both' || $pref === 'pickup_only')
+                                <option value="pickup" {{ old('handover_method') === 'pickup' ? 'selected' : '' }}>🚚 Doorstep / Recycler Pickup (Collect from Seller's Location)</option>
+                            @endif
+                            @if($pref === 'both' || $pref === 'meetup_only')
+                                <option value="meetup" {{ old('handover_method') === 'meetup' ? 'selected' : '' }}>🤝 Safe Public Meetup (Agree on Meetup Spot)</option>
+                            @endif
+                        </select>
+                        <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
+                            Seller preference: <strong>{{ ucfirst(str_replace('_', ' ', $pref)) }}</strong>
+                        </small>
+                        @error('handover_method')
+                            <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <!-- Pickup / Meetup Date -->
+                    <div style="margin-bottom: 1.75rem;">
+                        <label id="dateLabel" style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+                            <i class="fas fa-calendar-alt me-2" style="color: #9b59b6;"></i>Proposed Date & Time *
                         </label>
                         <input type="datetime-local" 
                                class="form-control @error('proposed_pickup_date') is-invalid @enderror" 
@@ -145,28 +173,28 @@
                                required
                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;">
                         <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
-                            When you plan to pick up the device
+                            When you plan to meet or pick up the device
                         </small>
                         @error('proposed_pickup_date')
                             <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>
                         @enderror
                     </div>
 
-                    <!-- Pickup Location -->
+                    <!-- Pickup / Meetup Location -->
                     <div style="margin-bottom: 1.75rem;">
-                        <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-map-marker-alt me-2" style="color: #e74c3c;"></i>Pickup Location *
+                        <label id="locationLabel" style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+                            <i class="fas fa-map-marker-alt me-2" style="color: #e74c3c;"></i>Proposed Location / Address *
                         </label>
                         <input type="text" 
                                class="form-control @error('pickup_location') is-invalid @enderror" 
                                id="pickup_location" 
                                name="pickup_location" 
-                               placeholder="Street address or landmark"
+                               placeholder="e.g. Seller's address or Public Mall / Barangay Center"
                                value="{{ old('pickup_location') }}" 
                                required
                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;">
                         <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
-                            Where the seller should prepare the device for pickup
+                            Where the transaction handover will take place
                         </small>
                         @error('pickup_location')
                             <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>

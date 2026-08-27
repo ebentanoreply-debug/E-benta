@@ -93,6 +93,8 @@ Route::middleware('auth')->group(function () {
         ->name('settings.payments.update');
     Route::put('/settings/seller', [SettingsController::class, 'updateSellerProfile'])
         ->name('settings.seller.update');
+    Route::post('/settings/id-verification', [SettingsController::class, 'submitIdVerification'])
+        ->name('settings.id-verification.submit');
     Route::put('/settings/preferences', [SettingsController::class, 'updatePreferences'])
         ->name('settings.preferences.update');
 

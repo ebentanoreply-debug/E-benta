@@ -17,6 +17,8 @@ class Listing extends Model
 
     protected $fillable = [
         'user_id',
+        'listing_type',
+        'lot_item_count',
         'device_type_id',
         'device_brand_id',
         'device_model_id',
@@ -25,6 +27,7 @@ class Listing extends Model
         'description',
         'estimated_weight',
         'intended_action',
+        'handover_preference',
         'suggested_price',
         'status',
         'matched_buyer_id',
@@ -39,6 +42,7 @@ class Listing extends Model
     protected function casts(): array
     {
         return [
+            'lot_item_count' => 'integer',
             'estimated_weight' => 'decimal:2',
             'suggested_price' => 'decimal:2',
             'carbon_footprint' => 'decimal:2',
@@ -214,6 +218,14 @@ class Listing extends Model
         $coefficient = 15;
 
         return round($weight * $coefficient, 2);
+    }
+
+    /**
+     * Check if listing is a bulk e-waste lot/bundle.
+     */
+    public function isBulkLot(): bool
+    {
+        return $this->listing_type === 'bulk_lot';
     }
 
     /**

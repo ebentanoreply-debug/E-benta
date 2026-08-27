@@ -763,7 +763,7 @@
                                        id="role" name="role" required onchange="toggleBusinessFields()">
                                     <option value="">Select your account type</option>
                                     <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>
-                                        🏪 Seller - I have e-waste to sell or donate
+                                        🏪 Seller - I have e-waste to sell or recycle
                                     </option>
                                     <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>
                                         🛍️ Buyer - I process or purchase e-waste

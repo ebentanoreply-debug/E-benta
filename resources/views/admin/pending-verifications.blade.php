@@ -563,6 +563,41 @@
                                     <p class="info-meta">{{ $user->created_at->diffForHumans() }}</p>
                                 </div>
 
+                                <!-- Valid ID Verification Documents -->
+                                <div class="info-divider"></div>
+                                <div class="info-group">
+                                    <label class="info-label">
+                                        <i class="fas fa-id-card"></i>Government Valid ID Details
+                                    </label>
+                                    @if($user->id_type)
+                                        <p class="info-value" style="font-weight: 700; color: #0d9488;">
+                                            {{ $user->id_type }} <span style="font-weight: 500; color: #64748b;">(No. {{ $user->id_number }})</span>
+                                        </p>
+                                        <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
+                                            @if($user->id_photo_url)
+                                                <a href="{{ $user->id_photo_url }}" target="_blank" style="flex: 1; text-decoration: none;">
+                                                    <div style="border: 1.5px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; overflow: hidden; aspect-ratio: 16/9; background: #f1f5f9; position: relative;">
+                                                        <img src="{{ $user->id_photo_url }}" alt="ID Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 3px;">ID Photo 🔍</span>
+                                                    </div>
+                                                </a>
+                                            @endif
+                                            @if($user->id_selfie_url)
+                                                <a href="{{ $user->id_selfie_url }}" target="_blank" style="flex: 1; text-decoration: none;">
+                                                    <div style="border: 1.5px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; overflow: hidden; aspect-ratio: 16/9; background: #f1f5f9; position: relative;">
+                                                        <img src="{{ $user->id_selfie_url }}" alt="Selfie with ID" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 3px;">Selfie 🔍</span>
+                                                    </div>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <p class="info-value" style="color: #94a3b8; font-size: 0.85rem; font-style: italic;">
+                                            No Valid ID document submitted yet
+                                        </p>
+                                    @endif
+                                </div>
+
                                 <div class="info-divider"></div>
 
                                 <!-- Action Buttons -->

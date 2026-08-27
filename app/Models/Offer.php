@@ -19,10 +19,12 @@ class Offer extends Model
         'buyer_id',
         'bid_amount',
         'proposed_method',
+        'handover_method',
         'notes',
         'proposed_pickup_date',
         'pickup_location',
         'status',
+        'cancellation_reason',
         'responded_at',
     ];
 
@@ -143,17 +145,14 @@ class Offer extends Model
         }
 
         $listing = $this->listing;
-        $pickedUp = $listing?->picked_up_at !== null || $listing?->status === 'in_transit';
+        $inProgressOrDone = $listing?->picked_up_at !== null
+            || in_array($listing?->status, ['in_transit', 'delivered', 'processed', 'completed']);
 
-        if ($pickedUp) {
+        if ($inProgressOrDone) {
             return false;
         }
 
-        if (!$this->responded_at) {
-            return false;
-        }
-
-        return $this->responded_at->diffInMinutes(now()) <= 30;
+        return true;
     }
 
     /**

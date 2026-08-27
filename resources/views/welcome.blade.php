@@ -869,7 +869,7 @@
                         <span class="accent">Economic Value</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Join thousands of eco-conscious users. Sell functional gadgets for cash, donate to those in need, or recycle responsibly. E-Benta makes e-waste management simple, transparent, and rewarding.
+                        Join thousands of eco-conscious users. Sell functional gadgets for cash, bundle broken e-waste into bulk lots, or recycle responsibly. E-Benta makes e-waste management simple, transparent, and rewarding.
                     </p>
                     <div class="hero-buttons">
                         <a href="{{ auth()->check() ? route('seller.dashboard') : route('register') }}" class="btn btn-primary-green">
@@ -903,7 +903,7 @@
         <div class="container-fluid">
             <div class="pathways-title">
                 <h2>Three Powerful Pathways for Your E-Waste</h2>
-                <p>Whether you want to earn cash, help others, or recycle responsibly, E-Benta is your complete e-waste solution.</p>
+                <p>Whether you have single gadgets, broken device scrap bundles, or certified e-waste, E-Benta is your complete solution.</p>
             </div>
             <div class="row g-4">
                 <!-- Sell Pathway -->
@@ -912,24 +912,24 @@
                         <div class="pathway-icon">
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
-                        <h4>Monetize</h4>
-                        <p>Turn your old electronics into immediate cash. List devices in seconds, connect with verified buyers, and get paid instantly upon pickup with zero hassle.</p>
+                        <h4>Monetize Devices</h4>
+                        <p>Turn working or repairable electronics into immediate cash. List individual devices in seconds, accept buyer offers, and choose pickup or safe meetup.</p>
                         <a href="{{ auth()->check() ? route('seller.dashboard') : route('register') }}" class="pathway-link">
                             Start Selling <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Donate Pathway -->
+                <!-- Bulk Lot Scrap Pathway -->
                 <div class="col-lg-4">
                     <div class="pathway-card">
                         <div class="pathway-icon">
-                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-boxes"></i>
                         </div>
-                        <h4>Give Back</h4>
-                        <p>Bridge the digital divide. Donate functional devices to schools and non-profits. Make a direct impact on education and community development worldwide.</p>
-                        <a href="{{ route('listings.index') }}" class="pathway-link">
-                            Donate Now <i class="fas fa-arrow-right"></i>
+                        <h4>Bulk E-Waste Lots</h4>
+                        <p>Have multiple broken phones, tablets, or boards? Bundle them into a single bulk lot listing so recyclers and repairers can purchase everything in one go.</p>
+                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="pathway-link">
+                            List Bulk Lot <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -940,8 +940,8 @@
                         <div class="pathway-icon">
                             <i class="fas fa-sync-alt"></i>
                         </div>
-                        <h4>Recycle</h4>
-                        <p>End-of-life devices? We ensure 100% responsible recycling through certified partners. Zero landfill, safe hazmat disposal, and environmental accountability tracked.</p>
+                        <h4>Certified Recycle</h4>
+                        <p>End-of-life devices? Ensure 100% responsible recycling through certified partners. Zero landfill, safe hazmat disposal, and environmental carbon savings tracked.</p>
                         <a href="{{ route('listings.index') }}" class="pathway-link">
                             Recycle Responsibly <i class="fas fa-arrow-right"></i>
                         </a>

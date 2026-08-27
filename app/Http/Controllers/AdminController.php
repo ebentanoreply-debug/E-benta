@@ -53,7 +53,7 @@ class AdminController extends Controller
     }
 
     /**
-    * Show pending buyer verifications.
+     * Show pending buyer verifications.
      */
     public function pendingVerifications()
     {
@@ -61,15 +61,21 @@ class AdminController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        $pendingUsers = User::where('role', 'buyer')
-            ->where('is_verified', false)
+        $pendingUsers = User::where(function ($q) {
+                $q->where('id_verification_status', 'pending')
+                  ->orWhere(function ($sub) {
+                      $sub->where('role', 'buyer')->where('is_verified', false);
+                  });
+            })
+            ->orderBy('id_submitted_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return view('admin.pending-verifications', compact('pendingUsers'));
     }
 
     /**
-     * Verify a buyer/recycler account.
+     * Verify a user's account and government ID.
      */
     public function verifyUser(User $user)
     {
@@ -77,35 +83,34 @@ class AdminController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        if ($user->role !== 'buyer') {
-            return redirect()->back()
-                ->with('error', 'Only buyers can be verified');
-        }
-
-        $user->update(['is_verified' => true]);
+        $user->update([
+            'is_verified' => true,
+            'id_verification_status' => 'verified',
+            'id_rejection_reason' => null,
+        ]);
 
         // Log account approval
         AuditLogger::logAccountApproval(
             $user->id,
             'approved',
-            "Admin " . Auth::user()->name . " approved account"
+            "Admin " . Auth::user()->name . " approved ID verification and verified account"
         );
 
-        // Send notification to buyer - account approved
+        // Send notification to user - account approved
         Notification::notify(
             $user,
             'account_approved',
-            'Account Approved! 🎉',
-            'Congratulations! Your account has been approved. You can now browse listings and submit offers.',
+            'Identity Verified! 🛡️',
+            'Congratulations! Your government ID has been verified by our team. Your Verified badge is now active.',
             ['verified_at' => now()]
         );
 
         return redirect()->route('admin.pending-verifications')
-            ->with('success', 'User account verified successfully');
+            ->with('success', 'User ID and account verified successfully');
     }
 
     /**
-     * Reject a buyer/recycler account.
+     * Reject a user ID verification.
      */
     public function rejectUser(Request $request, User $user)
     {
@@ -117,27 +122,30 @@ class AdminController extends Controller
             'reason' => 'required|string|max:500',
         ]);
 
+        $user->update([
+            'is_verified' => false,
+            'id_verification_status' => 'rejected',
+            'id_rejection_reason' => $request->reason,
+        ]);
+
         // Log account rejection
         AuditLogger::logAccountApproval(
             $user->id,
             'rejected',
-            "Admin " . Auth::user()->name . " rejected account. Reason: " . $request->reason
+            "Admin " . Auth::user()->name . " rejected ID verification. Reason: " . $request->reason
         );
 
         // Send rejection notification to user with reason
         Notification::notify(
             $user,
             'account_rejected',
-            'Account Registration Rejected',
-            'Your account registration has been rejected. Reason: ' . $request->reason,
+            'ID Verification Update ⚠️',
+            'Your ID verification could not be approved. Reason: ' . $request->reason . '. You can re-submit clear ID documents in Settings.',
             ['rejection_reason' => $request->reason]
         );
 
-        // Optionally delete the user or mark it differently
-        $user->delete();
-
         return redirect()->route('admin.pending-verifications')
-            ->with('success', 'User account rejected and notification sent');
+            ->with('success', 'ID verification rejected and user notified.');
     }
 
     /**
