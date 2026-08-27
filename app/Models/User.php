@@ -29,6 +29,15 @@ class User extends Authenticatable
         'is_verified',
         'is_suspended',
         'is_banned',
+        'warning_count',
+        'suspended_until',
+        'id_type',
+        'id_number',
+        'id_photo_url',
+        'id_selfie_url',
+        'id_verification_status',
+        'id_rejection_reason',
+        'id_submitted_at',
         'business_name',
         'business_description',
         'phone',
@@ -81,6 +90,9 @@ class User extends Authenticatable
             'is_verified' => 'boolean',
             'is_suspended' => 'boolean',
             'is_banned' => 'boolean',
+            'warning_count' => 'integer',
+            'suspended_until' => 'datetime',
+            'id_submitted_at' => 'datetime',
             'email_notifications' => 'boolean',
             'sms_notifications' => 'boolean',
             'marketing_updates' => 'boolean',
@@ -282,12 +294,69 @@ class User extends Authenticatable
 
     public function isSuspended(): bool
     {
-        return (bool) $this->is_suspended;
+        if (!$this->is_suspended) {
+            return false;
+        }
+
+        // If suspension has an expiration date and it's already in the past, auto-unsuspend
+        if ($this->suspended_until && $this->suspended_until->isPast()) {
+            $this->update([
+                'is_suspended' => false,
+                'suspended_until' => null,
+            ]);
+            return false;
+        }
+
+        return true;
     }
 
     public function isBanned(): bool
     {
         return (bool) $this->is_banned;
+    }
+
+    public function isIdVerified(): bool
+    {
+        return $this->id_verification_status === 'verified' || $this->is_verified;
+    }
+
+    public function isIdPending(): bool
+    {
+        return $this->id_verification_status === 'pending';
+    }
+
+    /**
+     * Add a warning to user. Auto-bans if warning count reaches 3.
+     */
+    public function addWarning(?string $reason = null): array
+    {
+        $newCount = ($this->warning_count ?? 0) + 1;
+        $banned = false;
+
+        $updateData = ['warning_count' => $newCount];
+
+        if ($newCount >= 3) {
+            $updateData['is_banned'] = true;
+            $banned = true;
+        }
+
+        $this->update($updateData);
+
+        return [
+            'warning_count' => $newCount,
+            'is_banned' => $banned,
+        ];
+    }
+
+    /**
+     * Suspend user for a given number of days (or null for indefinite).
+     */
+    public function suspendForDays(?int $days = null): void
+    {
+        $this->update([
+            'is_suspended' => true,
+            'suspended_until' => $days ? now()->addDays($days) : null,
+        ]);
     }
 
     /**

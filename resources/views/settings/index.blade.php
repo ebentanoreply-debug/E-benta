@@ -648,6 +648,14 @@ select.stt-input option { background: #0d1f38; color: #e2e8f0; }
             <button class="stt-nav-item" onclick="sttSwitch('privacy', this)">
                 <i class="fas fa-lock"></i> Privacy & Security
             </button>
+            <button class="stt-nav-item" onclick="sttSwitch('id-verification', this)">
+                <i class="fas fa-id-card"></i> ID Verification
+                @if(auth()->user()->isIdVerified())
+                    <span class="stt-nav-badge" style="background: rgba(34,197,94,0.2); color: #86efac; border-color: rgba(34,197,94,0.4);">Verified</span>
+                @elseif(auth()->user()->isIdPending())
+                    <span class="stt-nav-badge" style="background: rgba(245,158,11,0.2); color: #fde047; border-color: rgba(245,158,11,0.4);">Pending</span>
+                @endif
+            </button>
             <button class="stt-nav-item" onclick="sttSwitch('payments', this)">
                 <i class="fas fa-credit-card"></i> Payments
             </button>
@@ -1114,7 +1122,6 @@ select.stt-input option { background: #0d1f38; color: #e2e8f0; }
                                 <label class="stt-label">Default Listing Action</label>
                                 <select name="preferred_action" class="stt-input @error('preferred_action') is-invalid @enderror">
                                     <option value="sell" {{ ($u->preferred_action ?? 'sell') === 'sell' ? 'selected' : '' }}>💰 Sell</option>
-                                    <option value="donate" {{ ($u->preferred_action ?? '') === 'donate' ? 'selected' : '' }}>❤️ Donate</option>
                                     <option value="recycle" {{ ($u->preferred_action ?? '') === 'recycle' ? 'selected' : '' }}>♻️ Recycle</option>
                                 </select>
                                 @error('preferred_action')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -1215,9 +1222,117 @@ select.stt-input option { background: #0d1f38; color: #e2e8f0; }
                         <button type="button" class="stt-btn-danger" onclick="alert('Please contact support@e-benta.com to delete your account.')">
                             <i class="fas fa-user-times"></i> Delete Account
                         </button>
+        {{-- ════════════════════════════════════════════════
+             ID VERIFICATION
+        ═══════════════════════════════════════════════════ --}}
+        <div id="stt-id-verification" class="stt-panel">
+            <div class="stt-panel-header">
+                <h2 class="stt-panel-title">Government <span>ID Verification</span></h2>
+                <p class="stt-panel-sub">Submit a valid government-issued ID to get a Verified badge for safe meetups and transactions.</p>
+            </div>
+
+            @php
+                $user = auth()->user();
+                $isVerified = $user->isIdVerified();
+                $isPending = $user->isIdPending();
+                $isRejected = $user->id_verification_status === 'rejected';
+            @endphp
+
+            <!-- Status Card -->
+            <div class="stt-card" style="margin-bottom: 1.5rem;">
+                <div class="stt-card-header" style="align-items: center;">
+                    <div class="stt-card-icon {{ $isVerified ? 'green' : ($isPending ? 'gold' : ($isRejected ? 'red' : 'blue')) }}">
+                        <i class="fas {{ $isVerified ? 'fa-shield-check' : ($isPending ? 'fa-hourglass-half' : ($isRejected ? 'fa-exclamation-triangle' : 'fa-id-card')) }}"></i>
+                    </div>
+                    <div>
+                        <p class="stt-card-title">
+                            Verification Status: 
+                            @if($isVerified)
+                                <span style="color: #86efac; font-weight: 800;">VERIFIED 🛡️</span>
+                            @elseif($isPending)
+                                <span style="color: #fde047; font-weight: 800;">PENDING REVIEW ⏳</span>
+                            @elseif($isRejected)
+                                <span style="color: #fca5a5; font-weight: 800;">REJECTED ⚠️</span>
+                            @else
+                                <span style="color: #94a3b8; font-weight: 800;">NOT SUBMITTED 📋</span>
+                            @endif
+                        </p>
+                        <p class="stt-card-sub">
+                            @if($isVerified)
+                                Your identity has been verified. You have full access to transactions, meetups, and verified badges.
+                            @elseif($isPending)
+                                Your valid ID has been submitted on {{ $user->id_submitted_at ? $user->id_submitted_at->format('M d, Y') : 'recently' }} and is currently under review by administrators.
+                            @elseif($isRejected)
+                                Reason: {{ $user->id_rejection_reason ?? 'Document unreadable or invalid' }}. Please re-submit a clear copy below.
+                            @else
+                                Upload your government ID to build trust with buyers and sellers during meetups.
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>
+
+            @if(!$isVerified)
+            <!-- Submission Form -->
+            <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="stt-card">
+                    <div class="stt-card-header">
+                        <div class="stt-card-icon teal"><i class="fas fa-upload"></i></div>
+                        <div>
+                            <p class="stt-card-title">{{ $isRejected ? 'Re-Submit Valid ID' : ($isPending ? 'Update Submitted Documents' : 'Submit Valid ID') }}</p>
+                            <p class="stt-card-sub">Acceptable IDs: Philippine National ID (PhilSys), Driver's License, UMID, Passport, PRC, Postal ID, Voter's ID.</p>
+                        </div>
+                    </div>
+                    <div class="stt-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="stt-label">Valid ID Type <span style="color: #ef4444;">*</span></label>
+                                <select name="id_type" class="stt-input @error('id_type') is-invalid @enderror" required>
+                                    <option value="">Select ID Type...</option>
+                                    <option value="Philippine National ID (PhilSys)" {{ old('id_type', $user->id_type) === 'Philippine National ID (PhilSys)' ? 'selected' : '' }}>Philippine National ID (PhilSys)</option>
+                                    <option value="Driver's License" {{ old('id_type', $user->id_type) === "Driver's License" ? 'selected' : '' }}>Driver's License</option>
+                                    <option value="UMID / SSS ID" {{ old('id_type', $user->id_type) === 'UMID / SSS ID' ? 'selected' : '' }}>UMID / SSS ID</option>
+                                    <option value="Passport" {{ old('id_type', $user->id_type) === 'Passport' ? 'selected' : '' }}>Passport</option>
+                                    <option value="PRC ID" {{ old('id_type', $user->id_type) === 'PRC ID' ? 'selected' : '' }}>PRC ID</option>
+                                    <option value="Postal ID" {{ old('id_type', $user->id_type) === 'Postal ID' ? 'selected' : '' }}>Postal ID</option>
+                                    <option value="Voter's ID / Certificate" {{ old('id_type', $user->id_type) === "Voter's ID / Certificate" ? 'selected' : '' }}>Voter's ID / Certificate</option>
+                                    <option value="Other Government ID" {{ old('id_type', $user->id_type) === 'Other Government ID' ? 'selected' : '' }}>Other Government ID</option>
+                                </select>
+                                @error('id_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="stt-label">ID Number <span style="color: #ef4444;">*</span></label>
+                                <input type="text" name="id_number" class="stt-input @error('id_number') is-invalid @enderror"
+                                    value="{{ old('id_number', $user->id_number) }}" placeholder="e.g. 1234-5678-9012-3456" required>
+                                @error('id_number')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="stt-label">Front ID Photo <span style="color: #ef4444;">*</span></label>
+                                <input type="file" name="id_photo" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" required>
+                                <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of the front side of your ID (JPG, PNG, WEBP up to 4MB)</small>
+                                @error('id_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="stt-label">Selfie with ID <span style="color: #64748b;">(Optional but Recommended)</span></label>
+                                <input type="file" name="id_selfie" class="stt-input @error('id_selfie') is-invalid @enderror" accept="image/*">
+                                <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Holding your ID next to your face for fastest approval</small>
+                                @error('id_selfie')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+
+                        <div class="stt-form-footer" style="margin-top: 1.5rem;">
+                            <button type="submit" class="stt-btn" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);">
+                                <i class="fas fa-paper-plane me-1"></i>Submit for Verification
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            @endif
         </div>
 
     </main>
@@ -1269,7 +1384,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Restore active tab from hash
     const hash = window.location.hash.replace('#', '');
-    const panels = ['account', 'notifications', 'privacy', 'payments', 'seller', 'preferences'];
+    const panels = ['account', 'notifications', 'privacy', 'id-verification', 'payments', 'seller', 'preferences'];
     if (hash && panels.includes(hash)) {
         const navBtn = document.querySelector(`.stt-nav-item[onclick*="'${hash}'"]`);
         sttSwitch(hash, navBtn);

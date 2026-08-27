@@ -604,31 +604,75 @@
                     @endif
 
                     @if($report->status !== 'resolved' && $report->status !== 'dismissed')
+                        @php
+                            $targetUser = null;
+                            if ($report->reportable instanceof \App\Models\User) $targetUser = $report->reportable;
+                            elseif ($report->reportable instanceof \App\Models\Listing) $targetUser = $report->reportable->seller;
+                            elseif ($report->reportable instanceof \App\Models\Offer) $targetUser = $report->reportable->buyer;
+                            elseif ($report->reportable instanceof \App\Models\Review) $targetUser = $report->reportable->reviewer;
+                            $currentWarnings = $targetUser ? ($targetUser->warning_count ?? 0) : 0;
+                        @endphp
+
                         <!-- Resolve Form -->
                         <form method="POST" action="{{ route('admin.reports.resolve', $report) }}" class="action-form">
                             @csrf
                             <div>
                                 <label class="action-form-label"><i class="fas fa-gavel" style="margin-right: 0.5rem;"></i>Resolution Action</label>
-                                <select name="action_taken" required class="action-form-select">
+                                <select name="action_taken" id="actionTakenSelect" required class="action-form-select" onchange="updateActionDetails(this.value)">
                                     <option value="">-- Select Action --</option>
                                     <option value="none">No Action Required</option>
-                                    <option value="warning_sent">Send Warning to User</option>
-                                    <option value="content_removed">Remove Content</option>
-                                    <option value="user_suspended">Suspend User</option>
+                                    <option value="warning_sent">Send Warning to User (3 Strikes = Auto Ban)</option>
+                                    <option value="content_removed">Remove / Withdraw Reported Content</option>
+                                    <option value="user_suspended">Suspend User Account</option>
                                     <option value="user_banned">Ban User Permanently</option>
                                     <option value="listing_removed">Remove Listing</option>
                                 </select>
                             </div>
 
-                            <div>
-                                <label class="action-form-label"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Resolution Notes</label>
-                                <textarea name="admin_notes" placeholder="Document your resolution decision..." class="action-form-textarea"></textarea>
+                            <!-- Dynamic Suspension Duration -->
+                            <div id="suspensionDurationWrapper" style="display: none; margin-top: 1rem;">
+                                <label class="action-form-label"><i class="fas fa-calendar-alt" style="margin-right: 0.5rem;"></i>Suspension Duration</label>
+                                <select name="suspension_days" class="action-form-select">
+                                    <option value="3">3 Days Suspension</option>
+                                    <option value="7" selected>7 Days Suspension (1 Week)</option>
+                                    <option value="14">14 Days Suspension (2 Weeks)</option>
+                                    <option value="30">30 Days Suspension (1 Month)</option>
+                                    <option value="">Indefinite / Until manually lifted</option>
+                                </select>
+                            </div>
+
+                            <!-- Dynamic Warning Strike Alert -->
+                            <div id="warningStrikeWrapper" style="display: none; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; border-radius: 0.5rem; font-size: 0.85rem; color: #92400e;">
+                                <strong>User Warning History: {{ $currentWarnings }} / 3 Strikes</strong>
+                                @if($currentWarnings >= 2)
+                                    <p style="margin: 0.25rem 0 0; color: #dc2626; font-weight: 700;">
+                                        ⚠️ WARNING: This will be the 3rd strike! The account will be AUTOMATICALLY BANNED permanently upon submission.
+                                    </p>
+                                @else
+                                    <p style="margin: 0.25rem 0 0;">
+                                        This action will issue Warning #{{ $currentWarnings + 1 }} to {{ $targetUser?->name ?? 'the user' }}.
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div style="margin-top: 1rem;">
+                                <label class="action-form-label"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Resolution Notes & Notification Message</label>
+                                <textarea name="admin_notes" placeholder="Document your resolution decision and instructions to user..." class="action-form-textarea"></textarea>
                             </div>
 
                             <button type="submit" class="action-btn action-btn-resolve">
                                 <i class="fas fa-check-circle"></i>Resolve Report
                             </button>
                         </form>
+
+                        <script>
+                            function updateActionDetails(val) {
+                                const suspDiv = document.getElementById('suspensionDurationWrapper');
+                                const warnDiv = document.getElementById('warningStrikeWrapper');
+                                if (suspDiv) suspDiv.style.display = (val === 'user_suspended') ? 'block' : 'none';
+                                if (warnDiv) warnDiv.style.display = (val === 'warning_sent') ? 'block' : 'none';
+                            }
+                        </script>
 
                         <!-- Dismiss Form -->
                         <form method="POST" action="{{ route('admin.reports.dismiss', $report) }}" class="action-form">

@@ -98,6 +98,7 @@ class OfferController extends Controller
         $request->validate([
             'bid_amount' => 'required|numeric|min:0.01',
             'proposed_method' => 'required|in:repair,harvest,refine,dispose',
+            'handover_method' => 'nullable|in:pickup,meetup',
             'proposed_pickup_date' => 'required|date|after:today',
             'pickup_location' => 'required|string|max:255',
             'notes' => 'nullable|string|max:500',
@@ -114,11 +115,17 @@ class OfferController extends Controller
                 ->with('error', 'You have already submitted a pending offer for this item');
         }
 
+        $handoverMethod = $request->input('handover_method');
+        if (!$handoverMethod) {
+            $handoverMethod = $listing->handover_preference === 'meetup_only' ? 'meetup' : 'pickup';
+        }
+
         $offer = Offer::create([
             'listing_id' => $listing->id,
             'buyer_id' => $user->id,
             'bid_amount' => $request->bid_amount,
             'proposed_method' => $request->proposed_method,
+            'handover_method' => $handoverMethod,
             'proposed_pickup_date' => $request->proposed_pickup_date,
             'pickup_location' => $request->pickup_location,
             'notes' => $request->notes,
@@ -305,7 +312,7 @@ class OfferController extends Controller
     /**
      * Cancel an offer (buyer action).
      */
-    public function cancel(Offer $offer)
+    public function cancel(Request $request, Offer $offer)
     {
         // Only buyer can cancel
         if (Auth::id() !== $offer->buyer_id) {
@@ -317,17 +324,29 @@ class OfferController extends Controller
                 ->with('error', 'This offer can no longer be cancelled');
         }
 
-        DB::transaction(function () use ($offer) {
+        $isAccepted = $offer->status === 'accepted';
+
+        if ($isAccepted) {
+            $request->validate([
+                'cancellation_reason' => 'required|string|min:3|max:1000',
+            ], [
+                'cancellation_reason.required' => 'Please provide a reason for cancelling this accepted offer.',
+            ]);
+        }
+
+        $cancellationReason = $request->input('cancellation_reason');
+
+        DB::transaction(function () use ($offer, $isAccepted, $cancellationReason) {
             $previousStatus = $offer->status;
 
             $offer->status = 'cancelled';
+            $offer->cancellation_reason = $cancellationReason;
             $offer->responded_at = now();
             $offer->save();
 
-            if ($previousStatus === 'accepted') {
+            if ($isAccepted) {
                 $listing = $offer->listing;
-
-                if ($listing && $listing->matched_buyer_id === $offer->buyer_id) {
+                if ($listing && ($listing->matched_buyer_id === $offer->buyer_id || $listing->status === 'matched')) {
                     $listing->update([
                         'status' => 'available',
                         'matched_buyer_id' => null,
@@ -342,18 +361,23 @@ class OfferController extends Controller
                 $offer->id,
                 $previousStatus,
                 'cancelled',
-                "Buyer {$offer->buyer->name} cancelled the offer"
+                "Buyer {$offer->buyer->name} cancelled the offer." . ($cancellationReason ? " Reason: {$cancellationReason}" : '')
             );
+
+            $notificationMessage = $isAccepted
+                ? "{$offer->buyer->name} cancelled their accepted offer on your listing. Reason: " . ($cancellationReason ?: 'None provided') . ". Your listing is now available again."
+                : "{$offer->buyer->name} withdrew their pending offer on your listing.";
 
             Notification::notify(
                 $offer->listing->seller,
                 'offer_cancelled',
                 'Offer Cancelled',
-                "{$offer->buyer->name} cancelled their offer on your listing.",
+                $notificationMessage,
                 [
                     'listing_id' => $offer->listing->id,
                     'offer_id' => $offer->id,
                     'buyer_name' => $offer->buyer->name,
+                    'cancellation_reason' => $cancellationReason,
                 ]
             );
         });

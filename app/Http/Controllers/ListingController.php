@@ -168,6 +168,8 @@ class ListingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'listing_type' => 'nullable|in:single,bulk_lot',
+            'lot_item_count' => 'nullable|required_if:listing_type,bulk_lot|integer|min:2|max:1000',
             'device_type_id' => 'required|exists:device_types,id',
             'device_brand_id' => 'nullable|exists:device_brands,id',
             'device_model_id' => ['nullable', 'exists:device_models,id', function ($attribute, $value, $fail) use ($request) {
@@ -181,9 +183,11 @@ class ListingController extends Controller
             'device_details' => 'nullable|string|max:255',
             'condition' => 'required|in:working,minor_damage,major_damage,non_functional',
             'description' => 'required|string|max:1000',
-            'intended_action' => 'required|in:sell,donate,recycle',
+            'intended_action' => 'required|in:sell,recycle',
+            'handover_preference' => 'nullable|in:pickup_only,meetup_only,both',
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photos' => 'nullable|array|max:8',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
 
         if ($request->intended_action === 'sell') {
@@ -203,14 +207,19 @@ class ListingController extends Controller
         $deviceType = DeviceType::find($request->device_type_id);
         $categoryName = $deviceType?->name;
 
-        // Get estimated weight based on category
+        // Get estimated weight based on category (or scaled if bulk lot)
         $weight = Listing::getDefaultWeight($categoryName);
+        if ($request->listing_type === 'bulk_lot' && $request->lot_item_count) {
+            $weight = round($weight * (int) $request->lot_item_count * 0.75, 2); // bulk bundle weight estimate
+        }
 
         // Calculate carbon footprint
         $carbonFootprint = Listing::calculateCarbonFootprint($categoryName, $weight);
 
         $listing = Listing::create([
             'user_id' => Auth::id(),
+            'listing_type' => $request->input('listing_type', 'single'),
+            'lot_item_count' => $request->listing_type === 'bulk_lot' ? (int) $request->lot_item_count : null,
             'device_type_id' => $request->device_type_id,
             'device_brand_id' => $request->device_brand_id,
             'device_model_id' => $request->device_model_id,
@@ -219,6 +228,7 @@ class ListingController extends Controller
             'description' => $request->description,
             'estimated_weight' => $weight,
             'intended_action' => $request->intended_action,
+            'handover_preference' => $request->input('handover_preference', 'both'),
             'suggested_price' => $request->filled('suggested_price') ? round((float) $request->suggested_price, 2) : null,
             'status' => 'pending',
             'carbon_footprint' => $carbonFootprint,
@@ -329,6 +339,8 @@ class ListingController extends Controller
         }
 
         $request->validate([
+            'listing_type' => 'nullable|in:single,bulk_lot',
+            'lot_item_count' => 'nullable|required_if:listing_type,bulk_lot|integer|min:2|max:1000',
             'device_type_id' => 'required|exists:device_types,id',
             'device_brand_id' => 'nullable|exists:device_brands,id',
             'device_model_id' => ['nullable', 'exists:device_models,id', function ($attribute, $value, $fail) use ($request) {
@@ -342,9 +354,11 @@ class ListingController extends Controller
             'device_details' => 'nullable|string|max:255',
             'condition' => 'required|in:working,minor_damage,major_damage,non_functional',
             'description' => 'required|string|max:1000',
-            'intended_action' => 'required|in:sell,donate,recycle',
+            'intended_action' => 'required|in:sell,recycle',
+            'handover_preference' => 'nullable|in:pickup_only,meetup_only,both',
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photos' => 'nullable|array|max:8',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'delete_photos' => 'array',
             'delete_photos.*' => 'integer',
         ]);
@@ -399,9 +413,14 @@ class ListingController extends Controller
         $deviceType = DeviceType::find($request->device_type_id);
         $categoryName = $deviceType?->name;
         $weight = Listing::getDefaultWeight($categoryName);
+        if ($request->listing_type === 'bulk_lot' && $request->lot_item_count) {
+            $weight = round($weight * (int) $request->lot_item_count * 0.75, 2);
+        }
         $carbonFootprint = Listing::calculateCarbonFootprint($categoryName, $weight);
 
         $listing->update([
+            'listing_type' => $request->input('listing_type', $listing->listing_type ?? 'single'),
+            'lot_item_count' => $request->listing_type === 'bulk_lot' ? (int) $request->lot_item_count : null,
             'device_type_id' => $request->device_type_id,
             'device_brand_id' => $request->device_brand_id,
             'device_model_id' => $request->device_model_id,
@@ -409,6 +428,7 @@ class ListingController extends Controller
             'condition' => $request->condition,
             'description' => $request->description,
             'intended_action' => $request->intended_action,
+            'handover_preference' => $request->input('handover_preference', $listing->handover_preference ?? 'both'),
             'suggested_price' => $request->filled('suggested_price') ? round((float) $request->suggested_price, 2) : null,
             'estimated_weight' => $weight,
             'carbon_footprint' => $carbonFootprint,
