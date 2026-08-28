@@ -17,11 +17,28 @@ use App\Http\Controllers\SavedItemController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Api\DeviceModelController;
+use App\Models\Listing;
+use App\Models\User;
+use App\Models\ImpactLog;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    $hasListings = Schema::hasTable('listings');
+    $hasUsers = Schema::hasTable('users');
+    $hasImpactLogs = Schema::hasTable('impact_logs');
+
+    $featuredListings = $hasListings 
+        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'listingPhotos'])->latest()->take(6)->get()
+        : collect();
+
+    $totalListings = $hasListings ? Listing::count() : 0;
+    $totalUsers = $hasUsers ? User::count() : 0;
+    $totalCarbonSaved = $hasImpactLogs ? ((float) ImpactLog::sum('co2_saved') ?: ($hasListings ? (float) Listing::sum('carbon_footprint') : 0)) : 0;
+    $totalWeightDiverted = $hasImpactLogs ? ((float) ImpactLog::sum('landfill_diverted_weight') ?: ($hasListings ? Listing::where('status', 'completed')->count() * 1.5 : 0)) : 0;
+
+    return view('welcome', compact('featuredListings', 'totalListings', 'totalUsers', 'totalCarbonSaved', 'totalWeightDiverted'));
 })->name('home');
 
 Route::get('/listings', [ListingController::class, 'index'])->name('listings.index');

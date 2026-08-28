@@ -135,18 +135,32 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6">
                                     <label for="handover_preference" class="form-label" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
                                         <i class="fas fa-truck-loading me-1" style="color: var(--light-green);"></i>Handover Option <span style="color: #e74c3c;">*</span>
                                     </label>
                                     <select class="form-select @error('handover_preference') is-invalid @enderror" 
                                            id="handover_preference" name="handover_preference" required
+                                           onchange="togglePickupAddressField()"
                                            style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">
                                         <option value="both" {{ old('handover_preference', $listing->handover_preference ?? 'both') == 'both' ? 'selected' : '' }}>🔄 Both Pickup & Meetup Available</option>
                                         <option value="pickup_only" {{ old('handover_preference', $listing->handover_preference) == 'pickup_only' ? 'selected' : '' }}>🚚 Doorstep / Location Pickup Only</option>
                                         <option value="meetup_only" {{ old('handover_preference', $listing->handover_preference) == 'meetup_only' ? 'selected' : '' }}>🤝 Safe Public Meetup Only</option>
                                     </select>
                                     @error('handover_preference')
+                                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-12" id="pickup_address_group">
+                                    <label for="pickup_address" class="form-label" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
+                                        <i class="fas fa-map-marker-alt me-1" style="color: var(--light-green);"></i>Seller Pickup / Collection Address <span style="color: #e74c3c;" id="pickup_address_required_star">*</span>
+                                    </label>
+                                    <textarea class="form-control @error('pickup_address') is-invalid @enderror" 
+                                             id="pickup_address" name="pickup_address" rows="2"
+                                             placeholder="e.g. Unit / Street, Barangay, City, Province (where the recycler or buyer will collect the item)"
+                                             style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">{{ old('pickup_address', $listing->pickup_address ?? auth()->user()->addresses()->first()?->getFullAddress() ?? (auth()->user()->address_city ? auth()->user()->address_city . (auth()->user()->address_province ? ', ' . auth()->user()->address_province : '') : '')) }}</textarea>
+                                    <small style="color: #64748b; font-size: 0.82rem; margin-top: 0.35rem; display: block;">Required for doorstep pickup so buyers/recyclers know the collection location.</small>
+                                    @error('pickup_address')
                                         <span class="invalid-feedback d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -314,9 +328,28 @@
         }
     }
 
+    function togglePickupAddressField() {
+        const handover = document.getElementById('handover_preference');
+        const group = document.getElementById('pickup_address_group');
+        const input = document.getElementById('pickup_address');
+        const star = document.getElementById('pickup_address_required_star');
+        if (!handover || !group || !input) return;
+
+        if (handover.value === 'meetup_only') {
+            group.style.display = 'none';
+            input.removeAttribute('required');
+            if (star) star.style.display = 'none';
+        } else {
+            group.style.display = 'block';
+            input.setAttribute('required', 'required');
+            if (star) star.style.display = 'inline';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         updateListingTypeView();
         toggleSellerPriceField();
+        togglePickupAddressField();
 
         const intendedAction = document.getElementById('intended_action');
         if (intendedAction) {

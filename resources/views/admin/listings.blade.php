@@ -1,632 +1,247 @@
 @extends('layouts.app')
 
-@section('title', 'All Listings - E-Benta Admin')
+@section('title', 'Marketplace Listings Oversight - E-Benta Admin')
 
-@section('content')
+@section('styles')
 <style>
-    /* === LISTINGS WRAPPER === */
-    .listings-wrapper {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    .admin-page-container {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding-bottom: 4rem;
     }
 
-    /* === HEADER SECTION === */
-    .listings-header {
-        background: linear-gradient(135deg, #3b82f6 0%, #0891b2 100%);
-        color: white;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
+    body.dark-mode .admin-page-container {
+        background: #09171f;
+    }
+
+    .admin-module-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        color: #ffffff;
+        padding: 2.25rem 0 2rem;
         position: relative;
         overflow: hidden;
     }
 
-    .listings-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        z-index: 0;
+    .admin-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
     }
 
-    .listings-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        z-index: 0;
+    body.dark-mode .admin-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
-    .listings-header-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .listings-header h1 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.5px;
-    }
-
-    .listings-header p {
-        opacity: 0.95;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    /* === FILTER SECTION === */
-    .filter-card {
-        background: white;
-        border-radius: 1.2rem;
-        padding: 1.8rem;
-        border: 1px solid rgba(59, 130, 246, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
-    }
-
-    .filter-wrapper {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-end;
-        flex-wrap: wrap;
-    }
-
-    .filter-group {
-        flex: 1;
-        min-width: 250px;
-    }
-
-    .filter-label {
-        color: #1e293b;
-        font-weight: 700;
+    .admin-table th {
+        font-size: 0.75rem;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .filter-label i {
-        color: #3b82f6;
-    }
-
-    .filter-select {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        color: #1e293b;
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        padding: 0.85rem 1rem;
-        border-radius: 0.8rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        width: 100%;
-        font-size: 0.95rem;
-    }
-
-    .filter-select:focus {
-        border-color: rgba(59, 130, 246, 0.5);
-        box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
-        background: white;
-        outline: none;
-    }
-
-    .filter-btn {
-        background: linear-gradient(135deg, #3b82f6 0%, #0891b2 100%);
-        color: white;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 0.9rem 1.25rem;
         border: none;
-        padding: 0.85rem 2rem;
-        font-weight: 700;
-        border-radius: 0.8rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-        cursor: pointer;
-        white-space: nowrap;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
     }
 
-    .filter-btn:hover {
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
-        transform: translateY(-2px);
-    }
-
-    /* === TABLE SECTION === */
-    .table-card {
-        background: white;
-        border-radius: 1.2rem;
-        border: 1px solid rgba(59, 130, 246, 0.1);
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .table-header {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-        border-bottom: 1px solid rgba(59, 130, 246, 0.15);
-        padding: 1.5rem;
-    }
-
-    .table-header h5 {
-        margin: 0;
-        color: #1e293b;
-        font-weight: 800;
-        font-size: 1.1rem;
-        letter-spacing: -0.5px;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .table-header i {
-        color: #3b82f6;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .listings-table {
-        color: #1e293b;
-        margin-bottom: 0;
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .listings-table thead {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%);
-        border-bottom: 2px solid rgba(59, 130, 246, 0.15);
-    }
-
-    .listings-table thead th {
-        color: #3b82f6;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.8rem;
-        padding: 1.25rem 1rem;
-    }
-
-    .listings-table tbody tr {
-        border-bottom: 1px solid rgba(59, 130, 246, 0.08);
-        transition: background 0.2s ease;
-    }
-
-    .listings-table tbody tr:hover {
-        background: rgba(59, 130, 246, 0.04);
-    }
-
-    .listings-table td {
-        padding: 1.25rem 1rem;
-        vertical-align: middle;
-    }
-
-    .device-info {
-        color: #1e293b;
-        font-weight: 600;
-    }
-
-    .device-condition {
-        color: #64748b;
-        font-weight: 400;
-        font-size: 0.85rem;
-        margin-top: 0.3rem;
-    }
-
-    .seller-info {
-        color: #1e293b;
-    }
-
-    .seller-name {
-        font-weight: 700;
-        display: block;
-    }
-
-    .seller-email {
-        color: #64748b;
-        font-size: 0.85rem;
-        margin-top: 0.3rem;
-        display: block;
-    }
-
-    .status-badge {
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.4rem;
-        font-size: 0.85rem;
-        display: inline-block;
-        font-weight: 700;
-        border: 1px solid;
-    }
-
-    .status-available {
-        background: rgba(13, 148, 136, 0.15);
-        color: #0d9488;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    .status-matched {
-        background: rgba(59, 130, 246, 0.15);
-        color: #3b82f6;
-        border-color: rgba(59, 130, 246, 0.2);
-    }
-
-    .status-processed {
-        background: rgba(168, 85, 247, 0.15);
-        color: #a855f7;
-        border-color: rgba(168, 85, 247, 0.2);
-    }
-
-    .status-other {
-        background: rgba(203, 213, 225, 0.15);
-        color: #64748b;
-        border-color: rgba(203, 213, 225, 0.2);
-    }
-
-    .price-value {
-        color: #3b82f6;
-        font-weight: 700;
-        font-size: 1rem;
-    }
-
-    .offers-container {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    .offer-badge {
-        padding: 0.4rem 0.7rem;
-        border-radius: 0.3rem;
-        font-size: 0.8rem;
-        display: inline-block;
-        font-weight: 700;
-        border: 1px solid;
-        white-space: nowrap;
-    }
-
-    .offer-pending {
-        background: rgba(249, 115, 22, 0.15);
-        color: #f97316;
-        border-color: rgba(249, 115, 22, 0.15);
-    }
-
-    .offer-accepted {
-        background: rgba(13, 148, 136, 0.15);
-        color: #0d9488;
-        border-color: rgba(13, 148, 136, 0.15);
-    }
-
-    .offer-completed {
-        background: rgba(34, 197, 94, 0.15);
-        color: #22c55e;
-        border-color: rgba(34, 197, 94, 0.15);
-    }
-
-    .impact-value {
-        color: #3b82f6;
-        font-weight: 600;
-    }
-
-    .date-value {
-        color: #64748b;
-        font-size: 0.9rem;
-    }
-
-    .date-meta {
+    body.dark-mode .admin-table th {
+        background: rgba(0, 0, 0, 0.2);
         color: #94a3b8;
-        font-size: 0.8rem;
-        margin-top: 0.3rem;
-        display: block;
     }
 
-    /* === PAGINATION === */
-    .pagination-wrapper {
-        padding: 1.5rem;
-        border-top: 1px solid rgba(59, 130, 246, 0.1);
-        display: flex;
-        justify-content: center;
+    .admin-table td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+        color: #334155;
     }
 
-    /* === EMPTY STATE === */
-    .empty-state {
-        padding: 3rem 2rem;
-        text-align: center;
+    body.dark-mode .admin-table td {
+        border-top-color: rgba(255, 255, 255, 0.05);
+        color: #cbd5e1;
     }
 
-    .empty-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        font-size: 2.5rem;
-        color: #3b82f6;
+    .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.03);
     }
 
-    .empty-title {
-        color: #1e293b;
-        margin-bottom: 0.75rem;
-        font-weight: 800;
-        font-size: 1.2rem;
-        letter-spacing: -0.5px;
-    }
-
-    .empty-message {
-        color: #64748b;
-        margin: 0;
-        font-weight: 500;
-    }
-
-    .empty-link {
-        color: #3b82f6;
-        text-decoration: none;
-        font-weight: 700;
-    }
-
-    .empty-link:hover {
-        text-decoration: underline;
-    }
-
-    /* === DARK MODE === */
-    body.dark-mode .listings-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .filter-card,
-    body.dark-mode .table-card {
-        background: #2a2a2a;
-        border-color: rgba(59, 130, 246, 0.2);
-    }
-
-    body.dark-mode .filter-label,
-    body.dark-mode .table-header h5,
-    body.dark-mode .device-info,
-    body.dark-mode .seller-info,
-    body.dark-mode .empty-title,
-    body.dark-mode .listings-table td {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .filter-select {
-        background: #333333;
-        border-color: rgba(59, 130, 246, 0.3);
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .filter-select:focus {
-        background: #3a3a3a;
-    }
-
-    body.dark-mode .listings-table thead {
-        background: rgba(59, 130, 246, 0.1);
-    }
-
-    body.dark-mode .listings-table tbody tr:hover {
-        background: rgba(59, 130, 246, 0.08);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-        .listings-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .filter-wrapper {
-            flex-direction: column;
-        .listings-header {
-            padding: 1.75rem 1rem;
-        }
-
-        .listings-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .filter-group,
-        .filter-btn {
-            width: 100%;
-        }
-
-        .filter-wrapper {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .listings-table {
-            font-size: 0.85rem;
-        }
-
-        .listings-table td {
-            padding: 0.85rem 0.5rem;
-        }
-
-        .offers-container {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .listings-wrapper {
-            padding: 1rem 0;
-        }
-
-        .filter-card, .table-card {
-            border-radius: 1rem;
-            padding: 1rem;
-        }
+    body.dark-mode .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.08);
     }
 </style>
+@endsection
 
-<!-- Include Sidebar -->
+@section('content')
+
 @include('admin.sidebar')
 
 <div class="main-content-wrapper">
-    <div class="listings-wrapper">
-        <!-- Header -->
-        <div class="listings-header">
+    <div class="admin-page-container">
+        
+        <!-- HEADER -->
+        <div class="admin-module-header">
             <div class="container-fluid px-3 px-md-4">
-                <div class="listings-header-content">
-                    <h1><i class="fas fa-list me-2"></i>All Listings</h1>
-                    <p>Monitor and manage marketplace listings ({{ $listings->total() }} total)</p>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(13, 148, 136, 0.2); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-boxes-stacked me-1"></i>Marketplace Inventory
+                            </span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $listings->total() }} Total Devices</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
+                            Listings & Bulk Scrap Lots
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Monitor verified listings, bulk scrap declarations, asking prices, and handover preferences.
+                        </p>
+                    </div>
+
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Dashboard</span>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="container-fluid px-3 px-md-4">
-            <!-- Filter Section -->
-            <div class="filter-card">
-                <form method="GET" action="{{ route('admin.listings') }}" class="filter-wrapper">
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-filter"></i>Filter by Status
-                        </label>
-                        <select name="status" class="filter-select">
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
+
+            <!-- FILTER TOOLBAR -->
+            <div class="admin-card mb-4 p-3 p-md-4">
+                <form method="GET" action="{{ route('admin.listings') }}" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase;">Status Filter</label>
+                        <select name="status" class="form-select form-select-sm" style="border-radius: 0.6rem; font-weight: 600;">
                             <option value="">All Statuses</option>
                             <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Available</option>
-                            <option value="matched" {{ request('status') == 'matched' ? 'selected' : '' }}>Matched</option>
-                            <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>Processed</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            <option value="matched" {{ request('status') == 'matched' ? 'selected' : '' }}>Matched (Offer Accepted)</option>
+                            <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>Completed / Processed</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected / Withdrawn</option>
                         </select>
                     </div>
-                    <button type="submit" class="filter-btn">
-                        <i class="fas fa-search"></i>Filter
-                    </button>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase;">Search by Title or Seller</label>
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search device title, category, seller name..." value="{{ request('search') }}" style="border-radius: 0.6rem;">
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-sm btn-dark w-100 font-weight-bold" style="border-radius: 0.6rem; padding: 0.45rem;">
+                            <i class="fas fa-filter me-1"></i>Filter
+                        </button>
+                        <a href="{{ route('admin.listings') }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 0.6rem;">
+                            <i class="fas fa-rotate-left"></i>
+                        </a>
+                    </div>
                 </form>
             </div>
 
-            <!-- Listings Table -->
-            <div class="table-card">
-                <div class="table-header">
-                    <h5><i class="fas fa-boxes"></i>Listings Overview</h5>
-                </div>
+            <!-- LISTINGS TABLE -->
+            <div class="admin-card">
                 <div class="table-responsive">
-                    @if($listings->count() > 0)
-                        <table class="listings-table">
-                            <thead>
+                    <table class="table admin-table">
+                        <thead>
+                            <tr>
+                                <th>Device / Lot</th>
+                                <th>Seller</th>
+                                <th>Status</th>
+                                <th>Handover Mode</th>
+                                <th>Price</th>
+                                <th>Active Offers</th>
+                                <th>CO₂ Saved</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($listings as $listing)
                                 <tr>
-                                    <th><i class="fas fa-laptop me-1"></i>Device</th>
-                                    <th><i class="fas fa-user me-1"></i>Seller</th>
-                                    <th><i class="fas fa-flag me-1"></i>Status</th>
-                                    <th><i class="fas fa-dollar-sign me-1"></i>Price</th>
-                                    <th><i class="fas fa-comments me-1"></i>Offers</th>
-                                    <th><i class="fas fa-leaf me-1"></i>Impact</th>
-                                    <th><i class="fas fa-calendar me-1"></i>Listed</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($listings as $listing)
-                                    <tr>
-                                        <td>
-                                            <div class="device-info">{{ $listing->category ?: ($listing->deviceType ? $listing->deviceType->name : 'Uncategorized') }}</div>
-                                            <div class="device-condition">{{ ucfirst($listing->condition) }}</div>
-                                        </td>
-                                        <td>
-                                            <div class="seller-info">
-                                                <span class="seller-name">{{ $listing->seller->name }}</span>
-                                                <span class="seller-email">{{ $listing->seller->email }}</span>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div style="width: 36px; height: 36px; border-radius: 0.6rem; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+                                                <i class="fas {{ $listing->is_bulk_lot ? 'fa-boxes-stacked' : 'fa-laptop' }}"></i>
                                             </div>
-                                        </td>
-                                        <td>
-                                            @if($listing->status === 'available')
-                                                <span class="status-badge status-available">
-                                                    <i class="fas fa-circle-check me-1"></i>Available
-                                                </span>
-                                            @elseif($listing->status === 'matched')
-                                                <span class="status-badge status-matched">
-                                                    <i class="fas fa-handshake me-1"></i>Matched
-                                                </span>
-                                            @elseif($listing->status === 'processed')
-                                                <span class="status-badge status-processed">
-                                                    <i class="fas fa-check me-1"></i>Processed
-                                                </span>
-                                            @else
-                                                <span class="status-badge status-other">
-                                                    <i class="fas fa-ban me-1"></i>{{ ucfirst($listing->status) }}
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <span class="price-value">
-                                                @if($listing->suggested_price > 0)
-                                                    ₱{{ $listing->suggested_price }}
-                                                @else
-                                                    Free
-                                                @endif
+                                            <div>
+                                                <strong style="color: #0f172a; font-size: 0.92rem; display: block;">
+                                                    {{ $listing->title ?: ($listing->category ?: ($listing->deviceType ? $listing->deviceType->name : 'Item')) }}
+                                                </strong>
+                                                <small class="text-muted text-capitalize">{{ str_replace('_', ' ', $listing->condition) }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong style="display: block; font-size: 0.88rem;">{{ $listing->seller?->name ?? 'Unknown' }}</strong>
+                                        <small class="text-muted">{{ $listing->seller?->email }}</small>
+                                    </td>
+                                    <td>
+                                        @if($listing->status === 'available')
+                                            <span class="badge bg-success font-weight-bold">Available</span>
+                                        @elseif($listing->status === 'matched')
+                                            <span class="badge bg-info text-dark font-weight-bold">Matched</span>
+                                        @elseif($listing->status === 'processed' || $listing->status === 'completed')
+                                            <span class="badge bg-primary font-weight-bold">Completed</span>
+                                        @else
+                                            <span class="badge bg-secondary font-weight-bold">{{ ucfirst($listing->status) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($listing->handover_preference === 'pickup_only')
+                                            <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-weight: 700; font-size: 0.75rem;">
+                                                <i class="fas fa-truck-pickup me-1"></i>Doorstep Pickup
                                             </span>
-                                        </td>
-                                        <td>
-                                            @php
-                                                $pendingOffers = $listing->offers()->where('status', 'pending')->count();
-                                                $acceptedOffers = $listing->offers()->where('status', 'accepted')->count();
-                                                $completedOffers = $listing->offers()->where('status', 'completed')->count();
-                                            @endphp
-                                            <div class="offers-container">
-                                                @if($pendingOffers > 0)
-                                                    <span class="offer-badge offer-pending">
-                                                        <i class="fas fa-bell me-1"></i>{{ $pendingOffers }} pending
-                                                    </span>
-                                                @endif
-                                                @if($acceptedOffers > 0)
-                                                    <span class="offer-badge offer-accepted">
-                                                        <i class="fas fa-check-circle me-1"></i>{{ $acceptedOffers }} accepted
-                                                    </span>
-                                                @endif
-                                                @if($completedOffers > 0)
-                                                    <span class="offer-badge offer-completed">
-                                                        <i class="fas fa-trophy me-1"></i>{{ $completedOffers }} completed
-                                                    </span>
-                                                @endif
-                                                @if($pendingOffers == 0 && $acceptedOffers == 0 && $completedOffers == 0)
-                                                    <span style="color: #cbd5e1;">—</span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="impact-value">{{ $listing->carbon_footprint }} kg CO₂</span>
-                                        </td>
-                                        <td>
-                                            <div class="date-value">{{ $listing->created_at->format('M d, Y') }}</div>
-                                            <span class="date-meta">{{ $listing->created_at->diffForHumans() }}</span>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="pagination-wrapper">
-                            {{ $listings->links() }}
-                        </div>
-                    @else
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-inbox"></i>
-                            </div>
-                            <h5 class="empty-title">No Listings Found</h5>
-                            <p class="empty-message">
-                                @if(request('status'))
-                                    No listings found with the selected status. <a href="{{ route('admin.listings') }}" class="empty-link">Clear filters</a>
-                                @else
-                                    There are currently no listings in the system.
-                                @endif
-                            </p>
-                        </div>
-                    @endif
+                                        @elseif($listing->handover_preference === 'meetup_only')
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.12); color: #2563eb; font-weight: 700; font-size: 0.75rem;">
+                                                <i class="fas fa-handshake me-1"></i>Meetup Only
+                                            </span>
+                                        @else
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-weight: 700; font-size: 0.75rem;">
+                                                <i class="fas fa-arrows-split-up-and-left me-1"></i>Flexible
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <strong style="color: #0f172a; font-family: 'Outfit', sans-serif;">
+                                            {{ $listing->suggested_price > 0 ? '₱' . number_format($listing->suggested_price, 2) : 'Free Recycled' }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-dark font-weight-bold">
+                                            {{ $listing->offers()->count() }} {{ Str::plural('Bid', $listing->offers()->count()) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-success border font-weight-bold">
+                                            <i class="fas fa-leaf me-1"></i>{{ $listing->carbon_footprint ?? 0 }} kg
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ route('listings.show', $listing) }}" class="btn btn-sm btn-outline-dark" target="_blank" style="font-weight: 700; border-radius: 0.5rem; font-size: 0.8rem; padding: 0.35rem 0.85rem;">
+                                            <i class="fas fa-arrow-up-right-from-square me-1"></i>View
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center py-5 text-muted">
+                                        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                        <strong>No listings found.</strong>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
+
+                @if($listings->hasPages())
+                    <div class="p-3 border-top">
+                        {{ $listings->links() }}
+                    </div>
+                @endif
             </div>
+
         </div>
     </div>
 </div>

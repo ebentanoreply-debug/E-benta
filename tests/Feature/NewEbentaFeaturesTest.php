@@ -44,6 +44,7 @@ class NewEbentaFeaturesTest extends TestCase
             'listing_type' => 'bulk_lot',
             'lot_item_count' => 10,
             'handover_preference' => 'pickup_only',
+            'pickup_address' => 'Unit 102 Green Residences, Taft Ave, Manila',
         ]);
 
         $response->assertRedirect();
@@ -52,8 +53,88 @@ class NewEbentaFeaturesTest extends TestCase
             'listing_type' => 'bulk_lot',
             'lot_item_count' => 10,
             'handover_preference' => 'pickup_only',
+            'pickup_address' => 'Unit 102 Green Residences, Taft Ave, Manila',
             'intended_action' => 'sell',
         ]);
+    }
+
+    public function test_seller_requires_pickup_address_when_doorstep_pickup_is_selected()
+    {
+        $seller = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);
+        $deviceType = DeviceType::create([
+            'name' => 'Tablets',
+            'base_carbon_footprint' => 30,
+            'estimated_weight' => 0.5,
+        ]);
+
+        $response = $this->actingAs($seller)->post(route('listings.store'), [
+            'device_type_id' => $deviceType->id,
+            'condition' => 'working',
+            'intended_action' => 'sell',
+            'suggested_price' => 2000.00,
+            'description' => 'Working iPad tablet',
+            'handover_preference' => 'pickup_only',
+            'pickup_address' => '',
+        ]);
+
+        $response->assertSessionHasErrors('pickup_address');
+    }
+
+    public function test_buyer_creating_pickup_offer_automatically_uses_seller_pickup_address()
+    {
+        $seller = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);
+        $buyer = User::factory()->create(['role' => 'buyer', 'email_verified_at' => now(), 'is_verified' => true]);
+        $listing = Listing::create([
+            'user_id' => $seller->id,
+            'description' => 'Recycle scrap metal',
+            'condition' => 'non_functional',
+            'intended_action' => 'recycle',
+            'handover_preference' => 'pickup_only',
+            'pickup_address' => '456 Warehouse Blvd, Pasig City',
+            'status' => 'available',
+        ]);
+
+        $response = $this->actingAs($buyer)->post(route('offers.store', $listing), [
+            'bid_amount' => 500,
+            'proposed_method' => 'dispose',
+            'handover_method' => 'pickup',
+            'proposed_pickup_date' => now()->addDays(3)->format('Y-m-d H:i:s'),
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('offers', [
+            'listing_id' => $listing->id,
+            'buyer_id' => $buyer->id,
+            'handover_method' => 'pickup',
+            'pickup_location' => '456 Warehouse Blvd, Pasig City',
+        ]);
+    }
+
+    public function test_listings_index_can_be_filtered_by_seller_id()
+    {
+        $seller1 = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);
+        $seller2 = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);
+
+        $listing1 = Listing::create([
+            'user_id' => $seller1->id,
+            'description' => 'Seller 1 listing',
+            'condition' => 'working',
+            'intended_action' => 'sell',
+            'status' => 'available',
+        ]);
+
+        $listing2 = Listing::create([
+            'user_id' => $seller2->id,
+            'description' => 'Seller 2 listing',
+            'condition' => 'working',
+            'intended_action' => 'sell',
+            'status' => 'available',
+        ]);
+
+        $response = $this->get(route('listings.index', ['seller_id' => $seller1->id]));
+        $response->assertStatus(200);
+        $response->assertSee('Seller 1 listing');
+        $response->assertDontSee('Seller 2 listing');
     }
 
     public function test_buyer_can_cancel_pending_offer_without_reason()

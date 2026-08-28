@@ -1,675 +1,311 @@
 @extends('layouts.app')
 
-@section('title', 'Pending Verifications - E-Benta Admin')
+@section('title', 'ID & Recycler Verifications - E-Benta Admin')
 
-@section('content')
+@section('styles')
 <style>
-    /* === VERIFICATIONS WRAPPER === */
-    .verifications-wrapper {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    .admin-page-container {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding-bottom: 4rem;
     }
 
-    /* === HEADER SECTION === */
-    .verifications-header {
-        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-        color: white;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
+    body.dark-mode .admin-page-container {
+        background: #09171f;
+    }
+
+    .admin-module-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        color: #ffffff;
+        padding: 2.25rem 0 2rem;
         position: relative;
         overflow: hidden;
     }
 
-    .verifications-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        z-index: 0;
-    }
-
-    .verifications-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        z-index: 0;
-    }
-
-    .verifications-header-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .verifications-header h1 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.5px;
-    }
-
-    .verifications-header p {
-        opacity: 0.95;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    /* === USER CARDS GRID === */
-    .verifications-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .user-card {
-        background: white;
-        border-radius: 1.2rem;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(245, 158, 11, 0.1);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .user-card::before {
+    .admin-module-header::after {
         content: '';
         position: absolute;
         top: 0;
-        left: 0;
         right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #f59e0b, #f97316);
+        width: 400px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+        pointer-events: none;
     }
 
-    .user-card:hover {
-        box-shadow: 0 12px 32px rgba(245, 158, 11, 0.15);
-        transform: translateY(-6px);
+    .admin-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
     }
 
-    .user-card-header {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.04) 100%);
-        padding: 1.5rem;
-        border-bottom: 1px solid rgba(245, 158, 11, 0.15);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    body.dark-mode .admin-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
-    .user-avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        color: #f59e0b;
+    .admin-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(13, 148, 136, 0.12);
+        border-color: #0d9488;
     }
 
-    .user-card-title {
-        color: #1e293b;
-        font-weight: 700;
-        margin: 0 0 0 1rem;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        flex: 1;
-    }
-
-    .status-badge {
-        background: rgba(245, 158, 11, 0.15);
-        color: #a16207;
-        padding: 0.5rem 1rem;
-        border-radius: 2rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        border: 1px solid rgba(245, 158, 11, 0.25);
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        white-space: nowrap;
-    }
-
-    .user-card-body {
-        padding: 1.8rem;
-    }
-
-    .info-group {
-        margin-bottom: 1.2rem;
-    }
-
-    .info-group:last-of-type {
-        margin-bottom: 0;
-    }
-
-    .info-label {
-        color: #64748b;
-        font-size: 0.75rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .info-label i {
-        color: #f59e0b;
-    }
-
-    .info-value {
-        color: #1e293b;
-        font-weight: 500;
-        font-size: 0.95rem;
-        margin: 0;
-    }
-
-    .info-meta {
-        color: #94a3b8;
-        font-size: 0.8rem;
-        margin: 0.3rem 0 0 0;
-    }
-
-    .info-divider {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.15), transparent);
-        margin: 1.5rem 0;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .action-btn {
-        flex: 1;
-        padding: 0.85rem 1rem;
-        border: none;
-        border-radius: 0.8rem;
-        font-weight: 700;
-        font-size: 0.9rem;
+    .user-doc-preview {
+        border: 1.5px solid rgba(13, 148, 136, 0.25);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: #09171f;
+        position: relative;
         cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: white;
+        transition: all 0.2s ease;
+        aspect-ratio: 16/10;
     }
 
-    .btn-approve {
-        background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+    .user-doc-preview:hover {
+        border-color: #0d9488;
+        transform: scale(1.02);
     }
 
-    .btn-approve:hover {
-        box-shadow: 0 6px 20px rgba(13, 148, 136, 0.35);
-        transform: translateY(-2px);
+    .user-doc-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    .btn-reject {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
-    }
-
-    .btn-reject:hover {
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
-        transform: translateY(-2px);
-    }
-
-    /* === MODAL STYLES === */
-    .modal-content {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid rgba(239, 68, 68, 0.15);
-        border-radius: 1.2rem;
-        box-shadow: 0 20px 50px rgba(239, 68, 68, 0.15);
-    }
-
-    .modal-header {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
-        border-bottom: 1px solid rgba(239, 68, 68, 0.15);
-        border-radius: 1rem 1rem 0 0;
-        padding: 1.5rem;
-    }
-
-    .modal-title {
-        color: #1e293b;
-        font-weight: 800;
-        font-size: 1.2rem;
-        letter-spacing: -0.5px;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .modal-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        color: #ef4444;
-    }
-
-    .modal-body {
-        padding: 2rem;
-    }
-
-    .form-label {
-        color: #64748b;
-        font-size: 0.85rem;
+    .doc-badge-overlay {
+        position: absolute;
+        bottom: 6px;
+        left: 6px;
+        background: rgba(9, 23, 31, 0.85);
+        color: #ffffff;
+        font-size: 0.7rem;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .form-control {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        color: #1e293b;
-        font-weight: 500;
-        border-radius: 0.6rem;
-        padding: 1rem;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-    }
-
-    .form-control:focus {
-        border-color: rgba(239, 68, 68, 0.5);
-        box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
-        background: white;
-        outline: none;
-    }
-
-    .form-helper {
-        color: #64748b;
-        display: block;
-        margin-top: 0.75rem;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .modal-footer {
-        border-top: 1px solid rgba(239, 68, 68, 0.1);
-        padding: 1.5rem;
-        background: rgba(239, 68, 68, 0.02);
-        gap: 1rem;
-    }
-
-    .btn-cancel {
-        background: rgba(100, 116, 139, 0.1);
-        color: #475569;
-        border: 1px solid rgba(100, 116, 139, 0.2);
-        font-weight: 600;
-        border-radius: 0.6rem;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .btn-cancel:hover {
-        background: rgba(100, 116, 139, 0.15);
-        transform: translateY(-2px);
-    }
-
-    .btn-confirm {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        border: none;
-        font-weight: 700;
-        border-radius: 0.6rem;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
-        text-decoration: none;
-    }
-
-    .btn-confirm:hover {
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
-        transform: translateY(-2px);
-    }
-
-    /* === EMPTY STATE === */
-    .empty-state {
-        background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-        border: 2px solid rgba(13, 148, 136, 0.15);
-        border-left: 5px solid #0d9488;
-        color: #1e293b;
-        padding: 3rem 2rem;
-        border-radius: 1.2rem;
-        box-shadow: 0 8px 25px rgba(13, 148, 136, 0.08);
-        text-align: center;
-    }
-
-    .empty-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0.08) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        font-size: 2.5rem;
-        color: #0d9488;
-    }
-
-    .empty-title {
-        color: #0d9488;
-        margin-bottom: 0.75rem;
-        font-weight: 800;
-        font-size: 1.3rem;
-        letter-spacing: -0.5px;
-    }
-
-    .empty-message {
-        color: #64748b;
-        margin: 0;
-        font-weight: 500;
-    }
-
-    /* === PAGINATION === */
-    .pagination-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-
-    /* === DARK MODE === */
-    body.dark-mode .verifications-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .user-card,
-    body.dark-mode .empty-state {
-        background: #2a2a2a;
-        border-color: rgba(245, 158, 11, 0.2);
-    }
-
-    body.dark-mode .user-card:hover {
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-    }
-
-    body.dark-mode .user-card-header {
-        background: rgba(245, 158, 11, 0.08);
-        border-color: rgba(245, 158, 11, 0.2);
-    }
-
-    body.dark-mode .user-card-title,
-    body.dark-mode .info-value,
-    body.dark-mode .modal-title,
-    body.dark-mode .empty-state {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .form-control {
-        background: #333333;
-        border-color: rgba(239, 68, 68, 0.3);
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .form-control:focus {
-        background: #3a3a3a;
-    }
-
-    body.dark-mode .modal-content {
-        background: linear-gradient(135deg, #2a2a2a 0%, #333333 100%);
-        border-color: rgba(239, 68, 68, 0.2);
-    }
-
-    body.dark-mode .modal-header {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: rgba(239, 68, 68, 0.2);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-        .verifications-header {
-            padding: 1.75rem 1rem;
-        }
-
-        .verifications-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .verifications-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            width: 100%;
-            justify-content: center;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .verifications-wrapper {
-            padding: 1rem 0;
-        }
-
-        .user-card {
-            padding: 1.25rem 1rem;
-            border-radius: 1rem;
-        }
-
-        .user-info-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.25rem;
-        }
+        padding: 2px 8px;
+        border-radius: 4px;
+        backdrop-filter: blur(4px);
     }
 </style>
+@endsection
 
-<!-- Include Sidebar -->
+@section('content')
+
 @include('admin.sidebar')
 
 <div class="main-content-wrapper">
-    <div class="verifications-wrapper">
-        <!-- Header -->
-        <div class="verifications-header">
+    <div class="admin-page-container">
+        
+        <!-- HEADER -->
+        <div class="admin-module-header">
             <div class="container-fluid px-3 px-md-4">
-                <div class="verifications-header-content">
-                    <h1><i class="fas fa-user-check me-2"></i>Pending Verifications</h1>
-                    <p>Review and approve buyer applications ({{ count($pendingUsers) }} pending)</p>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-id-card me-1"></i>KYC & ID Verification Queue
+                            </span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $pendingUsers->total() }} Submissions Pending</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
+                            Government ID Verifications
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Inspect PhilSys, Driver's Licenses, and Passports to verify legitimate buyers & recyclers.
+                        </p>
+                    </div>
+
+                    <div>
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Dashboard Overview</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="container-fluid px-3 px-md-4">
-            @if(count($pendingUsers) > 0)
-                <div class="verifications-grid">
-                    @forelse($pendingUsers as $user)
-                        <div class="user-card">
-                            <div class="user-card-header">
-                                <div style="display: flex; align-items: center;">
-                                    <div class="user-avatar">
-                                        <i class="fas fa-user-circle"></i>
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
+
+            @if($pendingUsers->count() > 0)
+                <div class="row g-4">
+                    @foreach($pendingUsers as $user)
+                        <div class="col-lg-6 col-xl-4">
+                            <div class="admin-card h-100 d-flex flex-column">
+                                <div class="p-3 p-md-4 border-bottom d-flex justify-content-between align-items-start gap-2" style="background: rgba(13, 148, 136, 0.04);">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if($user->avatar_url)
+                                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #0d9488;">
+                                        @else
+                                            <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #0d9488, #06b6d4); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                                                {{ substr($user->name, 0, 1) }}
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <h6 style="font-weight: 800; font-size: 1.05rem; margin: 0; color: #0f172a;" class="dark:text-white">
+                                                {{ $user->name }}
+                                            </h6>
+                                            <small style="color: #64748b; font-size: 0.8rem;">{{ $user->email }}</small>
+                                        </div>
                                     </div>
-                                    <h5 class="user-card-title">{{ $user->name }}</h5>
-                                </div>
-                                <span class="status-badge">
-                                    <i class="fas fa-hourglass-half"></i>Pending
-                                </span>
-                            </div>
-
-                            <div class="user-card-body">
-                                <!-- Email -->
-                                <div class="info-group">
-                                    <label class="info-label">
-                                        <i class="fas fa-envelope"></i>Email Address
-                                    </label>
-                                    <p class="info-value">{{ $user->email }}</p>
-                                </div>
-
-                                <!-- Organization Name -->
-                                @if($user->business_name)
-                                    <div class="info-group">
-                                        <label class="info-label">
-                                            <i class="fas fa-building"></i>Organization Name
-                                        </label>
-                                        <p class="info-value">{{ $user->business_name }}</p>
-                                    </div>
-                                @endif
-
-                                <!-- Phone -->
-                                @if($user->phone)
-                                    <div class="info-group">
-                                        <label class="info-label">
-                                            <i class="fas fa-phone"></i>Phone Number
-                                        </label>
-                                        <p class="info-value">{{ $user->phone }}</p>
-                                    </div>
-                                @endif
-
-                                <!-- Registration Date -->
-                                <div class="info-group">
-                                    <label class="info-label">
-                                        <i class="fas fa-calendar"></i>Applied On
-                                    </label>
-                                    <p class="info-value">{{ $user->created_at->format('M d, Y') }}</p>
-                                    <p class="info-meta">{{ $user->created_at->diffForHumans() }}</p>
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; font-weight: 800; font-size: 0.75rem; border-radius: 2rem; padding: 0.35rem 0.7rem;">
+                                        <i class="fas fa-hourglass-half me-1"></i>Review
+                                    </span>
                                 </div>
 
-                                <!-- Valid ID Verification Documents -->
-                                <div class="info-divider"></div>
-                                <div class="info-group">
-                                    <label class="info-label">
-                                        <i class="fas fa-id-card"></i>Government Valid ID Details
-                                    </label>
-                                    @if($user->id_type)
-                                        <p class="info-value" style="font-weight: 700; color: #0d9488;">
-                                            {{ $user->id_type }} <span style="font-weight: 500; color: #64748b;">(No. {{ $user->id_number }})</span>
-                                        </p>
-                                        <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
-                                            @if($user->id_photo_url)
-                                                <a href="{{ $user->id_photo_url }}" target="_blank" style="flex: 1; text-decoration: none;">
-                                                    <div style="border: 1.5px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; overflow: hidden; aspect-ratio: 16/9; background: #f1f5f9; position: relative;">
-                                                        <img src="{{ $user->id_photo_url }}" alt="ID Photo" style="width: 100%; height: 100%; object-fit: cover;">
-                                                        <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 3px;">ID Photo 🔍</span>
-                                                    </div>
-                                                </a>
-                                            @endif
-                                            @if($user->id_selfie_url)
-                                                <a href="{{ $user->id_selfie_url }}" target="_blank" style="flex: 1; text-decoration: none;">
-                                                    <div style="border: 1.5px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; overflow: hidden; aspect-ratio: 16/9; background: #f1f5f9; position: relative;">
-                                                        <img src="{{ $user->id_selfie_url }}" alt="Selfie with ID" style="width: 100%; height: 100%; object-fit: cover;">
-                                                        <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); color: white; font-size: 0.65rem; padding: 1px 4px; border-radius: 3px;">Selfie 🔍</span>
-                                                    </div>
-                                                </a>
+                                <div class="p-3 p-md-4 flex-grow-1">
+                                    <div class="mb-3">
+                                        <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">SUBMITTED ID TYPE</small>
+                                        <div class="d-flex align-items-center gap-2 mt-1">
+                                            <span class="badge bg-dark" style="font-size: 0.8rem; font-weight: 700; padding: 0.35rem 0.75rem;">
+                                                <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Government ID' }}
+                                            </span>
+                                            @if($user->id_number)
+                                                <small style="color: #475569; font-weight: 700;"># {{ $user->id_number }}</small>
                                             @endif
                                         </div>
-                                    @else
-                                        <p class="info-value" style="color: #94a3b8; font-size: 0.85rem; font-style: italic;">
-                                            No Valid ID document submitted yet
-                                        </p>
+                                    </div>
+
+                                    @if($user->phone || $user->business_name)
+                                        <div class="mb-3 p-2 rounded" style="background: #f8fafc; font-size: 0.85rem;">
+                                            @if($user->business_name)
+                                                <div><strong style="color: #0f172a;">Company:</strong> {{ $user->business_name }}</div>
+                                            @endif
+                                            @if($user->phone)
+                                                <div><strong style="color: #0f172a;">Phone:</strong> {{ $user->phone }}</div>
+                                            @endif
+                                        </div>
                                     @endif
+
+                                    <!-- Document Attachments -->
+                                    <div class="mb-3">
+                                        <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">ATTACHED DOCUMENTS</small>
+                                        <div class="row g-2 mt-1">
+                                            @if($user->id_photo_url)
+                                                <div class="col-6">
+                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}id">
+                                                        <img src="{{ $user->id_photo_url }}" alt="Primary ID">
+                                                        <span class="doc-badge-overlay"><i class="fas fa-magnifying-glass me-1"></i>Front ID</span>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if($user->id_selfie_url)
+                                                <div class="col-6">
+                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}selfie">
+                                                        <img src="{{ $user->id_selfie_url }}" alt="Selfie with ID">
+                                                        <span class="doc-badge-overlay"><i class="fas fa-magnifying-glass me-1"></i>Selfie Match</span>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if(!$user->id_photo_url && !$user->id_selfie_url)
+                                                <div class="col-12 text-muted" style="font-size: 0.85rem; font-style: italic;">
+                                                    No direct photo uploaded (Manual verification required).
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <small style="color: #94a3b8; font-size: 0.75rem;">
+                                        Applied: {{ $user->created_at->format('M d, Y • h:i A') }} ({{ $user->created_at->diffForHumans() }})
+                                    </small>
                                 </div>
 
-                                <div class="info-divider"></div>
-
                                 <!-- Action Buttons -->
-                                <div class="action-buttons">
+                                <div class="p-3 border-top d-flex gap-2" style="background: rgba(0,0,0,0.02);">
                                     <form method="POST" action="{{ route('admin.verify-user', $user) }}" style="flex: 1;">
                                         @csrf
-                                        <button type="submit" class="action-btn btn-approve">
-                                            <i class="fas fa-check"></i>Approve
+                                        <button type="submit" class="btn btn-success w-100" style="font-weight: 800; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem;">
+                                            <i class="fas fa-check-circle me-1"></i>Approve ID
                                         </button>
                                     </form>
-                                    <button type="button" class="action-btn btn-reject" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}">
-                                        <i class="fas fa-times"></i>Reject
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}" style="font-weight: 700; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem 1rem;">
+                                        <i class="fas fa-times-circle me-1"></i>Reject
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Reject Modal -->
-                        <div class="modal fade" id="rejectModal{{ $user->id }}" tabindex="-1" aria-labelledby="rejectLabel{{ $user->id }}" aria-hidden="true">
+                        <!-- ID Photo Zoom Modal -->
+                        @if($user->id_photo_url)
+                            <div class="modal fade" id="docModal{{ $user->id }}id" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content border-0 shadow-lg">
+                                        <div class="modal-header bg-dark text-white">
+                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-id-card me-2"></i>{{ $user->name }} - Primary ID Document</h6>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body p-0 bg-dark text-center">
+                                            <img src="{{ $user->id_photo_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Selfie Zoom Modal -->
+                        @if($user->id_selfie_url)
+                            <div class="modal fade" id="docModal{{ $user->id }}selfie" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content border-0 shadow-lg">
+                                        <div class="modal-header bg-dark text-white">
+                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-user-check me-2"></i>{{ $user->name }} - Selfie with ID</h6>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body p-0 bg-dark text-center">
+                                            <img src="{{ $user->id_selfie_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Reject Modal with Reason -->
+                        <div class="modal fade" id="rejectModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="rejectLabel{{ $user->id }}">
-                                            <div class="modal-icon">
-                                                <i class="fas fa-ban"></i>
-                                            </div>
-                                            Reject Application
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h6 class="modal-title font-weight-bold"><i class="fas fa-triangle-exclamation me-2"></i>Reject Verification Application</h6>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
                                     <form method="POST" action="{{ route('admin.reject-user', $user) }}">
                                         @csrf
-                                        <div class="modal-body">
-                                            <label for="reason{{ $user->id }}" class="form-label">
-                                                <i class="fas fa-comment"></i>Rejection Reason
-                                            </label>
-                                            <textarea class="form-control" id="reason{{ $user->id }}" name="reason" rows="4" required placeholder="Provide a clear reason for rejection..."></textarea>
-                                            <small class="form-helper">
-                                                <i class="fas fa-info-circle"></i>The applicant will receive this reason via email
+                                        <div class="modal-body p-4">
+                                            <label class="form-label font-weight-bold">Rejection Reason</label>
+                                            <textarea class="form-control" name="reason" rows="4" required placeholder="State why ID was rejected (e.g. Blurry photo, Expired document, Mismatched name)..."></textarea>
+                                            <small class="text-muted d-block mt-2">
+                                                <i class="fas fa-info-circle me-1"></i>The user will receive this explanation to allow re-submission.
                                             </small>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn-cancel" data-bs-dismiss="modal">
-                                                <i class="fas fa-times me-2"></i>Cancel
-                                            </button>
-                                            <button type="submit" class="btn-confirm">
-                                                <i class="fas fa-check me-2"></i>Confirm Rejection
-                                            </button>
+                                        <div class="modal-footer bg-light">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger font-weight-bold">Confirm Rejection</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                    @empty
-                    @endforelse
+                    @endforeach
                 </div>
 
-                <!-- Pagination -->
-                @if($pendingUsers->count() > 0)
-                    <div class="pagination-wrapper">
-                        {{ $pendingUsers->links() }}
-                    </div>
-                @endif
+                <div class="mt-4">
+                    {{ $pendingUsers->links() }}
+                </div>
             @else
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-check-circle"></i>
+                <div class="text-center py-5">
+                    <div style="width: 70px; height: 70px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-circle-check"></i>
                     </div>
-                    <h5 class="empty-title">No Pending Verifications</h5>
-                    <p class="empty-message">All buyer applications have been reviewed and processed.</p>
+                    <h4 style="font-weight: 900; color: #0f172a;">All Caught Up!</h4>
+                    <p style="color: #64748b; font-size: 0.95rem; max-width: 450px; margin: 0 auto;">
+                        There are no pending ID submissions awaiting verification. All buyer accounts are currently processed.
+                    </p>
                 </div>
             @endif
+
         </div>
     </div>
 </div>

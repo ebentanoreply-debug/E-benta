@@ -95,14 +95,26 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'This listing is no longer available');
         }
 
-        $request->validate([
+        $handoverMethod = $request->input('handover_method');
+        if (!$handoverMethod) {
+            $handoverMethod = $listing->handover_preference === 'meetup_only' ? 'meetup' : 'pickup';
+        }
+
+        $rules = [
             'bid_amount' => 'required|numeric|min:0.01',
             'proposed_method' => 'required|in:repair,harvest,refine,dispose',
             'handover_method' => 'nullable|in:pickup,meetup',
             'proposed_pickup_date' => 'required|date|after:today',
-            'pickup_location' => 'required|string|max:255',
             'notes' => 'nullable|string|max:500',
-        ]);
+        ];
+
+        if ($handoverMethod === 'meetup') {
+            $rules['pickup_location'] = 'required|string|max:255';
+        } else {
+            $rules['pickup_location'] = 'nullable|string|max:255';
+        }
+
+        $request->validate($rules);
 
         // Check if buyer already submitted offer for this listing
         $existingOffer = Offer::where('listing_id', $listing->id)
@@ -115,10 +127,13 @@ class OfferController extends Controller
                 ->with('error', 'You have already submitted a pending offer for this item');
         }
 
-        $handoverMethod = $request->input('handover_method');
-        if (!$handoverMethod) {
-            $handoverMethod = $listing->handover_preference === 'meetup_only' ? 'meetup' : 'pickup';
-        }
+        $sellerAddress = $listing->pickup_address
+            ?: ($listing->seller->addresses()->first()?->getFullAddress()
+            ?: ($listing->seller->address_city ? $listing->seller->address_city . ($listing->seller->address_province ? ', ' . $listing->seller->address_province : '') : 'Seller Location'));
+
+        $finalPickupLocation = $handoverMethod === 'pickup'
+            ? ($listing->pickup_address ?: $sellerAddress)
+            : ($request->input('pickup_location') ?: 'Agreed Meetup Location');
 
         $offer = Offer::create([
             'listing_id' => $listing->id,
@@ -127,7 +142,7 @@ class OfferController extends Controller
             'proposed_method' => $request->proposed_method,
             'handover_method' => $handoverMethod,
             'proposed_pickup_date' => $request->proposed_pickup_date,
-            'pickup_location' => $request->pickup_location,
+            'pickup_location' => $finalPickupLocation,
             'notes' => $request->notes,
             'status' => 'pending',
         ]);
@@ -146,7 +161,7 @@ class OfferController extends Controller
         );
 
         // Notify seller about new offer
-        $categoryName = $listing->category ?: ($listing->deviceType->name ?: 'item');
+        $categoryName = $listing->category ?: ($listing->deviceType?->name ?: 'item');
         Notification::notify(
             $listing->seller,
             'offer_received',

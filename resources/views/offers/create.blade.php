@@ -135,6 +135,9 @@
                     <!-- Handover Method -->
                     @php
                         $pref = $listing->handover_preference ?? 'both';
+                        $sellerAddress = $listing->pickup_address
+                            ?: ($listing->seller->addresses()->first()?->getFullAddress()
+                            ?: ($listing->seller->address_city ? $listing->seller->address_city . ($listing->seller->address_province ? ', ' . $listing->seller->address_province : '') : 'Seller Registered Location'));
                     @endphp
                     <div style="margin-bottom: 1.75rem;">
                         <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
@@ -146,10 +149,10 @@
                                required
                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;" onchange="updateLocationLabel(this.value)">
                             @if($pref === 'both' || $pref === 'pickup_only')
-                                <option value="pickup" {{ old('handover_method') === 'pickup' ? 'selected' : '' }}>🚚 Doorstep / Recycler Pickup (Collect from Seller's Location)</option>
+                                <option value="pickup" {{ old('handover_method', ($pref === 'pickup_only' ? 'pickup' : '')) === 'pickup' ? 'selected' : '' }}>🚚 Doorstep / Recycler Pickup (Collect from Seller's Location)</option>
                             @endif
                             @if($pref === 'both' || $pref === 'meetup_only')
-                                <option value="meetup" {{ old('handover_method') === 'meetup' ? 'selected' : '' }}>🤝 Safe Public Meetup (Agree on Meetup Spot)</option>
+                                <option value="meetup" {{ old('handover_method', ($pref === 'meetup_only' ? 'meetup' : '')) === 'meetup' ? 'selected' : '' }}>🤝 Safe Public Meetup (Agree on Meetup Spot)</option>
                             @endif
                         </select>
                         <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
@@ -180,21 +183,38 @@
                         @enderror
                     </div>
 
-                    <!-- Pickup / Meetup Location -->
-                    <div style="margin-bottom: 1.75rem;">
+                    <!-- Doorstep Pickup Seller Address Info (Shown when pickup is selected) -->
+                    <div id="pickupInfoBox" style="background: rgba(13, 148, 136, 0.12); border: 1px solid rgba(13, 148, 136, 0.3); border-left: 4px solid var(--light-green); padding: 1.25rem; border-radius: 0.8rem; margin-bottom: 1.75rem;">
+                        <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--light-green); font-size: 1.25rem; margin-top: 0.2rem;"></i>
+                            <div>
+                                <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.25rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                    Collection Location (Seller's Address)
+                                </label>
+                                <p style="color: var(--light-green); font-weight: 700; margin: 0; font-size: 1rem;">
+                                    {{ $sellerAddress }}
+                                </p>
+                                <small style="color: #64748b; display: block; margin-top: 0.35rem;">
+                                    You will collect the device directly from the seller's location on the scheduled pickup date.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meetup Location (Shown ONLY when meetup is selected) -->
+                    <div id="meetupLocationGroup" style="margin-bottom: 1.75rem; display: none;">
                         <label id="locationLabel" style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-map-marker-alt me-2" style="color: #e74c3c;"></i>Proposed Location / Address *
+                            <i class="fas fa-handshake me-2" style="color: #e74c3c;"></i>Proposed Meetup Location / Spot <span style="color: #e74c3c;">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('pickup_location') is-invalid @enderror" 
                                id="pickup_location" 
                                name="pickup_location" 
-                               placeholder="e.g. Seller's address or Public Mall / Barangay Center"
+                               placeholder="e.g. SM Mall Main Entrance, Barangay Hall, Public Plaza"
                                value="{{ old('pickup_location') }}" 
-                               required
                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;">
                         <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
-                            Where the transaction handover will take place
+                            Where the safe meetup and handover will take place
                         </small>
                         @error('pickup_location')
                             <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>
@@ -256,6 +276,37 @@
         </div>
     </div>
 </div>
+
+<script>
+function updateLocationLabel(method) {
+    const pickupInfo = document.getElementById('pickupInfoBox');
+    const meetupGroup = document.getElementById('meetupLocationGroup');
+    const locationInput = document.getElementById('pickup_location');
+    const dateLabel = document.getElementById('dateLabel');
+
+    if (method === 'meetup') {
+        if (pickupInfo) pickupInfo.style.display = 'none';
+        if (meetupGroup) meetupGroup.style.display = 'block';
+        if (locationInput) locationInput.setAttribute('required', 'required');
+        if (dateLabel) dateLabel.innerHTML = '<i class="fas fa-calendar-alt me-2" style="color: #9b59b6;"></i>Proposed Meetup Date & Time *';
+    } else {
+        if (pickupInfo) pickupInfo.style.display = 'block';
+        if (meetupGroup) meetupGroup.style.display = 'none';
+        if (locationInput) {
+            locationInput.removeAttribute('required');
+            locationInput.value = '';
+        }
+        if (dateLabel) dateLabel.innerHTML = '<i class="fas fa-calendar-alt me-2" style="color: #9b59b6;"></i>Proposed Pickup Date & Time *';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const handoverSelect = document.getElementById('handover_method');
+    if (handoverSelect) {
+        updateLocationLabel(handoverSelect.value);
+    }
+});
+</script>
 
 <style>
 .form-control:focus,

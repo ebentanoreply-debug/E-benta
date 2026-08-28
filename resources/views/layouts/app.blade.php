@@ -7,15 +7,19 @@
     <title>@yield('title', 'E-Benta - E-Waste Marketplace')</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=1">
     <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}?v=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-green: #0d9488;
+            --emerald-accent: #059669;
             --dark-bg: #ffffff;
             --light-green: #0d9488;
-            --text-light: #1e293b;
-            --secondary-color: #f0f7ff;
+            --text-light: #0f172a;
+            --secondary-color: #f0fdf4;
             --accent-green: #06b6d4;
             --muted-label: #64748b;
         }
@@ -27,9 +31,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--dark-bg);
             color: var(--text-light);
+            scroll-behavior: smooth;
         }
 
         .navbar {
@@ -76,8 +81,43 @@
             gap: 0.5rem;
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             letter-spacing: -0.5px;
-            margin-left: 3rem;
+            margin-left: 0;
             position: relative;
+        }
+
+        .admin-topbar-toggle-btn {
+            background: rgba(13, 148, 136, 0.18);
+            border: 1px solid rgba(13, 148, 136, 0.35);
+            color: #2dd4bf;
+            width: 36px;
+            height: 36px;
+            border-radius: 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .admin-topbar-toggle-btn:hover {
+            background: rgba(13, 148, 136, 0.35);
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .admin-workspace-pill {
+            background: rgba(13, 148, 136, 0.15);
+            border: 1px solid rgba(13, 148, 136, 0.3);
+            color: #2dd4bf;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.35rem 0.75rem;
+            border-radius: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            letter-spacing: 0.3px;
         }
 
         .navbar-brand:hover {
@@ -730,14 +770,30 @@
             document.body.classList.add('dark-mode');
         }
     </script>
-    <!-- Enhanced Navigation Bar -->
+    <!-- Enhanced Top Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid px-3 px-md-4">
-            <!-- Brand -->
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-leaf"></i>
-                <span>E-Benta</span>
-            </a>
+            <!-- Left: Brand & Context Indicator -->
+            <div class="d-flex align-items-center gap-2">
+                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && (request()->routeIs('admin.*') || request()->routeIs('admin/*'))))
+                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleAdminSidebar()" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                @endif
+
+                <a class="navbar-brand m-0" href="/">
+                    <i class="fas fa-leaf"></i>
+                    <span>E-Benta</span>
+                </a>
+
+                @if(request()->routeIs('admin.*'))
+                    <div class="d-none d-md-flex align-items-center ms-2">
+                        <span class="admin-workspace-pill">
+                            <i class="fas fa-shield-halved" style="color: #10b981;"></i> Admin Workspace
+                        </span>
+                    </div>
+                @endif
+            </div>
 
             <!-- Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -746,100 +802,140 @@
 
             <!-- Navigation Items -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto" style="align-items: center;">
-                    <!-- Browse Items -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/listings">
-                            <i class="fas fa-search me-1"></i>Browse Items
-                        </a>
-                    </li>
+                <ul class="navbar-nav ms-auto" style="align-items: center; gap: 0.35rem;">
+                    
+                    @if(!request()->routeIs('admin.*'))
+                        <!-- Marketplace Link -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('listings.*') ? 'active' : '' }}" href="{{ route('listings.index') }}">
+                                <i class="fas fa-store me-1" style="color: var(--light-green);"></i>Marketplace
+                            </a>
+                        </li>
+
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('home') }}#process">
+                                    <i class="fas fa-bolt me-1" style="color: #06b6d4;"></i>How It Works
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('home') }}#impact">
+                                    <i class="fas fa-leaf me-1" style="color: #10b981;"></i>Eco Impact
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('home') }}#calculator">
+                                    <i class="fas fa-calculator me-1" style="color: #f59e0b;"></i>Value Calculator
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('home') }}#faq">
+                                    <i class="fas fa-circle-question me-1" style="color: #a855f7;"></i>FAQ
+                                </a>
+                            </li>
+                        @endguest
+
+                        @auth
+                            @if(auth()->user()->isSeller())
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('seller.*') ? 'active' : '' }}" href="{{ route('seller.dashboard') }}">
+                                        <i class="fas fa-chart-pie me-1"></i>Seller Hub
+                                    </a>
+                                </li>
+                            @elseif(auth()->user()->isBuyer())
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('buyer.*') ? 'active' : '' }}" href="{{ route('buyer.dashboard') }}">
+                                        <i class="fas fa-chart-line me-1"></i>Buyer Dashboard
+                                    </a>
+                                </li>
+                            @endif
+                        @endauth
+                    @endif
 
                     @auth
-                        <!-- Dashboard/Admin Links -->
-                        @if(auth()->user()->isSeller())
+                        @if(!request()->routeIs('admin.*'))
+                            <!-- Messages Link (Buyers & Sellers Only) -->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('seller.dashboard') }}">
-                                    <i class="fas fa-store me-1"></i>My Listings
-                                </a>
-                            </li>
-                        @elseif(auth()->user()->isBuyer())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('buyer.dashboard') }}">
-                                    <i class="fas fa-chart-line me-1"></i>Dashboard
-                                </a>
-                            </li>
-                        @elseif(auth()->user()->isAdmin())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                                    <i class="fas fa-gavel me-1"></i>Admin Panel
+                                <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}" title="Messages">
+                                    <i class="fas fa-comments me-1"></i><span class="d-lg-none">Messages</span>
                                 </a>
                             </li>
                         @endif
 
-                        <!-- Messages Link -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}">
-                                <i class="fas fa-comments me-1"></i>Messages
-                            </a>
-                        </li>
-
                         <!-- Notifications Dropdown -->
                         <li class="nav-item dropdown notif-nav-item">
                             <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.color='#27ae60';" onmouseout="this.style.color='var(--light-green)';">
-                                <i class="fas fa-bell" style="font-size: 1.3rem; color: var(--light-green); transition: all 0.3s ease; transform-origin: center; display: inline-block;" onmouseover="this.style.transform='scale(1.08)';" onmouseout="this.style.transform='scale(1)';"></i>
-                                <span id="notification-badge" style="position: absolute; top: -8px; right: -8px; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 50%; min-width: 20px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3); animation: pulse 2s infinite;">0</span>
+                                <i class="fas fa-bell" style="font-size: 1.25rem; color: #2dd4bf; transition: all 0.3s ease; transform-origin: center; display: inline-block;" onmouseover="this.style.transform='scale(1.08)';" onmouseout="this.style.transform='scale(1)';"></i>
+                                <span id="notification-badge" style="position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 50%; min-width: 18px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); animation: pulse 2s infinite;">0</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="max-width: 380px; height: auto; max-height: 450px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); border: 1px solid rgba(155, 89, 182, 0.2); border-radius: 0.8rem; animation: slideInDown 0.3s ease; display: none; flex-direction: column; padding: 0; margin: 0; min-width: 320px;">
-                                <!-- Header (Fixed) -->
-                                <li style="padding: 1rem 1.25rem; border-bottom: 1px solid rgba(155, 89, 182, 0.1); background: linear-gradient(135deg, rgba(155, 89, 182, 0.05) 0%, rgba(155, 89, 182, 0.02) 100%); flex-shrink: 0; list-style: none; margin: 0;"><h6 style="margin: 0; font-weight: 700; color: white; font-size: 0.95rem;"><i class="fas fa-bell me-2" style="color: #9b59b6;"></i>Recent Notifications</h6></li>
-                                
-                                <!-- Scrollable Notifications Wrapper -->
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="max-width: 380px; height: auto; max-height: 450px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; display: none; flex-direction: column; padding: 0; margin: 0; min-width: 320px;">
+                                <!-- Header -->
+                                <li style="padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(13, 148, 136, 0.08); flex-shrink: 0; list-style: none; margin: 0;">
+                                    <h6 style="margin: 0; font-weight: 800; color: white; font-size: 0.95rem;"><i class="fas fa-bell me-2" style="color: #2dd4bf;"></i>Recent Notifications</h6>
+                                </li>
+                                <!-- Scrollable Container -->
                                 <div style="flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 80px; max-height: calc(450px - 120px);">
                                     <ul id="notifications-menu-container" style="list-style: none; margin: 0; padding: 0.5rem 0; display: flex; flex-direction: column;"></ul>
                                 </div>
-                                
-                                <!-- Footer (Fixed) -->
-                                <li style="border-top: 1px solid rgba(155, 89, 182, 0.1); flex-shrink: 0; background: linear-gradient(135deg, rgba(155, 89, 182, 0.02) 0%, rgba(155, 89, 182, 0.05) 100%); list-style: none; padding: 0; margin: 0;">
-                                    <a href="{{ route('notifications.index') }}" style="padding: 0.85rem 1.25rem; color: var(--light-green); font-weight: 600; font-size: 0.9rem; transition: all 0.2s ease; display: block; margin: 0; border-radius: 0; text-align: center; text-decoration: none;" onmouseover="this.style.background='rgba(46, 204, 113, 0.1)';" onmouseout="this.style.background='transparent';"><i class="fas fa-arrow-right me-2"></i>View All Notifications</a>
+                                <!-- Footer -->
+                                <li style="border-top: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; background: rgba(13, 148, 136, 0.04); list-style: none; padding: 0; margin: 0;">
+                                    <a href="{{ route('notifications.index') }}" style="padding: 0.85rem 1.25rem; color: #2dd4bf; font-weight: 700; font-size: 0.88rem; display: block; margin: 0; text-align: center; text-decoration: none;"><i class="fas fa-arrow-right me-2"></i>View All Notifications</a>
                                 </li>
                             </ul>
                         </li>
 
-                        <!-- User Dropdown -->
-                        <li class="nav-item dropdown user-nav-item">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <!-- User Capsule Dropdown -->
+                        <li class="nav-item dropdown user-nav-item ms-lg-2">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.6rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 0.35rem 0.85rem 0.35rem 0.45rem; border-radius: 2rem; transition: all 0.2s ease;">
                                 @if(auth()->user()->avatar_url)
-                                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--light-green); flex-shrink: 0;">
+                                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981; flex-shrink: 0;">
                                 @else
-                                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--dark-bg); font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
+                                    <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
                                         {{ substr(auth()->user()->name, 0, 1) }}
                                     </div>
                                 @endif
-                                <span class="user-display-name">{{ auth()->user()->name }}</span>
+                                <span class="user-display-name" style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">{{ auth()->user()->name }}</span>
+                                @if(auth()->user()->isAdmin())
+                                    <span class="badge" style="background: #10b981; color: #ffffff; font-size: 0.65rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 0.4rem;">ADMIN</span>
+                                @endif
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: var(--light-green);"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: var(--light-green);"></i>Settings</a></li>
-                                <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: var(--light-green);"></i>Change Password</a></li>
+                                @if(auth()->user()->isAdmin())
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2" style="color: #2dd4bf;"></i>Admin Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.pending-verifications') }}"><i class="fas fa-id-card me-2" style="color: #38bdf8;"></i>Verifications Queue</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}"><i class="fas fa-flag me-2" style="color: #f59e0b;"></i>User Reports</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @endif
+                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #2dd4bf;"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #2dd4bf;"></i>Change Password</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
                                         @csrf
-                                        <button type="submit" class="dropdown-item w-100 text-start"><i class="fas fa-sign-out-alt me-2" style="color: #e74c3c;"></i>Logout</button>
+                                        <button type="submit" class="dropdown-item w-100 text-start" style="color: #fca5a5 !important;"><i class="fas fa-sign-out-alt me-2" style="color: #ef4444;"></i>Logout</button>
                                     </form>
                                 </li>
                             </ul>
                         </li>
+
+                        @if(!request()->routeIs('admin.*'))
+                            <li class="nav-item ms-lg-2">
+                                <a class="btn btn-sm" href="{{ route('listings.create') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; font-weight: 800; padding: 0.55rem 1.1rem; border-radius: 0.75rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                    <i class="fas fa-plus-circle"></i><span>List Device</span>
+                                </a>
+                            </li>
+                        @endif
                     @else
-                        <!-- Login/Register -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                        <!-- Login/Register for Guests -->
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link" href="{{ route('login') }}" style="color: #f1f5f9 !important; font-weight: 700;">
+                                <i class="fas fa-arrow-right-to-bracket me-1"></i>Login
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn" href="{{ route('register') }}" style="background: linear-gradient(135deg, var(--light-green) 0%, #27ae60 100%); color: var(--dark-bg); border: none; font-weight: 700; padding: 0.65rem 1.5rem; border-radius: 0.6rem; margin-left: 0.75rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);" onmouseover="this.style.boxShadow='0 8px 20px rgba(46, 204, 113, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(46, 204, 113, 0.2)'; this.style.transform='translateY(0)';">
-                                <i class="fas fa-user-plus me-1"></i>Register
+                        <li class="nav-item ms-lg-1">
+                            <a class="btn" href="{{ route('register') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; font-weight: 800; padding: 0.65rem 1.4rem; border-radius: 0.75rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35); display: inline-flex; align-items: center; gap: 0.4rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(13, 148, 136, 0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(13, 148, 136, 0.35)';">
+                                <i class="fas fa-plus-circle"></i><span>List Device</span>
                             </a>
                         </li>
                     @endauth
@@ -1030,10 +1126,74 @@
         @yield('content')
     </main>
 
-    <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <div class="container">
-            <p class="mb-1" style="font-size: 0.9rem;">&copy; 2026 E-Benta - Circular Economy-Based E-Waste Marketplace</p>
-            <p class="small mb-0" style="font-size: 0.75rem; color: #94a3b8;">Building a sustainable future through responsible e-waste management</p>
+    <!-- Modern Multi-Column Eco Footer -->
+    <footer style="background: linear-gradient(180deg, #09171f 0%, #050d12 100%); color: #94a3b8; border-top: 1px solid rgba(13, 148, 136, 0.25); padding: 4.5rem 0 2rem; margin-top: auto; position: relative; overflow: hidden;">
+        <!-- Ambient subtle glow -->
+        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 180px; background: radial-gradient(ellipse at top, rgba(13, 148, 136, 0.15), transparent 70%); pointer-events: none;"></div>
+
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="row g-4 g-lg-5 mb-5">
+                <!-- Col 1: Brand & Environmental Mission -->
+                <div class="col-lg-4 col-md-6">
+                    <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                        <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4);">
+                            <i class="fas fa-leaf" style="color: #ffffff; font-size: 1.2rem;"></i>
+                        </div>
+                        <span style="font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">E-Benta</span>
+                    </div>
+                    <p style="font-size: 0.95rem; line-height: 1.7; color: #94a3b8; margin-bottom: 1.5rem;">
+                        The Philippines' premier circular economy platform for certified e-waste monetization, bulk scrap trading, and verifiable zero-landfill recycling.
+                    </p>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13, 148, 136, 0.12); border: 1px solid rgba(13, 148, 136, 0.3); padding: 0.45rem 0.9rem; border-radius: 2rem; font-size: 0.8rem; color: #5eead4; font-weight: 700;">
+                        <i class="fas fa-shield-halved"></i> Verified Zero-Landfill Initiative
+                    </div>
+                </div>
+
+                <!-- Col 2: Marketplace Navigation -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Marketplace</h6>
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+                        <li><a href="{{ route('listings.index') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-arrow-right me-2" style="font-size: 0.75rem; color: #0d9488;"></i>All Listings</a></li>
+                        <li><a href="{{ route('listings.index', ['category' => 'Smartphone']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-mobile-screen me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Smartphones</a></li>
+                        <li><a href="{{ route('listings.index', ['category' => 'Laptop']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-laptop me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Laptops & PCs</a></li>
+                        <li><a href="{{ route('listings.index', ['condition' => 'non_functional']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-boxes-stacked me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Scrap & Bulk Lots</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Platform & Handover -->
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">How It Works</h6>
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+                        <li><a href="{{ route('home') }}#process" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-bolt me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>4-Step Listing Flow</a></li>
+                        <li><a href="{{ route('home') }}#calculator" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-calculator me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>CO₂ & Price Estimator</a></li>
+                        <li><a href="{{ route('home') }}#impact" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-chart-line me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Environmental Scoreboard</a></li>
+                        <li><a href="{{ route('home') }}#faq" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-circle-question me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Frequently Asked Questions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Trust & Quick Action -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Start Today</h6>
+                    <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 1rem; line-height: 1.6;">
+                        Have broken gadgets or scrap taking up storage? List in 60 seconds with verified doorstep pickup or safe meetup.
+                    </p>
+                    <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-sm w-100" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; font-weight: 800; padding: 0.75rem 1rem; border-radius: 0.6rem; border: none; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <i class="fas fa-plus-circle me-1"></i>Post Free Listing
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Sub-Footer -->
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem;">
+                <p class="mb-0" style="color: #64748b;">
+                    &copy; {{ date('Y') }} <strong>E-Benta</strong>. All Rights Reserved. Built for Sustainable Circular Innovation.
+                </p>
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <span style="color: #475569;"><i class="fas fa-lock me-1"></i>256-Bit Encrypted</span>
+                    <span style="color: #475569;"><i class="fas fa-id-card me-1"></i>Govt ID Verified</span>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;"><i class="fas fa-arrow-up me-1"></i>Top</a>
+                </div>
+            </div>
         </div>
     </footer>
 
