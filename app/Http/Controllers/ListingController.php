@@ -12,6 +12,7 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ListingController extends Controller
 {
@@ -45,6 +46,13 @@ class ListingController extends Controller
             $query->where('intended_action', $request->action);
         }
 
+        // Filter by seller
+        $filteredSeller = null;
+        if ($request->has('seller_id') && $request->seller_id) {
+            $query->where('user_id', $request->seller_id);
+            $filteredSeller = User::find($request->seller_id);
+        }
+
         // Sort options
         $sort = $request->get('sort', 'latest');
         match ($sort) {
@@ -56,7 +64,7 @@ class ListingController extends Controller
 
         $listings = $query->paginate(15);
 
-        return view('listings.index', compact('listings', 'savedListingIds'));
+        return view('listings.index', compact('listings', 'savedListingIds', 'filteredSeller'));
     }
 
     /**
@@ -185,6 +193,20 @@ class ListingController extends Controller
             'description' => 'required|string|max:1000',
             'intended_action' => 'required|in:sell,recycle',
             'handover_preference' => 'nullable|in:pickup_only,meetup_only,both',
+            'pickup_address' => [
+                Rule::requiredIf(function () use ($request) {
+                    $pref = $request->input('handover_preference');
+                    if (!$pref || !in_array($pref, ['pickup_only', 'both'])) {
+                        return false;
+                    }
+                    $userAddress = Auth::user()?->addresses()->first()?->getFullAddress()
+                        ?? (Auth::user()?->address_city ? Auth::user()->address_city : null);
+                    return empty($userAddress);
+                }),
+                'nullable',
+                'string',
+                'max:500',
+            ],
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
             'photos' => 'nullable|array|max:8',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
@@ -216,6 +238,9 @@ class ListingController extends Controller
         // Calculate carbon footprint
         $carbonFootprint = Listing::calculateCarbonFootprint($categoryName, $weight);
 
+        $handoverPref = $request->input('handover_preference', 'both');
+        $pickupAddress = in_array($handoverPref, ['pickup_only', 'both']) ? $request->input('pickup_address') : null;
+
         $listing = Listing::create([
             'user_id' => Auth::id(),
             'listing_type' => $request->input('listing_type', 'single'),
@@ -228,7 +253,8 @@ class ListingController extends Controller
             'description' => $request->description,
             'estimated_weight' => $weight,
             'intended_action' => $request->intended_action,
-            'handover_preference' => $request->input('handover_preference', 'both'),
+            'handover_preference' => $handoverPref,
+            'pickup_address' => $pickupAddress,
             'suggested_price' => $request->filled('suggested_price') ? round((float) $request->suggested_price, 2) : null,
             'status' => 'pending',
             'carbon_footprint' => $carbonFootprint,
@@ -249,7 +275,7 @@ class ListingController extends Controller
         $listing->update(['status' => 'available']);
 
         // Notify seller that listing was created successfully
-        $itemName = $listing->category ?: ($listing->deviceType->name ?: 'item');
+        $itemName = $listing->category ?: ($listing->deviceType?->name ?: 'item');
         Notification::notify(
             Auth::user(),
             'listing_created',
@@ -356,6 +382,21 @@ class ListingController extends Controller
             'description' => 'required|string|max:1000',
             'intended_action' => 'required|in:sell,recycle',
             'handover_preference' => 'nullable|in:pickup_only,meetup_only,both',
+            'pickup_address' => [
+                Rule::requiredIf(function () use ($request, $listing) {
+                    $pref = $request->input('handover_preference', $listing->handover_preference);
+                    if (!$pref || !in_array($pref, ['pickup_only', 'both'])) {
+                        return false;
+                    }
+                    $userAddress = Auth::user()?->addresses()->first()?->getFullAddress()
+                        ?? (Auth::user()?->address_city ? Auth::user()->address_city : null)
+                        ?? $listing->pickup_address;
+                    return empty($userAddress);
+                }),
+                'nullable',
+                'string',
+                'max:500',
+            ],
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
             'photos' => 'nullable|array|max:8',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
@@ -418,6 +459,9 @@ class ListingController extends Controller
         }
         $carbonFootprint = Listing::calculateCarbonFootprint($categoryName, $weight);
 
+        $handoverPref = $request->input('handover_preference', $listing->handover_preference ?? 'both');
+        $pickupAddress = in_array($handoverPref, ['pickup_only', 'both']) ? $request->input('pickup_address') : null;
+
         $listing->update([
             'listing_type' => $request->input('listing_type', $listing->listing_type ?? 'single'),
             'lot_item_count' => $request->listing_type === 'bulk_lot' ? (int) $request->lot_item_count : null,
@@ -428,7 +472,8 @@ class ListingController extends Controller
             'condition' => $request->condition,
             'description' => $request->description,
             'intended_action' => $request->intended_action,
-            'handover_preference' => $request->input('handover_preference', $listing->handover_preference ?? 'both'),
+            'handover_preference' => $handoverPref,
+            'pickup_address' => $pickupAddress,
             'suggested_price' => $request->filled('suggested_price') ? round((float) $request->suggested_price, 2) : null,
             'estimated_weight' => $weight,
             'carbon_footprint' => $carbonFootprint,

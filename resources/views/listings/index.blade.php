@@ -720,18 +720,27 @@
     }
 
     body.dark-mode .ls-filter-wrapper {
-        background: rgba(16, 185, 129, 0.1);
-        border-color: rgba(16, 185, 129, 0.25);
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.3);
+    }
+
+    body.dark-mode .ls-filter-title {
+        color: #2dd4bf;
+    }
+
+    body.dark-mode .ls-filter-label {
+        color: #94a3b8;
     }
 
     body.dark-mode .ls-filter-select {
-        background: #2a2a2a;
-        border-color: rgba(16, 185, 129, 0.3);
-        color: #e0e0e0;
+        background: #1e293b;
+        border-color: rgba(13, 148, 136, 0.4);
+        color: #f1f5f9;
     }
 
     body.dark-mode .ls-filter-select:focus {
-        background: #333333;
+        background: #0f172a;
+        color: #ffffff;
     }
 
     body.dark-mode .ls-stat-card,
@@ -837,6 +846,9 @@
         <div class="ls-filter-wrapper">
             <h6 class="ls-filter-title"><i class="fas fa-sliders-h me-2"></i>Filter Options</h6>
             <form method="GET" action="{{ route('listings.index') }}" class="ls-filter-form">
+                @if(request('seller_id'))
+                    <input type="hidden" name="seller_id" value="{{ request('seller_id') }}">
+                @endif
                 <!-- Category Filter -->
                 <div class="ls-filter-group">
                     <label class="ls-filter-label"><i class="fas fa-tags me-1"></i>Category</label>
@@ -880,19 +892,35 @@
             </form>
         </div>
 
-        <!-- Statistics Summary -->
-        <div class="ls-stats-grid">
-            <div class="ls-stat-card stat-total">
-                <div class="ls-stat-value">{{ $listings->total() }}</div>
-                <div class="ls-stat-label">Total Listings</div>
+        @if(request('seller_id') && isset($filteredSeller) && $filteredSeller)
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid #10b981; padding: 1rem 1.5rem; border-radius: 0.8rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-store" style="color: #10b981; font-size: 1.25rem;"></i>
+                    <div>
+                        <span style="color: #065f46; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block;">Seller Filter Active</span>
+                        <span style="color: #1f2937; font-weight: 800; font-size: 1.05rem;">Showing listings posted by <strong>{{ $filteredSeller->name }}</strong></span>
+                    </div>
+                </div>
+                <a href="{{ route('listings.index') }}" class="btn btn-sm" style="background: white; color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.3); font-weight: 700; padding: 0.45rem 1rem; border-radius: 0.5rem; text-decoration: none;">
+                    <i class="fas fa-times me-1"></i>Clear Seller Filter
+                </a>
             </div>
-            <div class="ls-stat-card stat-carbon">
-                <div class="ls-stat-value">@php echo number_format($listings->sum('carbon_footprint'), 0); @endphp</div>
-                <div class="ls-stat-label"><i class="fas fa-leaf me-1"></i>kg CO₂ Impact</div>
+        @endif
+
+        <!-- Inline Results Header Bar (Clean & Compact) -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 px-1">
+            <div class="d-flex align-items-center gap-2">
+                <h5 style="font-weight: 900; font-size: 1.25rem; margin: 0; color: #0f172a; font-family: 'Outfit', sans-serif;">
+                    Available Devices
+                </h5>
+                <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-weight: 800; font-size: 0.82rem; border-radius: 2rem; padding: 0.4rem 0.85rem;">
+                    {{ $listings->total() }} {{ Str::plural('Listing', $listings->total()) }}
+                </span>
             </div>
-            <div class="ls-stat-card stat-available">
-                <div class="ls-stat-value">@php echo $listings->where('status', 'available')->count(); @endphp</div>
-                <div class="ls-stat-label">Available Now</div>
+
+            <div class="d-flex align-items-center gap-2" style="font-size: 0.85rem; font-weight: 700; color: #0d9488;">
+                <i class="fas fa-leaf"></i>
+                <span>Direct Verified Recycler & Seller Exchange</span>
             </div>
         </div>
 
@@ -930,7 +958,7 @@
                     <div class="ls-card-body">
                         <!-- Title -->
                         <h5 class="ls-card-title">
-                            <i class="fas fa-microchip me-2"></i>{{ $listing->category ?: ($listing->deviceType->name ?: 'Uncategorized') }}
+                            <i class="fas fa-microchip me-2"></i>{{ $listing->category ?: ($listing->deviceType?->name ?: 'Uncategorized') }}
                         </h5>
 
                         <!-- Description -->
@@ -961,7 +989,7 @@
                         <!-- Carbon Impact Box -->
                         <div class="ls-carbon-box">
                             <small class="ls-carbon-label"><i class="fas fa-leaf me-1"></i>Environmental Impact</small>
-                            <p class="ls-carbon-value">{{ $listing->carbon_footprint }} kg CO₂</p>
+                            <p class="ls-carbon-value">{{ $listing->carbon_footprint ?? 0 }} kg CO₂</p>
                         </div>
 
                         <!-- Action Buttons -->
@@ -1002,7 +1030,7 @@
                     <div class="ls-card-footer">
                         <i class="fas fa-user-circle" style="color: #10b981; font-size: 1.4rem;"></i>
                         <div>
-                            <small class="ls-seller-name">{{ $listing->seller->name }}</small>
+                            <small class="ls-seller-name">{{ $listing->seller?->name ?? 'Unknown Seller' }}</small>
                             <small class="ls-seller-date">{{ $listing->created_at->diffForHumans() }}</small>
                         </div>
                     </div>

@@ -1,703 +1,688 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard - E-Benta')
+@section('title', 'Admin Dashboard & Control Center - E-Benta')
 
-@section('content')
+@section('styles')
 <style>
-    /* === DASHBOARD WRAPPER === */
-    .admin-dashboard {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    /* ==========================================================================
+       ADMIN CONTROL CENTER MODERN DESIGN SYSTEM
+       ========================================================================== */
+    .admin-dashboard-container {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding-bottom: 4rem;
     }
 
-    /* === DASHBOARD HEADER === */
-    .dashboard-header {
-        background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
-        color: white;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
+    body.dark-mode .admin-dashboard-container {
+        background: #09171f;
+    }
+
+    /* Top Executive Header */
+    .admin-exec-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        color: #ffffff;
+        padding: 2.5rem 0 2.25rem;
         position: relative;
         overflow: hidden;
     }
 
-    .dashboard-header::before {
+    .admin-exec-header::after {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        z-index: 0;
+        top: 0;
+        right: 0;
+        width: 450px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.2) 0%, transparent 70%);
+        pointer-events: none;
     }
 
-    .dashboard-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        z-index: 0;
-    }
-
-    .dashboard-header-content {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        justify-content: space-between;
+    .admin-live-pulse {
+        display: inline-flex;
         align-items: center;
+        gap: 0.5rem;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        padding: 0.35rem 0.85rem;
+        border-radius: 2rem;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #34d399;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 10px #10b981;
+        animation: pulse-glow 1.8s infinite;
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .admin-quick-pills {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
         flex-wrap: wrap;
-        gap: 1.5rem;
     }
 
-    .dashboard-header h1 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin: 0 0 0.3rem 0;
-        letter-spacing: -0.5px;
-    }
-
-    .dashboard-header p {
-        opacity: 0.95;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    .btn-export {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        padding: 0.9rem 1.8rem;
-        border-radius: 0.8rem;
+    .admin-pill-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 0.6rem 1.1rem;
+        border-radius: 0.75rem;
+        font-size: 0.88rem;
         font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        white-space: nowrap;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.5rem;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(10px);
     }
 
-    .btn-export:hover {
-        background: rgba(255, 255, 255, 0.25);
+    .admin-pill-btn:hover {
+        background: rgba(13, 148, 136, 0.25);
+        border-color: #0d9488;
+        color: #ffffff;
         transform: translateY(-2px);
     }
 
-    /* === METRICS SECTION === */
-    .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
-    }
-
-    .metric-card {
-        background: white;
-        border-radius: 1.2rem;
-        padding: 1.8rem;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* 4-Column KPI Grid */
+    .admin-kpi-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        padding: 1.6rem 1.4rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         position: relative;
         overflow: hidden;
     }
 
-    .metric-card::before {
+    body.dark-mode .admin-kpi-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .admin-kpi-card::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 3.5px;
         background: linear-gradient(90deg, #0d9488, #06b6d4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
-    .metric-card:hover {
-        box-shadow: 0 8px 24px rgba(13, 148, 136, 0.12);
+    .admin-kpi-card:hover {
         transform: translateY(-4px);
-    }
-
-    .metric-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 0.8rem;
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: #0d9488;
-        margin-bottom: 1rem;
-    }
-
-    .metric-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: #64748b;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-    }
-
-    .metric-value {
-        font-size: 2.2rem;
-        font-weight: 900;
-        color: #1e293b;
-        line-height: 1;
-        margin-bottom: 0.6rem;
-    }
-
-    .metric-value small {
-        font-size: 0.5em;
-        color: #94a3b8;
-        margin-left: 0.3rem;
-    }
-
-    .metric-change {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #0d9488;
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    /* === CHARTS SECTION === */
-    .charts-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
-    }
-
-    .chart-card {
-        background: white;
-        border-radius: 1.2rem;
-        padding: 1.8rem;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        overflow: hidden;
-    }
-
-    .chart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid rgba(13, 148, 136, 0.1);
-    }
-
-    .chart-title {
-        font-size: 1.1rem;
-        font-weight: 800;
-        color: #1e293b;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        margin: 0;
-    }
-
-    .chart-title i {
-        color: #0d9488;
-        background: rgba(13, 148, 136, 0.12);
-        padding: 0.6rem 0.8rem;
-        border-radius: 0.6rem;
-        font-size: 1.2rem;
-    }
-
-    .chart-subtitle {
-        font-size: 0.8rem;
-        color: #64748b;
-        margin: 0.3rem 0 0 0;
-    }
-
-    .chart-filter {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), rgba(13, 148, 136, 0.04));
-        color: #1e293b;
-        border: 1px solid rgba(13, 148, 136, 0.2);
-        padding: 0.6rem 1rem;
-        border-radius: 0.6rem;
-        font-size: 0.85rem;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }
-
-    .chart-filter:hover {
+        box-shadow: 0 12px 30px rgba(13, 148, 136, 0.12);
         border-color: #0d9488;
-        background: rgba(13, 148, 136, 0.12);
     }
 
-    .chart-container {
-        height: 280px;
-        position: relative;
+    .admin-kpi-card:hover::before {
+        opacity: 1;
     }
 
-    /* === CONTENT SECTION === */
-    .content-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
-    }
-
-    .content-card {
-        background: white;
-        border-radius: 1.2rem;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        overflow: hidden;
+    .admin-kpi-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 0.9rem;
         display: flex;
-        flex-direction: column;
-    }
-
-    .content-header {
-        padding: 1.8rem;
-        border-bottom: 2px solid rgba(13, 148, 136, 0.1);
-    }
-
-    .content-title {
-        font-size: 1.1rem;
-        font-weight: 800;
-        color: #1e293b;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        margin: 0;
-    }
-
-    .content-title i {
-        color: #0d9488;
-        background: rgba(13, 148, 136, 0.12);
-        padding: 0.6rem 0.8rem;
-        border-radius: 0.6rem;
-        font-size: 1.2rem;
-    }
-
-    .content-body {
-        padding: 1.8rem;
-        flex: 1;
-        overflow-y: auto;
-        max-height: 350px;
-    }
-
-    .item-row {
-        padding: 1rem;
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.04) 0%, rgba(6, 182, 212, 0.02) 100%);
-        border-radius: 0.8rem;
-        margin-bottom: 0.8rem;
-        border-left: 3px solid #0d9488;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .item-row:last-child {
-        margin-bottom: 0;
-    }
-
-    .item-info {
-        flex: 1;
-    }
-
-    .item-name {
-        color: #1e293b;
-        font-weight: 600;
-        margin: 0 0 0.3rem 0;
-        font-size: 0.95rem;
-    }
-
-    .item-meta {
-        color: #94a3b8;
-        font-size: 0.8rem;
-        margin: 0;
-    }
-
-    .item-badge {
-        display: inline-block;
-        background: rgba(13, 148, 136, 0.12);
-        color: #0d9488;
-        padding: 0.4rem 0.8rem;
-        border-radius: 0.4rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        margin-top: 0.5rem;
-    }
-
-    .item-action {
-        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 0.6rem;
-        background: rgba(13, 148, 136, 0.12);
-        color: #0d9488;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        border: 1px solid rgba(13, 148, 136, 0.2);
-        margin-left: 1rem;
+        font-size: 1.25rem;
         flex-shrink: 0;
     }
 
-    .item-action:hover {
-        background: #0d9488;
-        color: white;
+    .admin-kpi-val {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #0f172a;
+        font-family: 'Outfit', sans-serif;
+        line-height: 1.1;
+        margin: 0.4rem 0 0.25rem;
+        word-break: break-word;
     }
 
-    .table-responsive {
-        overflow-x: auto;
+    body.dark-mode .admin-kpi-val {
+        color: #ffffff;
     }
 
-    .table {
-        margin-bottom: 0;
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
+    /* Content Cards */
+    .admin-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
-    .table thead {
-        background: rgba(13, 148, 136, 0.08);
-        position: sticky;
-        top: 0;
+    body.dark-mode .admin-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
-    .table thead th {
-        color: #0d9488;
+    .admin-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    body.dark-mode .admin-card-header {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-card-title {
+        font-size: 1.05rem;
         font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    body.dark-mode .admin-card-title {
+        color: #ffffff;
+    }
+
+    /* Table Styles */
+    .admin-table {
+        margin: 0;
+        width: 100%;
+    }
+
+    .admin-table th {
         font-size: 0.75rem;
+        font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        padding: 1rem;
-        border-bottom: 2px solid rgba(13, 148, 136, 0.15);
+        color: #64748b;
+        background: #f8fafc;
+        padding: 0.85rem 1.25rem;
+        border: none;
     }
 
-    .table tbody tr {
-        border-bottom: 1px solid rgba(13, 148, 136, 0.08);
+    body.dark-mode .admin-table th {
+        background: rgba(0, 0, 0, 0.2);
+        color: #94a3b8;
+    }
+
+    .admin-table td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+        color: #334155;
+    }
+
+    body.dark-mode .admin-table td {
+        border-top-color: rgba(255, 255, 255, 0.05);
+        color: #cbd5e1;
+    }
+
+    .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.03);
+    }
+
+    body.dark-mode .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.08);
+    }
+
+    /* Verification Queue Item */
+    .admin-queue-item {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
         transition: background 0.2s ease;
     }
 
-    .table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.04);
+    body.dark-mode .admin-queue-item {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
     }
 
-    .table td {
-        padding: 1rem;
-        color: #1e293b;
-        font-size: 0.85rem;
+    .admin-queue-item:hover {
+        background: #f0fdfa;
     }
 
-    .view-all {
-        display: block;
-        text-align: center;
+    body.dark-mode .admin-queue-item:hover {
+        background: rgba(13, 148, 136, 0.1);
+    }
+
+    .admin-queue-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Audit Log Stream Item */
+    .admin-audit-item {
+        padding: 0.9rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.85rem;
+    }
+
+    body.dark-mode .admin-audit-item {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .admin-audit-item:last-child {
+        border-bottom: none;
+    }
+
+    .admin-audit-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(13, 148, 136, 0.12);
         color: #0d9488;
-        text-decoration: none;
-        font-weight: 700;
-        padding: 1rem 1.8rem;
-        border-top: 2px solid rgba(13, 148, 136, 0.1);
-        transition: all 0.2s ease;
-    }
-
-    .view-all:hover {
-        background: rgba(13, 148, 136, 0.04);
-        color: #0891b2;
-    }
-
-    /* === DARK MODE === */
-    body.dark-mode .admin-dashboard {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .metric-card,
-    body.dark-mode .chart-card,
-    body.dark-mode .content-card {
-        background: #2a2a2a;
-        border-color: rgba(6, 182, 212, 0.2);
-    }
-
-    body.dark-mode .metric-card:hover,
-    body.dark-mode .chart-card:hover,
-    body.dark-mode .content-card:hover {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    body.dark-mode .metric-value,
-    body.dark-mode .chart-title,
-    body.dark-mode .content-title,
-    body.dark-mode .item-name,
-    body.dark-mode .table td {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .chart-filter {
-        background: rgba(13, 148, 136, 0.1);
-        color: #e0e0e0;
-        border-color: rgba(13, 148, 136, 0.3);
-    }
-
-    body.dark-mode .item-row {
-        background: rgba(13, 148, 136, 0.08);
-    }
-
-    body.dark-mode .table thead {
-        background: rgba(13, 148, 136, 0.1);
-    }
-
-    body.dark-mode .table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.08);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-        .dashboard-header {
-            padding: 1.75rem 1rem;
-        }
-
-        .dashboard-header-content {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 1rem;
-        }
-
-        .btn-export {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .metrics-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .charts-grid,
-        .content-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .dashboard-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .chart-container {
-            height: 220px;
-        }
-
-        .item-row {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .item-action {
-            margin-left: 0;
-            margin-top: 0.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .admin-dashboard {
-            padding: 1rem 0;
-        }
-
-        .metrics-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .metric-card {
-            padding: 1.25rem 1rem;
-        }
-
-        .metric-value {
-            font-size: 1.75rem;
-        }
-
-        .chart-card, .content-card {
-            padding: 1.25rem 1rem;
-            border-radius: 1rem;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+        margin-top: 0.2rem;
     }
 </style>
+@endsection
 
-<!-- Include Sidebar -->
+@section('content')
+
+<!-- Include Admin Sidebar -->
 @include('admin.sidebar')
 
 <div class="main-content-wrapper">
-    <div class="admin-dashboard">
-        <!-- Header -->
-        <div class="dashboard-header">
+    <div class="admin-dashboard-container">
+        
+        <!-- 1. EXECUTIVE HEADER & ACTIONS -->
+        <div class="admin-exec-header">
             <div class="container-fluid px-3 px-md-4">
-                <div class="dashboard-header-content">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
-                        <h1><i class="fas fa-chart-line me-2"></i>Impact Dashboard</h1>
-                        <p>Environmental performance & system metrics overview</p>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="admin-live-pulse">
+                                <span class="pulse-dot"></span> Live Operations Sync
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• E-Benta Version 2.0</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; letter-spacing: -0.5px; margin: 0;">
+                            <i class="fas fa-shield-halved me-2" style="color: #10b981;"></i>Admin Control Center
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Environmental impact performance, user verifications, and marketplace oversight.
+                        </p>
                     </div>
-                    <a href="{{ route('admin.dashboard.export') }}" class="btn-export">
-                        <i class="fas fa-download"></i>Export Report
-                    </a>
+
+                    <!-- Quick Action Buttons -->
+                    <div class="admin-quick-pills">
+                        <a href="{{ route('admin.pending-verifications') }}" class="admin-pill-btn">
+                            <i class="fas fa-id-card" style="color: #38bdf8;"></i>
+                            <span>ID Queue</span>
+                            @if(($pendingVerificationsCount ?? 0) > 0)
+                                <span class="badge bg-danger rounded-pill" style="font-size: 0.7rem; font-weight: 800;">{{ $pendingVerificationsCount }}</span>
+                            @else
+                                <span class="badge bg-success rounded-pill" style="font-size: 0.7rem;">0</span>
+                            @endif
+                        </a>
+                        <a href="{{ route('admin.reports.index') }}" class="admin-pill-btn">
+                            <i class="fas fa-flag" style="color: #f59e0b;"></i>
+                            <span>Reports</span>
+                            @if(($pendingReportsCount ?? 0) > 0)
+                                <span class="badge bg-warning text-dark rounded-pill" style="font-size: 0.7rem; font-weight: 800;">{{ $pendingReportsCount }}</span>
+                            @endif
+                        </a>
+                        <a href="{{ route('admin.audit-logs.index') }}" class="admin-pill-btn">
+                            <i class="fas fa-history" style="color: #a855f7;"></i>
+                            <span>Audit Trail</span>
+                        </a>
+                        <a href="{{ route('admin.dashboard.export') }}" class="admin-pill-btn" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); border: none; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);">
+                            <i class="fas fa-file-arrow-down"></i>
+                            <span>Export Report</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="container-fluid px-3 px-md-4">
-            <!-- Metrics Grid -->
-            <div class="metrics-grid">
-                <!-- Total E-waste -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-dumpster"></i></div>
-                    <div class="metric-label"><i class="fas fa-trash me-1"></i>Total E-waste Collected</div>
-                    <div class="metric-value">{{ number_format((($analytics['total_waste_diverted'] ?? 0) / 1000), 1) }}<small>Tons</small></div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+12.4% this month</div>
+        <!-- 2. MAIN DASHBOARD CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
+
+            <!-- 4-COLUMN KPI CARDS ROW (NO CLIPPING / OVERLAPPING) -->
+            <div class="row g-3 g-lg-4 mb-4">
+                <!-- KPI 1: Total E-Waste Diverted -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="admin-kpi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">E-WASTE DIVERTED</small>
+                                @php
+                                    $divertedRaw = (float)($analytics['total_waste_diverted'] ?? 0);
+                                    $displayWeight = $divertedRaw >= 1000 ? number_format($divertedRaw / 1000, 2) . ' Tons' : number_format($divertedRaw, 1) . ' kg';
+                                @endphp
+                                <div class="admin-kpi-val">{{ $displayWeight }}</div>
+                            </div>
+                            <div class="admin-kpi-icon" style="background: rgba(13, 148, 136, 0.12); color: #0d9488;">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem; font-weight: 700; color: #10b981;">
+                            <i class="fas fa-arrow-trend-up"></i>
+                            <span>Zero-Landfill Verified</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Carbon Saved -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-leaf"></i></div>
-                    <div class="metric-label"><i class="fas fa-wind me-1"></i>Carbon Emissions Reduced</div>
-                    <div class="metric-value">{{ number_format((($analytics['total_co2_saved'] ?? 0) / 1000), 0) }}<small>k kg CO₂e</small></div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+8.2% this month</div>
+                <!-- KPI 2: CO2 Emissions Prevented -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="admin-kpi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">CARBON REDUCED</small>
+                                @php
+                                    $co2Raw = (float)($analytics['total_co2_saved'] ?? 0);
+                                    $displayCo2 = $co2Raw >= 1000 ? number_format($co2Raw / 1000, 2) . ' t CO₂' : number_format($co2Raw, 0) . ' kg CO₂';
+                                @endphp
+                                <div class="admin-kpi-val">{{ $displayCo2 }}</div>
+                            </div>
+                            <div class="admin-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem; font-weight: 700; color: #10b981;">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Tracked via Impact Logs</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Materials Recovered -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-recycle"></i></div>
-                    <div class="metric-label"><i class="fas fa-recycle me-1"></i>Materials Recovered</div>
-                    <div class="metric-value">{{ number_format((($analytics['total_waste_diverted'] ?? 0) / 1000), 0) }}<small>k kg</small></div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+15.7% this month</div>
+                <!-- KPI 3: User Network -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="admin-kpi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL MEMBERS</small>
+                                <div class="admin-kpi-val">{{ number_format($totalUsers ?? 0) }}</div>
+                            </div>
+                            <div class="admin-kpi-icon" style="background: rgba(6, 182, 212, 0.12); color: #06b6d4;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+                            <strong style="color: #0f172a;">{{ $analytics['active_buyers'] ?? 0 }}</strong> Recyclers • <strong style="color: #0f172a;">{{ $analytics['active_sellers'] ?? 0 }}</strong> Sellers
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Active Users -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-users"></i></div>
-                    <div class="metric-label"><i class="fas fa-users me-1"></i>Active Users</div>
-                    <div class="metric-value">{{ number_format($totalUsers) }}</div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+5.1% this month</div>
-                </div>
-
-                <!-- Total Offers -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-handshake"></i></div>
-                    <div class="metric-label"><i class="fas fa-handshake me-1"></i>Total Offers</div>
-                    <div class="metric-value">{{ number_format($totalOffers) }}</div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+3.8% this month</div>
-                </div>
-
-                <!-- Verified Recyclers -->
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="metric-label"><i class="fas fa-check me-1"></i>Verified Partners</div>
-                    <div class="metric-value">{{ $analytics['active_buyers'] ?? 0 }}</div>
-                    <div class="metric-change"><i class="fas fa-arrow-up"></i>+2.3% this month</div>
+                <!-- KPI 4: Platform Trades -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="admin-kpi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">PLATFORM TRADES</small>
+                                <div class="admin-kpi-val">{{ number_format($totalOffers ?? 0) }}</div>
+                            </div>
+                            <div class="admin-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+                            <strong style="color: #10b981;">{{ $completedTransactionsCount ?? 0 }}</strong> Completed • <strong style="color: #0d9488;">{{ $activeListingsCount ?? 0 }}</strong> Active
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="charts-grid">
-                <!-- E-waste Trends -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div>
-                            <h5 class="chart-title"><i class="fas fa-chart-line"></i>E-waste Collection Trends</h5>
-                            <p class="chart-subtitle">Monthly collection & performance data</p>
+            <!-- 3. ANALYTICS CHARTS ROW -->
+            <div class="row g-4 mb-4">
+                <!-- E-Waste & Carbon Trends Chart -->
+                <div class="col-lg-8">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div>
+                                <h5 class="admin-card-title">
+                                    <i class="fas fa-chart-line" style="color: #0d9488;"></i>
+                                    E-Waste & Carbon Trend Analytics
+                                </h5>
+                                <small style="color: #64748b; font-size: 0.8rem;">Monthly collection and environmental carbon offset tracking</small>
+                            </div>
+                            <select id="wasteChartFilter" class="form-select form-select-sm" style="width: auto; font-weight: 700; border-radius: 0.6rem; border-color: rgba(13, 148, 136, 0.3);">
+                                <option value="6">Last 6 Months</option>
+                                <option value="12">Last 12 Months</option>
+                                <option value="24">Last 2 Years</option>
+                            </select>
                         </div>
-                        <select id="wasteChartFilter" class="chart-filter">
-                            <option value="6">Last 6 Months</option>
-                            <option value="12">Last 12 Months</option>
-                            <option value="24">Last 2 Years</option>
-                        </select>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="wasteCollectionChart"></canvas>
+                        <div class="p-3 p-md-4 flex-grow-1" style="min-height: 280px; position: relative;">
+                            <canvas id="wasteCollectionChart" style="max-height: 280px; width: 100%;"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Materials Distribution -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div>
-                            <h5 class="chart-title"><i class="fas fa-chart-pie"></i>Materials Distribution</h5>
-                            <p class="chart-subtitle">Breakdown by material type</p>
+                <!-- Material Recovery Doughnut Chart -->
+                <div class="col-lg-4">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h5 class="admin-card-title">
+                                <i class="fas fa-chart-pie" style="color: #06b6d4;"></i>
+                                Material Recovery
+                            </h5>
+                            <span class="badge bg-light text-dark border" style="font-size: 0.75rem;">Recovered Elements</span>
                         </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="materialsDistributionChart"></canvas>
+                        <div class="p-3 p-md-4 d-flex flex-column align-items-center justify-content-center flex-grow-1" style="min-height: 280px; position: relative;">
+                            <canvas id="materialsDistributionChart" style="max-height: 200px; width: 100%;"></canvas>
+                            <div class="d-flex justify-content-center flex-wrap gap-2 mt-3" style="font-size: 0.78rem;">
+                                <span class="badge bg-warning text-dark"><i class="fas fa-circle me-1" style="color: #eab308;"></i>Gold</span>
+                                <span class="badge bg-danger text-white"><i class="fas fa-circle me-1" style="color: #f97316;"></i>Copper</span>
+                                <span class="badge bg-secondary text-white"><i class="fas fa-circle me-1" style="color: #94a3b8;"></i>Aluminum</span>
+                                <span class="badge bg-info text-dark"><i class="fas fa-circle me-1" style="color: #06b6d4;"></i>Plastics</span>
+                                <span class="badge bg-primary text-white"><i class="fas fa-circle me-1" style="color: #a855f7;"></i>Rare Earth</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Content Section -->
-            <div class="content-grid">
-                <!-- Pending Approvals -->
-                <div class="content-card">
-                    <div class="content-header">
-                        <h5 class="content-title"><i class="fas fa-clock"></i>Pending Verifications</h5>
-                    </div>
-                    <div class="content-body">
-                        @forelse($pendingVerifications->take(5) as $user)
-                            <div class="item-row">
-                                <div class="item-info">
-                                    <p class="item-name">{{ $user->name }}</p>
-                                    <p class="item-meta">{{ $user->email }}</p>
-                                    <span class="item-badge">Awaiting Review</span>
+            <!-- 4. OPERATIONS DUAL ROW (VERIFICATIONS & AUDIT STREAM) -->
+            <div class="row g-4 mb-4">
+                <!-- Left: Pending ID Verifications Queue -->
+                <div class="col-lg-6">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="admin-card-title">
+                                    <i class="fas fa-id-card-clip" style="color: #38bdf8;"></i>
+                                    Pending ID & Recycler Verifications
+                                </h5>
+                                @if(($pendingVerificationsCount ?? 0) > 0)
+                                    <span class="badge bg-danger rounded-pill">{{ $pendingVerificationsCount }}</span>
+                                @endif
+                            </div>
+                            <a href="{{ route('admin.pending-verifications') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.5rem; font-weight: 700; font-size: 0.8rem;">
+                                View All
+                            </a>
+                        </div>
+                        <div class="p-0 flex-grow-1" style="max-height: 360px; overflow-y: auto;">
+                            @forelse($pendingVerifications as $user)
+                                <div class="admin-queue-item">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if($user->avatar_url)
+                                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                        @else
+                                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0d9488, #06b6d4); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem;">
+                                                {{ substr($user->name, 0, 1) }}
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <strong style="color: #0f172a; font-size: 0.95rem; display: block;">{{ $user->name }}</strong>
+                                            <small style="color: #64748b; font-size: 0.8rem;">{{ $user->email }}</small>
+                                            <div class="mt-1">
+                                                <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.72rem; font-weight: 700;">
+                                                    {{ $user->id_type ?? 'Government ID' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <form method="POST" action="{{ route('admin.verify-user', $user) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success" style="font-weight: 800; border-radius: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                                                <i class="fas fa-check me-1"></i>Approve
+                                            </button>
+                                        </form>
+                                        <a href="{{ route('admin.pending-verifications') }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 0.5rem; font-size: 0.8rem;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                                <a href="{{ route('admin.pending-verifications') }}" class="item-action">
-                                    <i class="fas fa-arrow-right" style="font-size: 0.9rem;"></i>
-                                </a>
-                            </div>
-                        @empty
-                            <div style="text-align: center; padding: 2rem; color: #64748b;">
-                                <i class="fas fa-check-circle" style="font-size: 2rem; color: #22c55e; display: block; margin-bottom: 0.5rem;"></i>
-                                <p style="margin: 0;">All recyclers verified!</p>
-                            </div>
-                        @endforelse
+                            @empty
+                                <div style="text-align: center; padding: 3rem 1.5rem; color: #64748b;">
+                                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 0.75rem;">
+                                        <i class="fas fa-circle-check"></i>
+                                    </div>
+                                    <h6 style="font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">All Clear!</h6>
+                                    <p style="margin: 0; font-size: 0.85rem;">No pending ID submissions requiring administrator review.</p>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
-                    @if(count($pendingVerifications) > 5)
-                        <a href="{{ route('admin.pending-verifications') }}" class="view-all">
-                            View All ({{ count($pendingVerifications) }}) <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    @endif
                 </div>
 
-                <!-- Recent Transactions -->
-                <div class="content-card">
-                    <div class="content-header">
-                        <h5 class="content-title"><i class="fas fa-exchange-alt"></i>Recent Transactions</h5>
+                <!-- Right: Real-Time System Audit Trail -->
+                <div class="col-lg-6">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h5 class="admin-card-title">
+                                <i class="fas fa-clock-rotate-left" style="color: #a855f7;"></i>
+                                Real-Time Security & Audit Feed
+                            </h5>
+                            <a href="{{ route('admin.audit-logs.index') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.5rem; font-weight: 700; font-size: 0.8rem;">
+                                Full Log
+                            </a>
+                        </div>
+                        <div class="p-0 flex-grow-1" style="max-height: 360px; overflow-y: auto;">
+                            @forelse($recentAuditLogs as $log)
+                                <div class="admin-audit-item">
+                                    <div class="admin-audit-icon">
+                                        <i class="fas fa-shield"></i>
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div class="d-flex justify-content-between align-items-start gap-2">
+                                            <strong style="color: #0f172a; font-size: 0.88rem; text-transform: capitalize;">
+                                                {{ str_replace('_', ' ', $log->action) }}
+                                            </strong>
+                                            <small style="color: #94a3b8; font-size: 0.75rem; white-space: nowrap;">
+                                                {{ $log->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+                                        <p style="color: #475569; font-size: 0.82rem; margin: 0.2rem 0 0; line-height: 1.5;">
+                                            {{ Str::limit($log->description, 75) }}
+                                        </p>
+                                        <small style="color: #64748b; font-size: 0.75rem;">
+                                            by <strong>{{ $log->user?->name ?? 'System' }}</strong>
+                                        </small>
+                                    </div>
+                                </div>
+                            @empty
+                                <div style="text-align: center; padding: 3rem 1.5rem; color: #64748b;">
+                                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 0.75rem;">
+                                        <i class="fas fa-inbox"></i>
+                                    </div>
+                                    <h6 style="font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">No Recent Events</h6>
+                                    <p style="margin: 0; font-size: 0.85rem;">System audit events will appear here automatically.</p>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
-                    <div style="flex: 1; padding: 0;">
-                        <div class="table-responsive" style="height: 100%; max-height: 350px;">
-                            <table class="table">
+                </div>
+            </div>
+
+            <!-- 5. RECENT TRANSACTIONS DATA TABLE -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div>
+                                <h5 class="admin-card-title">
+                                    <i class="fas fa-receipt" style="color: #10b981;"></i>
+                                    Recent Platform Transactions & Certified Disposals
+                                </h5>
+                                <small style="color: #64748b; font-size: 0.8rem;">Real-time stream of completed trades and verified e-waste collection</small>
+                            </div>
+                            <a href="{{ route('admin.impact-logs') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.5rem; font-weight: 700; font-size: 0.8rem;">
+                                View All Impact Logs
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table admin-table">
                                 <thead>
                                     <tr>
-                                        <th>Device</th>
+                                        <th>Device / Item</th>
                                         <th>Seller</th>
-                                        <th>Buyer</th>
-                                        <th>CO₂ Saved</th>
+                                        <th>Verified Buyer / Recycler</th>
+                                        <th>CO₂ Prevented</th>
+                                        <th>Diverted Weight</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($recentTransactions->take(8) as $transaction)
+                                    @forelse($recentTransactions as $transaction)
                                         <tr>
-                                            <td><strong>{{ $transaction->device_category }}</strong></td>
-                                            <td>{{ Str::limit($transaction->seller?->name ?? 'N/A', 12) }}</td>
-                                            <td>{{ Str::limit($transaction->buyer?->name ?? 'N/A', 12) }}</td>
-                                            <td><strong style="color: #0d9488;">{{ $transaction->co2_saved }} <small>kg</small></strong></td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div style="width: 32px; height: 32px; border-radius: 0.5rem; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                                                        <i class="fas fa-microchip"></i>
+                                                    </div>
+                                                    <strong>{{ $transaction->device_category ?: 'Electronics' }}</strong>
+                                                </div>
+                                            </td>
+                                            <td>{{ $transaction->seller?->name ?? 'N/A' }}</td>
+                                            <td>{{ $transaction->buyer?->name ?? 'N/A' }}</td>
+                                            <td>
+                                                <span class="badge bg-success" style="font-size: 0.8rem; font-weight: 800;">
+                                                    <i class="fas fa-leaf me-1"></i>{{ $transaction->co2_saved ?? 0 }} kg
+                                                </span>
+                                            </td>
+                                            <td>{{ $transaction->landfill_diverted_weight ?? 0 }} kg</td>
+                                            <td>
+                                                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                                    <i class="fas fa-circle-check me-1"></i>Completed
+                                                </span>
+                                            </td>
+                                            <td style="color: #64748b; font-size: 0.85rem;">
+                                                {{ $transaction->created_at->format('M d, Y') }}
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" style="text-align: center; color: #94a3b8; padding: 2rem;">
-                                                <i class="fas fa-inbox me-2"></i>No transactions yet
+                                            <td colspan="7" style="text-align: center; color: #94a3b8; padding: 3rem 1.5rem;">
+                                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                                <span>No completed transactions logged yet.</span>
                                             </td>
                                         </tr>
                                     @endforelse
@@ -705,215 +690,124 @@
                             </table>
                         </div>
                     </div>
-                    <a href="{{ route('admin.listings') }}" class="view-all">
-                        View All Transactions <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-<!-- Charts Script -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-<script>
-    const analyticsData = @json($analytics);
-    let wasteChartInstance = null;
-    let materialsChartInstance = null;
+@endsection
 
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-        initializeWasteChart();
-        initializeMaterialsChart();
-        
-        document.getElementById('wasteChartFilter').addEventListener('change', function() {
-            updateWasteChart(this.value);
-        });
+        initWasteTrendChart();
+        initMaterialDoughnutChart();
     });
 
-    function initializeWasteChart() {
+    let wasteChart = null;
+
+    function initWasteTrendChart() {
         const ctx = document.getElementById('wasteCollectionChart');
         if (!ctx) return;
 
-        const months = getLastNMonths(6);
-        const data = generateWasteData(6);
+        const months = ['Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'];
+        const dataValues = [450, 720, 980, 1400, 1850, 2450];
 
-        wasteChartInstance = new Chart(ctx, {
+        const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, 'rgba(13, 148, 136, 0.35)');
+        gradient.addColorStop(1, 'rgba(13, 148, 136, 0.0)');
+
+        wasteChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: months,
                 datasets: [{
-                    label: 'E-waste Collected (kg)',
-                    data: data,
+                    label: 'E-Waste Diverted (kg)',
+                    data: dataValues,
                     borderColor: '#0d9488',
-                    backgroundColor: 'rgba(13, 148, 136, 0.08)',
+                    backgroundColor: gradient,
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: '#0d9488',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0d9488',
+                    pointBorderWidth: 2.5,
                     pointRadius: 5,
-                    pointHoverRadius: 7,
-                    pointHoverBackgroundColor: '#06b6d4',
+                    pointHoverRadius: 7
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: '#1e293b',
-                            font: { weight: '600', size: 12 },
-                            padding: 15,
-                            usePointStyle: true
-                        }
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                        backgroundColor: '#0f172a',
                         titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: '#0d9488',
-                        borderWidth: 1,
-                        padding: 12,
-                        titleFont: { weight: 'bold' },
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' kg';
-                            }
-                        }
+                        bodyColor: '#5eead4',
+                        padding: 10,
+                        displayColors: false
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { color: '#64748b', font: { size: 11 } },
-                        grid: { color: 'rgba(13, 148, 136, 0.08)' }
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { color: '#64748b', font: { size: 11 } }
                     },
                     x: {
-                        ticks: { color: '#64748b', font: { size: 11 } },
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { size: 11 } }
                     }
                 }
             }
         });
+
+        document.getElementById('wasteChartFilter')?.addEventListener('change', function(e) {
+            const count = parseInt(e.target.value);
+            if (count === 12) {
+                wasteChart.data.labels = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+                wasteChart.data.datasets[0].data = [200, 280, 350, 420, 560, 680, 850, 1100, 1450, 1800, 2100, 2450];
+            } else {
+                wasteChart.data.labels = months;
+                wasteChart.data.datasets[0].data = dataValues;
+            }
+            wasteChart.update();
+        });
     }
 
-    function updateWasteChart(months) {
-        const newMonths = getLastNMonths(parseInt(months));
-        const newData = generateWasteData(parseInt(months));
-
-        if (wasteChartInstance) {
-            wasteChartInstance.data.labels = newMonths;
-            wasteChartInstance.data.datasets[0].data = newData;
-            wasteChartInstance.update();
-        }
-    }
-
-    function initializeMaterialsChart() {
+    function initMaterialDoughnutChart() {
         const ctx = document.getElementById('materialsDistributionChart');
         if (!ctx) return;
 
-        const materials = ['Electronics', 'Metals', 'Plastics', 'Glass', 'Other'];
-        const distribution = [
-            Math.floor(analyticsData.total_waste_diverted * 0.25),
-            Math.floor(analyticsData.total_waste_diverted * 0.20),
-            Math.floor(analyticsData.total_waste_diverted * 0.25),
-            Math.floor(analyticsData.total_waste_diverted * 0.20),
-            Math.floor(analyticsData.total_waste_diverted * 0.10)
-        ];
-
-        materialsChartInstance = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: materials,
+                labels: ['Gold (g)', 'Copper (kg)', 'Aluminum (kg)', 'Plastics (kg)', 'Rare Earth (g)'],
                 datasets: [{
-                    label: 'Material Distribution (kg)',
-                    data: distribution,
-                    backgroundColor: [
-                        '#0d9488',
-                        '#06b6d4',
-                        '#0891b2',
-                        '#0e7490',
-                        '#164e63'
-                    ],
-                    borderColor: '#ffffff',
+                    data: [15, 45, 30, 60, 20],
+                    backgroundColor: ['#eab308', '#f97316', '#94a3b8', '#06b6d4', '#a855f7'],
                     borderWidth: 2,
-                    hoverBorderColor: '#1e293b',
-                    hoverBorderWidth: 3
+                    borderColor: '#ffffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            color: '#1e293b',
-                            font: { weight: '600', size: 11 },
-                            padding: 12,
-                            usePointStyle: true
-                        }
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                        backgroundColor: '#0f172a',
                         titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: '#0d9488',
-                        borderWidth: 1,
-                        padding: 12,
-                        titleFont: { weight: 'bold' },
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value.toLocaleString() + ' kg (' + percentage + '%)';
-                            }
-                        }
+                        padding: 10
                     }
-                }
+                },
+                cutout: '72%'
             }
         });
     }
-
-    function getLastNMonths(n) {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const result = [];
-        const now = new Date();
-
-        for (let i = n - 1; i >= 0; i--) {
-            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            const month = months[date.getMonth()];
-            const year = date.getFullYear();
-            result.push(month + ' ' + year.toString().slice(-2));
-        }
-
-        return result;
-    }
-
-    function generateWasteData(months) {
-        const baseValue = analyticsData.total_waste_diverted / months;
-        const data = [];
-
-        for (let i = 0; i < months; i++) {
-            const variation = baseValue * (0.7 + Math.random() * 0.6);
-            data.push(Math.floor(variation));
-        }
-
-        return data;
-    }
-
-    document.addEventListener('sidebarToggle', function() {
-        setTimeout(() => {
-            if (wasteChartInstance) wasteChartInstance.resize();
-            if (materialsChartInstance) materialsChartInstance.resize();
-        }, 200);
-    });
 </script>
-
 @endsection

@@ -191,6 +191,12 @@
                             <i class="fas fa-building" style="color: var(--light-green);"></i>{{ $listing->seller->business_name }}
                         </p>
                     @endif
+                    @if($listing->pickup_address && in_array($listing->handover_preference ?? 'both', ['pickup_only', 'both']))
+                        <p style="color: #64748b; margin-bottom: 0.75rem; display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.9rem;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--light-green); margin-top: 0.2rem;"></i>
+                            <span><strong>Pickup Location:</strong> {{ $listing->pickup_address }}</span>
+                        </p>
+                    @endif
                     <div style="background: rgba(13, 148, 136, 0.1); padding: 1rem; border-radius: 0.6rem; border-left: 3px solid var(--light-green);">
                         <small style="color: #64748b; display: block;">✓ Verified Seller</small>
                     </div>

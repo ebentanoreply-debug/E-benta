@@ -18,7 +18,7 @@ class ImpactController extends Controller
     public function createImpactLog(Offer $offer, array $data)
     {
         $listing = $offer->listing;
-        $deviceCategory = $listing->category ?: ($listing->deviceType->name ?? 'unknown');
+        $deviceCategory = $listing->category ?: ($listing->deviceType?->name ?? 'unknown');
 
         // Get material breakdown from data
         $materials = $data['material_breakdown'] ?? [];

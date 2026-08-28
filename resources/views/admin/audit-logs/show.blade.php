@@ -1,157 +1,152 @@
 @extends('layouts.app')
 
+@section('title', 'Audit Event #' . $auditLog->id . ' - E-Benta Admin')
+
+@section('styles')
+<style>
+    .admin-page-container {
+        background: #f8fafc;
+        min-height: 100vh;
+        padding-bottom: 4rem;
+    }
+
+    body.dark-mode .admin-page-container {
+        background: #09171f;
+    }
+
+    .admin-module-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        color: #ffffff;
+        padding: 2.25rem 0 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+    }
+
+    body.dark-mode .admin-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
+    }
+</style>
+@endsection
+
 @section('content')
-<!-- Include Sidebar -->
+
 @include('admin.sidebar')
 
 <div class="main-content-wrapper">
-    <div class="container-fluid px-3 px-md-4 py-3 py-md-4">
-    <!-- Back Link -->
-    <div class="row mb-3 mb-md-4">
-        <div class="col-12">
-            <a href="{{ route('admin.audit-logs.index') }}" style="color: #0d9488; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.3s ease;" onmouseover="this.style.color='#06b6d4';" onmouseout="this.style.color='#0d9488';">
-                <i class="fas fa-arrow-left me-2"></i>Back to Audit Logs
-            </a>
-        </div>
-    </div>
+    <div class="admin-page-container">
+        
+        <!-- HEADER -->
+        <div class="admin-module-header">
+            <div class="container-fluid px-3 px-md-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                Audit Event #{{ $auditLog->id }}
+                            </span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $auditLog->created_at->format('M d, Y • h:i:s A') }}</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 900; margin: 0;">
+                            {{ $auditLog->getActionLabel() }}
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Actor: <strong>{{ $auditLog->user?->name ?? 'System Process' }}</strong> ({{ $auditLog->user?->email }})
+                        </p>
+                    </div>
 
-    <!-- Main Card -->
-    <div class="row">
-        <div class="col-12">
-            <div style="background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%); border: 1px solid rgba(13, 148, 136, 0.15); border-radius: 1.2rem; overflow: hidden; box-shadow: 0 8px 25px rgba(13, 148, 136, 0.08);">
-                <!-- Header Bar -->
-                <div class="p-3 p-md-4" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white;">
-                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 800;">
-                        <i class="fas fa-history me-2"></i>{{ $auditLog->getActionLabel() }}
-                    </h1>
-                    <p style="margin: 0; color: rgba(255, 255, 255, 0.9); font-weight: 500; font-size: 0.9rem;">
-                        {{ $auditLog->created_at->format('F d, Y \a\t H:i:s') }}
-                    </p>
+                    <a href="{{ route('admin.audit-logs.index') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Audit Trail</span>
+                    </a>
                 </div>
+            </div>
+        </div>
 
-                <!-- Content -->
-                <div class="p-3 p-md-4">
-                    <!-- User Info -->
-                    <div style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(13, 148, 136, 0.1);">
-                        <h3 style="color: #1e293b; margin-top: 0; font-weight: 800; font-size: 1.15rem; margin-bottom: 1.5rem;">
-                            <i class="fas fa-user me-2" style="color: #0d9488;"></i>User Information
-                        </h3>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">User Name</label>
-                                <p style="margin: 0; color: #1e293b; font-size: 1.05rem; font-weight: 700;">{{ $auditLog->user->name }}</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Email Address</label>
-                                <p style="margin: 0; color: #1e293b; font-size: 1.05rem;">{{ $auditLog->user->email }}</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">User ID</label>
-                                <p style="margin: 0; color: #1e293b; font-size: 1.05rem; font-family: monospace; background: rgba(13, 148, 136, 0.08); padding: 0.6rem 1rem; border-radius: 0.6rem; display: inline-block;">{{ $auditLog->user_id }}</p>
-                            </div>
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
+            <div class="row g-4">
+                
+                <div class="col-lg-8">
+                    <!-- Event Description -->
+                    <div class="admin-card p-4 mb-4">
+                        <h5 style="font-weight: 800; color: #0f172a; margin-bottom: 1rem; font-family: 'Outfit', sans-serif;">
+                            <i class="fas fa-align-left text-emerald me-2"></i>Event Description
+                        </h5>
+                        <div class="p-3 bg-light rounded-3" style="font-size: 0.95rem; line-height: 1.6; color: #334155;">
+                            {{ $auditLog->description }}
                         </div>
                     </div>
 
-                    <!-- Action Details -->
-                    <div style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(13, 148, 136, 0.1);">
-                        <h3 style="color: #1e293b; margin-top: 0; font-weight: 800; font-size: 1.15rem; margin-bottom: 1.5rem;">
-                            <i class="fas fa-cogs me-2" style="color: #0d9488;"></i>Action Details
-                        </h3>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Action Type</label>
-                                <span style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); color: #0d9488; padding: 0.6rem 1.2rem; border-radius: 0.6rem; display: inline-block; font-weight: 700; border: 1px solid rgba(13, 148, 136, 0.2);">
-                                    {{ $auditLog->getActionLabel() }}
-                                </span>
-                            </div>
-                            @if($auditLog->model_type)
-                                <div class="col-md-4 mb-3">
-                                    <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Model Type</label>
-                                    <p style="margin: 0; color: #1e293b; font-size: 1.05rem; font-weight: 700;">{{ $auditLog->getModelLabel() }}</p>
-                                </div>
-                            @endif
-                            @if($auditLog->model_id)
-                                <div class="col-md-4 mb-3">
-                                    <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Model ID</label>
-                                    <p style="margin: 0; color: #1e293b; font-size: 1.05rem; font-family: monospace; background: rgba(13, 148, 136, 0.08); padding: 0.6rem 1rem; border-radius: 0.6rem; display: inline-block;">{{ $auditLog->model_id }}</p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div style="margin-bottom: 2.5rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%); border-radius: 0.8rem; border-left: 4px solid #0d9488;">
-                        <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">
-                            <i class="fas fa-align-left me-2" style="color: #0d9488;"></i>Description
-                        </label>
-                        <p style="margin: 0; color: #1e293b; font-size: 1rem; line-height: 1.6;">{{ $auditLog->description }}</p>
-                    </div>
-
-                    <!-- Changes -->
+                    <!-- Changes Diff Inspector -->
                     @if($auditLog->old_values || $auditLog->new_values)
-                        <div style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(13, 148, 136, 0.1);">
-                            <h3 style="color: #1e293b; margin-top: 0; font-weight: 800; font-size: 1.15rem; margin-bottom: 1.5rem;">
-                                <i class="fas fa-exchange-alt me-2" style="color: #0d9488;"></i>Changes Made
-                            </h3>
-                            <div class="row">
+                        <div class="admin-card p-4">
+                            <h5 style="font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">
+                                <i class="fas fa-exchange-alt text-info me-2"></i>State Changes Inspector
+                            </h5>
+                            <div class="row g-3">
                                 @if($auditLog->old_values)
-                                    <div class="col-md-6 mb-3">
-                                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%); border-radius: 0.8rem; border-left: 4px solid #ef4444;">
-                                            <h4 style="margin-top: 0; color: #dc2626; font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">
-                                                <i class="fas fa-minus-circle me-2"></i>Before
-                                            </h4>
-                                            <pre style="margin: 0; color: #1e293b; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace; line-height: 1.5;">{{ json_encode($auditLog->old_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="text-danger font-weight-bold text-uppercase" style="font-size: 0.75rem;">
+                                            <i class="fas fa-minus-circle me-1"></i>Previous State
+                                        </label>
+                                        <pre class="p-3 rounded-3 mt-1" style="background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.2); font-size: 0.82rem; color: #991b1b; white-space: pre-wrap;">{{ json_encode($auditLog->old_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
                                     </div>
                                 @endif
                                 @if($auditLog->new_values)
-                                    <div class="col-md-6 mb-3">
-                                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.04) 100%); border-radius: 0.8rem; border-left: 4px solid #22c55e;">
-                                            <h4 style="margin-top: 0; color: #16a34a; font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">
-                                                <i class="fas fa-plus-circle me-2"></i>After
-                                            </h4>
-                                            <pre style="margin: 0; color: #1e293b; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace; line-height: 1.5;">{{ json_encode($auditLog->new_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="text-success font-weight-bold text-uppercase" style="font-size: 0.75rem;">
+                                            <i class="fas fa-plus-circle me-1"></i>Updated State
+                                        </label>
+                                        <pre class="p-3 rounded-3 mt-1" style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.82rem; color: #065f46; white-space: pre-wrap;">{{ json_encode($auditLog->new_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
                                     </div>
                                 @endif
                             </div>
                         </div>
                     @endif
+                </div>
 
-                    <!-- Request Info -->
-                    <div style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(13, 148, 136, 0.1);">
-                        <h3 style="color: #1e293b; margin-top: 0; font-weight: 800; font-size: 1.15rem; margin-bottom: 1.5rem;">
-                            <i class="fas fa-server me-2" style="color: #0d9488;"></i>Request Information
-                        </h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">IP Address</label>
-                                <p style="margin: 0; color: #1e293b; font-size: 1rem; font-family: monospace; background: rgba(13, 148, 136, 0.08); padding: 0.6rem 1rem; border-radius: 0.6rem; display: inline-block;">{{ $auditLog->ip_address ?? 'Unknown' }}</p>
+                <!-- Right: Metadata & Client Information -->
+                <div class="col-lg-4">
+                    <div class="admin-card p-4 mb-4">
+                        <h6 style="font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">
+                            <i class="fas fa-network-wired text-purple me-2"></i>Network Context
+                        </h6>
+                        <div class="mb-3">
+                            <label class="text-muted font-weight-bold text-uppercase" style="font-size: 0.72rem;">IP ADDRESS</label>
+                            <div class="p-2 bg-light rounded font-monospace" style="font-size: 0.85rem;">
+                                {{ $auditLog->ip_address ?? '127.0.0.1' }}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">User Agent</label>
-                                <p style="margin: 0; color: #1e293b; font-size: 0.9rem; word-break: break-all; line-height: 1.6;">{{ $auditLog->user_agent ?? 'Unknown' }}</p>
+                        <div class="mb-3">
+                            <label class="text-muted font-weight-bold text-uppercase" style="font-size: 0.72rem;">USER AGENT</label>
+                            <div class="p-2 bg-light rounded" style="font-size: 0.8rem; word-break: break-all; color: #475569;">
+                                {{ $auditLog->user_agent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }}
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Timestamp -->
-                    <div>
-                        <label style="display: block; color: #64748b; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">
-                            <i class="fas fa-clock me-2" style="color: #0d9488;"></i>Timestamp
-                        </label>
-                        <p style="margin: 0; color: #1e293b; font-size: 1rem;">
-                            <strong>{{ $auditLog->created_at->format('F d, Y \a\t H:i:s') }}</strong>
-                            <small style="color: #64748b; display: block; margin-top: 0.5rem;">{{ $auditLog->created_at->diffForHumans() }}</small>
-                        </p>
+                        @if($auditLog->model_type)
+                            <div>
+                                <label class="text-muted font-weight-bold text-uppercase" style="font-size: 0.72rem;">TARGET OBJECT</label>
+                                <div class="p-2 bg-light rounded" style="font-size: 0.85rem;">
+                                    {{ $auditLog->getModelLabel() }} #{{ $auditLog->model_id }}
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @endsection

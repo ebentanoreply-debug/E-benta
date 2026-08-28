@@ -1,587 +1,237 @@
 @extends('layouts.app')
 
-@section('title', 'All Offers - E-Benta Admin')
+@section('title', 'Offers & Transactions Oversight - E-Benta Admin')
 
-@section('content')
+@section('styles')
 <style>
-    /* === OFFERS WRAPPER === */
-    .offers-wrapper {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    .admin-page-container {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding-bottom: 4rem;
     }
 
-    /* === HEADER SECTION === */
-    .offers-header {
-        background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-        color: white;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
+    body.dark-mode .admin-page-container {
+        background: #09171f;
+    }
+
+    .admin-module-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        color: #ffffff;
+        padding: 2.25rem 0 2rem;
         position: relative;
         overflow: hidden;
     }
 
-    .offers-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        z-index: 0;
+    .admin-card {
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
     }
 
-    .offers-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        z-index: 0;
+    body.dark-mode .admin-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
-    .offers-header-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .offers-header h1 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.5px;
-    }
-
-    .offers-header p {
-        opacity: 0.95;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    /* === FILTER SECTION === */
-    .filter-card-offers {
-        background: white;
-        border-radius: 1.2rem;
-        padding: 1.8rem;
-        border: 1px solid rgba(168, 85, 247, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
-    }
-
-    .filter-wrapper-offers {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-end;
-        flex-wrap: wrap;
-    }
-
-    .filter-group-offers {
-        flex: 1;
-        min-width: 250px;
-    }
-
-    .filter-label-offers {
-        color: #1e293b;
-        font-weight: 700;
+    .admin-table th {
+        font-size: 0.75rem;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .filter-label-offers i {
-        color: #a855f7;
-    }
-
-    .filter-select-offers {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        color: #1e293b;
-        border: 1px solid rgba(168, 85, 247, 0.2);
-        padding: 0.85rem 1rem;
-        border-radius: 0.8rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        width: 100%;
-        font-size: 0.95rem;
-    }
-
-    .filter-select-offers:focus {
-        border-color: rgba(168, 85, 247, 0.5);
-        box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
-        background: white;
-        outline: none;
-    }
-
-    .filter-btn-offers {
-        background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-        color: white;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 0.9rem 1.25rem;
         border: none;
-        padding: 0.85rem 2rem;
-        font-weight: 700;
-        border-radius: 0.8rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
-        cursor: pointer;
-        white-space: nowrap;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
     }
 
-    .filter-btn-offers:hover {
-        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
-        transform: translateY(-2px);
-    }
-
-    /* === TABLE SECTION === */
-    .table-card-offers {
-        background: white;
-        border-radius: 1.2rem;
-        border: 1px solid rgba(168, 85, 247, 0.1);
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .table-header-offers {
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%);
-        border-bottom: 1px solid rgba(168, 85, 247, 0.15);
-        padding: 1.5rem;
-    }
-
-    .table-header-offers h5 {
-        margin: 0;
-        color: #1e293b;
-        font-weight: 800;
-        font-size: 1.1rem;
-        letter-spacing: -0.5px;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .table-header-offers i {
-        color: #a855f7;
-    }
-
-    .table-responsive-offers {
-        overflow-x: auto;
-    }
-
-    .offers-table {
-        color: #1e293b;
-        margin-bottom: 0;
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .offers-table thead {
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(168, 85, 247, 0.04) 100%);
-        border-bottom: 2px solid rgba(168, 85, 247, 0.15);
-    }
-
-    .offers-table thead th {
-        color: #a855f7;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.8rem;
-        padding: 1.25rem 1rem;
-    }
-
-    .offers-table tbody tr {
-        border-bottom: 1px solid rgba(168, 85, 247, 0.08);
-        transition: background 0.2s ease;
-    }
-
-    .offers-table tbody tr:hover {
-        background: rgba(168, 85, 247, 0.04);
-    }
-
-    .offers-table td {
-        padding: 1.25rem 1rem;
-        vertical-align: middle;
-    }
-
-    .listing-info {
-        color: #1e293b;
-        font-weight: 600;
-    }
-
-    .listing-condition {
-        color: #64748b;
-        font-weight: 400;
-        font-size: 0.85rem;
-        margin-top: 0.3rem;
-    }
-
-    .buyer-info,
-    .seller-info-offers {
-        color: #1e293b;
-    }
-
-    .buyer-name,
-    .seller-name-offers {
-        font-weight: 700;
-        display: block;
-    }
-
-    .buyer-email,
-    .seller-email-offers {
-        color: #64748b;
-        font-size: 0.85rem;
-        margin-top: 0.3rem;
-        display: block;
-    }
-
-    .status-badge-offers {
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.4rem;
-        font-size: 0.85rem;
-        display: inline-block;
-        font-weight: 700;
-        border: 1px solid;
-    }
-
-    .status-pending-offers {
-        background: rgba(249, 115, 22, 0.15);
-        color: #f97316;
-        border-color: rgba(249, 115, 22, 0.2);
-    }
-
-    .status-accepted-offers {
-        background: rgba(13, 148, 136, 0.15);
-        color: #0d9488;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    .status-rejected-offers {
-        background: rgba(239, 68, 68, 0.15);
-        color: #ef4444;
-        border-color: rgba(239, 68, 68, 0.2);
-    }
-
-    .status-picked-up-offers {
-        background: rgba(59, 130, 246, 0.15);
-        color: #3b82f6;
-        border-color: rgba(59, 130, 246, 0.2);
-    }
-
-    .status-completed-offers {
-        background: rgba(168, 85, 247, 0.15);
-        color: #a855f7;
-        border-color: rgba(168, 85, 247, 0.2);
-    }
-
-    .price-value-offers {
-        color: #a855f7;
-        font-weight: 700;
-        font-size: 1rem;
-    }
-
-    .date-value-offers {
-        color: #64748b;
-        font-size: 0.9rem;
-    }
-
-    .date-meta-offers {
+    body.dark-mode .admin-table th {
+        background: rgba(0, 0, 0, 0.2);
         color: #94a3b8;
-        font-size: 0.8rem;
-        margin-top: 0.3rem;
-        display: block;
     }
 
-    /* === PAGINATION === */
-    .pagination-wrapper-offers {
-        padding: 1.5rem;
-        border-top: 1px solid rgba(168, 85, 247, 0.1);
-        display: flex;
-        justify-content: center;
+    .admin-table td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+        color: #334155;
     }
 
-    /* === EMPTY STATE === */
-    .empty-state-offers {
-        padding: 3rem 2rem;
-        text-align: center;
+    body.dark-mode .admin-table td {
+        border-top-color: rgba(255, 255, 255, 0.05);
+        color: #cbd5e1;
     }
 
-    .empty-icon-offers {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        font-size: 2.5rem;
-        color: #a855f7;
+    .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.03);
     }
 
-    .empty-title-offers {
-        color: #1e293b;
-        margin-bottom: 0.75rem;
-        font-weight: 800;
-        font-size: 1.2rem;
-        letter-spacing: -0.5px;
-    }
-
-    .empty-message-offers {
-        color: #64748b;
-        margin: 0;
-        font-weight: 500;
-    }
-
-    .empty-link-offers {
-        color: #a855f7;
-        text-decoration: none;
-        font-weight: 700;
-    }
-
-    .empty-link-offers:hover {
-        text-decoration: underline;
-    }
-
-    /* === DARK MODE === */
-    body.dark-mode .offers-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .filter-card-offers,
-    body.dark-mode .table-card-offers {
-        background: #2a2a2a;
-        border-color: rgba(168, 85, 247, 0.2);
-    }
-
-    body.dark-mode .filter-label-offers,
-    body.dark-mode .table-header-offers h5,
-    body.dark-mode .listing-info,
-    body.dark-mode .buyer-info,
-    body.dark-mode .seller-info-offers,
-    body.dark-mode .empty-title-offers,
-    body.dark-mode .offers-table td {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .filter-select-offers {
-        background: #333333;
-        border-color: rgba(168, 85, 247, 0.3);
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .filter-select-offers:focus {
-        background: #3a3a3a;
-    }
-
-    body.dark-mode .offers-table thead {
-        background: rgba(168, 85, 247, 0.1);
-    }
-
-    body.dark-mode .offers-table tbody tr:hover {
-        background: rgba(168, 85, 247, 0.08);
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-        .offers-header {
-            padding: 1.75rem 1rem;
-        }
-
-        .offers-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .filter-wrapper-offers {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .filter-group-offers,
-        .filter-btn-offers {
-            width: 100%;
-        }
-
-        .offers-table {
-            font-size: 0.85rem;
-        }
-
-        .offers-table td {
-            padding: 0.85rem 0.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .offers-wrapper {
-            padding: 1rem 0;
-        }
-
-        .filter-card-offers, .table-card-offers {
-            border-radius: 1rem;
-            padding: 1rem;
-        }
+    body.dark-mode .admin-table tbody tr:hover {
+        background: rgba(13, 148, 136, 0.08);
     }
 </style>
+@endsection
 
-<!-- Include Sidebar -->
+@section('content')
+
 @include('admin.sidebar')
 
 <div class="main-content-wrapper">
-    <div class="offers-wrapper">
-        <!-- Header -->
-        <div class="offers-header">
+    <div class="admin-page-container">
+        
+        <!-- HEADER -->
+        <div class="admin-module-header">
             <div class="container-fluid px-3 px-md-4">
-                <div class="offers-header-content">
-                    <h1><i class="fas fa-handshake me-2"></i>All Offers</h1>
-                    <p>Monitor and manage buyer offers ({{ $offers->total() }} total)</p>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-handshake me-1"></i>Trade Oversight
+                            </span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $offers->total() }} Total Bids & Trades</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
+                            Offers & Transactions
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Track buyer bids, accepted handovers, doorstep pickup collections, and completion status.
+                        </p>
+                    </div>
+
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Dashboard</span>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="container-fluid px-3 px-md-4">
-            <!-- Filter Section -->
-            <div class="filter-card-offers">
-                <form method="GET" action="{{ route('admin.offers') }}" class="filter-wrapper-offers">
-                    <div class="filter-group-offers">
-                        <label class="filter-label-offers">
-                            <i class="fas fa-filter"></i>Filter by Status
-                        </label>
-                        <select name="status" class="filter-select-offers">
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
+
+            <!-- FILTER TOOLBAR -->
+            <div class="admin-card mb-4 p-3 p-md-4">
+                <form method="GET" action="{{ route('admin.offers') }}" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase;">Status Filter</label>
+                        <select name="status" class="form-select form-select-sm" style="border-radius: 0.6rem; font-weight: 600;">
                             <option value="">All Statuses</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending Response</option>
+                            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted / Scheduled</option>
                             <option value="picked_up" {{ request('status') == 'picked_up' ? 'selected' : '' }}>Picked Up</option>
-                            <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed Handover</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
                         </select>
                     </div>
-                    <button type="submit" class="filter-btn-offers">
-                        <i class="fas fa-search"></i>Filter
-                    </button>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase;">Search Parties or Items</label>
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search buyer, seller, or listing title..." value="{{ request('search') }}" style="border-radius: 0.6rem;">
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-sm btn-dark w-100 font-weight-bold" style="border-radius: 0.6rem; padding: 0.45rem;">
+                            <i class="fas fa-filter me-1"></i>Filter
+                        </button>
+                        <a href="{{ route('admin.offers') }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 0.6rem;">
+                            <i class="fas fa-rotate-left"></i>
+                        </a>
+                    </div>
                 </form>
             </div>
 
-            <!-- Offers Table -->
-            <div class="table-card-offers">
-                <div class="table-header-offers">
-                    <h5><i class="fas fa-comments"></i>Offers Overview</h5>
-                </div>
-                <div class="table-responsive-offers">
-                    @if($offers->count() > 0)
-                        <table class="offers-table">
-                            <thead>
+            <!-- OFFERS TABLE -->
+            <div class="admin-card">
+                <div class="table-responsive">
+                    <table class="table admin-table">
+                        <thead>
+                            <tr>
+                                <th>Target Device</th>
+                                <th>Buyer / Recycler</th>
+                                <th>Seller</th>
+                                <th>Bid Amount</th>
+                                <th>Handover Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($offers as $offer)
                                 <tr>
-                                    <th><i class="fas fa-laptop me-1"></i>Listing</th>
-                                    <th><i class="fas fa-user me-1"></i>Buyer</th>
-                                    <th><i class="fas fa-handshake me-1"></i>Seller</th>
-                                    <th><i class="fas fa-flag me-1"></i>Status</th>
-                                    <th><i class="fas fa-dollar-sign me-1"></i>Offered Price</th>
-                                    <th><i class="fas fa-calendar me-1"></i>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($offers as $offer)
-                                    <tr>
-                                        <!-- Listing -->
-                                        <td>
-                                            <div class="listing-info">{{ $offer->listing->category }}</div>
-                                            <div class="listing-condition">{{ ucfirst($offer->listing->condition) }}</div>
-                                        </td>
-
-                                        <!-- Buyer -->
-                                        <td>
-                                            <div class="buyer-info">
-                                                <span class="buyer-name">{{ $offer->buyer->name }}</span>
-                                                <span class="buyer-email">{{ $offer->buyer->email }}</span>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div style="width: 34px; height: 34px; border-radius: 0.5rem; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 0.95rem;">
+                                                <i class="fas fa-microchip"></i>
                                             </div>
-                                        </td>
-
-                                        <!-- Seller -->
-                                        <td>
-                                            <div class="seller-info-offers">
-                                                <span class="seller-name-offers">{{ $offer->listing->seller->name }}</span>
-                                                <span class="seller-email-offers">{{ $offer->listing->seller->email }}</span>
+                                            <div>
+                                                <strong style="color: #0f172a; font-size: 0.92rem; display: block;">
+                                                    {{ $offer->listing?->category ?: ($offer->listing?->deviceType ? $offer->listing?->deviceType->name : 'Listing') }}
+                                                </strong>
+                                                <small class="text-muted">{{ $offer->listing?->title }}</small>
                                             </div>
-                                        </td>
-
-                                        <!-- Status -->
-                                        <td>
-                                            @if($offer->status === 'pending')
-                                                <span class="status-badge-offers status-pending-offers">
-                                                    <i class="fas fa-hourglass-half me-1"></i>Pending
-                                                </span>
-                                            @elseif($offer->status === 'accepted')
-                                                <span class="status-badge-offers status-accepted-offers">
-                                                    <i class="fas fa-check-circle me-1"></i>Accepted
-                                                </span>
-                                            @elseif($offer->status === 'rejected')
-                                                <span class="status-badge-offers status-rejected-offers">
-                                                    <i class="fas fa-times-circle me-1"></i>Rejected
-                                                </span>
-                                            @elseif($offer->status === 'picked_up')
-                                                <span class="status-badge-offers status-picked-up-offers">
-                                                    <i class="fas fa-truck me-1"></i>Picked Up
-                                                </span>
-                                            @elseif($offer->status === 'completed')
-                                                <span class="status-badge-offers status-completed-offers">
-                                                    <i class="fas fa-certificate me-1"></i>Completed
-                                                </span>
-                                            @else
-                                                <span class="status-badge-offers" style="background: rgba(203, 213, 225, 0.15); color: #64748b; border-color: rgba(203, 213, 225, 0.2);">
-                                                    <i class="fas fa-ban me-1"></i>{{ ucfirst(str_replace('_', ' ', $offer->status)) }}
-                                                </span>
-                                            @endif
-                                        </td>
-
-                                        <!-- Offered Price -->
-                                        <td>
-                                            <span class="price-value-offers">
-                                                @if($offer->bid_amount > 0)
-                                                    ₱{{ number_format($offer->bid_amount, 2) }}
-                                                @else
-                                                    Free
-                                                @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong style="display: block; font-size: 0.88rem;">{{ $offer->buyer?->name ?? 'Deleted' }}</strong>
+                                        <small class="text-muted">{{ $offer->buyer?->email }}</small>
+                                    </td>
+                                    <td>
+                                        <strong style="display: block; font-size: 0.88rem;">{{ $offer->listing?->seller?->name ?? 'Deleted' }}</strong>
+                                        <small class="text-muted">{{ $offer->listing?->seller?->email }}</small>
+                                    </td>
+                                    <td>
+                                        <strong style="color: #0f172a; font-family: 'Outfit', sans-serif; font-size: 0.95rem;">
+                                            ₱{{ number_format($offer->bid_amount, 2) }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        @if($offer->handover_method === 'doorstep_pickup')
+                                            <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-weight: 700; font-size: 0.75rem;">
+                                                <i class="fas fa-truck-pickup me-1"></i>Doorstep
                                             </span>
-                                        </td>
-
-                                        <!-- Date -->
-                                        <td>
-                                            <div class="date-value-offers">{{ $offer->created_at->format('M d, Y') }}</div>
-                                            <span class="date-meta-offers">{{ $offer->created_at->diffForHumans() }}</span>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="pagination-wrapper-offers">
-                            {{ $offers->links() }}
-                        </div>
-                    @else
-                        <div class="empty-state-offers">
-                            <div class="empty-icon-offers">
-                                <i class="fas fa-inbox"></i>
-                            </div>
-                            <h5 class="empty-title-offers">No Offers Found</h5>
-                            <p class="empty-message-offers">
-                                @if(request('status'))
-                                    No offers found with the selected status. <a href="{{ route('admin.offers') }}" class="empty-link-offers">Clear filters</a>
-                                @else
-                                    There are currently no offers in the system.
-                                @endif
-                            </p>
-                        </div>
-                    @endif
+                                        @else
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.12); color: #2563eb; font-weight: 700; font-size: 0.75rem;">
+                                                <i class="fas fa-handshake me-1"></i>Meetup
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($offer->status === 'pending')
+                                            <span class="badge bg-warning text-dark font-weight-bold">Pending</span>
+                                        @elseif($offer->status === 'accepted')
+                                            <span class="badge bg-info text-dark font-weight-bold">Accepted</span>
+                                        @elseif($offer->status === 'completed' || $offer->status === 'picked_up')
+                                            <span class="badge bg-success font-weight-bold">Completed</span>
+                                        @elseif($offer->status === 'rejected')
+                                            <span class="badge bg-danger font-weight-bold">Rejected</span>
+                                        @else
+                                            <span class="badge bg-secondary font-weight-bold">{{ ucfirst(str_replace('_', ' ', $offer->status)) }}</span>
+                                        @endif
+                                    </td>
+                                    <td style="color: #64748b; font-size: 0.82rem;">
+                                        {{ $offer->created_at->diffForHumans() }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-5 text-muted">
+                                        <i class="fas fa-handshake fa-2x mb-2 d-block"></i>
+                                        <strong>No offers logged in the system.</strong>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
+
+                @if($offers->hasPages())
+                    <div class="p-3 border-top">
+                        {{ $offers->links() }}
+                    </div>
+                @endif
             </div>
+
         </div>
     </div>
 </div>

@@ -28,6 +28,7 @@ class Listing extends Model
         'estimated_weight',
         'intended_action',
         'handover_preference',
+        'pickup_address',
         'suggested_price',
         'status',
         'matched_buyer_id',

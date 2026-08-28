@@ -7,9 +7,12 @@ use App\Models\Listing;
 use App\Models\Offer;
 use App\Models\ImpactLog;
 use App\Models\Notification;
+use App\Models\Report;
+use App\Models\AuditLog;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class AdminController extends Controller
 {
@@ -31,10 +34,29 @@ class AdminController extends Controller
             ->limit(10)
             ->get();
 
-        $pendingVerifications = User::where('role', 'buyer')
-            ->where('is_verified', false)
-            ->with('offers')
-            ->paginate(10);
+        $pendingVerifications = User::where(function ($q) {
+                $q->where('id_verification_status', 'pending')
+                  ->orWhere(function ($sub) {
+                      $sub->where('role', 'buyer')->where('is_verified', false);
+                  });
+            })
+            ->orderBy('id_submitted_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
+
+        $pendingVerificationsCount = User::where(function ($q) {
+            $q->where('id_verification_status', 'pending')
+              ->orWhere(function ($sub) {
+                  $sub->where('role', 'buyer')->where('is_verified', false);
+              });
+        })->count();
+
+        $pendingReportsCount = Schema::hasTable('reports') ? Report::where('status', 'pending')->count() : 0;
+        $recentAuditLogs = Schema::hasTable('audit_logs') ? AuditLog::with('user')->latest()->take(6)->get() : collect();
+        $bannedOrSuspendedCount = User::where('is_banned', true)->orWhere('is_suspended', true)->count();
+        $activeListingsCount = Listing::where('status', 'available')->count();
+        $completedTransactionsCount = Listing::where('status', 'completed')->count() + ImpactLog::count();
 
         $totalUsers = User::count();
         $totalListings = Listing::count();
@@ -45,6 +67,12 @@ class AdminController extends Controller
             'analytics',
             'recentTransactions',
             'pendingVerifications',
+            'pendingVerificationsCount',
+            'pendingReportsCount',
+            'recentAuditLogs',
+            'bannedOrSuspendedCount',
+            'activeListingsCount',
+            'completedTransactionsCount',
             'totalUsers',
             'totalListings',
             'totalOffers',

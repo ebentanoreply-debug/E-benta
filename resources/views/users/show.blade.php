@@ -213,9 +213,9 @@
                     <i class="fas fa-list me-2" style="color: var(--light-green);"></i>{{ $user->name }}'s Listings
                 </h2>
                 @if($listingsCount > 0)
-                    <span style="background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: var(--dark-bg); border: none; padding: 0.75rem 1.75rem; font-weight: 700; border-radius: 0.6rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);" onmouseover="this.style.boxShadow='0 8px 20px rgba(13, 148, 136, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(13, 148, 136, 0.2)'; this.style.transform='translateY(0)';">
+                    <a href="{{ route('listings.index', ['seller_id' => $user->id]) }}" class="btn" style="display: inline-flex; align-items: center; text-decoration: none; background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: var(--dark-bg); border: none; padding: 0.75rem 1.75rem; font-weight: 700; border-radius: 0.6rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(13, 148, 136, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(13, 148, 136, 0.2)'; this.style.transform='translateY(0)';">
                         <i class="fas fa-eye me-2"></i>View all {{ $listingsCount }} listings
-                    </span>
+                    </a>
                 @else
                     <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; color: var(--text-light); padding: 1.5rem; border-radius: 0.8rem;">
                         <p style="margin: 0; font-weight: 600;">
