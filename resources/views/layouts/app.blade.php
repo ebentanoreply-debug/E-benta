@@ -838,15 +838,15 @@
         <div class="container-fluid px-3 px-md-4">
             <!-- Left: Brand & Context Indicator -->
             <div class="d-flex align-items-center gap-2">
-                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && (request()->routeIs('admin.*') || request()->routeIs('admin/*') || request()->routeIs('settings*'))))
+                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
                     <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleAdminSidebar()" title="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
-                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('seller.*') || request()->routeIs('settings*'))))
+                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
                     <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleSellerSidebar()" title="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
-                @elseif(request()->routeIs('buyer.*') || (auth()->check() && auth()->user()->isBuyer() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
                     <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleBuyerSidebar()" title="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -863,13 +863,13 @@
                             <i class="fas fa-shield-halved" style="color: #10b981;"></i> Admin Workspace
                         </span>
                     </div>
-                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && request()->routeIs('settings*')))
+                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
                     <div class="d-none d-md-flex align-items-center ms-2">
                         <span class="admin-workspace-pill">
                             <i class="fas fa-store" style="color: #10b981;"></i> Seller Hub
                         </span>
                     </div>
-                @elseif(request()->routeIs('buyer.*') || (auth()->check() && auth()->user()->isBuyer() && request()->routeIs('settings*')))
+                @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
                     <div class="d-none d-md-flex align-items-center ms-2">
                         <span class="admin-workspace-pill">
                             <i class="fas fa-shopping-bag" style="color: #06b6d4;"></i> Buyer Hub

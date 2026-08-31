@@ -5,19 +5,26 @@
 @section('styles')
 <style>
     .inbox-wrapper {
-        min-height: calc(100vh - 70px);
+        min-height: calc(100vh - 60px);
         padding: 1.5rem 1rem 3rem;
+        background: #09171f;
+    }
+
+    body.dark-mode .inbox-wrapper {
+        background: #060e14;
     }
 
     .inbox-container {
-        max-width: 1200px;
+        max-width: 1350px;
         margin: 0 auto;
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+        background: linear-gradient(135deg, #0f232d 0%, #09171f 100%);
         border: 1px solid rgba(13, 148, 136, 0.25);
-        border-radius: 1.5rem;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        border-radius: 1.25rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         display: flex;
-        height: 720px;
+        height: calc(100vh - 120px);
+        min-height: 600px;
+        max-height: 820px;
         overflow: hidden;
     }
 
@@ -476,6 +483,15 @@
 
 
 @section('content')
+
+@if(auth()->check() && auth()->user()->isAdmin())
+    @include('admin.sidebar')
+@elseif(auth()->check() && auth()->user()->isSeller())
+    @include('seller.sidebar')
+@elseif(auth()->check())
+    @include('buyer.sidebar')
+@endif
+
 <div class="main-content-wrapper">
     <div class="inbox-wrapper">
         <div class="inbox-container">
