@@ -1,716 +1,1062 @@
 @extends('layouts.app')
 
-@section('title', 'Seller Dashboard - E-Benta')
+@section('title', ($isRecentView ?? false) ? 'Seller Dashboard - E-Benta' : 'My Listings - E-Benta')
 
 @section('content')
 <style>
-    /* === SELLER DASHBOARD WRAPPER === */
-    .seller-dashboard-wrapper {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        min-height: 100vh;
-        padding: 2rem 0;
+    /* === MODERN SELLER STUDIO THEME === */
+    :root {
+        --seller-primary: #0d9488;
+        --seller-primary-dark: #0f766e;
+        --seller-primary-light: #f0fdfa;
+        --seller-emerald: #059669;
+        --seller-amber: #f59e0b;
+        --seller-blue: #3b82f6;
+        --seller-indigo: #6366f1;
+        --seller-card-bg: #ffffff;
+        --seller-border-color: rgba(226, 232, 240, 0.9);
+        --seller-text-main: #0f172a;
+        --seller-text-muted: #64748b;
     }
 
-    /* === HEADER SECTION === */
-    .seller-dashboard-header {
-        background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
-        color: white;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
+    .seller-dashboard-page {
+        background-color: #f8fafc;
+        min-height: calc(100vh - 60px);
+        padding-bottom: 3rem;
+    }
+
+    .main-content-wrapper {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (max-width: 991.98px) {
+        .main-content-wrapper {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+    }
+
+    /* === COMPACT HERO / HEADER === */
+    .seller-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0d9488 160%);
+        color: #ffffff;
+        padding: 2.25rem 0 2rem;
         position: relative;
         overflow: hidden;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .seller-dashboard-header::before {
+    .seller-hero::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
+        top: -60px;
+        right: -60px;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.25) 0%, rgba(13, 148, 136, 0) 70%);
         border-radius: 50%;
+        pointer-events: none;
     }
 
-    .seller-dashboard-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-    }
-
-    .seller-dashboard-header-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .seller-dashboard-header h1 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin: 0 0 0.5rem 0;
-        letter-spacing: -0.5px;
-    }
-
-    .seller-dashboard-header p {
-        opacity: 0.95;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    /* === STAT CARDS === */
-    .stat-card {
-        background: white;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        border-top: 4px solid #0d9488;
-        border-radius: 1.2rem;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(13, 148, 136, 0.06);
-        transition: all 0.3s ease;
-        margin-bottom: 1.5rem;
-    }
-
-    .stat-card:hover {
-        box-shadow: 0 12px 35px rgba(13, 148, 136, 0.15);
-        transform: translateY(-5px);
-    }
-
-    .stat-card.stat-card-teal {
-        border-top-color: #0d9488;
-    }
-
-    .stat-card.stat-card-cyan {
-        border-top-color: #06b6d4;
-    }
-
-    .stat-card.stat-card-blue {
-        border-top-color: #3b82f6;
-    }
-
-    .stat-card.stat-card-amber {
-        border-top-color: #f59e0b;
-    }
-
-    .stat-card-header {
+    .hero-greeting {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .stat-card-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-
-    .stat-card.stat-card-teal .stat-card-icon {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0.08) 100%);
-        color: #0d9488;
-    }
-
-    .stat-card.stat-card-cyan .stat-card-icon {
-        background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.08) 100%);
-        color: #06b6d4;
-    }
-
-    .stat-card.stat-card-blue .stat-card-icon {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-        color: #3b82f6;
-    }
-
-    .stat-card.stat-card-amber .stat-card-icon {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
-        color: #f59e0b;
-    }
-
-    .stat-card-label {
-        color: #64748b;
+        gap: 0.6rem;
         font-size: 0.8rem;
-        margin: 0;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.08em;
+        color: #2dd4bf;
+        margin-bottom: 0.35rem;
     }
 
-    .stat-card-value {
-        margin: 0.75rem 0 0.5rem 0;
+    .hero-title {
+        font-size: 1.75rem;
         font-weight: 800;
-        font-size: 2rem;
-        color: #1e293b;
+        letter-spacing: -0.03em;
+        margin-bottom: 0.35rem;
+        color: #ffffff;
     }
 
-    .stat-card.stat-card-teal .stat-card-value {
-        color: #0d9488;
+    .hero-subtitle {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        margin-bottom: 0;
+        max-width: 650px;
     }
 
-    .stat-card.stat-card-cyan .stat-card-value {
-        color: #06b6d4;
+    .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
     }
 
-    .stat-card.stat-card-blue .stat-card-value {
-        color: #3b82f6;
-    }
-
-    .stat-card.stat-card-amber .stat-card-value {
-        color: #f59e0b;
-    }
-
-    .stat-card-description {
-        color: #64748b;
-        font-size: 0.85rem;
-        margin: 0;
-        font-weight: 500;
-    }
-
-    /* === ACTION BUTTONS === */
-    .action-btn {
+    .btn-create-listing {
         background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
-        color: white;
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 0.8rem;
+        color: #ffffff !important;
         font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
-        cursor: pointer;
-        text-decoration: none;
+        font-size: 0.88rem;
+        padding: 0.65rem 1.25rem;
+        border-radius: 0.65rem;
+        border: none;
+        box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
         display: inline-flex;
         align-items: center;
-        gap: 0.75rem;
-    }
-
-    .action-btn:hover {
-        box-shadow: 0 8px 20px rgba(13, 148, 136, 0.4);
-        transform: translateY(-2px);
-        color: white;
-    }
-
-    /* === TABLE CARD === */
-    .table-card {
-        background: white;
-        border-radius: 1.2rem;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .table-card-header {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(13, 148, 136, 0.05) 100%);
-        border-bottom: 1px solid rgba(13, 148, 136, 0.15);
-        padding: 1.5rem;
-    }
-
-    .table-card-header h5 {
-        margin: 0;
-        color: #1e293b;
-        font-weight: 800;
-        font-size: 1.1rem;
-        letter-spacing: -0.5px;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .table-card-icon {
-        color: #0d9488;
-    }
-
-    /* === TABLE STYLES === */
-    .listing-table {
-        color: #1e293b;
-        margin-bottom: 0;
-        width: 100%;
-    }
-
-    .listing-table thead {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.04) 100%);
-        border-bottom: 2px solid rgba(13, 148, 136, 0.15);
-    }
-
-    .listing-table th {
-        color: #0d9488;
-        font-weight: 800;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        padding: 1.25rem 1rem;
-        letter-spacing: 1px;
-        border: none;
-    }
-
-    .listing-table tbody tr {
-        border-bottom: 1px solid rgba(13, 148, 136, 0.08);
-        transition: background 0.2s ease;
-    }
-
-    .listing-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.04);
-    }
-
-    .listing-table td {
-        padding: 1.25rem 1rem;
-        vertical-align: middle;
-        color: #1e293b;
-        font-size: 0.9rem;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    /* === STATUS BADGES === */
-    .status-badge {
-        display: inline-block;
-        padding: 0.5rem 0.9rem;
-        border-radius: 0.6rem;
-        font-weight: 700;
-        font-size: 0.85rem;
-        border: 1px solid;
-    }
-
-    .status-available {
-        background: rgba(13, 148, 136, 0.15);
-        color: #0d9488;
-        border-color: rgba(13, 148, 136, 0.3);
-    }
-
-    .status-matched {
-        background: rgba(59, 130, 246, 0.15);
-        color: #3b82f6;
-        border-color: rgba(59, 130, 246, 0.3);
-    }
-
-    .status-processed {
-        background: rgba(245, 158, 11, 0.15);
-        color: #f59e0b;
-        border-color: rgba(245, 158, 11, 0.3);
-    }
-
-    /* === ACTION BTN SMALL === */
-    .action-btn-small {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-        border: none;
-        border-radius: 0.4rem;
-        font-weight: 700;
-        transition: all 0.3s ease;
+        gap: 0.5rem;
         text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-create-listing:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(13, 148, 136, 0.45);
+        background: linear-gradient(135deg, #0f766e 0%, #047857 100%);
+    }
+
+    .view-toggle-pill-group {
+        display: inline-flex;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.65rem;
+        padding: 0.25rem;
+        gap: 0.25rem;
+    }
+
+    .view-toggle-pill {
+        color: #cbd5e1;
+        padding: 0.45rem 0.9rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        cursor: pointer;
     }
 
-    .action-btn-view {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+    .view-toggle-pill:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
     }
 
-    .action-btn-view:hover {
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
-        transform: translateY(-1px);
+    .view-toggle-pill.active {
+        background: #0d9488;
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
     }
 
-    .action-btn-edit {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
-        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+    /* === KPI GRID MATRIX === */
+    .kpi-section {
+        margin-top: -1.25rem;
+        position: relative;
+        z-index: 10;
+        margin-bottom: 2rem;
     }
 
-    .action-btn-edit:hover {
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
-        transform: translateY(-1px);
+    .kpi-card {
+        background: #ffffff;
+        border: 1px solid var(--seller-border-color);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
     }
 
-    .action-btn-offers {
-        background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
-        color: white;
-        box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
+    .kpi-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+        border-color: rgba(13, 148, 136, 0.3);
     }
 
-    .action-btn-offers:hover {
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
-        transform: translateY(-1px);
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
     }
 
-    /* === EMPTY STATE === */
-    .empty-state-container {
-        text-align: center;
-        padding: 4rem 2rem;
-    }
+    .kpi-card.kpi-teal::before { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
+    .kpi-card.kpi-amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .kpi-card.kpi-blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+    .kpi-card.kpi-emerald::before { background: linear-gradient(90deg, #059669, #34d399); }
 
-    .empty-state-icon {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(13, 148, 136, 0.08));
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        margin: 0 auto 2rem;
+    .kpi-head {
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-size: 3.5rem;
-        color: rgba(13, 148, 136, 0.3);
+        justify-content: space-between;
+        margin-bottom: 0.85rem;
     }
 
-    .empty-state-title {
-        color: #1e293b;
+    .kpi-label {
+        font-size: 0.78rem;
         font-weight: 700;
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .empty-state-text {
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
         color: #64748b;
         margin: 0;
     }
 
-    /* === PAGINATION === */
-    .pagination-wrapper {
-        padding: 1.5rem;
-        border-top: 1px solid rgba(13, 148, 136, 0.1);
+    .kpi-icon-box {
+        width: 38px;
+        height: 38px;
+        border-radius: 0.6rem;
         display: flex;
+        align-items: center;
         justify-content: center;
+        font-size: 1rem;
     }
 
-    .pagination-wrapper .pagination {
-        gap: 0.35rem !important;
-        margin-bottom: 0 !important;
+    .kpi-teal .kpi-icon-box { background: rgba(13, 148, 136, 0.12); color: #0d9488; }
+    .kpi-amber .kpi-icon-box { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+    .kpi-blue .kpi-icon-box { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+    .kpi-emerald .kpi-icon-box { background: rgba(5, 150, 105, 0.12); color: #059669; }
+
+    .kpi-number {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.1;
+        margin-bottom: 0.4rem;
+        letter-spacing: -0.02em;
     }
 
-    .pagination-wrapper .page-item {
-        margin: 0 !important;
+    .kpi-meta {
+        margin-top: auto;
+        font-size: 0.78rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
     }
 
-    .pagination-wrapper .page-link {
-        padding: 0.5rem 0.8rem !important;
-        font-size: 0.9rem !important;
-        color: #0d9488 !important;
-        border: 1px solid rgba(13, 148, 136, 0.25) !important;
-        border-radius: 0.5rem !important;
-        transition: all 0.2s ease !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        line-height: 1.4 !important;
-        background: white !important;
+    .kpi-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 0.4rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
     }
 
-    .pagination-wrapper .page-link:hover {
-        background: rgba(13, 148, 136, 0.08) !important;
-        color: #059669 !important;
-        border-color: rgba(13, 148, 136, 0.4) !important;
-        transform: translateY(-1px) !important;
+    .kpi-tag-success { background: #f0fdf4; color: #16a34a; }
+    .kpi-tag-warning { background: #fffbeb; color: #d97706; }
+    .kpi-tag-info { background: #f0fdfa; color: #0d9488; }
+
+    /* === CONTENT WORKSPACE CARD === */
+    .content-panel-card {
+        background: #ffffff;
+        border: 1px solid var(--seller-border-color);
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        overflow: hidden;
     }
 
-    .pagination-wrapper .page-item.active .page-link {
-        background: linear-gradient(135deg, #0d9488 0%, #059669 100%) !important;
-        color: white !important;
-        border-color: #0d9488 !important;
-        box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2) !important;
+    /* Toolbar Header */
+    .panel-toolbar {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--seller-border-color);
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
-    .pagination-wrapper .page-item.disabled .page-link {
-        color: #cbd5e1 !important;
-        background: #f8fafc !important;
-        border-color: rgba(13, 148, 136, 0.12) !important;
-        cursor: not-allowed !important;
-        opacity: 0.65 !important;
+    .panel-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
-    /* === DARK MODE === */
-    body.dark-mode .seller-dashboard-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
+    .panel-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        letter-spacing: -0.2px;
     }
 
-    body.dark-mode .seller-dashboard-header {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    .panel-badge-count {
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 1rem;
     }
 
-    body.dark-mode .table-card {
-        background: #2a2a2a;
-        border-color: rgba(13, 148, 136, 0.2);
+    /* Filter Pills & Search */
+    .filter-tabs-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #f8fafc;
+        padding: 0.25rem;
+        border-radius: 0.6rem;
+        border: 1px solid #e2e8f0;
+        overflow-x: auto;
     }
 
-    body.dark-mode .stat-card {
-        background: #2a2a2a;
-        border-color: rgba(13, 148, 136, 0.2);
+    .filter-tab-btn {
+        padding: 0.35rem 0.8rem;
+        border-radius: 0.45rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #64748b;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
     }
 
-    body.dark-mode .listing-table th {
-        color: #10b981;
+    .filter-tab-btn:hover {
+        color: #0d9488;
+        background: rgba(13, 148, 136, 0.06);
     }
 
-    body.dark-mode .listing-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.1);
+    .filter-tab-btn.active {
+        background: #ffffff;
+        color: #0d9488;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
     }
 
-    body.dark-mode .listing-table td {
-        color: #e0e0e0;
+    .search-input-group {
+        position: relative;
+        min-width: 220px;
     }
 
-    body.dark-mode .table-card-header {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.03) 100%);
+    .search-input-group i {
+        position: absolute;
+        left: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.85rem;
+        pointer-events: none;
     }
 
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
-        .seller-dashboard-header {
-            padding: 1.75rem 1rem;
-        }
-
-        .seller-dashboard-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .stat-card-value {
-            font-size: 1.5rem;
-        }
-
-        .listing-table {
-            font-size: 0.8rem;
-        }
-
-        .listing-table th,
-        .listing-table td {
-            padding: 0.75rem 0.5rem;
-        }
+    .search-input-control {
+        width: 100%;
+        padding: 0.45rem 0.85rem 0.45rem 2.25rem;
+        font-size: 0.84rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.55rem;
+        background: #f8fafc;
+        color: #0f172a;
+        transition: all 0.2s ease;
     }
 
-    @media (max-width: 480px) {
-        .seller-dashboard-wrapper {
-            padding: 1rem 0;
-        }
+    .search-input-control:focus {
+        background: #ffffff;
+        border-color: #0d9488;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
 
-        .stat-card, .table-card-seller {
-            border-radius: 1rem;
-            padding: 1.25rem 1rem;
-            margin-bottom: 1rem;
-        }
+    /* === DATA TABLE STYLES === */
+    .table-responsive-wrapper {
+        overflow-x: auto;
+    }
+
+    .seller-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+    }
+
+    .seller-table thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 0.9rem 1.25rem;
+        border-bottom: 1px solid var(--seller-border-color);
+        white-space: nowrap;
+    }
+
+    .seller-table tbody tr {
+        border-bottom: 1px solid rgba(241, 245, 249, 1);
+        transition: background-color 0.15s ease;
+    }
+
+    .seller-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .seller-table td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        font-size: 0.88rem;
+    }
+
+    /* Item Column with Thumbnail */
+    .item-cell-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+    }
+
+    .item-thumb-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.6rem;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .item-thumb-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .item-thumb-icon {
+        color: #94a3b8;
+        font-size: 1.25rem;
+    }
+
+    .item-details-wrap {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .item-title {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 0.9rem;
+        text-decoration: none;
+        line-height: 1.25;
+        margin-bottom: 0.2rem;
+        transition: color 0.2s ease;
+    }
+
+    .item-title:hover {
+        color: #0d9488;
+    }
+
+    .item-sub-tags {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .badge-condition {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 0.35rem;
+        background: #f1f5f9;
+        color: #475569;
+        text-transform: capitalize;
+    }
+
+    /* Status Badges */
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.65rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .badge-status-available {
+        background: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+    }
+
+    .badge-status-matched {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+    }
+
+    .badge-status-processed {
+        background: #faf5ff;
+        color: #7c3aed;
+        border: 1px solid #e9d5ff;
+    }
+
+    .badge-status-pending {
+        background: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+    }
+
+    /* Price styling */
+    .price-value {
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #0f172a;
+        letter-spacing: -0.2px;
+    }
+
+    /* Offers Tag */
+    .offers-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.25rem 0.6rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .offers-pill.has-pending {
+        background: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+        animation: pulseSubtle 2s infinite ease-in-out;
+    }
+
+    .offers-pill.has-pending:hover {
+        background: #fef3c7;
+        color: #b45309;
+        transform: scale(1.02);
+    }
+
+    .offers-pill.no-offers {
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    @keyframes pulseSubtle {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.75; }
+    }
+
+    /* Action Buttons */
+    .action-group {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .btn-action-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        color: #475569;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        text-decoration: none;
+        transition: all 0.15s ease;
+    }
+
+    .btn-action-icon:hover {
+        background: #ffffff;
+        color: #0d9488;
+        border-color: #0d9488;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(13, 148, 136, 0.15);
+    }
+
+    .btn-action-icon.btn-action-edit:hover {
+        color: #f59e0b;
+        border-color: #f59e0b;
+        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
+    }
+
+    .btn-action-icon.btn-action-offers:hover {
+        color: #059669;
+        border-color: #059669;
+        box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
+    }
+
+    /* === EMPTY STATE === */
+    .empty-state-wrap {
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .empty-icon-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #f0fdfa;
+        color: #0d9488;
+        font-size: 1.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        border: 1px solid #ccfbf1;
+    }
+
+    .empty-state-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 0.4rem;
+    }
+
+    .empty-state-desc {
+        color: #64748b;
+        font-size: 0.88rem;
+        max-width: 420px;
+        margin: 0 auto 1.5rem;
+    }
+
+    /* === PAGINATION === */
+    .panel-footer-pagination {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--seller-border-color);
+        background: #fafafa;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    /* === DARK MODE ADAPTATION === */
+    body.dark-mode .seller-dashboard-page {
+        background-color: #0b1120;
+    }
+    body.dark-mode .kpi-card {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.dark-mode .kpi-number {
+        color: #ffffff;
+    }
+    body.dark-mode .content-panel-card {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.dark-mode .panel-toolbar {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.dark-mode .panel-title {
+        color: #ffffff;
+    }
+    body.dark-mode .filter-tabs-wrapper {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.dark-mode .filter-tab-btn.active {
+        background: #1e293b;
+        color: #2dd4bf;
+    }
+    body.dark-mode .search-input-control {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    body.dark-mode .seller-table thead th {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #94a3b8;
+    }
+    body.dark-mode .seller-table tbody tr {
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode .seller-table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+    body.dark-mode .item-title {
+        color: #ffffff;
+    }
+    body.dark-mode .price-value {
+        color: #ffffff;
+    }
+    body.dark-mode .btn-action-icon {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+    }
+    body.dark-mode .panel-footer-pagination {
+        background: #182234;
+        border-color: rgba(255, 255, 255, 0.08);
     }
 </style>
 
 @include('seller.sidebar')
+
 <div class="main-content-wrapper">
-    <div class="seller-dashboard-wrapper">
-        <!-- Header -->
-        <div class="seller-dashboard-header">
+    <div class="seller-dashboard-page">
+        <!-- Hero Header -->
+        <header class="seller-hero">
             <div class="container-fluid px-3 px-md-4">
-                <div class="seller-dashboard-header-content">
-                    <h1>
-                        <i class="fas fa-store me-2"></i>
-                        {{ ($isRecentView ?? false) ? 'Dashboard' : 'My Listing' }}
-                    </h1>
-                    <p>
-                        {{ ($isRecentView ?? false)
-                            ? 'Showing listings created in the last 24 hours. Use My Listings in the sidebar to see your full listing history.'
-                            : 'Showing all your listings, including older items.' }}
-                    </p>
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    <div>
+                        <div class="hero-greeting">
+                            <i class="fas fa-certificate"></i>
+                            <span>Verified Seller Studio</span>
+                        </div>
+                        <h1 class="hero-title">
+                            {{ ($isRecentView ?? false) ? 'Seller Dashboard' : 'Inventory Management' }}
+                        </h1>
+                        <p class="hero-subtitle">
+                            {{ ($isRecentView ?? false)
+                                ? 'Overview of your listings created within the last 24 hours and active performance metrics.'
+                                : 'Comprehensive catalog of all your electronic waste listings and transaction records.' }}
+                        </p>
+                    </div>
+
+                    <div class="hero-actions">
+                        <div class="view-toggle-pill-group">
+                            <a href="{{ route('seller.dashboard') }}" class="view-toggle-pill {{ ($isRecentView ?? false) ? 'active' : '' }}">
+                                <i class="fas fa-clock"></i> Recent 24h
+                            </a>
+                            <a href="{{ route('seller.listings') }}" class="view-toggle-pill {{ !($isRecentView ?? false) ? 'active' : '' }}">
+                                <i class="fas fa-boxes-stacked"></i> All Listings
+                            </a>
+                        </div>
+
+                        <a href="{{ route('listings.create') }}" class="btn-create-listing">
+                            <i class="fas fa-plus"></i> List Device
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- Main Content -->
         <div class="container-fluid px-3 px-md-4">
-
-        @if($isRecentView ?? false)
-        <!-- Statistics Cards -->
-        <div class="row mb-5">
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-teal">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon">
-                            <i class="fas fa-list-check"></i>
-                        </div>
-                        <div>
-                            <p class="stat-card-label">Total Listings</p>
-                        </div>
-                    </div>
-                    <h3 class="stat-card-value">{{ $statistics['total_listings'] }}</h3>
-                    <p class="stat-card-description">All your e-waste items</p>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-cyan">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div>
-                            <p class="stat-card-label">Active Listings</p>
-                        </div>
-                    </div>
-                    <h3 class="stat-card-value">{{ $statistics['active_listings'] }}</h3>
-                    <p class="stat-card-description">Currently available</p>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-blue">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <div>
-                            <p class="stat-card-label">Matched Listings</p>
-                        </div>
-                    </div>
-                    <h3 class="stat-card-value">{{ $statistics['matched_listings'] }}</h3>
-                    <p class="stat-card-description">Pending transactions</p>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-amber">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div>
-                            <p class="stat-card-label">Completed</p>
-                        </div>
-                    </div>
-                    <h3 class="stat-card-value">{{ $statistics['completed_transactions'] }}</h3>
-                    <p class="stat-card-description">Successful sales</p>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <!-- Listings Table -->
-        <div class="row">
-            <div class="col-12">
-                <div class="table-card">
-                    <div class="table-card-header">
-                        <h5>
-                            <i class="fas fa-boxes table-card-icon"></i>
-                            {{ ($isRecentView ?? false) ? 'Recent Listings (Last 24 Hours)' : 'My Listing (All Time)' }}
-                        </h5>
-                    </div>
-
-                    <div style="padding: 0;">
-                        @if(count($listings) > 0)
-                            <div class="table-responsive">
-                                <table class="listing-table">
-                                    <thead>
-                                        <tr>
-                                            <th><i class="fas fa-laptop me-1"></i>Device/Item</th>
-                                            <th><i class="fas fa-flag me-1"></i>Status</th>
-                                            <th><i class="fas fa-dollar-sign me-1"></i>Price</th>
-                                            <th><i class="fas fa-comments me-1"></i>Offers</th>
-                                            <th><i class="fas fa-calendar me-1"></i>Listed On</th>
-                                            <th><i class="fas fa-cog me-1"></i>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($listings as $listing)
-                                            <tr>
-                                                <td>
-                                                    <div style="font-weight: 600;">{{ $listing->category ?: ($listing->deviceType->name ?: 'Uncategorized') }}</div>
-                                                    <small style="color: #64748b;">{{ ucfirst(str_replace('_', ' ', $listing->condition)) }} condition</small>
-                                                </td>
-                                                <td>
-                                                    @if($listing->status === 'available')
-                                                        <span class="status-badge status-available">
-                                                            <i class="fas fa-check-circle me-1"></i>Available
-                                                        </span>
-                                                    @elseif($listing->status === 'matched')
-                                                        <span class="status-badge status-matched">
-                                                            <i class="fas fa-handshake me-1"></i>Matched
-                                                        </span>
-                                                    @elseif($listing->status === 'processed')
-                                                        <span class="status-badge status-processed">
-                                                            <i class="fas fa-check me-1"></i>Processed
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge">
-                                                            <i class="fas fa-ban me-1"></i>{{ ucfirst($listing->status) }}
-                                                        </span>
-                                                    @endif
-                                                </td>
-                                                <td style="color: #0d9488; font-weight: 800; font-size: 1rem;">
-                                                    ₱{{ number_format($listing->suggested_price, 2) }}
-                                                </td>
-                                                <td>
-                                                    @if($listing->offers()->where('status', 'pending')->count() > 0)
-                                                        <span class="status-badge status-processed">
-                                                            <i class="fas fa-bell me-1"></i>{{ $listing->offers()->where('status', 'pending')->count() }} pending
-                                                        </span>
-                                                    @else
-                                                        <span style="color: #64748b;">—</span>
-                                                    @endif
-                                                </td>
-                                                <td style="color: #64748b; font-size: 0.9rem;">
-                                                    {{ $listing->created_at->format('M d, Y') }}
-                                                </td>
-                                                <td>
-                                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                                        <a href="{{ route('listings.show', $listing) }}" class="action-btn-small action-btn-view">
-                                                            <i class="fas fa-eye"></i>View
-                                                        </a>
-                                                        @if($listing->isAvailable())
-                                                            <a href="{{ route('listings.edit', $listing) }}" class="action-btn-small action-btn-edit">
-                                                                <i class="fas fa-edit"></i>Edit
-                                                            </a>
-                                                        @endif
-                                                        @if($listing->offers()->where('status', 'pending')->count() > 0)
-                                                            <a href="{{ route('listings.offers', $listing) }}" class="action-btn-small action-btn-offers">
-                                                                <i class="fas fa-handshake"></i>Offers
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+            <!-- 4-Tier KPI Matrix -->
+            <section class="kpi-section">
+                <div class="row g-3">
+                    <!-- KPI 1: Active Listings -->
+                    <div class="col-6 col-lg-3">
+                        <div class="kpi-card kpi-teal">
+                            <div class="kpi-head">
+                                <span class="kpi-label">Active Inventory</span>
+                                <div class="kpi-icon-box">
+                                    <i class="fas fa-boxes-stacked"></i>
+                                </div>
                             </div>
-                            <!-- Pagination -->
-                            @if($listings->hasPages())
-                                <div class="pagination-wrapper">
-                                    {{ $listings->links('pagination.custom') }}
+                            <div class="kpi-number">{{ $statistics['active_listings'] ?? 0 }}</div>
+                            <div class="kpi-meta">
+                                <span class="kpi-tag kpi-tag-info">
+                                    ₱{{ number_format($statistics['active_inventory_value'] ?? 0, 0) }}
+                                </span>
+                                <span>of {{ $statistics['total_listings'] ?? 0 }} total items</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2: Pending Offers -->
+                    <div class="col-6 col-lg-3">
+                        <div class="kpi-card kpi-amber">
+                            <div class="kpi-head">
+                                <span class="kpi-label">Pending Offers</span>
+                                <div class="kpi-icon-box">
+                                    <i class="fas fa-handshake-angle"></i>
                                 </div>
-                            @endif
-                        @else
-                            <!-- Empty State -->
-                            <div class="empty-state-container">
-                                <div class="empty-state-icon">
-                                    <i class="fas fa-inbox"></i>
-                                </div>
-                                @if($isRecentView ?? false)
-                                    <h5 class="empty-state-title">No Recent Listings</h5>
-                                    <p class="empty-state-text" style="margin-bottom: 1.5rem;">
-                                        You have no listings created within the last 24 hours.
-                                    </p>
-                                    <a href="{{ route('seller.listings') }}" class="action-btn">
-                                        <i class="fas fa-list"></i>View All My Listings
-                                    </a>
+                            </div>
+                            <div class="kpi-number">{{ $statistics['pending_offers'] ?? 0 }}</div>
+                            <div class="kpi-meta">
+                                @if(($statistics['pending_offers'] ?? 0) > 0)
+                                    <span class="kpi-tag kpi-tag-warning">
+                                        <i class="fas fa-bell"></i> Action needed
+                                    </span>
                                 @else
-                                    <h5 class="empty-state-title">No Listings Yet</h5>
-                                    <p class="empty-state-text" style="margin-bottom: 1.5rem;">
-                                        Start creating listings to begin managing your e-waste items and generating environmental impact.
-                                    </p>
-                                    <a href="{{ route('listings.create') }}" class="action-btn">
-                                        <i class="fas fa-plus-circle"></i>Create First Listing
-                                    </a>
+                                    <span class="text-muted">All offers reviewed</span>
                                 @endif
                             </div>
-                        @endif
+                        </div>
+                    </div>
+
+                    <!-- KPI 3: Realized Revenue / Completed -->
+                    <div class="col-6 col-lg-3">
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-head">
+                                <span class="kpi-label">Completed Sales</span>
+                                <div class="kpi-icon-box">
+                                    <i class="fas fa-circle-check"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-number">{{ $statistics['completed_transactions'] ?? 0 }}</div>
+                            <div class="kpi-meta">
+                                <span class="kpi-tag kpi-tag-success">
+                                    ₱{{ number_format($statistics['total_revenue'] ?? 0, 2) }}
+                                </span>
+                                <span>earned</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4: Environmental Impact -->
+                    <div class="col-6 col-lg-3">
+                        <div class="kpi-card kpi-emerald">
+                            <div class="kpi-head">
+                                <span class="kpi-label">E-Waste Diverted</span>
+                                <div class="kpi-icon-box">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-number">{{ number_format($statistics['weight_diverted'] ?? 0, 1) }} <small style="font-size: 1rem; font-weight: 600;">kg</small></div>
+                            <div class="kpi-meta">
+                                <span class="kpi-tag kpi-tag-info">
+                                    <i class="fas fa-earth-americas"></i> Landfill avoided
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Main Listings Workspace -->
+            <section class="content-panel-card">
+                <!-- Panel Toolbar -->
+                <div class="panel-toolbar">
+                    <div class="panel-title-wrap">
+                        <h2 class="panel-title">
+                            {{ ($isRecentView ?? false) ? 'Recent Listings' : 'All Listings Catalog' }}
+                        </h2>
+                        <span class="panel-badge-count">{{ $listings->total() }} items</span>
+                    </div>
+
+                    <!-- Filters and Search Toolbar -->
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <!-- Status Filter Tabs -->
+                        <div class="filter-tabs-wrapper">
+                            @php
+                                $currentStatus = request('status', 'all');
+                                $baseUrl = ($isRecentView ?? false) ? route('seller.dashboard') : route('seller.listings');
+                            @endphp
+                            <a href="{{ $baseUrl }}?status=all{{ request('search') ? '&search=' . urlencode(request('search')) : '' }}" 
+                               class="filter-tab-btn {{ $currentStatus === 'all' || !$currentStatus ? 'active' : '' }}">
+                                All
+                            </a>
+                            <a href="{{ $baseUrl }}?status=available{{ request('search') ? '&search=' . urlencode(request('search')) : '' }}" 
+                               class="filter-tab-btn {{ $currentStatus === 'available' ? 'active' : '' }}">
+                                Available
+                            </a>
+                            <a href="{{ $baseUrl }}?status=matched{{ request('search') ? '&search=' . urlencode(request('search')) : '' }}" 
+                               class="filter-tab-btn {{ $currentStatus === 'matched' ? 'active' : '' }}">
+                                Matched
+                            </a>
+                            <a href="{{ $baseUrl }}?status=processed{{ request('search') ? '&search=' . urlencode(request('search')) : '' }}" 
+                               class="filter-tab-btn {{ $currentStatus === 'processed' ? 'active' : '' }}">
+                                Processed
+                            </a>
+                        </div>
+
+                        <!-- Keyword Search Input -->
+                        <form action="{{ $baseUrl }}" method="GET" class="d-flex align-items-center m-0">
+                            @if(request('status') && request('status') !== 'all')
+                                <input type="hidden" name="status" value="{{ request('status') }}">
+                            @endif
+                            <div class="search-input-group">
+                                <i class="fas fa-search"></i>
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search device..." class="search-input-control" autocomplete="off">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Listings Table -->
+                @if($listings->count() > 0)
+                    <div class="table-responsive-wrapper">
+                        <table class="seller-table">
+                            <thead>
+                                <tr>
+                                    <th>Item & Category</th>
+                                    <th>Status</th>
+                                    <th>Suggested Price</th>
+                                    <th>Buyer Offers</th>
+                                    <th>Listed Date</th>
+                                    <th style="text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($listings as $listing)
+                                    @php
+                                        $primaryPhoto = $listing->photos[0] ?? null;
+                                        $pendingOffers = $listing->offers ? $listing->offers->where('status', 'pending')->count() : 0;
+                                        $totalOffers = $listing->offers ? $listing->offers->count() : 0;
+                                        $categoryName = $listing->category ?: ($listing->deviceType->name ?? 'E-Waste Item');
+                                        $brandName = $listing->deviceBrand->name ?? null;
+                                    @endphp
+                                    <tr>
+                                        <!-- Item & Category -->
+                                        <td>
+                                            <div class="item-cell-wrap">
+                                                <div class="item-thumb-box">
+                                                    @if($primaryPhoto)
+                                                        <img src="{{ $primaryPhoto }}" alt="{{ $categoryName }}" class="item-thumb-img" loading="lazy">
+                                                    @else
+                                                        <i class="fas fa-laptop item-thumb-icon"></i>
+                                                    @endif
+                                                </div>
+                                                <div class="item-details-wrap">
+                                                    <a href="{{ route('listings.show', $listing) }}" class="item-title">
+                                                        {{ $categoryName }}
+                                                        @if($brandName)
+                                                            <span style="font-weight: 500; color: var(--seller-text-muted);">• {{ $brandName }}</span>
+                                                        @endif
+                                                    </a>
+                                                    <div class="item-sub-tags">
+                                                        <span class="badge-condition">
+                                                            {{ str_replace('_', ' ', $listing->condition) }}
+                                                        </span>
+                                                        @if($listing->estimated_weight)
+                                                            <span style="font-size: 0.72rem; color: #94a3b8;">
+                                                                {{ number_format($listing->estimated_weight, 1) }} kg
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Status Badge -->
+                                        <td>
+                                            @if($listing->status === 'available')
+                                                <span class="badge-status badge-status-available">
+                                                    <i class="fas fa-circle-check"></i> Available
+                                                </span>
+                                            @elseif($listing->status === 'matched')
+                                                <span class="badge-status badge-status-matched">
+                                                    <i class="fas fa-handshake"></i> Matched
+                                                </span>
+                                            @elseif($listing->status === 'processed')
+                                                <span class="badge-status badge-status-processed">
+                                                    <i class="fas fa-box-archive"></i> Processed
+                                                </span>
+                                            @else
+                                                <span class="badge-status badge-status-pending">
+                                                    <i class="fas fa-hourglass-half"></i> {{ ucfirst($listing->status) }}
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Suggested Price -->
+                                        <td>
+                                            <span class="price-value">₱{{ number_format($listing->suggested_price, 2) }}</span>
+                                        </td>
+
+                                        <!-- Offers -->
+                                        <td>
+                                            @if($pendingOffers > 0)
+                                                <a href="{{ route('listings.offers', $listing) }}" class="offers-pill has-pending" title="View pending offers">
+                                                    <i class="fas fa-bell"></i> {{ $pendingOffers }} Pending
+                                                </a>
+                                            @elseif($totalOffers > 0)
+                                                <a href="{{ route('listings.offers', $listing) }}" class="offers-pill" style="background: #f1f5f9; color: #475569;" title="View all offers">
+                                                    <i class="fas fa-comments"></i> {{ $totalOffers }} Offers
+                                                </a>
+                                            @else
+                                                <span class="offers-pill no-offers">—</span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Listed Date -->
+                                        <td>
+                                            <div style="font-weight: 600; color: #334155; font-size: 0.84rem;">
+                                                {{ $listing->created_at->format('M d, Y') }}
+                                            </div>
+                                            <small style="color: #94a3b8; font-size: 0.74rem;">
+                                                {{ $listing->created_at->diffForHumans() }}
+                                            </small>
+                                        </td>
+
+                                        <!-- Action Buttons -->
+                                        <td>
+                                            <div class="action-group justify-content-end">
+                                                <a href="{{ route('listings.show', $listing) }}" class="btn-action-icon" title="View Listing Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                @if($listing->isAvailable())
+                                                    <a href="{{ route('listings.edit', $listing) }}" class="btn-action-icon btn-action-edit" title="Edit Listing">
+                                                        <i class="fas fa-pen-to-square"></i>
+                                                    </a>
+                                                @endif
+                                                @if($totalOffers > 0)
+                                                    <a href="{{ route('listings.offers', $listing) }}" class="btn-action-icon btn-action-offers" title="Manage Offers">
+                                                        <i class="fas fa-handshake"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    @if($listings->hasPages())
+                        <div class="panel-footer-pagination">
+                            <div style="font-size: 0.82rem; color: #64748b;">
+                                Showing {{ $listings->firstItem() }} to {{ $listings->lastItem() }} of {{ $listings->total() }} items
+                            </div>
+                            <div>
+                                {{ $listings->links('pagination.custom') }}
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <!-- Empty State -->
+                    <div class="empty-state-wrap">
+                        <div class="empty-icon-circle">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        @if(request('search') || (request('status') && request('status') !== 'all'))
+                            <h3 class="empty-state-title">No Matching Listings Found</h3>
+                            <p class="empty-state-desc">
+                                We couldn't find any listings matching your current filter criteria. Try resetting your search or filters.
+                            </p>
+                            <a href="{{ ($isRecentView ?? false) ? route('seller.dashboard') : route('seller.listings') }}" class="btn-create-listing">
+                                <i class="fas fa-rotate-left"></i> Reset Filters
+                            </a>
+                        @elseif($isRecentView ?? false)
+                            <h3 class="empty-state-title">No Recent Listings</h3>
+                            <p class="empty-state-desc">
+                                You haven't created any listings in the last 24 hours. Explore your complete inventory history or publish a new device.
+                            </p>
+                            <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
+                                <a href="{{ route('seller.listings') }}" class="btn-action-icon" style="width: auto; padding: 0.6rem 1.2rem; font-weight: 700;">
+                                    <i class="fas fa-boxes-stacked me-1"></i> View All Listings
+                                </a>
+                                <a href="{{ route('listings.create') }}" class="btn-create-listing">
+                                    <i class="fas fa-plus"></i> List New Device
+                                </a>
+                            </div>
+                        @else
+                            <h3 class="empty-state-title">Your Inventory is Empty</h3>
+                            <p class="empty-state-desc">
+                                Start listing your electronic waste items to connect with verified buyers and divert e-waste responsibly.
+                            </p>
+                            <a href="{{ route('listings.create') }}" class="btn-create-listing">
+                                <i class="fas fa-plus"></i> Create First Listing
+                            </a>
+                        @endif
+                    </div>
+                @endif
+            </section>
         </div>
     </div>
 </div>
-</div>
-
 @endsection

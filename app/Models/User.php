@@ -269,6 +269,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is ID verified.
+     */
+    public function isVerified(): bool
+    {
+        return (bool) $this->is_verified;
+    }
+
+    /**
      * Check if user is an admin.
      */
     public function isAdmin(): bool

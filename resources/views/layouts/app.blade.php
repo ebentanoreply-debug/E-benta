@@ -68,6 +68,20 @@
             padding-top: 60px;
         }
 
+        @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
+        body {
+            padding-top: 0 !important;
+            background-color: #09171f;
+        }
+        @media (max-width: 991.98px) {
+            .admin-exec-header,
+            .admin-module-header,
+            .stt-hero-header {
+                padding-top: 4.25rem !important;
+            }
+        }
+        @endif
+
         main {
             flex: 1 0 auto;
         }
@@ -760,6 +774,61 @@
                 padding-right: 0 !important;
             }
         }
+
+        /* Pagination Styling and SVG Overflow Safeguards */
+        nav[aria-label*="pagination"] svg,
+        .pagination svg,
+        nav svg.w-5.h-5,
+        nav svg.w-5,
+        nav svg.h-5,
+        svg[class*="w-5"],
+        svg[class*="h-5"] {
+            width: 1.25rem !important;
+            height: 1.25rem !important;
+            max-width: 20px !important;
+            max-height: 20px !important;
+            display: inline-block !important;
+            vertical-align: middle;
+        }
+
+        .pagination {
+            margin-bottom: 0;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .page-item .page-link {
+            border-radius: 0.5rem;
+            color: #0d9488;
+            border-color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.375rem 0.75rem;
+        }
+
+        .page-item.active .page-link {
+            background-color: #0d9488;
+            border-color: #0d9488;
+            color: #ffffff;
+        }
+
+        body.dark-mode .page-item .page-link {
+            background-color: #1e293b;
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #2dd4bf;
+        }
+
+        body.dark-mode .page-item.active .page-link {
+            background-color: #0d9488;
+            border-color: #0d9488;
+            color: #ffffff;
+        }
+
+        body.dark-mode .page-item.disabled .page-link {
+            background-color: #0f172a;
+            border-color: rgba(255, 255, 255, 0.05);
+            color: #64748b;
+        }
     </style>
     @yield('styles')
 </head>
@@ -770,13 +839,22 @@
             document.body.classList.add('dark-mode');
         }
     </script>
+    @if(!request()->routeIs('admin.*') && !(auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
     <!-- Enhanced Top Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid px-3 px-md-4">
             <!-- Left: Brand & Context Indicator -->
             <div class="d-flex align-items-center gap-2">
-                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && (request()->routeIs('admin.*') || request()->routeIs('admin/*'))))
+                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && (request()->routeIs('admin.*') || request()->routeIs('admin/*') || request()->routeIs('settings*'))))
                     <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleAdminSidebar()" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('seller.*') || request()->routeIs('settings*'))))
+                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleSellerSidebar()" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                @elseif(request()->routeIs('buyer.*') || (auth()->check() && auth()->user()->isBuyer() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleBuyerSidebar()" title="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
                 @endif
@@ -786,23 +864,41 @@
                     <span>E-Benta</span>
                 </a>
 
-                @if(request()->routeIs('admin.*'))
+                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
                     <div class="d-none d-md-flex align-items-center ms-2">
                         <span class="admin-workspace-pill">
                             <i class="fas fa-shield-halved" style="color: #10b981;"></i> Admin Workspace
                         </span>
                     </div>
+                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && request()->routeIs('settings*')))
+                    <div class="d-none d-md-flex align-items-center ms-2">
+                        <span class="admin-workspace-pill">
+                            <i class="fas fa-store" style="color: #10b981;"></i> Seller Hub
+                        </span>
+                    </div>
+                @elseif(request()->routeIs('buyer.*') || (auth()->check() && auth()->user()->isBuyer() && request()->routeIs('settings*')))
+                    <div class="d-none d-md-flex align-items-center ms-2">
+                        <span class="admin-workspace-pill">
+                            <i class="fas fa-shopping-bag" style="color: #06b6d4;"></i> Buyer Hub
+                        </span>
+                    </div>
                 @endif
             </div>
 
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            @php
+                $isWorkspacePage = request()->routeIs('admin.*') || request()->routeIs('seller.*') || request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*');
+            @endphp
+
+            @if(!$isWorkspacePage)
+                <!-- Mobile Toggle for public/guest pages -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            @endif
 
             <!-- Navigation Items -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto" style="align-items: center; gap: 0.35rem;">
+            <div class="{{ $isWorkspacePage ? 'd-flex align-items-center ms-auto' : 'collapse navbar-collapse' }}" id="navbarNav">
+                <ul class="navbar-nav ms-auto flex-row align-items-center" style="gap: 0.35rem;">
                     
                     @if(!request()->routeIs('admin.*'))
                         <!-- Marketplace Link -->
@@ -943,6 +1039,7 @@
             </div>
         </div>
     </nav>
+    @endif
 
     @if($errors->any())
         <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
@@ -1126,76 +1223,169 @@
         @yield('content')
     </main>
 
+    @if(!request()->routeIs('admin.*') && !(auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
     <!-- Modern Multi-Column Eco Footer -->
-    <footer style="background: linear-gradient(180deg, #09171f 0%, #050d12 100%); color: #94a3b8; border-top: 1px solid rgba(13, 148, 136, 0.25); padding: 4.5rem 0 2rem; margin-top: auto; position: relative; overflow: hidden;">
+    <footer style="background: linear-gradient(180deg, #09171f 0%, #050d12 100%); color: #94a3b8; border-top: 1px solid rgba(13, 148, 136, 0.25); padding: 5rem 0 2.5rem; margin-top: auto; position: relative; overflow: hidden;">
         <!-- Ambient subtle glow -->
-        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 180px; background: radial-gradient(ellipse at top, rgba(13, 148, 136, 0.15), transparent 70%); pointer-events: none;"></div>
+        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 900px; height: 220px; background: radial-gradient(ellipse at top, rgba(13, 148, 136, 0.18), transparent 70%); pointer-events: none;"></div>
 
         <div class="container" style="position: relative; z-index: 2;">
+            <!-- Top Footer Grid -->
             <div class="row g-4 g-lg-5 mb-5">
                 <!-- Col 1: Brand & Environmental Mission -->
                 <div class="col-lg-4 col-md-6">
                     <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
-                        <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4);">
-                            <i class="fas fa-leaf" style="color: #ffffff; font-size: 1.2rem;"></i>
+                        <div style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);">
+                            <i class="fas fa-leaf" style="color: #ffffff; font-size: 1.25rem;"></i>
                         </div>
-                        <span style="font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">E-Benta</span>
+                        <span style="font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">E-Benta</span>
                     </div>
-                    <p style="font-size: 0.95rem; line-height: 1.7; color: #94a3b8; margin-bottom: 1.5rem;">
-                        The Philippines' premier circular economy platform for certified e-waste monetization, bulk scrap trading, and verifiable zero-landfill recycling.
+                    <p style="font-size: 0.92rem; line-height: 1.75; color: #94a3b8; margin-bottom: 1.5rem;">
+                        The Philippines' premier circular economy platform for certified e-waste monetization, bulk electronic scrap trading, and verifiable zero-landfill recycling.
                     </p>
-                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13, 148, 136, 0.12); border: 1px solid rgba(13, 148, 136, 0.3); padding: 0.45rem 0.9rem; border-radius: 2rem; font-size: 0.8rem; color: #5eead4; font-weight: 700;">
-                        <i class="fas fa-shield-halved"></i> Verified Zero-Landfill Initiative
+
+                    <!-- Trust Tag -->
+                    <div class="mb-4">
+                        <span style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13, 148, 136, 0.12); border: 1px solid rgba(13, 148, 136, 0.3); padding: 0.45rem 0.95rem; border-radius: 2rem; font-size: 0.8rem; color: #5eead4; font-weight: 700;">
+                            <i class="fas fa-shield-halved"></i> Verified Zero-Landfill Initiative
+                        </span>
+                    </div>
+
+                    <!-- Social Channels -->
+                    <div>
+                        <small style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Connect With Us</small>
+                        <div style="display: flex; gap: 0.6rem; align-items: center;">
+                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#0d9488'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#06b6d4'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#ec4899'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#3b82f6'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#10b981'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                                <i class="fab fa-discord"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Col 2: Marketplace Navigation -->
                 <div class="col-lg-2 col-md-6 col-6">
                     <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Marketplace</h6>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
                         <li><a href="{{ route('listings.index') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-arrow-right me-2" style="font-size: 0.75rem; color: #0d9488;"></i>All Listings</a></li>
                         <li><a href="{{ route('listings.index', ['category' => 'Smartphone']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-mobile-screen me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Smartphones</a></li>
                         <li><a href="{{ route('listings.index', ['category' => 'Laptop']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-laptop me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Laptops & PCs</a></li>
+                        <li><a href="{{ route('listings.index', ['category' => 'Tablet']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-tablet-screen-button me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Tablets & iPads</a></li>
                         <li><a href="{{ route('listings.index', ['condition' => 'non_functional']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-boxes-stacked me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Scrap & Bulk Lots</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 3: Platform & Handover -->
-                <div class="col-lg-3 col-md-6 col-6">
-                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">How It Works</h6>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
-                        <li><a href="{{ route('home') }}#process" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-bolt me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>4-Step Listing Flow</a></li>
+                <!-- Col 3: Platform Features & How It Works -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Platform</h6>
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
+                        <li><a href="{{ route('home') }}#process" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-bolt me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>4-Step Process</a></li>
                         <li><a href="{{ route('home') }}#calculator" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-calculator me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>CO₂ & Price Estimator</a></li>
-                        <li><a href="{{ route('home') }}#impact" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-chart-line me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Environmental Scoreboard</a></li>
-                        <li><a href="{{ route('home') }}#faq" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-circle-question me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Frequently Asked Questions</a></li>
+                        <li><a href="{{ route('home') }}#impact" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-chart-line me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Eco Scoreboard</a></li>
+                        <li><a href="{{ route('home') }}#faq" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-circle-question me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Help & FAQ</a></li>
+                        <li><a href="{{ route('listings.create') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-plus-circle me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Post a Listing</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 4: Trust & Quick Action -->
-                <div class="col-lg-3 col-md-6">
-                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Start Today</h6>
-                    <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 1rem; line-height: 1.6;">
-                        Have broken gadgets or scrap taking up storage? List in 60 seconds with verified doorstep pickup or safe meetup.
-                    </p>
-                    <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-sm w-100" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; font-weight: 800; padding: 0.75rem 1rem; border-radius: 0.6rem; border: none; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
-                        <i class="fas fa-plus-circle me-1"></i>Post Free Listing
-                    </a>
+                <!-- Col 4: Support & Contact Details -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Support & Contact</h6>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i class="fas fa-envelope" style="color: #0d9488; margin-top: 0.25rem;"></i>
+                            <div>
+                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Direct Support Email</span>
+                                <a href="mailto:support@e-benta.ph" style="color: #e2e8f0; font-weight: 600; text-decoration: none;">support@e-benta.ph</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i class="fas fa-location-dot" style="color: #06b6d4; margin-top: 0.25rem;"></i>
+                            <div>
+                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Service Coverage</span>
+                                <span style="color: #e2e8f0;">Metro Manila, Calabarzon & Central Luzon, PH</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i class="fas fa-clock" style="color: #f59e0b; margin-top: 0.25rem;"></i>
+                            <div>
+                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Operating Hours</span>
+                                <span style="color: #e2e8f0;">Mon – Sat: 8:00 AM – 6:00 PM PHT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter / Updates Box -->
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.85rem; padding: 0.9rem 1rem;">
+                        <small style="color: #e2e8f0; font-weight: 700; display: block; margin-bottom: 0.4rem;">Stay Updated on Drop-off Drives</small>
+                        <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to E-Benta Eco Updates!');" style="display: flex; gap: 0.4rem;">
+                            <input type="email" placeholder="Enter your email" required style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; color: #ffffff; font-size: 0.82rem; padding: 0.45rem 0.75rem; flex: 1; outline: none;">
+                            <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.5rem; font-weight: 800; font-size: 0.8rem; padding: 0.45rem 0.85rem; cursor: pointer;">Join</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Trust Badges Bar -->
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 1.5rem 0; margin-bottom: 2rem;">
+                <div class="row g-3 text-center text-md-start align-items-center">
+                    <div class="col-6 col-md-3">
+                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
+                            <i class="fas fa-id-card-clip" style="color: #0d9488; font-size: 1.35rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">100% ID Verified Members</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
+                            <i class="fas fa-lock" style="color: #06b6d4; font-size: 1.35rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">256-Bit SSL Encrypted</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
+                            <i class="fas fa-recycle" style="color: #10b981; font-size: 1.35rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">DENR E-Waste Aligned</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
+                            <i class="fas fa-truck-fast" style="color: #f59e0b; font-size: 1.35rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Safe Doorstep Collection</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Bottom Sub-Footer -->
-            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem; font-size: 0.85rem;">
                 <p class="mb-0" style="color: #64748b;">
-                    &copy; {{ date('Y') }} <strong>E-Benta</strong>. All Rights Reserved. Built for Sustainable Circular Innovation.
+                    &copy; {{ date('Y') }} <strong>E-Benta</strong>. All Rights Reserved. Built for Sustainable Circular Innovation in the Philippines.
                 </p>
-                <div style="display: flex; gap: 1.5rem; align-items: center;">
-                    <span style="color: #475569;"><i class="fas fa-lock me-1"></i>256-Bit Encrypted</span>
-                    <span style="color: #475569;"><i class="fas fa-id-card me-1"></i>Govt ID Verified</span>
-                    <a href="#" style="color: #64748b; text-decoration: none;" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;"><i class="fas fa-arrow-up me-1"></i>Top</a>
+                <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Privacy Policy</a>
+                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Terms of Service</a>
+                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Recycling Standards</a>
+                    <a href="#" style="color: #2dd4bf; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+                        <span>Back to Top</span> <i class="fas fa-arrow-up"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </footer>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

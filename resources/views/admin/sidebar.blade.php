@@ -3,12 +3,12 @@
     .admin-sidebar {
         position: fixed;
         left: 0;
-        top: 60px;
+        top: 0;
         width: 260px;
-        height: calc(100vh - 60px);
+        height: 100vh;
         display: flex;
         flex-direction: column;
-        z-index: 1010;
+        z-index: 1040;
         background: #09171f;
         border-right: 1px solid rgba(13, 148, 136, 0.2);
         transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
@@ -80,6 +80,29 @@
         margin: 0;
     }
 
+    .admin-mobile-floating-btn {
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #09171f;
+        color: #2dd4bf;
+        border: 1px solid rgba(13, 148, 136, 0.4);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        cursor: pointer;
+        z-index: 1030;
+        transition: all 0.2s ease;
+    }
+    .admin-mobile-floating-btn:active {
+        transform: scale(0.95);
+    }
+
     @media (max-width: 991.98px) {
         .admin-sidebar {
             top: 0 !important;
@@ -87,7 +110,7 @@
             transform: translateX(-100%) !important;
             opacity: 0 !important;
             pointer-events: none !important;
-            z-index: 1045 !important;
+            z-index: 1050 !important;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
         }
         .admin-sidebar.show-mobile {
@@ -98,16 +121,26 @@
     }
 </style>
 
-<div class="sidebar-backdrop" onclick="closeAdminSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1040; backdrop-filter: blur(4px);"></div>
+<!-- Floating Toggle Button on Mobile -->
+<button type="button" class="admin-mobile-floating-btn d-lg-none" onclick="toggleAdminSidebar()" title="Open Navigation">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="sidebar-backdrop" onclick="closeAdminSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1045; backdrop-filter: blur(4px);"></div>
 
 <div class="admin-sidebar">
-    <!-- Mobile Sidebar Header -->
-    <div class="d-lg-none" style="padding: 1.25rem 1.4rem; border-bottom: 1px solid rgba(13, 148, 136, 0.2); display: flex; align-items: center; justify-content: space-between; background: #060e14;">
-        <div class="d-flex align-items-center gap-2">
-            <i class="fas fa-shield-halved" style="color: #10b981; font-size: 1.25rem;"></i>
-            <span style="color: #ffffff; font-weight: 800; font-size: 1rem;">Admin Navigation</span>
-        </div>
-        <button type="button" onclick="closeAdminSidebar()" style="background: none; border: none; color: #94a3b8; font-size: 1.25rem; cursor: pointer;">
+    <!-- Sidebar Brand Header -->
+    <div style="padding: 1.25rem 1.4rem; border-bottom: 1px solid rgba(13, 148, 136, 0.2); display: flex; align-items: center; justify-content: space-between; background: #060e14;">
+        <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none;">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                <i class="fas fa-shield-halved" style="color: #ffffff; font-size: 1.1rem;"></i>
+            </div>
+            <div>
+                <span style="color: #ffffff; font-weight: 900; font-size: 1.05rem; display: block; line-height: 1.15;">E-Benta</span>
+                <span style="color: #10b981; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Admin Center</span>
+            </div>
+        </a>
+        <button type="button" class="d-lg-none" onclick="closeAdminSidebar()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">
             <i class="fas fa-times"></i>
         </button>
     </div>
@@ -153,11 +186,7 @@
         </a>
 
         <p class="sidebar-section-title">Administration</p>
-        <a href="{{ route('profile') }}" class="sidebar-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-            <i class="fas fa-user-gear"></i>
-            <span>Admin Profile</span>
-        </a>
-        <a href="{{ route('settings') }}" class="sidebar-link {{ request()->routeIs('settings') ? 'active' : '' }}">
+        <a href="{{ route('settings') }}" class="sidebar-link {{ request()->routeIs('settings*') ? 'active' : '' }}">
             <i class="fas fa-sliders"></i>
             <span>System Settings</span>
         </a>

@@ -1,289 +1,237 @@
 @extends('layouts.app')
 
-@section('title', 'Saved Items - E-Benta')
+@section('title', 'Saved Items - Buyer Hub - E-Benta')
 
-@section('content')
+@section('styles')
 <style>
-    .si-wrapper {
-        background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 35%, #f0f9ff 100%);
+    .saved-page-container {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 2rem 0;
-        position: relative;
+        padding-bottom: 4rem;
     }
 
-    .si-wrapper::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-            radial-gradient(ellipse 700px 450px at 15% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 55%),
-            radial-gradient(ellipse 560px 420px at 90% 85%, rgba(59, 130, 246, 0.07) 0%, transparent 55%);
-        pointer-events: none;
-        z-index: 0;
+    body.dark-mode .saved-page-container {
+        background: #09171f;
     }
 
-    .si-header {
-        background: linear-gradient(135deg, #ec4899 0%, #db2777 55%, #be185d 100%);
+    .saved-hero-header {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
-        padding: 2rem;
-        border-radius: 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 10px 30px rgba(190, 24, 93, 0.2);
+        padding: 2.25rem 0 2rem;
         position: relative;
         overflow: hidden;
     }
 
-    .si-header::after {
+    .saved-hero-header::after {
         content: '';
         position: absolute;
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
-        top: -110px;
-        right: -70px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+        top: 0;
+        right: 0;
+        width: 450px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.2) 0%, rgba(6, 182, 212, 0.08) 50%, transparent 70%);
+        pointer-events: none;
     }
 
-    .si-header h1 {
-        font-size: 2rem;
-        font-weight: 900;
-        margin: 0 0 0.4rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .si-header p {
-        margin: 0;
-        opacity: 0.95;
-        position: relative;
-        z-index: 1;
-    }
-
-    .si-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .si-card {
+    .saved-card {
         background: #ffffff;
-        border: 1px solid rgba(236, 72, 153, 0.2);
-        border-radius: 0.9rem;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 1.1rem;
         overflow: hidden;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
+        height: 100%;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
     }
 
-    .si-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+    .saved-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 30px rgba(13, 148, 136, 0.12);
+        border-color: rgba(13, 148, 136, 0.35);
     }
 
-    .si-image {
-        height: 170px;
-        background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(16, 185, 129, 0.08));
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    body.dark-mode .saved-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.2);
+    }
+
+    body.dark-mode .saved-card:hover {
+        border-color: rgba(13, 148, 136, 0.45);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .saved-image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 190px;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
         overflow: hidden;
     }
 
-    .si-image img {
+    body.dark-mode .saved-image-wrapper {
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+    }
+
+    .saved-image-wrapper img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.35s ease;
     }
 
-    .si-image i {
-        font-size: 2rem;
-        color: #db2777;
-        opacity: 0.65;
-    }
-
-    .si-body {
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        flex: 1;
-    }
-
-    .si-title {
-        margin: 0;
-        font-weight: 800;
-        color: #1e293b;
-        font-size: 1rem;
-    }
-
-    .si-desc {
-        margin: 0;
-        color: #64748b;
-        font-size: 0.85rem;
-        line-height: 1.45;
-    }
-
-    .si-price {
-        margin: 0;
-        font-size: 1rem;
-        font-weight: 800;
-        color: #0f766e;
-    }
-
-    .si-meta {
-        margin: 0;
-        color: #64748b;
-        font-size: 0.75rem;
-    }
-
-    .si-actions {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: auto;
-    }
-
-    .si-btn {
-        flex: 1;
-        border: none;
-        border-radius: 0.55rem;
-        padding: 0.6rem 0.7rem;
-        font-size: 0.78rem;
-        font-weight: 700;
-        text-decoration: none;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-
-    .si-btn-view {
-        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-        color: #ffffff;
-    }
-
-    .si-btn-offer {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: #ffffff;
-    }
-
-    .si-btn-remove {
-        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-        color: #ffffff;
-        cursor: pointer;
-    }
-
-    .si-empty {
-        background: #ffffff;
-        border: 2px dashed rgba(236, 72, 153, 0.3);
-        border-radius: 1rem;
-        padding: 3rem 1.5rem;
-        text-align: center;
-        color: #475569;
-        position: relative;
-        z-index: 1;
-    }
-
-    .si-empty i {
-        font-size: 2.5rem;
-        color: #db2777;
-        margin-bottom: 0.75rem;
-        display: block;
-    }
-
-    .si-pagination {
-        margin-top: 1.5rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    @media (max-width: 768px) {
-        .si-header h1 {
-            font-size: 1.5rem;
-        }
-
-        .si-grid {
-            grid-template-columns: 1fr;
-        }
+    .saved-card:hover .saved-image-wrapper img {
+        transform: scale(1.05);
     }
 </style>
+@endsection
+
+@section('content')
 
 @include('buyer.sidebar')
+
 <div class="main-content-wrapper">
-    <div class="si-wrapper">
-        <div class="container-fluid px-3 px-md-4 py-3 py-md-4" style="position: relative; z-index: 1;">
-            <div class="si-header">
-                <h1><i class="fas fa-heart me-2"></i>Saved Items</h1>
-                <p>Quick access to listings you bookmarked for later.</p>
+    <div class="saved-page-container">
+        
+        <!-- HERO HEADER -->
+        <div class="saved-hero-header">
+            <div class="container-fluid px-3 px-md-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(13, 148, 136, 0.2); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-bookmark me-1"></i>Saved Watchlist
+                            </span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $savedListings->total() }} Bookmarked Items</span>
+                        </div>
+                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
+                            Saved Items & Watchlist
+                        </h1>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
+                            Quick access to devices and lots you bookmarked for review and bidding.
+                        </p>
+                    </div>
+
+                    <a href="{{ route('listings.index') }}" class="btn d-inline-flex align-items-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.75rem; font-weight: 800; padding: 0.65rem 1.25rem; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3);">
+                        <i class="fas fa-search"></i>
+                        <span>Browse Catalog</span>
+                    </a>
+                </div>
             </div>
+        </div>
 
+        <!-- MAIN CONTENT -->
+        <div class="container-fluid px-3 px-md-4 mt-4">
             @if($savedListings->count() > 0)
-                <div class="si-grid">
+                <div class="row g-3 g-md-4">
                     @foreach($savedListings as $listing)
-                        <article class="si-card">
-                            <div class="si-image">
-                                @if($listing->photos && count(is_array($listing->photos) ? $listing->photos : json_decode($listing->photos, true) ?? []) > 0)
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <article class="saved-card">
+                                <!-- Image Box -->
+                                <div class="saved-image-wrapper">
                                     @php
-                                        $photos = is_array($listing->photos) ? $listing->photos : json_decode($listing->photos, true) ?? [];
+                                        $photos = is_array($listing->photos) ? $listing->photos : (json_decode($listing->photos, true) ?? []);
+                                        $firstPhoto = count($photos) > 0 ? $photos[0] : null;
                                     @endphp
-                                    <img src="{{ $photos[0] }}" alt="Listing image">
-                                @else
-                                    <i class="fas fa-image"></i>
-                                @endif
-                            </div>
-
-                            <div class="si-body">
-                                <h3 class="si-title">{{ $listing->category ?: ($listing->deviceType->name ?: 'Uncategorized') }}</h3>
-                                <p class="si-desc">{{ Str::limit($listing->description, 80) }}</p>
-                                <p class="si-price">
-                                    @if($listing->suggested_price > 0)
-                                        ₱{{ number_format($listing->suggested_price, 2) }}
+                                    @if($firstPhoto)
+                                        <img src="{{ $firstPhoto }}" alt="{{ $listing->title }}" loading="lazy">
                                     @else
-                                        <i class="fas fa-gift me-1"></i>Free
-                                    @endif
-                                </p>
-                                <p class="si-meta"><i class="fas fa-store me-1"></i>{{ $listing->seller->name }}</p>
-
-                                <div class="si-actions">
-                                    <a href="{{ route('listings.show', $listing) }}" class="si-btn si-btn-view">
-                                        <i class="fas fa-eye me-1"></i>View
-                                    </a>
-
-                                    @if(auth()->user()->is_verified)
-                                        <a href="{{ route('offers.create', $listing) }}" class="si-btn si-btn-offer">
-                                            <i class="fas fa-handshake me-1"></i>Offer
-                                        </a>
+                                        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8;">
+                                            <i class="fas fa-microchip" style="font-size: 2.5rem; opacity: 0.6; margin-bottom: 0.4rem; color: #0d9488;"></i>
+                                            <span style="font-size: 0.75rem; font-weight: 700;">E-Waste Device</span>
+                                        </div>
                                     @endif
 
-                                    <form method="POST" action="{{ route('buyer.saved-items.destroy', $listing) }}" style="margin: 0; flex: 1;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="si-btn si-btn-remove" style="width: 100%;">
-                                            <i class="fas fa-heart-broken me-1"></i>Remove
-                                        </button>
-                                    </form>
+                                    <!-- Condition Tag -->
+                                    <div style="position: absolute; top: 0.75rem; left: 0.75rem;">
+                                        <span class="badge" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: #ffffff; font-weight: 800; font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 0.45rem; text-transform: uppercase;">
+                                            {{ str_replace('_', ' ', $listing->condition ?? 'Good') }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
+
+                                <!-- Card Body -->
+                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                    <div class="d-flex align-items-center justify-content-between gap-1 mb-1">
+                                        <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0d9488; letter-spacing: 0.5px;">
+                                            {{ $listing->deviceType->name ?? ($listing->category ?? 'Electronics') }}
+                                        </span>
+                                        <span style="font-size: 0.72rem; color: #94a3b8;">
+                                            <i class="fas fa-store me-1"></i>{{ Str::limit($listing->seller?->name ?? 'Verified Seller', 14) }}
+                                        </span>
+                                    </div>
+
+                                    <h6 style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #0f172a; line-height: 1.35;" class="text-heading">
+                                        {{ Str::limit($listing->title ?: 'Electronic Lot', 40) }}
+                                    </h6>
+
+                                    <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1rem; line-height: 1.4; flex-grow: 1;">
+                                        {{ Str::limit($listing->description ?? 'No extra specifications provided.', 65) }}
+                                    </p>
+
+                                    <!-- Price -->
+                                    <div class="d-flex align-items-center justify-content-between pt-2 border-top mb-3" style="border-top-color: #f1f5f9 !important;">
+                                        <div>
+                                            <small style="color: #94a3b8; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; display: block;">Price</small>
+                                            <strong style="color: #0d9488; font-size: 1.1rem; font-weight: 900;">
+                                                @if($listing->suggested_price > 0)
+                                                    ₱{{ number_format($listing->suggested_price, 2) }}
+                                                @else
+                                                    <span style="color: #10b981;">Free Claim</span>
+                                                @endif
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions Row -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{{ route('listings.show', $listing) }}" class="btn btn-sm btn-outline-dark flex-grow-1" style="border-radius: 0.55rem; font-weight: 700; font-size: 0.8rem; padding: 0.45rem;">
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </a>
+
+                                        @if(auth()->user()->is_verified)
+                                            <a href="{{ route('offers.create', $listing) }}" class="btn btn-sm btn-dark flex-grow-1" style="border-radius: 0.55rem; font-weight: 700; font-size: 0.8rem; padding: 0.45rem; background: #0d9488; border-color: #0d9488;">
+                                                <i class="fas fa-handshake me-1"></i>Offer
+                                            </a>
+                                        @endif
+
+                                        <form method="POST" action="{{ route('buyer.saved-items.destroy', $listing) }}" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove from saved" style="border-radius: 0.55rem; padding: 0.45rem 0.65rem;">
+                                                <i class="fas fa-trash-can"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
                     @endforeach
                 </div>
 
                 @if($savedListings->hasPages())
-                    <div class="si-pagination">
+                    <div class="mt-4 pt-3 border-top d-flex justify-content-center">
                         {{ $savedListings->links() }}
                     </div>
                 @endif
             @else
-                <div class="si-empty">
-                    <i class="fas fa-heart"></i>
-                    <h4 style="margin: 0 0 0.5rem; font-weight: 800; color: #1e293b;">No saved items yet</h4>
-                    <p style="margin: 0 0 1.1rem;">Browse listings and tap the heart button to save items here.</p>
-                    <a href="{{ route('listings.index') }}" class="si-btn si-btn-view" style="display: inline-block; width: auto; padding-inline: 1rem;">
-                        <i class="fas fa-search me-1"></i>Browse Listings
+                <div class="p-5 text-center bg-white rounded-4 border" style="border-color: rgba(13, 148, 136, 0.15) !important;">
+                    <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1rem;">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <h4 style="font-weight: 800; color: #0f172a;" class="text-heading">No Saved Items Yet</h4>
+                    <p style="color: #64748b; font-size: 0.9rem; max-width: 420px; margin: 0.35rem auto 1.5rem;">
+                        Explore marketplace devices and click the bookmark button to keep track of items you want to buy later.
+                    </p>
+                    <a href="{{ route('listings.index') }}" class="btn d-inline-flex align-items-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.65rem; font-weight: 800; padding: 0.55rem 1.25rem;">
+                        <i class="fas fa-search"></i>
+                        <span>Explore Marketplace</span>
                     </a>
                 </div>
             @endif
         </div>
     </div>
 </div>
+
 @endsection

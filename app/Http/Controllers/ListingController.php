@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Offer;
 use App\Models\ImpactLog;
 use App\Models\Listing;
 use App\Models\User;
@@ -41,36 +42,54 @@ class ListingController extends Controller
             $query->where('condition', $request->condition);
         }
 
-        // Filter by intended action
-        if ($request->has('action') && $request->action) {
-            $query->where('intended_action', $request->action);
+        // Search in title, category, description, and brand
+        if ($request->has('search') && $request->search) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->whereHas('deviceType', function ($sub) use ($searchTerm) {
+                    $sub->where('name', 'like', '%' . $searchTerm . '%');
+                })
+                ->orWhereHas('deviceBrand', function ($sub) use ($searchTerm) {
+                    $sub->where('name', 'like', '%' . $searchTerm . '%');
+                })
+                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
         }
 
-        // Filter by seller
-        $filteredSeller = null;
-        if ($request->has('seller_id') && $request->seller_id) {
-            $query->where('user_id', $request->seller_id);
-            $filteredSeller = User::find($request->seller_id);
-        }
-
-        // Sort options
+        // Sorting
         $sort = $request->get('sort', 'latest');
-        match ($sort) {
-            'price_low' => $query->orderBy('suggested_price', 'asc'),
-            'price_high' => $query->orderBy('suggested_price', 'desc'),
-            'oldest' => $query->orderBy('created_at', 'asc'),
-            default => $query->orderBy('created_at', 'desc'), // latest
-        };
+        switch ($sort) {
+            case 'price_low':
+                $query->orderBy('suggested_price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('suggested_price', 'desc');
+                break;
+            case 'weight_low':
+                $query->orderBy('estimated_weight', 'asc');
+                break;
+            case 'weight_high':
+                $query->orderBy('estimated_weight', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
 
-        $listings = $query->paginate(15);
+        $listings = $query->paginate(12)->withQueryString();
 
-        return view('listings.index', compact('listings', 'savedListingIds', 'filteredSeller'));
+        // Get filter options from database
+        $categories = DeviceType::pluck('name')->toArray();
+        $conditions = ['functional', 'repairable', 'for_parts'];
+
+        return view('listings.index', compact('listings', 'categories', 'conditions', 'savedListingIds'));
     }
 
     /**
      * Show seller's dashboard with their listings.
      */
-    public function sellerDashboard()
+    public function sellerDashboard(Request $request)
     {
         $user = Auth::user();
 
@@ -78,11 +97,47 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized access');
         }
 
-        $listings = Listing::where('user_id', $user->id)
+        $query = Listing::where('user_id', $user->id)
             ->where('created_at', '>=', now()->subDay())
-            ->with(['deviceType', 'listingPhotos'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->with(['deviceType', 'deviceBrand', 'listingPhotos', 'offers']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('deviceType', function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%");
+                })->orWhereHas('deviceBrand', function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%");
+                })->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $listings = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        $sellerListingIds = Listing::where('user_id', $user->id)->pluck('id');
+
+        $pendingOffersCount = Offer::whereIn('listing_id', $sellerListingIds)
+            ->where('status', 'pending')
+            ->count();
+
+        $completedSalesQuery = Offer::whereIn('listing_id', $sellerListingIds)
+            ->where('status', 'completed');
+
+        $totalRevenue = (float) (clone $completedSalesQuery)->sum('bid_amount');
+
+        $activeInventoryValue = (float) Listing::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'available'])
+            ->sum('suggested_price');
+
+        $totalWeightDiverted = (float) Listing::where('user_id', $user->id)
+            ->whereIn('status', ['matched', 'processed'])
+            ->sum('estimated_weight');
 
         $statistics = [
             'total_listings' => Listing::where('user_id', $user->id)->count(),
@@ -95,6 +150,10 @@ class ListingController extends Controller
             'completed_transactions' => Listing::where('user_id', $user->id)
                 ->where('status', 'processed')
                 ->count(),
+            'pending_offers' => $pendingOffersCount,
+            'total_revenue' => $totalRevenue,
+            'active_inventory_value' => $activeInventoryValue,
+            'weight_diverted' => $totalWeightDiverted,
         ];
 
         $isRecentView = true;
@@ -105,7 +164,7 @@ class ListingController extends Controller
     /**
      * Show seller's full listing history.
      */
-    public function sellerListings()
+    public function sellerListings(Request $request)
     {
         $user = Auth::user();
 
@@ -113,10 +172,46 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized access');
         }
 
-        $listings = Listing::where('user_id', $user->id)
-            ->with(['deviceType', 'listingPhotos'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Listing::where('user_id', $user->id)
+            ->with(['deviceType', 'deviceBrand', 'listingPhotos', 'offers']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('deviceType', function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%");
+                })->orWhereHas('deviceBrand', function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%");
+                })->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $listings = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        $sellerListingIds = Listing::where('user_id', $user->id)->pluck('id');
+
+        $pendingOffersCount = Offer::whereIn('listing_id', $sellerListingIds)
+            ->where('status', 'pending')
+            ->count();
+
+        $completedSalesQuery = Offer::whereIn('listing_id', $sellerListingIds)
+            ->where('status', 'completed');
+
+        $totalRevenue = (float) (clone $completedSalesQuery)->sum('bid_amount');
+
+        $activeInventoryValue = (float) Listing::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'available'])
+            ->sum('suggested_price');
+
+        $totalWeightDiverted = (float) Listing::where('user_id', $user->id)
+            ->whereIn('status', ['matched', 'processed'])
+            ->sum('estimated_weight');
 
         $statistics = [
             'total_listings' => Listing::where('user_id', $user->id)->count(),
@@ -129,6 +224,10 @@ class ListingController extends Controller
             'completed_transactions' => Listing::where('user_id', $user->id)
                 ->where('status', 'processed')
                 ->count(),
+            'pending_offers' => $pendingOffersCount,
+            'total_revenue' => $totalRevenue,
+            'active_inventory_value' => $activeInventoryValue,
+            'weight_diverted' => $totalWeightDiverted,
         ];
 
         $isRecentView = false;
