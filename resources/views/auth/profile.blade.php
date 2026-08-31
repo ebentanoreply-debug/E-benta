@@ -798,34 +798,65 @@
                         <i class="fas fa-rocket" style="color: #0d9488; font-size: 1.4rem;"></i>Quick Actions
                     </h4>
                     <div class="quick-links">
-                        @if(auth()->user()->isSeller())
-                            <a href="{{ route('seller.dashboard') }}" class="quick-link">
-                                <i class="fa-solid fa-chart-line quick-link-icon"></i>
-                                <h6 class="quick-link-title">My Listings</h6>
-                                <p class="quick-link-desc">View and manage your listings</p>
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="quick-link">
+                                <i class="fas fa-shield-halved quick-link-icon" style="color: #10b981;"></i>
+                                <h6 class="quick-link-title">Control Center</h6>
+                                <p class="quick-link-desc">Executive dashboard & platform overview</p>
                             </a>
+                            <a href="{{ route('admin.pending-verifications') }}" class="quick-link">
+                                <i class="fas fa-id-card-clip quick-link-icon" style="color: #38bdf8;"></i>
+                                <h6 class="quick-link-title">ID Verifications</h6>
+                                <p class="quick-link-desc">Review submitted member IDs</p>
+                            </a>
+                            <a href="{{ route('admin.reports.index') }}" class="quick-link">
+                                <i class="fas fa-flag quick-link-icon" style="color: #f59e0b;"></i>
+                                <h6 class="quick-link-title">User Reports</h6>
+                                <p class="quick-link-desc">Moderate complaints & moderation queue</p>
+                            </a>
+                            <a href="{{ route('admin.audit-logs.index') }}" class="quick-link">
+                                <i class="fas fa-history quick-link-icon" style="color: #a855f7;"></i>
+                                <h6 class="quick-link-title">Audit Trail</h6>
+                                <p class="quick-link-desc">System security & admin event logs</p>
+                            </a>
+                        @elseif(auth()->user()->isSeller())
                             <a href="{{ route('seller.dashboard') }}" class="quick-link">
-                                <i class="fas fa-shopping-cart quick-link-icon"></i>
-                                <h6 class="quick-link-title">Sales</h6>
-                                <p class="quick-link-desc">Track your sales and orders</p>
+                                <i class="fas fa-boxes-stacked quick-link-icon" style="color: #0d9488;"></i>
+                                <h6 class="quick-link-title">Seller Hub</h6>
+                                <p class="quick-link-desc">Manage active listings & inventory</p>
+                            </a>
+                            <a href="{{ route('listings.create') }}" class="quick-link">
+                                <i class="fas fa-plus-circle quick-link-icon" style="color: #06b6d4;"></i>
+                                <h6 class="quick-link-title">List New Device</h6>
+                                <p class="quick-link-desc">Post electronics for recycling or sale</p>
+                            </a>
+                            <a href="{{ route('settings') }}" class="quick-link">
+                                <i class="fas fa-sliders-h quick-link-icon" style="color: #f59e0b;"></i>
+                                <h6 class="quick-link-title">Account Settings</h6>
+                                <p class="quick-link-desc">Manage payouts, notifications & address</p>
                             </a>
                         @else
                             <a href="{{ route('buyer.dashboard') }}" class="quick-link">
-                                <i class="fas fa-inbox quick-link-icon"></i>
-                                <h6 class="quick-link-title">My Offers</h6>
-                                <p class="quick-link-desc">View your active offers</p>
+                                <i class="fas fa-chart-line quick-link-icon" style="color: #0d9488;"></i>
+                                <h6 class="quick-link-title">Buyer Hub</h6>
+                                <p class="quick-link-desc">Dashboard, metrics & live recovery stats</p>
                             </a>
-                            <a href="{{ route('buyer.dashboard') }}" class="quick-link">
-                                <i class="fas fa-tree quick-link-icon"></i>
-                                <h6 class="quick-link-title">Impact Stats</h6>
-                                <p class="quick-link-desc">View environmental impact</p>
+                            <a href="{{ route('buyer.transaction-history') }}" class="quick-link">
+                                <i class="fas fa-receipt quick-link-icon" style="color: #06b6d4;"></i>
+                                <h6 class="quick-link-title">My Offers & Orders</h6>
+                                <p class="quick-link-desc">Track active negotiations & completed deals</p>
+                            </a>
+                            <a href="{{ route('buyer.saved-items') }}" class="quick-link">
+                                <i class="fas fa-bookmark quick-link-icon" style="color: #ec4899;"></i>
+                                <h6 class="quick-link-title">Saved Watchlist</h6>
+                                <p class="quick-link-desc">View bookmarked devices & scrap lots</p>
+                            </a>
+                            <a href="{{ route('listings.index') }}" class="quick-link">
+                                <i class="fas fa-search quick-link-icon" style="color: #10b981;"></i>
+                                <h6 class="quick-link-title">Browse Catalog</h6>
+                                <p class="quick-link-desc">Discover marketplace e-waste lots</p>
                             </a>
                         @endif
-                        <a href="#" class="quick-link">
-                            <i class="fas fa-question-circle quick-link-icon"></i>
-                            <h6 class="quick-link-title">Help & Support</h6>
-                            <p class="quick-link-desc">Get help and support</p>
-                        </a>
                     </div>
                 </div>
             </div>

@@ -709,12 +709,24 @@
 
     let wasteChart = null;
 
+    const trend6Labels = @json($trend6Months ?? []);
+    const trend6Data = @json($trend6Waste ?? []);
+    const trend12Labels = @json($trend12Months ?? []);
+    const trend12Data = @json($trend12Waste ?? []);
+    const trend24Labels = @json($trend24Months ?? []);
+    const trend24Data = @json($trend24Waste ?? []);
+
+    const materialValues = [
+        {{ (float)($materials['gold'] ?? 0) }},
+        {{ (float)($materials['copper'] ?? 0) }},
+        {{ (float)($materials['aluminum'] ?? 0) }},
+        {{ (float)($materials['plastic'] ?? 0) }},
+        {{ (float)($materials['rare_earth'] ?? 0) }}
+    ];
+
     function initWasteTrendChart() {
         const ctx = document.getElementById('wasteCollectionChart');
         if (!ctx) return;
-
-        const months = ['Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'];
-        const dataValues = [450, 720, 980, 1400, 1850, 2450];
 
         const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 250);
         gradient.addColorStop(0, 'rgba(13, 148, 136, 0.35)');
@@ -723,10 +735,10 @@
         wasteChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: months,
+                labels: trend6Labels.length > 0 ? trend6Labels : ['No Data'],
                 datasets: [{
                     label: 'E-Waste Diverted (kg)',
-                    data: dataValues,
+                    data: trend6Data.length > 0 ? trend6Data : [0],
                     borderColor: '#0d9488',
                     backgroundColor: gradient,
                     borderWidth: 3,
@@ -749,7 +761,12 @@
                         titleColor: '#ffffff',
                         bodyColor: '#5eead4',
                         padding: 10,
-                        displayColors: false
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' kg diverted';
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -769,11 +786,14 @@
         document.getElementById('wasteChartFilter')?.addEventListener('change', function(e) {
             const count = parseInt(e.target.value);
             if (count === 12) {
-                wasteChart.data.labels = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-                wasteChart.data.datasets[0].data = [200, 280, 350, 420, 560, 680, 850, 1100, 1450, 1800, 2100, 2450];
+                wasteChart.data.labels = trend12Labels;
+                wasteChart.data.datasets[0].data = trend12Data;
+            } else if (count === 24) {
+                wasteChart.data.labels = trend24Labels;
+                wasteChart.data.datasets[0].data = trend24Data;
             } else {
-                wasteChart.data.labels = months;
-                wasteChart.data.datasets[0].data = dataValues;
+                wasteChart.data.labels = trend6Labels;
+                wasteChart.data.datasets[0].data = trend6Data;
             }
             wasteChart.update();
         });
@@ -783,12 +803,16 @@
         const ctx = document.getElementById('materialsDistributionChart');
         if (!ctx) return;
 
+        // Check if all material values are 0
+        const totalMaterials = materialValues.reduce((a, b) => a + b, 0);
+        const chartData = totalMaterials > 0 ? materialValues : [0.01, 0.01, 0.01, 0.01, 0.01];
+
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Gold (g)', 'Copper (kg)', 'Aluminum (kg)', 'Plastics (kg)', 'Rare Earth (g)'],
                 datasets: [{
-                    data: [15, 45, 30, 60, 20],
+                    data: chartData,
                     backgroundColor: ['#eab308', '#f97316', '#94a3b8', '#06b6d4', '#a855f7'],
                     borderWidth: 2,
                     borderColor: '#ffffff'
@@ -802,7 +826,13 @@
                     tooltip: {
                         backgroundColor: '#0f172a',
                         titleColor: '#ffffff',
-                        padding: 10
+                        padding: 10,
+                        callbacks: {
+                            label: function(context) {
+                                const val = materialValues[context.dataIndex];
+                                return context.label + ': ' + val;
+                            }
+                        }
                     }
                 },
                 cutout: '72%'

@@ -63,6 +63,41 @@ class AdminController extends Controller
         $totalOffers = Offer::count();
         $totalTransactions = ImpactLog::count();
 
+        // Dynamic 6-month, 12-month, and 24-month trend data
+        $trend6Months = [];
+        $trend6Waste = [];
+        $trend6Co2 = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $trend6Months[] = $date->format('M Y');
+            $trend6Waste[] = round((float) ImpactLog::whereYear('created_at', $date->year)->whereMonth('created_at', $date->month)->sum('landfill_diverted_weight'), 2);
+            $trend6Co2[] = round((float) ImpactLog::whereYear('created_at', $date->year)->whereMonth('created_at', $date->month)->sum('co2_saved'), 2);
+        }
+
+        $trend12Months = [];
+        $trend12Waste = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $trend12Months[] = $date->format('M');
+            $trend12Waste[] = round((float) ImpactLog::whereYear('created_at', $date->year)->whereMonth('created_at', $date->month)->sum('landfill_diverted_weight'), 2);
+        }
+
+        $trend24Months = [];
+        $trend24Waste = [];
+        for ($i = 23; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $trend24Months[] = $date->format('M y');
+            $trend24Waste[] = round((float) ImpactLog::whereYear('created_at', $date->year)->whereMonth('created_at', $date->month)->sum('landfill_diverted_weight'), 2);
+        }
+
+        $materials = [
+            'gold' => round((float) ($analytics['materials_recovered']['gold'] ?? 0), 2),
+            'copper' => round((float) ($analytics['materials_recovered']['copper'] ?? 0), 2),
+            'aluminum' => round((float) ($analytics['materials_recovered']['aluminum'] ?? 0), 2),
+            'plastic' => round((float) ($analytics['materials_recovered']['plastic'] ?? 0), 2),
+            'rare_earth' => round((float) ($analytics['materials_recovered']['rare_earth'] ?? 0), 2),
+        ];
+
         return view('admin.dashboard', compact(
             'analytics',
             'recentTransactions',
@@ -76,7 +111,15 @@ class AdminController extends Controller
             'totalUsers',
             'totalListings',
             'totalOffers',
-            'totalTransactions'
+            'totalTransactions',
+            'trend6Months',
+            'trend6Waste',
+            'trend6Co2',
+            'trend12Months',
+            'trend12Waste',
+            'trend24Months',
+            'trend24Waste',
+            'materials'
         ));
     }
 
