@@ -332,8 +332,17 @@
     }
 </style>
 
-<div class="al-page">
-    <div class="container">
+@if(auth()->check() && auth()->user()->isAdmin())
+    @include('admin.sidebar')
+@elseif(auth()->check() && auth()->user()->isSeller())
+    @include('seller.sidebar')
+@elseif(auth()->check())
+    @include('buyer.sidebar')
+@endif
+
+<div class="main-content-wrapper">
+    <div class="al-page">
+        <div class="container">
         <div class="al-hero">
             <div class="al-hero-icon">
                 <i class="fas fa-map-marked-alt"></i>
@@ -445,5 +454,6 @@
             </div>
         @endif
     </div>
+</div>
 </div>
 @endsection

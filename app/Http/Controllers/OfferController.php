@@ -33,7 +33,7 @@ class OfferController extends Controller
                 ->with(['listing', 'listing.seller'])
                 ->orderBy('created_at', 'desc')
                 ->get();
-            
+
             return view('buyer.pending-verification', compact('offers'));
         }
 
@@ -129,7 +129,7 @@ class OfferController extends Controller
 
         $sellerAddress = $listing->pickup_address
             ?: ($listing->seller->addresses()->first()?->getFullAddress()
-            ?: ($listing->seller->address_city ? $listing->seller->address_city . ($listing->seller->address_province ? ', ' . $listing->seller->address_province : '') : 'Seller Location'));
+                ?: ($listing->seller->address_city ? $listing->seller->address_city . ($listing->seller->address_province ? ', ' . $listing->seller->address_province : '') : 'Seller Location'));
 
         $finalPickupLocation = $handoverMethod === 'pickup'
             ? ($listing->pickup_address ?: $sellerAddress)
@@ -435,9 +435,11 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        if (!$offer->isAccepted()
+        if (
+            !$offer->isAccepted()
             || $offer->listing->matched_buyer_id !== Auth::id()
-            || $offer->listing->status !== 'delivered') {
+            || $offer->listing->status !== 'delivered'
+        ) {
             return redirect()->back()->with('error', 'This offer is not ready for processing');
         }
 
@@ -454,7 +456,7 @@ class OfferController extends Controller
         }
 
         $totalRecoveredWeight = collect($validated['material_breakdown'] ?? [])
-            ->sum(fn (array $material): float => (float) $material['weight']);
+            ->sum(fn(array $material): float => (float) $material['weight']);
 
         if ($totalRecoveredWeight > $deviceWeight) {
             return redirect()->back()
@@ -582,9 +584,7 @@ class OfferController extends Controller
         return view('seller.transaction-history', compact('offers'));
     }
 
-    /**
-     * Show seller sales analytics.
-     */
+
     public function sellerSalesAnalytics()
     {
         $user = Auth::user();
@@ -621,8 +621,9 @@ class OfferController extends Controller
         $monthlyRevenue = [];
 
         for ($i = 5; $i >= 0; $i--) {
-            $monthStart = now()->subMonths($i)->startOfMonth();
-            $monthEnd = now()->subMonths($i)->endOfMonth();
+            $monthDate = now()->startOfMonth()->subMonths($i);
+            $monthStart = $monthDate->copy()->startOfMonth();
+            $monthEnd = $monthDate->copy()->endOfMonth();
 
             $salesInMonthQuery = (clone $offersQuery)
                 ->where('status', 'completed')

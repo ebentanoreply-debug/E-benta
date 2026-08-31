@@ -6,9 +6,13 @@
 <style>
     /* === TRANSACTION HISTORY WRAPPER === */
     .th-wrapper {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        min-height: 100vh;
-        padding: 2rem 0;
+        background: #f8fafc;
+        min-height: calc(100vh - 60px);
+        padding-bottom: 4rem;
+    }
+
+    body.dark-mode .th-wrapper {
+        background: #09171f;
     }
 
     /* === HEADER SECTION === */
@@ -16,7 +20,7 @@
         background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: white;
-        padding: 2.5rem 2rem;
+        padding: 2.25rem 0 2rem;
         margin-bottom: 2rem;
         position: relative;
         overflow: hidden;
@@ -25,23 +29,12 @@
     .th-header::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-    }
-
-    .th-header::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
+        top: 0;
+        right: 0;
+        width: 420px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.2) 0%, transparent 70%);
+        pointer-events: none;
     }
 
     .th-header-content {
@@ -50,9 +43,9 @@
     }
 
     .th-header h1 {
-        font-size: 2.2rem;
+        font-size: clamp(1.6rem, 2.5vw, 2.2rem);
         font-weight: 900;
-        margin: 0 0 0.5rem 0;
+        margin: 0 0 0.4rem 0;
         letter-spacing: -0.5px;
     }
 
@@ -60,15 +53,22 @@
         opacity: 0.95;
         margin: 0;
         font-size: 0.95rem;
+        color: #94a3b8;
     }
 
     /* === FILTER SECTION === */
     .th-filter-wrapper {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(13, 148, 136, 0.05) 100%);
-        border: 1px solid rgba(13, 148, 136, 0.3);
-        border-radius: 1rem;
-        padding: 1.5rem;
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.18);
+        border-radius: 1.15rem;
+        padding: 1.25rem 1.5rem;
         margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    body.dark-mode .th-filter-wrapper {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .th-filter-form {
@@ -84,136 +84,144 @@
     }
 
     .th-filter-group label {
-        color: #1e293b;
-        font-weight: 700;
+        color: #64748b;
+        font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         display: block;
         margin-bottom: 0.5rem;
     }
 
+    body.dark-mode .th-filter-group label {
+        color: #94a3b8;
+    }
+
     .th-filter-group select {
-        background: rgba(13, 148, 136, 0.1);
-        border: 1px solid rgba(13, 148, 136, 0.3);
-        color: #1e293b;
-        padding: 0.75rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #0f172a;
+        padding: 0.65rem 0.85rem;
         border-radius: 0.6rem;
         width: 100%;
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 0.88rem;
+    }
+
+    body.dark-mode .th-filter-group select {
+        background: #08141b;
+        border-color: rgba(13, 148, 136, 0.25);
+        color: #ffffff;
     }
 
     .th-filter-btn {
-        background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
         color: white;
         border: none;
-        padding: 0.75rem 1.5rem;
-        font-weight: 700;
+        padding: 0.65rem 1.4rem;
+        font-weight: 800;
+        font-size: 0.88rem;
         border-radius: 0.6rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         cursor: pointer;
     }
 
     .th-filter-btn:hover {
-        box-shadow: 0 8px 20px rgba(13, 148, 136, 0.35);
-        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+        transform: translateY(-1px);
     }
 
     .th-clear-btn {
-        background: rgba(13, 148, 136, 0.15);
-        color: #0d9488;
-        border: 1px solid rgba(13, 148, 136, 0.3);
-        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 0.65rem 1.4rem;
         font-weight: 700;
+        font-size: 0.88rem;
         border-radius: 0.6rem;
         text-decoration: none;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
 
     .th-clear-btn:hover {
-        background: rgba(13, 148, 136, 0.25);
+        background: rgba(13, 148, 136, 0.15);
+        color: #2dd4bf;
     }
 
     /* === STAT CARDS === */
     .th-stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.75rem;
+        gap: 1.25rem;
         margin-bottom: 2rem;
     }
 
     .th-stat-card {
-        background: white;
-        border: 1px solid rgba(13, 148, 136, 0.1);
-        border-top: 4px solid #0d9488;
-        border-radius: 1.2rem;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(13, 148, 136, 0.06);
-        transition: all 0.3s ease;
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.18);
+        border-radius: 1.1rem;
+        padding: 1.35rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        transition: all 0.25s ease;
+    }
+
+    body.dark-mode .th-stat-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .th-stat-card:hover {
-        box-shadow: 0 12px 35px rgba(13, 148, 136, 0.15);
-        transform: translateY(-5px);
-    }
-
-    .th-stat-card.stat-sold {
-        border-top-color: #0d9488;
-    }
-
-    .th-stat-card.stat-pending {
-        border-top-color: #f59e0b;
-    }
-
-    .th-stat-card.stat-weight {
-        border-top-color: #9b59b6;
-    }
-
-    .th-stat-card.stat-co2 {
-        border-top-color: #06b6d4;
+        box-shadow: 0 10px 28px rgba(13, 148, 136, 0.12);
+        border-color: rgba(13, 148, 136, 0.4);
+        transform: translateY(-2px);
     }
 
     .th-stat-label {
         color: #64748b;
-        font-size: 0.8rem;
-        margin: 0;
-        font-weight: 700;
+        font-size: 0.75rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        display: block;
-        margin-bottom: 0.75rem;
+        letter-spacing: 0.5px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    body.dark-mode .th-stat-label {
+        color: #94a3b8;
     }
 
     .th-stat-value {
-        margin: 0;
-        font-weight: 800;
-        font-size: 2rem;
-        color: #1e293b;
+        font-size: 1.85rem;
+        font-weight: 900;
+        color: #0f172a;
+        font-family: 'Outfit', sans-serif;
+        letter-spacing: -0.5px;
+        margin: 0.35rem 0 0;
     }
 
-    .th-stat-card.stat-sold .th-stat-value {
-        color: #0d9488;
+    body.dark-mode .th-stat-value {
+        color: #ffffff;
     }
-
-    .th-stat-card.stat-pending .th-stat-value {
-        color: #f39c12;
-    }
-
-    .th-stat-card.stat-weight .th-stat-value {
-        color: #9b59b6;
-    }
-
-    .th-stat-card.stat-co2 .th-stat-value {
-        color: #06b6d4;
-    }
-
     /* === TRANSACTION CARD === */
     .th-transaction-card {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 100%);
-        border: 1px solid rgba(13, 148, 136, 0.15);
-        border-radius: 1rem;
-        padding: 2rem;
+        background: #ffffff;
+        border: 1px solid rgba(13, 148, 136, 0.18);
+        border-radius: 1.15rem;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        transition: all 0.25s ease;
+    }
+
+    body.dark-mode .th-transaction-card {
+        background: #0f232d;
+        border-color: rgba(13, 148, 136, 0.25);
+    }
+
+    .th-transaction-card:hover {
+        box-shadow: 0 10px 30px rgba(13, 148, 136, 0.12);
+        border-color: rgba(13, 148, 136, 0.35);
+    }
         margin-bottom: 1.5rem;
         transition: all 0.3s ease;
     }
