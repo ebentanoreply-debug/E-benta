@@ -80,27 +80,91 @@
         margin: 0;
     }
 
-    .admin-mobile-floating-btn {
-        position: fixed;
-        top: 14px;
-        left: 14px;
-        width: 42px;
-        height: 42px;
+    .admin-mobile-top-bar {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 58px;
+        background: #060e14;
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        z-index: 1030;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .admin-hamburger-btn {
+        width: 38px;
+        height: 38px;
         border-radius: 10px;
-        background: #09171f;
+        background: rgba(13, 148, 136, 0.15);
         color: #2dd4bf;
-        border: 1px solid rgba(13, 148, 136, 0.4);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(13, 148, 136, 0.35);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .admin-hamburger-btn:hover, .admin-hamburger-btn:active {
+        background: #0d9488;
+        color: #ffffff;
+        border-color: #0d9488;
+        transform: scale(0.96);
+    }
+
+    .admin-mini-logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.15rem;
-        cursor: pointer;
-        z-index: 1030;
+        color: #ffffff;
+        font-size: 0.9rem;
+    }
+
+    .admin-brand-title {
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 1.05rem;
+        letter-spacing: -0.3px;
+    }
+
+    .admin-role-badge {
+        background: #10b981;
+        color: #ffffff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 0.15rem 0.45rem;
+        border-radius: 0.35rem;
+        letter-spacing: 0.5px;
+    }
+
+    .admin-icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
         transition: all 0.2s ease;
     }
-    .admin-mobile-floating-btn:active {
-        transform: scale(0.95);
+
+    .admin-icon-btn:hover, .admin-icon-btn:active {
+        background: rgba(13, 148, 136, 0.2);
+        color: #2dd4bf;
+        border-color: rgba(13, 148, 136, 0.4);
     }
 
     @media (max-width: 991.98px) {
@@ -121,10 +185,26 @@
     }
 </style>
 
-<!-- Floating Toggle Button on Mobile -->
-<button type="button" class="admin-mobile-floating-btn d-lg-none" onclick="toggleAdminSidebar()" title="Open Navigation">
-    <i class="fas fa-bars"></i>
-</button>
+<!-- Sleek Native-App Mobile Header for Admin -->
+<div class="admin-mobile-top-bar d-lg-none">
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" class="admin-hamburger-btn" onclick="toggleAdminSidebar()" title="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+            <div class="admin-mini-logo">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <span class="admin-brand-title">E-Benta</span>
+            <span class="admin-role-badge">ADMIN</span>
+        </a>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <a href="{{ route('settings') }}" class="admin-icon-btn" title="Settings">
+            <i class="fas fa-sliders"></i>
+        </a>
+    </div>
+</div>
 
 <div class="sidebar-backdrop" onclick="closeAdminSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1045; backdrop-filter: blur(4px);"></div>
 

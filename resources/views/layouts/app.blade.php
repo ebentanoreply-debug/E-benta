@@ -73,13 +73,6 @@
             padding-top: 0 !important;
             background-color: #09171f;
         }
-        @media (max-width: 991.98px) {
-            .admin-exec-header,
-            .admin-module-header,
-            .stt-hero-header {
-                padding-top: 4.25rem !important;
-            }
-        }
         @endif
 
         main {

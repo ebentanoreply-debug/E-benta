@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
 
+        $middleware->validateCsrfTokens(except: [
+            '/logout',
+            'logout',
+        ]);
+
         $middleware->alias([
             'seller' => \App\Http\Middleware\CheckIfSeller::class,
             'buyer' => \App\Http\Middleware\CheckIfBuyer::class,
@@ -21,5 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+            if ($request->is('logout')) {
+                return redirect('/')->with('info', 'You have been logged out.');
+            }
+            return redirect()->route('login')->with('info', 'Your session has expired. Please log in again.');
+        });
     })->create();

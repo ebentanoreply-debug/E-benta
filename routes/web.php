@@ -84,7 +84,7 @@ Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend
 Route::get('/register/set-password', [EmailVerificationController::class, 'showSetPasswordForm'])->name('register.set-password');
 Route::post('/register/set-password', [EmailVerificationController::class, 'savePasswordAndComplete'])->name('register.save-password');
 
-Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Authenticated user routes
 Route::middleware('auth')->group(function () {

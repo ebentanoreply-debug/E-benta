@@ -11,7 +11,8 @@
     }
 
     .sa-header {
-        background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: white;
         padding: 2.25rem 2rem;
         margin-bottom: 2rem;
