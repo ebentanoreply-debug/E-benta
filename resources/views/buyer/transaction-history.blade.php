@@ -86,6 +86,89 @@
         border-color: rgba(13, 148, 136, 0.45);
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     }
+
+    /* 5-Stage Order Tracking Stepper */
+    .order-stepper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: 0.75rem 0.5rem;
+        margin: 1rem 0;
+        background: rgba(13, 148, 136, 0.03);
+        border-radius: 0.75rem;
+        border: 1px solid rgba(13, 148, 136, 0.1);
+    }
+    .order-stepper::before {
+        content: '';
+        position: absolute;
+        top: 28px;
+        left: 30px;
+        right: 30px;
+        height: 3px;
+        background: #e2e8f0;
+        z-index: 1;
+    }
+    body.dark-mode .order-stepper::before {
+        background: #1e293b;
+    }
+    .order-step {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        flex: 1;
+    }
+    .order-step-node {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        border: 2px solid #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #94a3b8;
+        transition: all 0.25s ease;
+    }
+    .order-step.completed .order-step-node {
+        background: #10b981;
+        border-color: #10b981;
+        color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    .order-step.active .order-step-node {
+        background: #0d9488;
+        border-color: #0d9488;
+        color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.3);
+        animation: pulseAnimation 2s infinite;
+    }
+    .order-step-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #64748b;
+        margin-top: 0.35rem;
+        letter-spacing: 0.2px;
+    }
+    .order-step.completed .order-step-title,
+    .order-step.active .order-step-title {
+        color: #0f172a;
+        font-weight: 800;
+    }
+    body.dark-mode .order-step.completed .order-step-title,
+    body.dark-mode .order-step.active .order-step-title {
+        color: #f1f5f9;
+    }
+    @media (max-width: 576px) {
+        .order-step-title {
+            display: none;
+        }
+    }
 </style>
 @endsection
 
@@ -185,22 +268,27 @@
             @if($offers->count() > 0)
                 <div>
                     @foreach($offers as $offer)
+                        @php
+                            $primaryPhoto = $offer->listing?->listingPhotos?->first()?->photo_url;
+                            if (!$primaryPhoto && !empty($offer->listing?->photos)) {
+                                $arrPhotos = is_array($offer->listing->photos) ? $offer->listing->photos : json_decode($offer->listing->photos, true) ?? [];
+                                $primaryPhoto = !empty($arrPhotos) ? $arrPhotos[0] : null;
+                            }
+                            $itemName = ($offer->listing?->deviceBrand?->name ? $offer->listing->deviceBrand->name . ' ' : '') . ($offer->listing?->deviceModel?->model_name ?: ($offer->listing?->category ?: ($offer->listing?->deviceType?->name ?: 'Hardware Listing')));
+                        @endphp
                         <article class="th-transaction-item">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 pb-3 border-bottom mb-3" style="border-bottom-color: #f1f5f9 !important;">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div style="width: 46px; height: 46px; border-radius: 0.65rem; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
-                                        @if($offer->listing?->photos && count(is_array($offer->listing->photos) ? $offer->listing->photos : json_decode($offer->listing->photos, true) ?? []) > 0)
-                                            @php
-                                                $photos = is_array($offer->listing->photos) ? $offer->listing->photos : json_decode($offer->listing->photos, true) ?? [];
-                                            @endphp
-                                            <img src="{{ $photos[0] }}" alt="Item" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <div style="width: 50px; height: 50px; border-radius: 0.75rem; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+                                        @if($primaryPhoto)
+                                            <img src="{{ $primaryPhoto }}" alt="{{ $itemName }}" style="width: 100%; height: 100%; object-fit: cover;">
                                         @else
-                                            <i class="fas fa-microchip text-muted"></i>
+                                            <i class="fas fa-microchip text-emerald" style="color: #10b981;"></i>
                                         @endif
                                     </div>
                                     <div>
                                         <h5 style="font-weight: 800; font-size: 1.05rem; margin: 0 0 0.2rem; color: #0f172a;" class="text-heading">
-                                            {{ $offer->listing?->title ?: ($offer->listing?->category ?: 'Listing Item #'.$offer->listing_id) }}
+                                            {{ $itemName }}
                                         </h5>
                                         <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size: 0.8rem; color: #64748b;">
                                             <span><i class="fas fa-store me-1"></i>Seller: <strong>{{ $offer->listing?->seller?->name ?? 'Verified Member' }}</strong></span>
@@ -230,6 +318,40 @@
                                     @endif
                                 </div>
                             </div>
+
+                            <!-- 5-Stage Order Progress Tracker -->
+                            @if(!in_array($offer->status, ['rejected', 'cancelled']))
+                                @php
+                                    $stepState = match($offer->status) {
+                                        'completed' => 5,
+                                        'in_transit', 'delivered' => 4,
+                                        'accepted' => 3,
+                                        default => 1,
+                                    };
+                                @endphp
+                                <div class="order-stepper">
+                                    <div class="order-step {{ $stepState >= 1 ? ($stepState === 1 ? 'active' : 'completed') : '' }}">
+                                        <div class="order-step-node"><i class="fas fa-file-invoice"></i></div>
+                                        <div class="order-step-title">Offer Placed</div>
+                                    </div>
+                                    <div class="order-step {{ $stepState >= 2 ? ($stepState === 2 ? 'active' : 'completed') : ($stepState > 2 ? 'completed' : '') }}">
+                                        <div class="order-step-node"><i class="fas fa-handshake"></i></div>
+                                        <div class="order-step-title">Accepted</div>
+                                    </div>
+                                    <div class="order-step {{ $stepState >= 3 ? ($stepState === 3 ? 'active' : 'completed') : '' }}">
+                                        <div class="order-step-node"><i class="fas fa-calendar-check"></i></div>
+                                        <div class="order-step-title">Scheduled</div>
+                                    </div>
+                                    <div class="order-step {{ $stepState >= 4 ? ($stepState === 4 ? 'active' : 'completed') : '' }}">
+                                        <div class="order-step-node"><i class="fas fa-truck"></i></div>
+                                        <div class="order-step-title">Handover</div>
+                                    </div>
+                                    <div class="order-step {{ $stepState >= 5 ? 'completed' : '' }}">
+                                        <div class="order-step-node"><i class="fas fa-award"></i></div>
+                                        <div class="order-step-title">Completed</div>
+                                    </div>
+                                </div>
+                            @endif
 
                             <!-- Details Row -->
                             <div class="row g-3 mb-3">

@@ -4,56 +4,89 @@
 
 @section('styles')
 <style>
-    .inbox-wrapper {
-        min-height: calc(100vh - 60px);
-        padding: 1.5rem 1rem 3rem;
+    .inbox-page-wrapper {
+        background: #f8fafc;
+        min-height: calc(100vh - 180px);
+        padding-bottom: 2.5rem;
+    }
+
+    body.dark-mode .inbox-page-wrapper {
         background: #09171f;
     }
 
-    body.dark-mode .inbox-wrapper {
-        background: #060e14;
+    .inbox-breadcrumb-bar {
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 0.75rem 0;
+        margin-bottom: 1.5rem;
+    }
+
+    body.dark-mode .inbox-breadcrumb-bar {
+        background: #0c1c24;
+        border-bottom-color: rgba(13, 148, 136, 0.2);
     }
 
     .inbox-container {
-        max-width: 1350px;
+        max-width: 1400px;
         margin: 0 auto;
-        background: linear-gradient(135deg, #0f232d 0%, #09171f 100%);
-        border: 1px solid rgba(13, 148, 136, 0.25);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 1.25rem;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
         display: flex;
-        height: calc(100vh - 120px);
+        height: calc(100vh - 230px);
         min-height: 600px;
-        max-height: 820px;
+        max-height: 840px;
         overflow: hidden;
+    }
+
+    body.dark-mode .inbox-container {
+        background: linear-gradient(135deg, #0f232d 0%, #09171f 100%);
+        border-color: rgba(13, 148, 136, 0.25);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
 
     /* Left Column: Conversations List */
     .inbox-sidebar {
-        width: 360px;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        width: 380px;
+        border-right: 1px solid #e2e8f0;
         display: flex;
         flex-direction: column;
-        background: rgba(15, 23, 42, 0.6);
+        background: #f8fafc;
         flex-shrink: 0;
+    }
+
+    body.dark-mode .inbox-sidebar {
+        background: rgba(15, 23, 42, 0.6);
+        border-right-color: rgba(255, 255, 255, 0.08);
     }
 
     .inbox-sidebar-header {
         padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
 
+    body.dark-mode .inbox-sidebar-header {
+        background: rgba(15, 23, 42, 0.8);
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
     .inbox-sidebar-header h4 {
         margin: 0;
-        color: #ffffff;
+        color: #0f172a;
         font-weight: 800;
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    body.dark-mode .inbox-sidebar-header h4 {
+        color: #ffffff;
     }
 
     .inbox-conversations-list {
@@ -78,10 +111,20 @@
     }
 
     .inbox-item:hover {
+        background: #f1f5f9;
+    }
+
+    body.dark-mode .inbox-item:hover {
         background: rgba(255, 255, 255, 0.05);
     }
 
     .inbox-item.active {
+        background: #f0fdfa;
+        border-color: rgba(13, 148, 136, 0.35);
+        box-shadow: 0 2px 10px rgba(13, 148, 136, 0.08);
+    }
+
+    body.dark-mode .inbox-item.active {
         background: linear-gradient(135deg, rgba(13, 148, 136, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
         border-color: rgba(13, 148, 136, 0.35);
     }
@@ -94,145 +137,6 @@
         color: #ffffff;
         font-weight: 800;
         font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .inbox-item-details {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .inbox-item-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.25rem;
-    }
-
-    .inbox-item-name {
-        color: #ffffff;
-        font-weight: 700;
-        font-size: 0.95rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .inbox-item-time {
-        font-size: 0.72rem;
-        color: #64748b;
-        flex-shrink: 0;
-    }
-
-    .inbox-item-device {
-        color: #2dd4bf;
-        font-size: 0.8rem;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-
-    .inbox-item-snippet {
-        color: #94a3b8;
-        font-size: 0.82rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: 0;
-    }
-
-    .inbox-badge-locked {
-        font-size: 0.7rem;
-        color: #94a3b8;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 0.15rem 0.4rem;
-        border-radius: 0.3rem;
-    }
-
-    /* Right Column: Chat Box */
-    .inbox-chat-pane {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        background: rgba(15, 23, 42, 0.3);
-    }
-
-    .inbox-chat-topbar {
-        padding: 1rem 1.5rem;
-        background: rgba(15, 23, 42, 0.8);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
-    .inbox-chat-topbar-info {
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
-    }
-
-    .inbox-chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1.5rem;
-    }
-
-    .inbox-chat-inputbar {
-        padding: 1rem 1.25rem;
-        background: rgba(15, 23, 42, 0.85);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .inbox-empty-state {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #64748b;
-        padding: 2rem;
-        text-align: center;
-    }
-
-    .inbox-empty-state i {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        color: rgba(13, 148, 136, 0.3);
-    }
-
-    @media (max-width: 768px) {
-        .inbox-container {
-            flex-direction: column;
-            height: auto;
-            min-height: 580px;
-        }
-
-        .inbox-sidebar {
-            width: 100%;
-            max-height: 240px;
-            border-right: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-    }
-
-    /* ── Sidebar item components ─────────────────────── */
-    .inbox-item-avatar {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #0d9488, #06b6d4);
-        color: #ffffff;
-        font-weight: 800;
-        font-size: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -253,12 +157,16 @@
     }
 
     .inbox-item-name {
+        color: #0f172a;
         font-weight: 700;
-        font-size: 0.9rem;
-        color: #e2e8f0;
+        font-size: 0.92rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    body.dark-mode .inbox-item-name {
+        color: #e2e8f0;
     }
 
     .inbox-item-time {
@@ -270,12 +178,17 @@
 
     .inbox-item-device {
         display: block;
-        font-size: 0.75rem;
-        color: #2dd4bf;
+        font-size: 0.78rem;
+        color: #0d9488;
+        font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         margin-bottom: 0.15rem;
+    }
+
+    body.dark-mode .inbox-item-device {
+        color: #2dd4bf;
     }
 
     .inbox-item-snippet {
@@ -287,29 +200,138 @@
         text-overflow: ellipsis;
     }
 
+    body.dark-mode .inbox-item-snippet {
+        color: #94a3b8;
+    }
+
     .inbox-badge-locked {
         font-size: 0.65rem;
         padding: 0.15rem 0.5rem;
-        background: rgba(239, 68, 68, 0.15);
-        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
         border-radius: 99px;
-        border: 1px solid rgba(239, 68, 68, 0.3);
+        border: 1px solid rgba(239, 68, 68, 0.25);
         white-space: nowrap;
         flex-shrink: 0;
+    }
+
+    body.dark-mode .inbox-badge-locked {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Right Column: Chat Box */
+    .inbox-chat-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        background: #ffffff;
+    }
+
+    body.dark-mode .inbox-chat-pane {
+        background: rgba(15, 23, 42, 0.3);
+    }
+
+    .inbox-chat-topbar {
+        padding: 1rem 1.5rem;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    body.dark-mode .inbox-chat-topbar {
+        background: rgba(15, 23, 42, 0.8);
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .inbox-chat-topbar h5 {
+        color: #0f172a;
+        font-weight: 800;
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    body.dark-mode .inbox-chat-topbar h5 {
+        color: #ffffff;
+    }
+
+    .inbox-chat-topbar small {
+        color: #64748b;
+        font-size: 0.82rem;
+    }
+
+    body.dark-mode .inbox-chat-topbar small {
+        color: #94a3b8;
+    }
+
+    .inbox-chat-topbar-info {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
     }
 
     .chat-role-badge {
         font-size: 0.7rem;
         padding: 0.15rem 0.55rem;
-        background: rgba(13, 148, 136, 0.2);
-        color: #2dd4bf;
+        background: rgba(13, 148, 136, 0.12);
+        color: #0d9488;
         border-radius: 99px;
-        border: 1px solid rgba(13, 148, 136, 0.35);
+        border: 1px solid rgba(13, 148, 136, 0.3);
         margin-left: 0.5rem;
-        font-weight: 600;
+        font-weight: 700;
     }
 
-    /* ── Chat message bubbles ────────────────────────── */
+    body.dark-mode .chat-role-badge {
+        background: rgba(13, 148, 136, 0.2);
+        color: #2dd4bf;
+        border-color: rgba(13, 148, 136, 0.35);
+    }
+
+    .inbox-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: #f8fafc;
+    }
+
+    body.dark-mode .inbox-chat-messages {
+        background: transparent;
+    }
+
+    .inbox-chat-inputbar {
+        padding: 1rem 1.25rem;
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    body.dark-mode .inbox-chat-inputbar {
+        background: rgba(15, 23, 42, 0.85);
+        border-top-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .inbox-empty-state {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .inbox-empty-state i {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        color: rgba(13, 148, 136, 0.3);
+    }
+
+    /* Message Bubbles */
     .chat-message-row {
         display: flex;
         align-items: flex-end;
@@ -329,14 +351,19 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        color: #cbd5e1;
+        background: rgba(13, 148, 136, 0.15);
+        color: #0d9488;
         font-weight: 700;
         font-size: 0.85rem;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+    }
+
+    body.dark-mode .msg-avatar {
+        background: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
     }
 
     .msg-bubble-wrap {
@@ -365,24 +392,31 @@
         background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
         color: #ffffff;
         border-bottom-right-radius: 0.2rem;
-        box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3);
+        box-shadow: 0 4px 15px rgba(13, 148, 136, 0.25);
     }
 
     .bubble-them {
+        background: #ffffff;
+        color: #0f172a;
+        border-bottom-left-radius: 0.2rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    body.dark-mode .bubble-them {
         background: #334155;
         color: #f8fafc;
-        border-bottom-left-radius: 0.2rem;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.08);
     }
 
     .msg-time {
         font-size: 0.72rem;
-        color: #64748b;
+        color: #94a3b8;
         margin-top: 0.25rem;
         padding: 0 0.25rem;
     }
 
-    /* ── Chat input bar ──────────────────────────────── */
+    /* Input form */
     .chat-input-form {
         display: flex;
         align-items: center;
@@ -391,10 +425,10 @@
 
     .chat-textarea {
         flex: 1;
-        background: rgba(30, 41, 59, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
         border-radius: 0.75rem;
-        color: #ffffff;
+        color: #0f172a;
         padding: 0.65rem 1rem;
         font-size: 0.95rem;
         resize: none;
@@ -403,11 +437,19 @@
         font-family: inherit;
     }
 
-    .chat-textarea::placeholder { color: #475569; }
+    body.dark-mode .chat-textarea {
+        background: rgba(30, 41, 59, 0.9);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+    }
+
+    .chat-textarea::placeholder {
+        color: #94a3b8;
+    }
 
     .chat-textarea:focus {
         border-color: #0d9488;
-        box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.25);
+        box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
     }
 
     .chat-send-btn {
@@ -443,16 +485,21 @@
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        padding: 0.75rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.85rem;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
         border-radius: 0.75rem;
-        color: #94a3b8;
+        color: #64748b;
         font-size: 0.9rem;
-        font-weight: 500;
+        font-weight: 600;
     }
 
-    /* ── Empty states ────────────────────────────────── */
+    body.dark-mode .chat-locked-notice {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+    }
+
     .chat-empty {
         text-align: center;
         padding: 3rem 1rem;
@@ -466,34 +513,65 @@
         color: rgba(13, 148, 136, 0.3);
     }
 
-    /* ── Bootstrap badge soft variant ───────────────── */
     .bg-teal-soft {
-        background: rgba(13, 148, 136, 0.15);
-        color: #2dd4bf;
-        border: 1px solid rgba(13, 148, 136, 0.3);
+        background: rgba(13, 148, 136, 0.12);
+        color: #0d9488;
+        border: 1px solid rgba(13, 148, 136, 0.25);
         font-size: 0.75rem;
         padding: 0.25rem 0.75rem;
         border-radius: 99px;
-        font-weight: 600;
+        font-weight: 700;
     }
 
-    .text-teal { color: #2dd4bf; margin-right: 0.4rem; }
+    body.dark-mode .bg-teal-soft {
+        background: rgba(13, 148, 136, 0.15);
+        color: #2dd4bf;
+        border-color: rgba(13, 148, 136, 0.3);
+    }
+
+    .text-teal { color: #0d9488; margin-right: 0.4rem; }
+    body.dark-mode .text-teal { color: #2dd4bf; }
+
+    @media (max-width: 768px) {
+        .inbox-container {
+            flex-direction: column;
+            height: auto;
+            min-height: 580px;
+        }
+
+        .inbox-sidebar {
+            width: 100%;
+            max-height: 260px;
+            border-right: none;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .inbox-sidebar {
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+    }
 </style>
 @endsection
 
-
 @section('content')
 
-@if(auth()->check() && auth()->user()->isAdmin())
-    @include('admin.sidebar')
-@elseif(auth()->check() && auth()->user()->isSeller())
-    @include('seller.sidebar')
-@elseif(auth()->check())
-    @include('buyer.sidebar')
-@endif
+<div class="inbox-page-wrapper">
+    <!-- Breadcrumb Bar -->
+    <div class="inbox-breadcrumb-bar">
+        <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between">
+            <nav style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
+                <a href="{{ route('home') }}" class="text-decoration-none text-muted"><i class="fas fa-home me-1"></i>Home</a>
+                <span class="text-muted">/</span>
+                <span class="text-dark fw-bold">Live Negotiations & Messages</span>
+            </nav>
+            <div class="d-none d-md-flex align-items-center gap-2 text-muted" style="font-size: 0.8rem;">
+                <i class="fas fa-shield-halved text-success"></i>
+                <span>Direct Offer Coordination</span>
+            </div>
+        </div>
+    </div>
 
-<div class="main-content-wrapper">
-    <div class="inbox-wrapper">
+    <div class="container-fluid px-3 px-lg-4">
         <div class="inbox-container">
             <!-- Left Sidebar: Conversations -->
             <div class="inbox-sidebar">
@@ -567,19 +645,19 @@
                                 @endif
                             </div>
                             <div>
-                                <h5 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.05rem;">
+                                <h5>
                                     {{ $otherParty->name ?? 'User' }}
                                     <small class="chat-role-badge">
                                         {{ ($otherParty->id === $activeOffer->listing->user_id) ? 'Seller' : 'Buyer' }}
                                     </small>
                                 </h5>
-                                <small style="color: #94a3b8; font-size: 0.8rem;">
-                                    Item: <strong>{{ $activeOffer->listing->title ?? $activeOffer->listing->category }}</strong> • Offer: <strong style="color: #2dd4bf;">₱{{ number_format($activeOffer->bid_amount, 2) }}</strong>
+                                <small>
+                                    Item: <strong>{{ $activeOffer->listing->title ?? $activeOffer->listing->category }}</strong> • Offer: <strong style="color: #0d9488;">₱{{ number_format($activeOffer->bid_amount, 2) }}</strong>
                                 </small>
                             </div>
                         </div>
 
-                        <a href="{{ route('offers.show', $activeOffer) }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; border-radius: 0.5rem; font-size: 0.82rem; font-weight: 600;">
+                        <a href="{{ route('offers.show', $activeOffer) }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 0.5rem; font-size: 0.82rem; font-weight: 700;">
                             <i class="fas fa-file-contract me-1"></i> Offer Details
                         </a>
                     </div>
@@ -641,7 +719,7 @@
                 @else
                     <div class="inbox-empty-state">
                         <i class="fas fa-comments"></i>
-                        <h4 style="color: #ffffff; font-weight: 700;">No Conversation Selected</h4>
+                        <h4 style="font-weight: 700;">No Conversation Selected</h4>
                         <p>Select an offer on the left or accept an offer to start coordinating.</p>
                     </div>
                 @endif

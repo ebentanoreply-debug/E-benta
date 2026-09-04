@@ -131,11 +131,15 @@
                                 <!-- Image Box -->
                                 <div class="saved-image-wrapper">
                                     @php
-                                        $photos = is_array($listing->photos) ? $listing->photos : (json_decode($listing->photos, true) ?? []);
-                                        $firstPhoto = count($photos) > 0 ? $photos[0] : null;
+                                        $primaryPhoto = $listing->listingPhotos->first()?->photo_url;
+                                        if (!$primaryPhoto && !empty($listing->photos)) {
+                                            $decodedPhotos = is_array($listing->photos) ? $listing->photos : (json_decode($listing->photos, true) ?? []);
+                                            $primaryPhoto = !empty($decodedPhotos) ? $decodedPhotos[0] : null;
+                                        }
+                                        $deviceName = ($listing->deviceBrand?->name ? $listing->deviceBrand->name . ' ' : '') . ($listing->deviceModel?->model_name ?: ($listing->category ?: ($listing->deviceType?->name ?: 'Hardware Item')));
                                     @endphp
-                                    @if($firstPhoto)
-                                        <img src="{{ $firstPhoto }}" alt="{{ $listing->title }}" loading="lazy">
+                                    @if($primaryPhoto)
+                                        <img src="{{ $primaryPhoto }}" alt="{{ $deviceName }}" loading="lazy">
                                     @else
                                         <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8;">
                                             <i class="fas fa-microchip" style="font-size: 2.5rem; opacity: 0.6; margin-bottom: 0.4rem; color: #0d9488;"></i>
@@ -145,9 +149,19 @@
 
                                     <!-- Condition Tag -->
                                     <div style="position: absolute; top: 0.75rem; left: 0.75rem;">
-                                        <span class="badge" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: #ffffff; font-weight: 800; font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 0.45rem; text-transform: uppercase;">
-                                            {{ str_replace('_', ' ', $listing->condition ?? 'Good') }}
-                                        </span>
+                                        @if($listing->condition === 'functional')
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(4px); color: #ffffff; font-weight: 800; font-size: 0.68rem; padding: 0.3rem 0.6rem; border-radius: 0.45rem;">
+                                                <i class="fas fa-check-circle me-1"></i>Working
+                                            </span>
+                                        @elseif($listing->condition === 'repairable')
+                                            <span class="badge" style="background: rgba(245, 158, 11, 0.9); backdrop-filter: blur(4px); color: #ffffff; font-weight: 800; font-size: 0.68rem; padding: 0.3rem 0.6rem; border-radius: 0.45rem;">
+                                                <i class="fas fa-tools me-1"></i>Repairable
+                                            </span>
+                                        @else
+                                            <span class="badge" style="background: rgba(100, 116, 139, 0.9); backdrop-filter: blur(4px); color: #ffffff; font-weight: 800; font-size: 0.68rem; padding: 0.3rem 0.6rem; border-radius: 0.45rem;">
+                                                <i class="fas fa-recycle me-1"></i>For Parts
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -155,15 +169,15 @@
                                 <div class="p-3 d-flex flex-column flex-grow-1">
                                     <div class="d-flex align-items-center justify-content-between gap-1 mb-1">
                                         <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0d9488; letter-spacing: 0.5px;">
-                                            {{ $listing->deviceType->name ?? ($listing->category ?? 'Electronics') }}
+                                            {{ $listing->deviceType?->name ?? ($listing->category ?? 'Electronics') }}
                                         </span>
                                         <span style="font-size: 0.72rem; color: #94a3b8;">
                                             <i class="fas fa-store me-1"></i>{{ Str::limit($listing->seller?->name ?? 'Verified Seller', 14) }}
                                         </span>
                                     </div>
 
-                                    <h6 style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #0f172a; line-height: 1.35;" class="text-heading">
-                                        {{ Str::limit($listing->title ?: 'Electronic Lot', 40) }}
+                                    <h6 style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #0f172a; line-height: 1.35;" class="text-heading text-truncate" title="{{ $deviceName }}">
+                                        {{ $deviceName }}
                                     </h6>
 
                                     <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 1rem; line-height: 1.4; flex-grow: 1;">
@@ -174,7 +188,7 @@
                                     <div class="d-flex align-items-center justify-content-between pt-2 border-top mb-3" style="border-top-color: #f1f5f9 !important;">
                                         <div>
                                             <small style="color: #94a3b8; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; display: block;">Price</small>
-                                            <strong style="color: #0d9488; font-size: 1.1rem; font-weight: 900;">
+                                            <strong style="color: #0d9488; font-size: 1.15rem; font-weight: 900;">
                                                 @if($listing->suggested_price > 0)
                                                     ₱{{ number_format($listing->suggested_price, 2) }}
                                                 @else
@@ -190,16 +204,16 @@
                                             <i class="fas fa-eye me-1"></i>View
                                         </a>
 
-                                        @if(auth()->user()->is_verified)
-                                            <a href="{{ route('offers.create', $listing) }}" class="btn btn-sm btn-dark flex-grow-1" style="border-radius: 0.55rem; font-weight: 700; font-size: 0.8rem; padding: 0.45rem; background: #0d9488; border-color: #0d9488;">
-                                                <i class="fas fa-handshake me-1"></i>Offer
+                                        @if(auth()->user()->is_verified && $listing->isAvailable())
+                                            <a href="{{ route('offers.create', $listing) }}" class="btn btn-sm btn-dark flex-grow-1" style="border-radius: 0.55rem; font-weight: 700; font-size: 0.8rem; padding: 0.45rem; background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); border: none;">
+                                                <i class="fas fa-shopping-bag me-1"></i>Buy / Offer
                                             </a>
                                         @endif
 
                                         <form method="POST" action="{{ route('buyer.saved-items.destroy', $listing) }}" class="m-0">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove from saved" style="border-radius: 0.55rem; padding: 0.45rem 0.65rem;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove from wishlist" style="border-radius: 0.55rem; padding: 0.45rem 0.65rem;">
                                                 <i class="fas fa-trash-can"></i>
                                             </button>
                                         </form>

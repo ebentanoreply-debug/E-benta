@@ -352,6 +352,12 @@
         }
 
         footer {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            border-top: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
 
         .btn-secondary-outline {
             background-color: transparent;
@@ -822,220 +828,603 @@
             border-color: rgba(255, 255, 255, 0.05);
             color: #64748b;
         }
+
+        /* ==========================================================================
+           E-COMMERCE MARKETPLACE MASTER DESIGN SYSTEM
+           ========================================================================== */
+        body.has-commerce-header {
+            padding-top: 130px !important;
+        }
+        @media (max-width: 991.98px) {
+            body.has-commerce-header {
+                padding-top: 155px !important;
+            }
+        }
+        @media (max-width: 576px) {
+            body.has-commerce-header {
+                padding-top: 180px !important;
+            }
+        }
+
+        .commerce-master-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1025;
+            background: #0b131f;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .commerce-topbar {
+            background: #080f18;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 0.76rem;
+            padding: 0.3rem 0;
+            color: #94a3b8;
+        }
+
+        .commerce-topbar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .commerce-topbar a:hover {
+            color: #2dd4bf;
+        }
+
+        .commerce-topbar-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(13, 148, 136, 0.18);
+            border: 1px solid rgba(13, 148, 136, 0.3);
+            color: #2dd4bf;
+            padding: 0.12rem 0.55rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        .commerce-main-nav {
+            background: linear-gradient(135deg, #0f1c2d 0%, #16283d 100%);
+            border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+            padding: 0.6rem 0;
+        }
+
+        .commerce-brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+            border-radius: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);
+            flex-shrink: 0;
+        }
+
+        .commerce-brand-name {
+            font-size: 1.35rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+
+        .commerce-brand-tag {
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #2dd4bf;
+            text-transform: uppercase;
+        }
+
+        /* Mega Search */
+        .commerce-search-form {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 0.75rem;
+            padding: 3px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(13, 148, 136, 0.35);
+            width: 100%;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .commerce-search-form:focus-within {
+            box-shadow: 0 6px 25px rgba(13, 148, 136, 0.4), 0 0 0 2px #0d9488;
+        }
+
+        .commerce-search-category {
+            border: none;
+            background: #f1f5f9;
+            color: #1e293b;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.5rem 0.65rem;
+            border-radius: 0.55rem 0 0 0.55rem;
+            outline: none;
+            cursor: pointer;
+            border-right: 1px solid #e2e8f0;
+            max-width: 135px;
+        }
+
+        .commerce-search-input {
+            border: none;
+            background: transparent;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.88rem;
+            color: #0f172a;
+            width: 100%;
+            outline: none;
+        }
+
+        .commerce-search-input::placeholder {
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+        .commerce-search-btn {
+            background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+            border: none;
+            color: #ffffff;
+            padding: 0.5rem 1.15rem;
+            border-radius: 0.55rem;
+            font-weight: 800;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            flex-shrink: 0;
+        }
+
+        .commerce-search-btn:hover {
+            background: linear-gradient(135deg, #0f766e 0%, #0891b2 100%);
+            transform: scale(1.02);
+        }
+
+        /* Action Buttons */
+        .commerce-action-item {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.4rem 0.65rem;
+            border-radius: 0.6rem;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .commerce-action-item:hover {
+            background: rgba(13, 148, 136, 0.2);
+            color: #ffffff;
+            border-color: rgba(13, 148, 136, 0.4);
+        }
+
+        .commerce-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 0.15rem 0.42rem;
+            border-radius: 1rem;
+            min-width: 17px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.5);
+            line-height: 1;
+        }
+
+        .commerce-sell-btn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #ffffff !important;
+            border: none;
+            font-weight: 800;
+            font-size: 0.86rem;
+            padding: 0.52rem 1.05rem;
+            border-radius: 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+        }
+
+        .commerce-sell-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(249, 115, 22, 0.55);
+            color: #ffffff;
+        }
+
+        /* Category Strip */
+        .commerce-category-strip {
+            background: #09131f;
+            border-bottom: 1px solid rgba(13, 148, 136, 0.2);
+            padding: 0.35rem 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .commerce-category-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .commerce-cat-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0.3rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .commerce-cat-link:hover, .commerce-cat-link.active {
+            background: rgba(13, 148, 136, 0.18);
+            color: #2dd4bf;
+        }
     </style>
     @yield('styles')
 </head>
-<body>
+@php
+    $isWorkspacePage = request()->routeIs('admin.*') || request()->routeIs('seller.*') || request()->routeIs('buyer.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*');
+    $savedCount = auth()->check() ? auth()->user()->savedListings()->count() : 0;
+    $unreadMsgCount = auth()->check() ? auth()->user()->unreadMessagesCount() : 0;
+@endphp
+<body class="{{ !$isWorkspacePage ? 'has-commerce-header' : '' }}">
     <script>
         // Initialize dark mode immediately (before other DOM content)
         if (localStorage.getItem('darkModeEnabled') === 'true') {
             document.body.classList.add('dark-mode');
         }
     </script>
+    
     @if(!request()->routeIs('admin.*') && !(auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
-    <!-- Enhanced Top Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid px-3 px-md-4">
-            <!-- Left: Brand & Context Indicator -->
-            <div class="d-flex align-items-center gap-2">
-                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
-                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleAdminSidebar()" title="Toggle Sidebar">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
-                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleSellerSidebar()" title="Toggle Sidebar">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
-                    <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleBuyerSidebar()" title="Toggle Sidebar">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                @endif
+        @if($isWorkspacePage)
+            <!-- Workspace Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+                <div class="container-fluid px-3 px-md-4">
+                    <div class="d-flex align-items-center gap-2">
+                        @if(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                            <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleSellerSidebar()" title="Toggle Sidebar">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                            <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleBuyerSidebar()" title="Toggle Sidebar">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        @endif
 
-                <a class="navbar-brand m-0" href="/">
-                    <i class="fas fa-leaf"></i>
-                    <span>E-Benta</span>
-                </a>
+                        <a class="navbar-brand m-0" href="/">
+                            <i class="fas fa-leaf"></i>
+                            <span>E-Benta</span>
+                        </a>
 
-                @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
-                    <div class="d-none d-md-flex align-items-center ms-2">
-                        <span class="admin-workspace-pill">
-                            <i class="fas fa-shield-halved" style="color: #10b981;"></i> Admin Workspace
-                        </span>
+                        @if(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                            <div class="d-none d-md-flex align-items-center ms-2">
+                                <span class="admin-workspace-pill">
+                                    <i class="fas fa-store" style="color: #10b981;"></i> Seller Hub
+                                </span>
+                            </div>
+                        @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                            <div class="d-none d-md-flex align-items-center ms-2">
+                                <span class="admin-workspace-pill">
+                                    <i class="fas fa-shopping-bag" style="color: #06b6d4;"></i> Buyer Hub
+                                </span>
+                            </div>
+                        @endif
                     </div>
-                @elseif(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
-                    <div class="d-none d-md-flex align-items-center ms-2">
-                        <span class="admin-workspace-pill">
-                            <i class="fas fa-store" style="color: #10b981;"></i> Seller Hub
-                        </span>
-                    </div>
-                @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
-                    <div class="d-none d-md-flex align-items-center ms-2">
-                        <span class="admin-workspace-pill">
-                            <i class="fas fa-shopping-bag" style="color: #06b6d4;"></i> Buyer Hub
-                        </span>
-                    </div>
-                @endif
-            </div>
 
-            @php
-                $isWorkspacePage = request()->routeIs('admin.*') || request()->routeIs('seller.*') || request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*');
-            @endphp
-
-            @if(!$isWorkspacePage)
-                <!-- Mobile Toggle for public/guest pages -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            @endif
-
-            <!-- Navigation Items -->
-            <div class="{{ $isWorkspacePage ? 'd-flex align-items-center ms-auto' : 'collapse navbar-collapse' }}" id="navbarNav">
-                <ul class="navbar-nav ms-auto flex-row align-items-center" style="gap: 0.35rem;">
-                    
-                    @if(!request()->routeIs('admin.*'))
-                        <!-- Marketplace Link -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('listings.*') ? 'active' : '' }}" href="{{ route('listings.index') }}">
-                                <i class="fas fa-store me-1" style="color: var(--light-green);"></i>Marketplace
-                            </a>
-                        </li>
-
-                        @guest
+                    <div class="d-flex align-items-center ms-auto" id="navbarNav">
+                        <ul class="navbar-nav ms-auto flex-row align-items-center" style="gap: 0.35rem;">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}#process">
-                                    <i class="fas fa-bolt me-1" style="color: #06b6d4;"></i>How It Works
+                                <a class="nav-link {{ request()->routeIs('listings.*') ? 'active' : '' }}" href="{{ route('listings.index') }}">
+                                    <i class="fas fa-store me-1" style="color: var(--light-green);"></i>Marketplace
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}#impact">
-                                    <i class="fas fa-leaf me-1" style="color: #10b981;"></i>Eco Impact
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}#calculator">
-                                    <i class="fas fa-calculator me-1" style="color: #f59e0b;"></i>Value Calculator
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}#faq">
-                                    <i class="fas fa-circle-question me-1" style="color: #a855f7;"></i>FAQ
-                                </a>
-                            </li>
-                        @endguest
 
-                        @auth
-                            @if(auth()->user()->isSeller())
+                            @auth
                                 <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('seller.*') ? 'active' : '' }}" href="{{ route('seller.dashboard') }}">
-                                        <i class="fas fa-chart-pie me-1"></i>Seller Hub
+                                    <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}" title="Messages">
+                                        <i class="fas fa-comments me-1"></i><span class="d-lg-none">Messages</span>
                                     </a>
                                 </li>
-                            @elseif(auth()->user()->isBuyer())
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('buyer.*') ? 'active' : '' }}" href="{{ route('buyer.dashboard') }}">
-                                        <i class="fas fa-chart-line me-1"></i>Buyer Dashboard
+
+                                <!-- Notifications Dropdown -->
+                                <li class="nav-item dropdown notif-nav-item">
+                                    <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-bell" style="font-size: 1.25rem; color: #2dd4bf;"></i>
+                                        <span id="notification-badge" style="position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 50%; min-width: 18px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); animation: pulse 2s infinite;">0</span>
                                     </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="max-width: 380px; height: auto; max-height: 450px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; display: none; flex-direction: column; padding: 0; margin: 0; min-width: 320px;">
+                                        <li style="padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(13, 148, 136, 0.08); flex-shrink: 0; list-style: none; margin: 0;">
+                                            <h6 style="margin: 0; font-weight: 800; color: white; font-size: 0.95rem;"><i class="fas fa-bell me-2" style="color: #2dd4bf;"></i>Recent Notifications</h6>
+                                        </li>
+                                        <div style="flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 80px; max-height: calc(450px - 120px);">
+                                            <ul id="notifications-menu-container" style="list-style: none; margin: 0; padding: 0.5rem 0; display: flex; flex-direction: column;"></ul>
+                                        </div>
+                                        <li style="border-top: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; background: rgba(13, 148, 136, 0.04); list-style: none; padding: 0; margin: 0;">
+                                            <a href="{{ route('notifications.index') }}" style="padding: 0.85rem 1.25rem; color: #2dd4bf; font-weight: 700; font-size: 0.88rem; display: block; margin: 0; text-align: center; text-decoration: none;"><i class="fas fa-arrow-right me-2"></i>View All Notifications</a>
+                                        </li>
+                                    </ul>
                                 </li>
+
+                                <!-- User Capsule Dropdown -->
+                                <li class="nav-item dropdown user-nav-item ms-lg-2">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.6rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 0.35rem 0.85rem 0.35rem 0.45rem; border-radius: 2rem; transition: all 0.2s ease;">
+                                        @if(auth()->user()->avatar_url)
+                                            <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981; flex-shrink: 0;">
+                                        @else
+                                            <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
+                                                {{ substr(auth()->user()->name, 0, 1) }}
+                                            </div>
+                                        @endif
+                                        <span class="user-display-name" style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">{{ auth()->user()->name }}</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #2dd4bf;"></i>Settings</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #2dd4bf;"></i>Change Password</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item w-100 text-start" style="color: #fca5a5 !important;"><i class="fas fa-sign-out-alt me-2" style="color: #ef4444;"></i>Logout</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endauth
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        @else
+            <!-- Full E-Commerce Master Header -->
+            <header class="commerce-master-header">
+                <!-- 1. Top Utility Strip -->
+                <div class="commerce-topbar">
+                    <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2 gap-md-3">
+                            @auth
+                                @php
+                                    $userDeliverCity = auth()->user()->addresses()->where('is_primary', true)->first()?->city ?? auth()->user()->address_city;
+                                @endphp
+                                @if($userDeliverCity)
+                                    <span class="commerce-topbar-pill">
+                                        <i class="fas fa-location-dot"></i> Deliver to: <strong>{{ $userDeliverCity }}</strong>
+                                    </span>
+                                    <span class="d-none d-md-inline" style="color: rgba(255,255,255,0.2);">|</span>
+                                @endif
+                            @endauth
+                            @php
+                                $totalCo2Header = \App\Models\ImpactLog::sum('co2_saved') + \App\Models\Listing::sum('carbon_footprint');
+                            @endphp
+                            @if($totalCo2Header > 0)
+                                <span class="d-none d-md-inline" style="font-size: 0.75rem; color: #94a3b8;">
+                                    <i class="fas fa-leaf me-1 text-emerald-400" style="color: #10b981;"></i> <strong>{{ number_format($totalCo2Header, 1) }} kg</strong> CO₂ Diverted
+                                </span>
                             @endif
-                        @endauth
-                    @endif
-
-                    @auth
-                        @if(!request()->routeIs('admin.*'))
-                            <!-- Messages Link (Buyers & Sellers Only) -->
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}" title="Messages">
-                                    <i class="fas fa-comments me-1"></i><span class="d-lg-none">Messages</span>
-                                </a>
-                            </li>
-                        @endif
-
-                        <!-- Notifications Dropdown -->
-                        <li class="nav-item dropdown notif-nav-item">
-                            <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.color='#27ae60';" onmouseout="this.style.color='var(--light-green)';">
-                                <i class="fas fa-bell" style="font-size: 1.25rem; color: #2dd4bf; transition: all 0.3s ease; transform-origin: center; display: inline-block;" onmouseover="this.style.transform='scale(1.08)';" onmouseout="this.style.transform='scale(1)';"></i>
-                                <span id="notification-badge" style="position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 50%; min-width: 18px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); animation: pulse 2s infinite;">0</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <a href="{{ route('listings.create') }}" class="d-none d-sm-inline">
+                                <i class="fas fa-recycle me-1 text-teal-400" style="color: #2dd4bf;"></i> Sell / Recycle Tech
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="max-width: 380px; height: auto; max-height: 450px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; display: none; flex-direction: column; padding: 0; margin: 0; min-width: 320px;">
-                                <!-- Header -->
-                                <li style="padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(13, 148, 136, 0.08); flex-shrink: 0; list-style: none; margin: 0;">
-                                    <h6 style="margin: 0; font-weight: 800; color: white; font-size: 0.95rem;"><i class="fas fa-bell me-2" style="color: #2dd4bf;"></i>Recent Notifications</h6>
-                                </li>
-                                <!-- Scrollable Container -->
-                                <div style="flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 80px; max-height: calc(450px - 120px);">
-                                    <ul id="notifications-menu-container" style="list-style: none; margin: 0; padding: 0.5rem 0; display: flex; flex-direction: column;"></ul>
+                            <a href="{{ route('home') }}#process" class="d-none d-md-inline">How It Works</a>
+                            <a href="{{ route('home') }}#faq" class="d-none d-lg-inline">Help & FAQ</a>
+                            <button type="button" class="btn btn-link text-decoration-none p-0" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="font-size: 0.8rem; color: #94a3b8;">
+                                <i class="fas fa-moon dark-mode-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Main E-Commerce Search & Action Header -->
+                <div class="commerce-main-nav">
+                    <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between gap-3">
+                        <!-- Brand Logo -->
+                        <a class="d-flex align-items-center gap-2 text-decoration-none flex-shrink-0" href="/">
+                            <div class="commerce-brand-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <span class="commerce-brand-name">E-Benta</span>
+                                <span class="commerce-brand-tag">CIRCULAR MARKETPLACE</span>
+                            </div>
+                        </a>
+
+                        <!-- Center: Mega Search Input -->
+                        @php
+                            $globalDeviceTypes = \App\Models\DeviceType::orderBy('name')->get();
+                            $activeListingCount = \App\Models\Listing::where('status', 'available')->count();
+                        @endphp
+                        <div class="flex-grow-1 mx-1 mx-md-3" style="max-width: 650px;">
+                            <form action="{{ route('listings.index') }}" method="GET" class="commerce-search-form">
+                                <select name="category" class="commerce-search-category d-none d-md-block">
+                                    <option value="">All Categories</option>
+                                    @foreach($globalDeviceTypes as $gType)
+                                        <option value="{{ $gType->name }}" {{ request('category') == $gType->name ? 'selected' : '' }}>{{ $gType->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="position-relative flex-grow-1">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="commerce-search-input" placeholder="Search {{ $activeListingCount > 0 ? $activeListingCount . ' available' : 'verified' }} tech listings, brands, scrap..." autocomplete="off">
                                 </div>
-                                <!-- Footer -->
-                                <li style="border-top: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; background: rgba(13, 148, 136, 0.04); list-style: none; padding: 0; margin: 0;">
-                                    <a href="{{ route('notifications.index') }}" style="padding: 0.85rem 1.25rem; color: #2dd4bf; font-weight: 700; font-size: 0.88rem; display: block; margin: 0; text-align: center; text-decoration: none;"><i class="fas fa-arrow-right me-2"></i>View All Notifications</a>
-                                </li>
-                            </ul>
-                        </li>
+                                <button type="submit" class="commerce-search-btn">
+                                    <i class="fas fa-magnifying-glass"></i>
+                                    <span class="d-none d-sm-inline">Search</span>
+                                </button>
+                            </form>
+                        </div>
 
-                        <!-- User Capsule Dropdown -->
-                        <li class="nav-item dropdown user-nav-item ms-lg-2">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.6rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 0.35rem 0.85rem 0.35rem 0.45rem; border-radius: 2rem; transition: all 0.2s ease;">
-                                @if(auth()->user()->avatar_url)
-                                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981; flex-shrink: 0;">
-                                @else
-                                    <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">
-                                        {{ substr(auth()->user()->name, 0, 1) }}
+                        <!-- Right: Actions & User Info -->
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <!-- Wishlist / Saved Items -->
+                            <a href="{{ auth()->check() ? (auth()->user()->isBuyer() ? route('buyer.saved-items') : route('listings.index')) : route('login') }}" class="commerce-action-item" title="Saved Items / Wishlist">
+                                <i class="fas fa-heart text-danger" style="font-size: 1.05rem; color: #f43f5e !important;"></i>
+                                <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.1;">
+                                    <span style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Wishlist</span>
+                                    <span style="font-size: 0.8rem; font-weight: 800; color: #ffffff;">Saved</span>
+                                </div>
+                                @if(auth()->check() && $savedCount > 0)
+                                    <span class="commerce-badge">{{ $savedCount }}</span>
+                                @endif
+                            </a>
+
+                            @auth
+                                <!-- Messages / Chat Room -->
+                                <a href="{{ route('messages.index') }}" class="commerce-action-item" title="Messages & Offers">
+                                    <i class="fas fa-comment-dots text-info" style="font-size: 1.05rem; color: #38bdf8 !important;"></i>
+                                    <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.1;">
+                                        <span style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Offers</span>
+                                        <span style="font-size: 0.8rem; font-weight: 800; color: #ffffff;">Messages</span>
                                     </div>
-                                @endif
-                                <span class="user-display-name" style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">{{ auth()->user()->name }}</span>
-                                @if(auth()->user()->isAdmin())
-                                    <span class="badge" style="background: #10b981; color: #ffffff; font-size: 0.65rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 0.4rem;">ADMIN</span>
-                                @endif
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                @if(auth()->user()->isAdmin())
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2" style="color: #2dd4bf;"></i>Admin Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.pending-verifications') }}"><i class="fas fa-id-card me-2" style="color: #38bdf8;"></i>Verifications Queue</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}"><i class="fas fa-flag me-2" style="color: #f59e0b;"></i>User Reports</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                @endif
-                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #2dd4bf;"></i>Settings</a></li>
-                                <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #2dd4bf;"></i>Change Password</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item w-100 text-start" style="color: #fca5a5 !important;"><i class="fas fa-sign-out-alt me-2" style="color: #ef4444;"></i>Logout</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-
-                        @if(!request()->routeIs('admin.*'))
-                            <li class="nav-item ms-lg-2">
-                                <a class="btn btn-sm" href="{{ route('listings.create') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; font-weight: 800; padding: 0.55rem 1.1rem; border-radius: 0.75rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35); display: inline-flex; align-items: center; gap: 0.4rem;">
-                                    <i class="fas fa-plus-circle"></i><span>List Device</span>
+                                    @if($unreadMsgCount > 0)
+                                        <span class="commerce-badge bg-info text-white">{{ $unreadMsgCount }}</span>
+                                    @endif
                                 </a>
-                            </li>
-                        @endif
-                    @else
-                        <!-- Login/Register for Guests -->
-                        <li class="nav-item ms-lg-2">
-                            <a class="nav-link" href="{{ route('login') }}" style="color: #f1f5f9 !important; font-weight: 700;">
-                                <i class="fas fa-arrow-right-to-bracket me-1"></i>Login
+
+                                <!-- Notifications Dropdown -->
+                                <div class="dropdown">
+                                    <button class="commerce-action-item border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                                        <i class="fas fa-bell text-warning" style="font-size: 1.05rem; color: #fbbf24 !important;"></i>
+                                        @php
+                                            $userUnreadNotifCount = auth()->user()->notifications()->where('is_read', false)->count();
+                                        @endphp
+                                        @if($userUnreadNotifCount > 0)
+                                            <span class="commerce-badge bg-warning text-dark">{{ $userUnreadNotifCount }}</span>
+                                        @endif
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg py-2" style="width: 320px; max-height: 400px; overflow-y: auto; background: #0f172a; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem;">
+                                        <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center" style="border-color: rgba(255,255,255,0.1) !important;">
+                                            <strong style="color: #ffffff; font-size: 0.88rem;">Notifications</strong>
+                                            <a href="{{ route('notifications.index') }}" style="font-size: 0.75rem; color: #2dd4bf; text-decoration: none;">View All</a>
+                                        </li>
+                                        @forelse(auth()->user()->notifications()->latest()->take(5)->get() as $notif)
+                                            <li>
+                                                <a class="dropdown-item py-2 px-3 text-wrap" href="{{ route('notifications.open', $notif) }}" style="color: #cbd5e1; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                                    <div class="fw-bold text-white mb-1">{{ $notif->title }}</div>
+                                                    <div class="small opacity-75">{{ Str::limit($notif->message, 60) }}</div>
+                                                    <small class="text-muted d-block mt-1">{{ $notif->created_at->diffForHumans() }}</small>
+                                                </a>
+                                            </li>
+                                        @empty
+                                            <li class="px-3 py-4 text-center text-muted" style="font-size: 0.85rem;">
+                                                <i class="fas fa-bell-slash fa-2x mb-2 opacity-50 d-block"></i>
+                                                No new notifications
+                                            </li>
+                                        @endforelse
+                                    </ul>
+                                </div>
+
+                                <!-- User Account Capsule -->
+                                <div class="dropdown">
+                                    <button class="commerce-user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; gap: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 0.32rem 0.75rem 0.32rem 0.4rem; border-radius: 2rem; transition: all 0.2s ease;">
+                                        <div class="commerce-user-avatar" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem;">
+                                            @if(auth()->user()->avatar)
+                                                <img src="{{ auth()->user()->avatar }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                            @else
+                                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                            @endif
+                                        </div>
+                                        <div class="d-none d-lg-flex flex-column text-start" style="line-height: 1.1;">
+                                            <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">
+                                                {{ auth()->user()->role }}
+                                            </span>
+                                            <span style="font-size: 0.82rem; font-weight: 800; color: #ffffff;">
+                                                {{ Str::limit(auth()->user()->name, 12) }}
+                                            </span>
+                                        </div>
+                                        <i class="fas fa-chevron-down" style="font-size: 0.65rem; color: #94a3b8;"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: #0f172a; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem;">
+                                        @if(auth()->user()->isAdmin())
+                                            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2" style="color: #2dd4bf;"></i>Admin Dashboard</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        @elseif(auth()->user()->isSeller())
+                                            <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Seller Hub</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('seller.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>My Inventory</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        @elseif(auth()->user()->isBuyer())
+                                            <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-shopping-bag me-2" style="color: #2dd4bf;"></i>Buyer Dashboard</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('buyer.saved-items') }}"><i class="fas fa-heart me-2" style="color: #f43f5e;"></i>Saved Items</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        @endif
+                                        <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #2dd4bf;"></i>Settings</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #2dd4bf;"></i>Change Password</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item w-100 text-start" style="color: #fca5a5 !important;"><i class="fas fa-sign-out-alt me-2" style="color: #ef4444;"></i>Logout</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            @else
+                                <a href="{{ route('login') }}" class="commerce-action-item text-white" style="font-weight: 700; font-size: 0.84rem;">
+                                    <i class="fas fa-arrow-right-to-bracket" style="color: #2dd4bf;"></i>
+                                    <span>Sign In</span>
+                                </a>
+                            @endauth
+
+                            <!-- Sell Device Action Button -->
+                            <a href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('listings.create') : route('listings.index')) : route('register') }}" class="commerce-sell-btn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Sell Tech</span>
                             </a>
-                        </li>
-                        <li class="nav-item ms-lg-1">
-                            <a class="btn" href="{{ route('register') }}" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; font-weight: 800; padding: 0.65rem 1.4rem; border-radius: 0.75rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35); display: inline-flex; align-items: center; gap: 0.4rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(13, 148, 136, 0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(13, 148, 136, 0.35)';">
-                                <i class="fas fa-plus-circle"></i><span>List Device</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Subnav Category Strip -->
+                <div class="commerce-category-strip">
+                    <div class="container-fluid px-3 px-lg-4 d-flex align-items-center gap-2">
+                        <a href="{{ route('listings.index') }}" class="commerce-cat-link {{ !request('category') && !request('condition') && !request('sort') ? 'active' : '' }}">
+                            <i class="fas fa-border-all text-teal-400" style="color: #2dd4bf;"></i> All Tech
+                        </a>
+                        @foreach($globalDeviceTypes->take(6) as $dType)
+                            <a href="{{ route('listings.index', ['category' => $dType->name]) }}" class="commerce-cat-link {{ request('category') == $dType->name ? 'active' : '' }}">
+                                {{ $dType->name }}
                             </a>
-                        </li>
-                    @endauth
-                </ul>
-            </div>
-        </div>
-    </nav>
+                        @endforeach
+                        <a href="{{ route('listings.index', ['condition' => 'functional']) }}" class="commerce-cat-link {{ request('condition') == 'functional' ? 'active' : '' }}">
+                            <i class="fas fa-certificate" style="color: #10b981;"></i> Certified Working
+                        </a>
+                        <a href="{{ route('listings.index', ['condition' => 'repairable']) }}" class="commerce-cat-link {{ request('condition') == 'repairable' ? 'active' : '' }}">
+                            <i class="fas fa-wrench"></i> Repairable Deals
+                        </a>
+                        <a href="{{ route('listings.index', ['condition' => 'for_parts']) }}" class="commerce-cat-link {{ request('condition') == 'for_parts' ? 'active' : '' }}">
+                            <i class="fas fa-microchip"></i> Parts & Salvage
+                        </a>
+                    </div>
+                </div>
+            </header>
+        @endif
     @endif
 
     @if($errors->any())
-        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: {{ !$isWorkspacePage ? '135px' : '75px' }}; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
                 <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(231, 76, 60, 0.4); border-left: 5px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: flex-start; gap: 1rem;">
@@ -1054,7 +1443,7 @@
     @endif
 
     @if(session('success'))
-        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: {{ !$isWorkspacePage ? '135px' : '75px' }}; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
                 <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(13, 148, 136, 0.4); border-left: 5px solid #0d9488; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -1070,7 +1459,7 @@
     @endif
 
     @if(session('error'))
-        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: {{ !$isWorkspacePage ? '135px' : '75px' }}; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
                 <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(231, 76, 60, 0.4); border-left: 5px solid #e74c3c; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -1086,7 +1475,7 @@
     @endif
 
     @if(session('info'))
-        <div style="position: fixed; top: 75px; left: 0; right: 0; z-index: 1050; pointer-events: none;">
+        <div style="position: fixed; top: {{ !$isWorkspacePage ? '135px' : '75px' }}; left: 0; right: 0; z-index: 1050; pointer-events: none;">
             <div class="container">
                 <div class="alert alert-dismissible fade show js-auto-dismiss" style="background: #ffffff; border: 1px solid rgba(52, 152, 219, 0.4); border-left: 5px solid #3498db; padding: 1.25rem 1.5rem; border-radius: 0.85rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18); animation: slideInDown 0.4s ease; margin-bottom: 0; pointer-events: auto;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -1308,7 +1697,7 @@
                             <i class="fas fa-location-dot" style="color: #06b6d4; margin-top: 0.25rem;"></i>
                             <div>
                                 <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Service Coverage</span>
-                                <span style="color: #e2e8f0;">Metro Manila, Calabarzon & Central Luzon, PH</span>
+                                <span style="color: #e2e8f0;">Nationwide, Philippines</span>
                             </div>
                         </div>
 

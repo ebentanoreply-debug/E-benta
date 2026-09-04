@@ -23,27 +23,52 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $query = Listing::where('status', 'available')
-            ->with(['seller', 'offers', 'deviceType', 'listingPhotos']);
+            ->with(['seller', 'offers', 'deviceType', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
         $savedListingIds = collect();
         if (Auth::check() && Auth::user()->isBuyer()) {
             $savedListingIds = Auth::user()->savedListings()->pluck('listings.id');
         }
 
+        // Filter by seller ID
+        if ($request->filled('seller_id')) {
+            $query->where('user_id', $request->seller_id);
+        }
+
         // Filter by category
-        if ($request->has('category') && $request->category) {
+        if ($request->filled('category')) {
             $query->whereHas('deviceType', function ($deviceTypeQuery) use ($request) {
                 $deviceTypeQuery->where('name', $request->category);
             });
         }
 
         // Filter by condition
-        if ($request->has('condition') && $request->condition) {
+        if ($request->filled('condition')) {
             $query->where('condition', $request->condition);
         }
 
-        // Search in title, category, description, and brand
-        if ($request->has('search') && $request->search) {
+        // Filter by brand
+        if ($request->filled('brand')) {
+            $query->whereHas('deviceBrand', function ($brandQuery) use ($request) {
+                $brandQuery->where('name', $request->brand);
+            });
+        }
+
+        // Filter by listing type (single item vs bulk lot)
+        if ($request->filled('listing_type')) {
+            $query->where('listing_type', $request->listing_type);
+        }
+
+        // Filter by price range
+        if ($request->filled('min_price') && is_numeric($request->min_price)) {
+            $query->where('suggested_price', '>=', (float) $request->min_price);
+        }
+        if ($request->filled('max_price') && is_numeric($request->max_price)) {
+            $query->where('suggested_price', '<=', (float) $request->max_price);
+        }
+
+        // Search in title, category, description, brand, and device details
+        if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
                 $q->whereHas('deviceType', function ($sub) use ($searchTerm) {
@@ -52,6 +77,10 @@ class ListingController extends Controller
                 ->orWhereHas('deviceBrand', function ($sub) use ($searchTerm) {
                     $sub->where('name', 'like', '%' . $searchTerm . '%');
                 })
+                ->orWhereHas('deviceModel', function ($sub) use ($searchTerm) {
+                    $sub->where('model_name', 'like', '%' . $searchTerm . '%');
+                })
+                ->orWhere('device_details', 'like', '%' . $searchTerm . '%')
                 ->orWhere('description', 'like', '%' . $searchTerm . '%');
             });
         }
@@ -65,11 +94,17 @@ class ListingController extends Controller
             case 'price_high':
                 $query->orderBy('suggested_price', 'desc');
                 break;
+            case 'co2_high':
+                $query->orderBy('carbon_footprint', 'desc');
+                break;
             case 'weight_low':
                 $query->orderBy('estimated_weight', 'asc');
                 break;
             case 'weight_high':
                 $query->orderBy('estimated_weight', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
                 break;
             case 'latest':
             default:
@@ -79,11 +114,44 @@ class ListingController extends Controller
 
         $listings = $query->paginate(12)->withQueryString();
 
-        // Get filter options from database
-        $categories = DeviceType::pluck('name')->toArray();
-        $conditions = ['functional', 'repairable', 'for_parts'];
+        // Get faceted options and counts from database
+        $categoriesWithCount = DeviceType::withCount(['listings' => function($q) {
+            $q->where('status', 'available');
+        }])->get();
 
-        return view('listings.index', compact('listings', 'categories', 'conditions', 'savedListingIds'));
+        $brandsWithCount = DeviceBrand::whereHas('listings', function($q) {
+            $q->where('status', 'available');
+        })->withCount(['listings' => function($q) {
+            $q->where('status', 'available');
+        }])->get();
+
+        if ($brandsWithCount->isEmpty()) {
+            $brandsWithCount = DeviceBrand::take(10)->get();
+        }
+
+        $conditions = [
+            'functional' => 'Certified Working',
+            'repairable' => 'Repairable / Minor Defect',
+            'for_parts' => 'For Parts / Scrap'
+        ];
+
+        $conditionCounts = [
+            'functional' => Listing::where('status', 'available')->where('condition', 'functional')->count(),
+            'repairable' => Listing::where('status', 'available')->where('condition', 'repairable')->count(),
+            'for_parts' => Listing::where('status', 'available')->where('condition', 'for_parts')->count(),
+        ];
+
+        $categories = DeviceType::pluck('name')->toArray();
+
+        return view('listings.index', compact(
+            'listings', 
+            'categories', 
+            'categoriesWithCount', 
+            'brandsWithCount', 
+            'conditions', 
+            'conditionCounts', 
+            'savedListingIds'
+        ));
     }
 
     /**
@@ -413,9 +481,26 @@ class ListingController extends Controller
 
         $listing->load(['seller', 'offers' => function ($query) {
             $query->where('status', 'pending')->with('buyer');
-        }, 'deviceType', 'listingPhotos']);
+        }, 'deviceType', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
-        return view('listings.show', compact('listing'));
+        $isSaved = false;
+        if (Auth::check() && Auth::user()->isBuyer()) {
+            $isSaved = Auth::user()->savedListings()->where('listings.id', $listing->id)->exists();
+        }
+
+        $relatedListings = Listing::where('status', 'available')
+            ->where('id', '!=', $listing->id)
+            ->where(function ($query) use ($listing) {
+                if ($listing->device_type_id) {
+                    $query->where('device_type_id', $listing->device_type_id);
+                }
+            })
+            ->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('listings.show', compact('listing', 'isSaved', 'relatedListings'));
     }
 
     /**
