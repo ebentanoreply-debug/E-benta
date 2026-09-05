@@ -20,4 +20,12 @@ class DeviceType extends Model
     {
         return $this->hasMany(DeviceModel::class);
     }
+
+    /**
+     * Get the listings for this device type.
+     */
+    public function listings(): HasMany
+    {
+        return $this->hasMany(Listing::class, 'device_type_id');
+    }
 }

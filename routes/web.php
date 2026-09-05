@@ -30,15 +30,37 @@ Route::get('/', function () {
     $hasImpactLogs = Schema::hasTable('impact_logs');
 
     $featuredListings = $hasListings 
-        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'listingPhotos'])->latest()->take(6)->get()
+        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(8)->get()
         : collect();
+
+    $flashDeals = $hasListings
+        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->orderBy('suggested_price', 'asc')->take(4)->get()
+        : collect();
+
+    $salvageLots = $hasListings
+        ? Listing::where('status', 'available')->whereIn('condition', ['repairable', 'for_parts'])->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(4)->get()
+        : collect();
+
+    $savedListingIds = collect();
+    if (auth()->check() && auth()->user()->isBuyer()) {
+        $savedListingIds = auth()->user()->savedListings()->pluck('listings.id');
+    }
 
     $totalListings = $hasListings ? Listing::count() : 0;
     $totalUsers = $hasUsers ? User::count() : 0;
     $totalCarbonSaved = $hasImpactLogs ? ((float) ImpactLog::sum('co2_saved') ?: ($hasListings ? (float) Listing::sum('carbon_footprint') : 0)) : 0;
     $totalWeightDiverted = $hasImpactLogs ? ((float) ImpactLog::sum('landfill_diverted_weight') ?: ($hasListings ? Listing::where('status', 'completed')->count() * 1.5 : 0)) : 0;
 
-    return view('welcome', compact('featuredListings', 'totalListings', 'totalUsers', 'totalCarbonSaved', 'totalWeightDiverted'));
+    return view('welcome', compact(
+        'featuredListings', 
+        'flashDeals', 
+        'salvageLots', 
+        'savedListingIds', 
+        'totalListings', 
+        'totalUsers', 
+        'totalCarbonSaved', 
+        'totalWeightDiverted'
+    ));
 })->name('home');
 
 Route::get('/listings', [ListingController::class, 'index'])->name('listings.index');

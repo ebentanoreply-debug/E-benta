@@ -20,4 +20,12 @@ class DeviceBrand extends Model
     {
         return $this->hasMany(DeviceModel::class);
     }
+
+    /**
+     * Get the listings for this brand.
+     */
+    public function listings(): HasMany
+    {
+        return $this->hasMany(Listing::class, 'device_brand_id');
+    }
 }

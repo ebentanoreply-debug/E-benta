@@ -404,6 +404,242 @@
         text-align: center;
     }
 
+    /* E-Commerce Circular Category Explorer */
+    .eb-circle-cat-section {
+        background: #ffffff;
+        padding: 2.2rem 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .eb-circle-cat-list {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        overflow-x: auto;
+        padding: 0.5rem 0.25rem;
+        scrollbar-width: none;
+    }
+    .eb-circle-cat-list::-webkit-scrollbar {
+        display: none;
+    }
+    .eb-circle-cat-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        flex-shrink: 0;
+        width: 100px;
+        transition: transform 0.25s ease;
+    }
+    .eb-circle-cat-card:hover {
+        transform: translateY(-4px);
+    }
+    .eb-circle-bubble {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+        border: 2px solid rgba(13, 148, 136, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.65rem;
+        color: var(--eco-primary);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        margin-bottom: 0.55rem;
+        position: relative;
+    }
+    .eb-circle-cat-card:hover .eb-circle-bubble {
+        background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+        color: #ffffff;
+        border-color: transparent;
+        box-shadow: 0 10px 25px rgba(13, 148, 136, 0.4);
+        transform: scale(1.08);
+    }
+    .eb-circle-name {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #1e293b;
+        text-align: center;
+        line-height: 1.25;
+    }
+
+    /* Flash Deals & Offers Ribbon */
+    .eb-flash-banner {
+        background: linear-gradient(135deg, #09171f 0%, #172554 50%, #0c4a6e 100%);
+        border-radius: 1.5rem;
+        border: 1px solid rgba(6, 182, 212, 0.35);
+        padding: 2rem;
+        color: #ffffff;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        margin-bottom: 2.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .eb-flash-banner::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; width: 300px;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .eb-flash-badge {
+        background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 0.75rem;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        padding: 0.35rem 0.85rem;
+        border-radius: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+    .eb-timer-ticker {
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.6rem;
+        padding: 0.3rem 0.75rem;
+        font-family: monospace;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #38bdf8;
+        letter-spacing: 1px;
+    }
+
+    /* Modern E-Commerce Product Card V2 */
+    .eb-pcard {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1.15rem;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        position: relative;
+    }
+    .eb-pcard:hover {
+        transform: translateY(-6px);
+        border-color: #0d9488;
+        box-shadow: 0 16px 36px rgba(13, 148, 136, 0.16);
+    }
+    .eb-pcard-media {
+        height: 210px;
+        background: #f8fafc;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .eb-pcard-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    .eb-pcard:hover .eb-pcard-media img {
+        transform: scale(1.08);
+    }
+    .eb-pcard-wishlist {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 5;
+    }
+    .eb-pcard-wishlist:hover, .eb-pcard-wishlist.active {
+        color: #f43f5e;
+        transform: scale(1.12);
+        background: #ffffff;
+    }
+    .eb-pcard-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 2rem;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        backdrop-filter: blur(8px);
+        z-index: 2;
+    }
+    .eb-pcard-body {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    .eb-pcard-price {
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: #0f172a;
+        line-height: 1;
+    }
+
+    /* Tab Switcher */
+    .eb-market-tabs .nav-link {
+        color: #64748b !important;
+        font-weight: 800;
+        font-size: 0.95rem;
+        padding: 0.65rem 1.4rem;
+        border-radius: 2rem;
+        border: 1.5px solid transparent;
+        transition: all 0.2s ease;
+    }
+    .eb-market-tabs .nav-link.active {
+        background: #0f172a;
+        color: #ffffff !important;
+        border-color: #0f172a;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.2);
+    }
+    .eb-market-tabs .nav-link:hover:not(.active) {
+        border-color: #cbd5e1;
+        color: #0f172a !important;
+    }
+
+    /* Trust Guarantee Pillars */
+    .eb-trust-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
+        border-top: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 2.5rem 0;
+    }
+    .eb-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .eb-trust-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.85rem;
+        background: rgba(13, 148, 136, 0.12);
+        color: var(--eco-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+    }
+
     @media (max-width: 768px) {
         .eb-hero { padding: 3rem 0 4rem; }
         .eb-calc-wrapper { padding: 2rem 1.25rem; }
@@ -414,65 +650,91 @@
 
 @section('content')
 
-    <!-- 1. HERO SECTION -->
+    <!-- 1. HERO SECTION & MARKETPLACE SHOWCASE -->
     <section class="eb-hero">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">
                     <div class="eb-hero-badge">
-                        <i class="fas fa-leaf"></i> Philippines' Circular E-Waste Platform
+                        <i class="fas fa-bolt text-warning me-1"></i> Philippines' #1 Circular Tech Marketplace
                     </div>
                     <h1>
-                        Don't Trash Old Gadgets.
-                        <span class="gradient-text">Turn E-Waste Into Value.</span>
+                        Buy Refurbished Tech.
+                        <span class="gradient-text">Recycle E-Waste for Cash.</span>
                     </h1>
                     <p class="eb-hero-lead">
-                        E-Benta connects households with verified buyers and certified recyclers. Monetize working electronics, bundle broken scrap lots, and guarantee 100% responsible zero-landfill recycling.
+                        Discover certified refurbished electronics at up to 70% off retail, or monetize old hardware and bulk salvage lots with verified local recyclers.
                     </p>
                     
                     <div class="d-flex flex-wrap gap-3 mb-4">
-                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-primary">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>List Your Device Now</span>
-                        </a>
-                        <a href="{{ route('listings.index') }}" class="eb-btn-outline">
+                        <a href="{{ route('listings.index') }}" class="eb-btn-primary">
                             <i class="fas fa-store"></i>
-                            <span>Explore Marketplace</span>
+                            <span>Explore Tech Deals</span>
+                        </a>
+                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-outline">
+                            <i class="fas fa-recycle text-success"></i>
+                            <span>Sell / Recycle a Device</span>
                         </a>
                     </div>
 
+                    <!-- Search Shortcuts / Trending Keywords -->
+                    @php
+                        $trendingBrands = \App\Models\DeviceBrand::take(4)->get();
+                    @endphp
+                    @if($trendingBrands->count() > 0)
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-4" style="font-size: 0.85rem;">
+                            <span style="color: #64748b; font-weight: 700;"><i class="fas fa-arrow-trend-up me-1 text-teal-600" style="color: #0d9488;"></i>Trending Brands:</span>
+                            @foreach($trendingBrands as $tBrand)
+                                <a href="{{ route('listings.index', ['brand' => $tBrand->name]) }}" class="badge rounded-pill bg-white text-dark text-decoration-none border shadow-sm px-3 py-2">{{ $tBrand->name }}</a>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <!-- Live Social Proof Banner -->
-                    <div class="d-flex align-items-center gap-4 pt-3 flex-wrap">
+                    <div class="d-flex align-items-center gap-4 pt-2 flex-wrap">
                         <div class="d-flex align-items-center gap-2">
                             <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981;"></div>
-                            <span style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">{{ number_format($totalListings ?? 150) }}+</span>
-                            <span style="color: #64748b; font-size: 0.85rem;">Active Listings</span>
+                            <span style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">{{ number_format($totalListings) }}</span>
+                            <span style="color: #64748b; font-size: 0.85rem;">Active Deals</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <i class="fas fa-shield-check" style="color: #0d9488;"></i>
                             <span style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">100%</span>
-                            <span style="color: #64748b; font-size: 0.85rem;">ID Verified</span>
+                            <span style="color: #64748b; font-size: 0.85rem;">Escrow Protected</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <i class="fas fa-truck-pickup" style="color: #06b6d4;"></i>
                             <span style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">Doorstep</span>
-                            <span style="color: #64748b; font-size: 0.85rem;">Recycler Pickup</span>
+                            <span style="color: #64748b; font-size: 0.85rem;">Pickup Available</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="position-relative">
-                        <!-- Top Floating Pill -->
-                        <div class="eb-floating-tag" style="top: -20px; left: 10px;">
-                            <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981;">
-                                <i class="fas fa-money-bill-wave"></i>
+                        @php
+                            $heroListing = $featuredListings->first() ?? $flashDeals->first();
+                        @endphp
+
+                        @if($heroListing)
+                            <!-- Top Floating Pill -->
+                            <div class="eb-floating-tag" style="top: -20px; left: 10px;">
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                                    <i class="fas fa-tag"></i>
+                                </div>
+                                <div>
+                                    <small style="color: #64748b; font-weight: 700; display: block; font-size: 0.72rem;">ACTIVE HARDWARE</small>
+                                    <span style="font-weight: 800; color: #0f172a; font-size: 0.92rem;">
+                                        @if($heroListing->suggested_price > 0)
+                                            ₱{{ number_format($heroListing->suggested_price, 2) }}
+                                        @else
+                                            FREE
+                                        @endif
+                                        • {{ $heroListing->deviceBrand?->name ? $heroListing->deviceBrand->name . ' ' : '' }}{{ $heroListing->deviceModel?->model_name ?: ($heroListing->category ?: ($heroListing->deviceType?->name ?: 'Item')) }}
+                                    </span>
+                                </div>
                             </div>
-                            <div>
-                                <small style="color: #64748b; font-weight: 700; display: block; font-size: 0.75rem;">COMPLETED SALE</small>
-                                <span style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">₱4,800 • iPhone 11 (Damaged)</span>
-                            </div>
-                        </div>
+                        @endif
 
                         <!-- Main Graphic Hero Card -->
                         <div class="eb-hero-card">
@@ -482,7 +744,7 @@
                                     <div style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></div>
                                     <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div>
                                 </div>
-                                <span style="font-size: 0.8rem; font-weight: 700; color: var(--eco-primary);"><i class="fas fa-recycle me-1"></i>Circular Flow Live</span>
+                                <span style="font-size: 0.8rem; font-weight: 800; color: var(--eco-primary);"><i class="fas fa-recycle me-1"></i>Circular Flow Live</span>
                             </div>
 
                             <img src="{{ asset('images/E-waste to wealth transformation.png') }}" alt="E-waste to wealth transformation" class="img-fluid rounded-4 mb-3" style="width: 100%; object-fit: cover; max-height: 280px; box-shadow: 0 8px 25px rgba(0,0,0,0.08);">
@@ -490,233 +752,399 @@
                             <div class="row g-2 text-center">
                                 <div class="col-4">
                                     <div style="background: #f8fafc; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">CO₂ SAVED</small>
-                                        <strong style="color: #0d9488; font-size: 1.05rem;">89.5t</strong>
+                                        <small style="color: #64748b; font-size: 0.72rem; display: block; font-weight: 700;">CO₂ SAVED</small>
+                                        <strong style="color: #0d9488; font-size: 1.05rem;">{{ number_format($totalCarbonSaved, 1) }} kg</strong>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div style="background: #f8fafc; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">SCRAP LOTS</small>
-                                        <strong style="color: #06b6d4; font-size: 1.05rem;">1,240+</strong>
+                                        <small style="color: #64748b; font-size: 0.72rem; display: block; font-weight: 700;">ACTIVE SELLERS</small>
+                                        <strong style="color: #06b6d4; font-size: 1.05rem;">{{ number_format($totalUsers) }}</strong>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div style="background: #f8fafc; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">PAYOUT TIME</small>
-                                        <strong style="color: #10b981; font-size: 1.05rem;">Instant</strong>
+                                        <small style="color: #64748b; font-size: 0.72rem; display: block; font-weight: 700;">LANDFILL DIVERTED</small>
+                                        <strong style="color: #10b981; font-size: 1.05rem;">{{ number_format($totalWeightDiverted, 1) }} kg</strong>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Bottom Floating Pill -->
-                        <div class="eb-floating-tag" style="bottom: -20px; right: 10px;">
-                            <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(6, 182, 212, 0.15); display: flex; align-items: center; justify-content: center; color: #06b6d4;">
-                                <i class="fas fa-truck-fast"></i>
+                        @if($heroListing && $heroListing->pickup_address)
+                            <!-- Bottom Floating Pill -->
+                            <div class="eb-floating-tag" style="bottom: -20px; right: 10px;">
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(6, 182, 212, 0.15); display: flex; align-items: center; justify-content: center; color: #06b6d4;">
+                                    <i class="fas fa-truck-fast"></i>
+                                </div>
+                                <div>
+                                    <small style="color: #64748b; font-weight: 700; display: block; font-size: 0.72rem;">DOORSTEP PICKUP</small>
+                                    <span style="font-weight: 800; color: #0f172a; font-size: 0.92rem;">{{ Str::limit($heroListing->pickup_address, 26) }}</span>
+                                </div>
                             </div>
-                            <div>
-                                <small style="color: #64748b; font-weight: 700; display: block; font-size: 0.75rem;">DOORSTEP PICKUP</small>
-                                <span style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">Scheduled by Recycler</span>
-                            </div>
-                        </div>
+                        @endif
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 2. QUICK CATEGORY EXPLORER -->
-    <section class="eb-category-section">
+    <!-- 2. CIRCULAR CATEGORY EXPLORER (Shopee/Lazada Marketplace Style) -->
+    <section class="eb-circle-cat-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-                <span style="font-weight: 800; color: #0f172a; font-size: 1rem;"><i class="fas fa-filter me-2" style="color: var(--eco-primary);"></i>Browse by Device Type:</span>
-                <a href="{{ route('listings.index') }}" style="color: var(--eco-primary); font-weight: 700; font-size: 0.9rem; text-decoration: none;">View All <i class="fas fa-arrow-right ms-1"></i></a>
-            </div>
-            <div class="row g-3">
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['category' => 'Smartphone']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-mobile-screen"></i></div>
-                        <span>Smartphones</span>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['category' => 'Laptop']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-laptop"></i></div>
-                        <span>Laptops</span>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['category' => 'Desktop']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-desktop"></i></div>
-                        <span>Desktops</span>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['category' => 'Tablet']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-tablet-screen-button"></i></div>
-                        <span>Tablets</span>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['condition' => 'non_functional']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-boxes-stacked"></i></div>
-                        <span>Bulk Scrap Lots</span>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{{ route('listings.index', ['category' => 'Other']) }}" class="eb-cat-pill justify-content-center">
-                        <div class="eb-cat-icon"><i class="fas fa-microchip"></i></div>
-                        <span>Parts & Boards</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. LIVE VERIFIED MARKETPLACE HIGHLIGHTS -->
-    <section class="py-5" style="background: #f8fafc;">
-        <div class="container py-4">
-            <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4">
-                <div>
-                    <span class="eb-section-tag"><i class="fas fa-bolt me-1"></i>Fresh On E-Benta</span>
-                    <h2 class="eb-section-title mb-0" style="font-size: 2.2rem;">Featured Verified Listings</h2>
-                </div>
-                <a href="{{ route('listings.index') }}" class="eb-btn-outline btn-sm">
-                    <span>View All Active Listings</span>
-                    <i class="fas fa-arrow-right"></i>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 style="font-weight: 800; color: #0f172a; font-size: 1.05rem; margin: 0;">
+                    <i class="fas fa-grid-2 me-2" style="color: var(--eco-primary);"></i>Browse Categories
+                </h6>
+                <a href="{{ route('listings.index') }}" style="color: var(--eco-primary); font-weight: 700; font-size: 0.88rem; text-decoration: none;">
+                    All Categories <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
 
-            <div class="row g-4">
-                @if(isset($featuredListings) && $featuredListings->count() > 0)
-                    @foreach($featuredListings as $listing)
-                        <div class="col-md-6 col-lg-4">
-                            <div class="eb-market-card">
-                                <div class="eb-card-img-wrapper">
-                                    @php
-                                        $photos = is_array($listing->photos) ? $listing->photos : json_decode($listing->photos, true) ?? [];
-                                        $primaryPhoto = count($photos) > 0 ? $photos[0] : null;
-                                    @endphp
-                                    @if($primaryPhoto)
-                                        <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'E-Waste Item' }}">
-                                    @else
-                                        <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
-                                    @endif
+            @php
+                $welcomeCategories = \App\Models\DeviceType::orderBy('name')->take(8)->get();
+            @endphp
+            <div class="eb-circle-cat-list">
+                @foreach($welcomeCategories as $wCat)
+                    <a href="{{ route('listings.index', ['category' => $wCat->name]) }}" class="eb-circle-cat-card">
+                        <div class="eb-circle-bubble">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <span class="eb-circle-name">{{ $wCat->name }}</span>
+                    </a>
+                @endforeach
+                <a href="{{ route('listings.index', ['condition' => 'functional']) }}" class="eb-circle-cat-card">
+                    <div class="eb-circle-bubble">
+                        <i class="fas fa-certificate" style="color: #10b981;"></i>
+                    </div>
+                    <span class="eb-circle-name">Certified Working</span>
+                </a>
+                <a href="{{ route('listings.index', ['condition' => 'repairable']) }}" class="eb-circle-cat-card">
+                    <div class="eb-circle-bubble">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <span class="eb-circle-name">Repairable</span>
+                </a>
+                <a href="{{ route('listings.index', ['condition' => 'for_parts']) }}" class="eb-circle-cat-card">
+                    <div class="eb-circle-bubble">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <span class="eb-circle-name">Scrap & Parts</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
-                                    <!-- Status Pill -->
-                                    <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); color: #ffffff; backdrop-filter: blur(8px); padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                        <i class="fas fa-check-circle text-success me-1"></i>{{ ucfirst($listing->condition ?? 'working') }}
+    <!-- 3. FLASH DEALS & LIMITED-TIME OFFERS RIBBON -->
+    @if(isset($flashDeals) && $flashDeals->count() > 0)
+        <section class="py-4" style="background: #ffffff;">
+            <div class="container">
+                <div class="eb-flash-banner">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="eb-flash-badge"><i class="fas fa-bolt"></i> FLASH DEALS</span>
+                            <h4 class="mb-0 fw-bold text-white d-none d-md-inline">Limited-Time Tech & Salvage Deals</h4>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span style="font-size: 0.85rem; color: #cbd5e1; font-weight: 600;">Ends in:</span>
+                            <div class="eb-timer-ticker" id="flash-countdown">04:18:29</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        @foreach($flashDeals as $deal)
+                            @php
+                                $photos = is_array($deal->photos) ? $deal->photos : json_decode($deal->photos, true) ?? [];
+                                $photo = count($photos) > 0 ? $photos[0] : null;
+                                $isSaved = isset($savedListingIds) && $savedListingIds->contains($deal->id);
+                            @endphp
+                            <div class="col-6 col-md-3">
+                                <div class="eb-pcard bg-white text-dark h-100">
+                                    <div class="eb-pcard-media" style="height: 160px;">
+                                        @if($photo)
+                                            <img src="{{ $photo }}" alt="{{ $deal->category }}">
+                                        @else
+                                            <i class="fas fa-microchip text-teal-600" style="font-size: 2.5rem; color: #0d9488;"></i>
+                                        @endif
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-2 py-1 fw-bold" style="font-size: 0.68rem;">
+                                            HOT DEAL
+                                        </span>
                                     </div>
-
-                                    @if($listing->listing_type === 'bulk_lot')
-                                        <div style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                            <i class="fas fa-boxes me-1"></i>Bulk Lot ({{ $listing->lot_item_count }} items)
+                                    <div class="p-3 d-flex flex-column flex-grow-1">
+                                        <span style="font-size: 0.72rem; font-weight: 800; color: #0d9488; text-transform: uppercase;">
+                                            {{ $deal->category ?: ($deal->deviceType?->name ?: 'Hardware') }}
+                                        </span>
+                                        <a href="{{ route('listings.show', $deal) }}" class="text-decoration-none text-dark fw-bold mb-2" style="font-size: 0.9rem; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                            {{ $deal->device_details ?: ($deal->description ? Str::limit($deal->description, 45) : 'Tech Listing') }}
+                                        </a>
+                                        <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                                            <div>
+                                                <span class="eb-pcard-price" style="font-size: 1.15rem; color: #ea580c;">
+                                                    ₱{{ number_format($deal->suggested_price, 2) }}
+                                                </span>
+                                            </div>
+                                            <a href="{{ route('listings.show', $deal) }}" class="btn btn-sm btn-dark px-2 py-1" style="font-size: 0.78rem; font-weight: 700; border-radius: 0.5rem;">
+                                                Buy
+                                            </a>
                                         </div>
-                                    @endif
-                                </div>
-
-                                <div class="p-4 d-flex flex-column flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span style="font-size: 0.8rem; font-weight: 800; color: var(--eco-primary); text-transform: uppercase;">
-                                            {{ $listing->category ?: ($listing->deviceType?->name ?: 'Hardware') }}
-                                        </span>
-                                        <span style="font-size: 0.8rem; color: #64748b;">
-                                            <i class="fas fa-leaf text-success me-1"></i>{{ $listing->carbon_footprint ?? 15 }}kg CO₂
-                                        </span>
                                     </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
-                                    <h5 style="font-weight: 800; font-size: 1.15rem; color: #0f172a; margin-bottom: 0.75rem; line-height: 1.3;">
-                                        {{ Str::limit($listing->description, 60) }}
-                                    </h5>
+    <!-- 4. CURATED MARKETPLACE CATALOG SHOWCASE WITH TABS -->
+    <section class="py-5" style="background: #f8fafc;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4">
+                <div>
+                    <span class="eb-section-tag"><i class="fas fa-sparkles me-1"></i>Curated Catalog</span>
+                    <h2 class="eb-section-title mb-0" style="font-size: 2.1rem;">Explore E-Benta Marketplace</h2>
+                </div>
+                <!-- Catalog Tabs -->
+                <ul class="nav eb-market-tabs gap-2" id="marketplaceTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="featured-tab" data-bs-toggle="tab" data-bs-target="#featured-pane" type="button" role="tab">
+                            🔥 Trending Finds
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="salvage-tab" data-bs-toggle="tab" data-bs-target="#salvage-pane" type="button" role="tab">
+                            🛠️ Salvage & Scrap Lots
+                        </button>
+                    </li>
+                </ul>
+            </div>
 
-                                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">ASKING PRICE</small>
-                                            <span style="font-size: 1.25rem; font-weight: 900; color: #0f172a;">
-                                                @if($listing->suggested_price > 0)
-                                                    ₱{{ number_format($listing->suggested_price, 2) }}
-                                                @else
-                                                    <span class="text-success">Free / Recycle</span>
+            <!-- Tab Content Panes -->
+            <div class="tab-content" id="marketplaceTabContent">
+                <!-- Pane 1: Featured Trending Tech -->
+                <div class="tab-pane fade show active" id="featured-pane" role="tabpanel" tabindex="0">
+                    <div class="row g-4">
+                        @if(isset($featuredListings) && $featuredListings->count() > 0)
+                            @foreach($featuredListings as $listing)
+                                @php
+                                    $photos = is_array($listing->photos) ? $listing->photos : json_decode($listing->photos, true) ?? [];
+                                    $primaryPhoto = count($photos) > 0 ? $photos[0] : null;
+                                    $isSaved = isset($savedListingIds) && $savedListingIds->contains($listing->id);
+                                @endphp
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="eb-pcard">
+                                        <div class="eb-pcard-media">
+                                            @if($primaryPhoto)
+                                                <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'Item' }}">
+                                            @else
+                                                <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
+                                            @endif
+
+                                            <!-- Condition Pill -->
+                                            <span class="eb-pcard-badge {{ $listing->condition === 'functional' ? 'eb-condition-functional' : ($listing->condition === 'repairable' ? 'eb-condition-repairable' : 'eb-condition-for_parts') }}">
+                                                {{ str_replace('_', ' ', ucfirst($listing->condition ?? 'working')) }}
+                                            </span>
+
+                                            <!-- Wishlist Button -->
+                                            @auth
+                                                @if(auth()->user()->isBuyer())
+                                                    <form method="POST" action="{{ $isSaved ? route('buyer.saved-items.destroy', $listing) : route('buyer.saved-items.store', $listing) }}" style="display: inline;">
+                                                        @csrf
+                                                        @if($isSaved)
+                                                            @method('DELETE')
+                                                        @endif
+                                                        <button type="submit" class="eb-pcard-wishlist {{ $isSaved ? 'active' : '' }}" title="{{ $isSaved ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+                                                            <i class="fas fa-heart"></i>
+                                                        </button>
+                                                    </form>
                                                 @endif
+                                            @else
+                                                <a href="{{ route('login') }}" class="eb-pcard-wishlist" title="Log in to save">
+                                                    <i class="far fa-heart"></i>
+                                                </a>
+                                            @endauth
+                                        </div>
+
+                                        <div class="eb-pcard-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span style="font-size: 0.75rem; font-weight: 800; color: var(--eco-primary); text-transform: uppercase;">
+                                                    {{ $listing->category ?: ($listing->deviceType?->name ?: 'Device') }}
+                                                </span>
+                                                @if($listing->carbon_footprint)
+                                                    <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">
+                                                        <i class="fas fa-leaf me-1"></i>-{{ $listing->carbon_footprint }}kg CO₂
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            <h6 style="font-weight: 800; font-size: 0.98rem; color: #0f172a; margin-bottom: 0.5rem; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                                <a href="{{ route('listings.show', $listing) }}" class="text-decoration-none text-dark">
+                                                    {{ $listing->device_details ?: ($listing->description ? Str::limit($listing->description, 55) : 'E-Waste Item') }}
+                                                </a>
+                                            </h6>
+
+                                            <!-- Seller Tag -->
+                                            <div class="d-flex align-items-center gap-1 mb-3" style="font-size: 0.78rem; color: #64748b;">
+                                                <i class="fas fa-circle-check text-teal-600" style="color: #0d9488;"></i>
+                                                <span class="text-truncate">{{ $listing->seller?->name ?? 'Verified Seller' }}</span>
+                                            </div>
+
+                                            <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <small style="color: #64748b; font-size: 0.7rem; display: block; font-weight: 700;">ASKING</small>
+                                                    <span class="eb-pcard-price">
+                                                        @if($listing->suggested_price > 0)
+                                                            ₱{{ number_format($listing->suggested_price, 2) }}
+                                                        @else
+                                                            <span class="text-success" style="font-size: 0.95rem;">Free / Scrap</span>
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                                <a href="{{ route('listings.show', $listing) }}" class="btn btn-sm btn-primary" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); border: none; font-weight: 800; padding: 0.4rem 0.85rem; border-radius: 0.6rem;">
+                                                    View
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-12 text-center py-5">
+                                <i class="fas fa-boxes-stacked" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                                <h5 class="fw-bold text-dark">No live listings yet</h5>
+                                <p class="text-muted">Be the first to list an electronic device!</p>
+                                <a href="{{ route('listings.create') }}" class="btn btn-primary fw-bold">List Tech Device</a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Pane 2: Salvage & Scrap Lots -->
+                <div class="tab-pane fade" id="salvage-pane" role="tabpanel" tabindex="0">
+                    <div class="row g-4">
+                        @if(isset($salvageLots) && $salvageLots->count() > 0)
+                            @foreach($salvageLots as $lot)
+                                @php
+                                    $photos = is_array($lot->photos) ? $lot->photos : json_decode($lot->photos, true) ?? [];
+                                    $primaryPhoto = count($photos) > 0 ? $photos[0] : null;
+                                    $isSaved = isset($savedListingIds) && $savedListingIds->contains($lot->id);
+                                @endphp
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="eb-pcard">
+                                        <div class="eb-pcard-media">
+                                            @if($primaryPhoto)
+                                                <img src="{{ $primaryPhoto }}" alt="{{ $lot->category ?: 'Salvage Lot' }}">
+                                            @else
+                                                <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-boxes-stacked"></i></div>
+                                            @endif
+                                            <span class="eb-pcard-badge eb-condition-for_parts">
+                                                {{ $lot->condition === 'repairable' ? 'Repairable' : 'For Parts / Scrap' }}
                                             </span>
                                         </div>
-                                        <a href="{{ route('listings.show', $listing) }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.6rem; font-weight: 700; padding: 0.45rem 1rem;">
-                                            View Details
-                                        </a>
+
+                                        <div class="eb-pcard-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span style="font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase;">
+                                                    {{ $lot->listing_type === 'bulk_lot' ? 'Bulk Lot ('.$lot->lot_item_count.' pcs)' : ($lot->category ?: 'Hardware') }}
+                                                </span>
+                                                @if($lot->estimated_weight)
+                                                    <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">
+                                                        <i class="fas fa-weight-hanging me-1"></i>{{ $lot->estimated_weight }}kg
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            <h6 style="font-weight: 800; font-size: 0.98rem; color: #0f172a; margin-bottom: 0.5rem; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                                <a href="{{ route('listings.show', $lot) }}" class="text-decoration-none text-dark">
+                                                    {{ $lot->device_details ?: ($lot->description ? Str::limit($lot->description, 55) : 'Salvage Lot') }}
+                                                </a>
+                                            </h6>
+
+                                            <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <small style="color: #64748b; font-size: 0.7rem; display: block; font-weight: 700;">SALVAGE VALUE</small>
+                                                    <span class="eb-pcard-price">₱{{ number_format($lot->suggested_price, 2) }}</span>
+                                                </div>
+                                                <a href="{{ route('listings.show', $lot) }}" class="btn btn-sm btn-outline-dark" style="font-weight: 800; border-radius: 0.6rem;">
+                                                    Offer
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="col-12 text-center py-5">
+                                <p class="text-muted">No salvage lots currently available.</p>
                             </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- View All Marketplace Catalog CTA -->
+            <div class="text-center mt-5">
+                <a href="{{ route('listings.index') }}" class="btn btn-lg px-5 py-3 fw-bold" style="background: #0f172a; color: #ffffff; border-radius: 1rem; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);">
+                    <i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Browse All 100+ Catalog Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. E-COMMERCE 4-PILLAR TRUST GUARANTEE -->
+    <section class="eb-trust-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-6 col-lg-3">
+                    <div class="eb-trust-item">
+                        <div class="eb-trust-icon">
+                            <i class="fas fa-shield-halved"></i>
                         </div>
-                    @endforeach
-                @else
-                    <!-- Clean Mock Highlights when no live database listings -->
-                    <div class="col-md-4">
-                        <div class="eb-market-card">
-                            <div class="eb-card-img-wrapper">
-                                <i class="fas fa-laptop" style="font-size: 3.5rem; color: #0d9488;"></i>
-                                <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                    <i class="fas fa-check-circle text-success me-1"></i>Working
-                                </div>
-                            </div>
-                            <div class="p-4 d-flex flex-column flex-grow-1">
-                                <span style="font-size: 0.8rem; font-weight: 800; color: var(--eco-primary); text-transform: uppercase;">Laptop</span>
-                                <h5 style="font-weight: 800; font-size: 1.15rem; color: #0f172a; margin-bottom: 0.75rem;">Dell Latitude 5420 Core i5</h5>
-                                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">ASKING PRICE</small>
-                                        <span style="font-size: 1.25rem; font-weight: 900; color: #0f172a;">₱8,500.00</span>
-                                    </div>
-                                    <a href="{{ route('listings.index') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.6rem; font-weight: 700;">Explore</a>
-                                </div>
-                            </div>
+                        <div>
+                            <h6 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 0.95rem;">Escrow Protection</h6>
+                            <small style="color: #64748b; font-size: 0.8rem;">Funds secured until pickup verification</small>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="eb-market-card">
-                            <div class="eb-card-img-wrapper">
-                                <i class="fas fa-boxes-stacked" style="font-size: 3.5rem; color: #f59e0b;"></i>
-                                <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                    <i class="fas fa-wrench text-warning me-1"></i>Non-functional
-                                </div>
-                                <div style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                    <i class="fas fa-boxes me-1"></i>Bulk Lot (15 Phones)
-                                </div>
-                            </div>
-                            <div class="p-4 d-flex flex-column flex-grow-1">
-                                <span style="font-size: 0.8rem; font-weight: 800; color: #f59e0b; text-transform: uppercase;">Scrap Bundle</span>
-                                <h5 style="font-weight: 800; font-size: 1.15rem; color: #0f172a; margin-bottom: 0.75rem;">Lot of 15 Damaged Smartphones for Parts</h5>
-                                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">ASKING PRICE</small>
-                                        <span style="font-size: 1.25rem; font-weight: 900; color: #0f172a;">₱3,200.00</span>
-                                    </div>
-                                    <a href="{{ route('listings.index') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.6rem; font-weight: 700;">Explore</a>
-                                </div>
-                            </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="eb-trust-item">
+                        <div class="eb-trust-icon">
+                            <i class="fas fa-truck-ramp-box"></i>
+                        </div>
+                        <div>
+                            <h6 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 0.95rem;">Doorstep Recycler Pickup</h6>
+                            <small style="color: #64748b; font-size: 0.8rem;">Schedule hassle-free collection</small>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="eb-market-card">
-                            <div class="eb-card-img-wrapper">
-                                <i class="fas fa-mobile-screen-button" style="font-size: 3.5rem; color: #06b6d4;"></i>
-                                <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 800;">
-                                    <i class="fas fa-check-circle text-info me-1"></i>Minor Damage
-                                </div>
-                            </div>
-                            <div class="p-4 d-flex flex-column flex-grow-1">
-                                <span style="font-size: 0.8rem; font-weight: 800; color: var(--eco-primary); text-transform: uppercase;">Smartphone</span>
-                                <h5 style="font-weight: 800; font-size: 1.15rem; color: #0f172a; margin-bottom: 0.75rem;">Samsung Galaxy S21 128GB (Cracked Glass)</h5>
-                                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <small style="color: #64748b; font-size: 0.75rem; display: block; font-weight: 700;">ASKING PRICE</small>
-                                        <span style="font-size: 1.25rem; font-weight: 900; color: #0f172a;">₱6,000.00</span>
-                                    </div>
-                                    <a href="{{ route('listings.index') }}" class="btn btn-sm btn-outline-dark" style="border-radius: 0.6rem; font-weight: 700;">Explore</a>
-                                </div>
-                            </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="eb-trust-item">
+                        <div class="eb-trust-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div>
+                            <h6 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 0.95rem;">Eco-Impact Certificate</h6>
+                            <small style="color: #64748b; font-size: 0.8rem;">Official CO₂ & landfill diversion proof</small>
                         </div>
                     </div>
-                @endif
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="eb-trust-item">
+                        <div class="eb-trust-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div>
+                            <h6 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 0.95rem;">Dedicated Support</h6>
+                            <small style="color: #64748b; font-size: 0.8rem;">Active dispute mediation team</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -742,11 +1170,10 @@
                             <div class="col-md-6">
                                 <label style="font-weight: 700; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.5rem;">Device Category</label>
                                 <select id="calc-device-type" class="form-select form-select-lg" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; border-radius: 0.8rem;" onchange="calculateEwasteValue()">
-                                    <option value="smartphone" style="color: #000;" selected>📱 Smartphone</option>
-                                    <option value="laptop" style="color: #000;">💻 Laptop</option>
-                                    <option value="desktop" style="color: #000;">🖥️ Desktop / PC</option>
-                                    <option value="tablet" style="color: #000;">🎮 Tablet / iPad</option>
-                                    <option value="bulk_lot" style="color: #000;">📦 Bulk Scrap Bundle (10+ items)</option>
+                                    @foreach(\App\Models\DeviceType::orderBy('name')->get() as $cIdx => $cType)
+                                        <option value="{{ strtolower($cType->name) }}" style="color: #000;" {{ $cIdx === 0 ? 'selected' : '' }}>{{ $cType->name }}</option>
+                                    @endforeach
+                                    <option value="bulk_lot" style="color: #000;">Bulk Scrap Bundle</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -952,7 +1379,7 @@
                     <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 1.5rem; padding: 2.25rem 1.5rem; backdrop-filter: blur(10px);">
                         <div style="font-size: 2.5rem; color: #34d399; margin-bottom: 0.75rem;"><i class="fas fa-cloud-arrow-down"></i></div>
                         <div style="font-size: 2.4rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;">
-                            {{ number_format($totalCarbonSaved ?? 2847, 0) }} kg
+                            {{ number_format($totalCarbonSaved, 0) }} kg
                         </div>
                         <span style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">CO₂ Emissions Prevented</span>
                     </div>
@@ -962,7 +1389,7 @@
                     <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 1.5rem; padding: 2.25rem 1.5rem; backdrop-filter: blur(10px);">
                         <div style="font-size: 2.5rem; color: #38bdf8; margin-bottom: 0.75rem;"><i class="fas fa-recycle"></i></div>
                         <div style="font-size: 2.4rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;">
-                            {{ number_format($totalWeightDiverted ?? 89500, 0) }} kg
+                            {{ number_format($totalWeightDiverted, 0) }} kg
                         </div>
                         <span style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">E-Waste Diverted from Landfill</span>
                     </div>
@@ -972,7 +1399,7 @@
                     <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 1.5rem; padding: 2.25rem 1.5rem; backdrop-filter: blur(10px);">
                         <div style="font-size: 2.5rem; color: #fbbf24; margin-bottom: 0.75rem;"><i class="fas fa-users"></i></div>
                         <div style="font-size: 2.4rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;">
-                            {{ number_format($totalUsers ?? 18250, 0) }}+
+                            {{ number_format($totalUsers, 0) }}
                         </div>
                         <span style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">Eco-Conscious Members</span>
                     </div>
@@ -1060,7 +1487,7 @@
                     Every Device Counts. <br><span class="gradient-text">Make Your Environmental Impact Today.</span>
                 </h2>
                 <p style="font-size: 1.15rem; color: #cbd5e1; max-width: 650px; margin: 0 auto 2.5rem; line-height: 1.7;">
-                    Join over 18,000 community members and certified recyclers turning hazardous e-waste into economic and environmental opportunity.
+                    Join {{ $totalUsers > 0 ? number_format($totalUsers) . ' ' : '' }}community members and certified recyclers turning hazardous e-waste into economic and environmental opportunity.
                 </p>
                 <div class="d-flex justify-content-center flex-wrap gap-3">
                     <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-primary" style="font-size: 1.1rem; padding: 1.1rem 2.8rem;">
@@ -1126,6 +1553,23 @@
             document.getElementById('calc-res-weight').textContent = result.weight;
         }
     }
+
+    // Flash Deal Countdown Timer
+    function startFlashTimer() {
+        let totalSeconds = 4 * 3600 + 18 * 60 + 29;
+        const timerEl = document.getElementById('flash-countdown');
+        if (!timerEl) return;
+        
+        setInterval(() => {
+            if (totalSeconds <= 0) totalSeconds = 12 * 3600;
+            totalSeconds--;
+            const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const s = String(totalSeconds % 60).padStart(2, '0');
+            timerEl.textContent = `${h}:${m}:${s}`;
+        }, 1000);
+    }
+    document.addEventListener('DOMContentLoaded', startFlashTimer);
 
     // Interactive FAQ Accordion Toggle
     function toggleFaq(btn) {
