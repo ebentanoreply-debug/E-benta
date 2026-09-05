@@ -1356,23 +1356,35 @@
                                         </div>
                                         <i class="fas fa-chevron-down" style="font-size: 0.65rem; color: #94a3b8;"></i>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: #0f172a; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem;">
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: #0f172a; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; min-width: 220px;">
                                         @if(auth()->user()->isAdmin())
+                                            <li><div class="px-3 py-1 text-xs text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Administration</div></li>
                                             <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2" style="color: #2dd4bf;"></i>Admin Dashboard</a></li>
-                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>Manage Listings</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.pending-verifications') }}"><i class="fas fa-user-check me-2" style="color: #fbbf24;"></i>Verifications</a></li>
+                                            <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
                                         @elseif(auth()->user()->isSeller())
-                                            <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Seller Hub</a></li>
+                                            <li><div class="px-3 py-1 text-xs text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Seller Hub</div></li>
+                                            <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Seller Centre</a></li>
                                             <li><a class="dropdown-item" href="{{ route('seller.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>My Inventory</a></li>
-                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="{{ route('seller.transaction-history') }}"><i class="fas fa-receipt me-2" style="color: #10b981;"></i>Sales Orders</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('seller.sales-analytics') }}"><i class="fas fa-chart-pie me-2" style="color: #f59e0b;"></i>Sales Analytics</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('listings.create') }}"><i class="fas fa-plus-circle me-2" style="color: #34d399;"></i>List New Tech</a></li>
+                                            <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
                                         @elseif(auth()->user()->isBuyer())
-                                            <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-shopping-bag me-2" style="color: #2dd4bf;"></i>Buyer Dashboard</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('buyer.saved-items') }}"><i class="fas fa-heart me-2" style="color: #f43f5e;"></i>Saved Items</a></li>
-                                            <li><hr class="dropdown-divider"></li>
+                                            <li><div class="px-3 py-1 text-xs text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Buyer Account</div></li>
+                                            <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-bag-shopping me-2" style="color: #2dd4bf;"></i>My Purchases & Orders</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('buyer.transaction-history') }}"><i class="fas fa-clock-rotate-left me-2" style="color: #38bdf8;"></i>Order History</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('buyer.saved-items') }}"><i class="fas fa-heart me-2" style="color: #f43f5e;"></i>Saved Wishlist</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('addresses.index') }}"><i class="fas fa-map-location-dot me-2" style="color: #fbbf24;"></i>Shipping Addresses</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('reviews.user', auth()->user()) }}"><i class="fas fa-star me-2" style="color: #eab308;"></i>My Reviews</a></li>
+                                            <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
                                         @endif
-                                        <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #2dd4bf;"></i>Settings</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #2dd4bf;"></i>Change Password</a></li>
-                                        <li><hr class="dropdown-divider"></li>
+                                        <li><div class="px-3 py-1 text-xs text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Account & Settings</div></li>
+                                        <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-circle me-2" style="color: #2dd4bf;"></i>Profile Info</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2" style="color: #94a3b8;"></i>Preferences & Security</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('password.change') }}"><i class="fas fa-lock me-2" style="color: #94a3b8;"></i>Change Password</a></li>
+                                        <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
                                                 @csrf
