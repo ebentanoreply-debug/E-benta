@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function payOffer(Offer $offer, PayMongoService $payMongo)
+    public function payOffer(Request $request, Offer $offer, PayMongoService $payMongo)
     {
         if (Auth::id() !== $offer->buyer_id) {
             return redirect('/')->with('error', 'Unauthorized');
@@ -24,8 +24,12 @@ class PaymentController extends Controller
             return redirect()->back()->with('info', 'This offer has already been paid.');
         }
 
+        $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         $existingPending = $offer->payments()->where('status', 'pending')->latest()->first();
-        if ($existingPending?->checkout_url) {
+        if (
+            $existingPending?->checkout_url
+            && data_get($existingPending->payload, '_callback_base_url') === $baseUrl
+        ) {
             return redirect()->away($existingPending->checkout_url);
         }
 
@@ -45,13 +49,13 @@ class PaymentController extends Controller
         ]);
 
         try {
-            $session = $payMongo->createCheckoutSession($offer);
+            $session = $payMongo->createCheckoutSession($offer, $baseUrl);
             $attributes = $session['attributes'] ?? [];
 
             $payment->update([
                 'paymongo_checkout_session_id' => $session['id'] ?? null,
                 'checkout_url' => $attributes['checkout_url'] ?? null,
-                'payload' => $session,
+                'payload' => array_merge($session, ['_callback_base_url' => $baseUrl]),
             ]);
         } catch (\Throwable $e) {
             $payment->update([
