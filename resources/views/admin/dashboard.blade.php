@@ -331,9 +331,14 @@
                             </div>
                             <span style="color: #94a3b8; font-size: 0.85rem;">• E-Benta Version 2.0</span>
                         </div>
-                        <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; letter-spacing: -0.5px; margin: 0;">
-                            <i class="fas fa-shield-halved me-2" style="color: #10b981;"></i>Admin Control Center
-                        </h1>
+                        <div class="d-flex align-items-center gap-3">
+                            <button type="button" class="admin-header-toggle-btn d-none d-lg-inline-flex" onclick="toggleAdminSidebar()" title="Toggle Sidebar" style="background: rgba(13, 148, 136, 0.18); border: 1px solid rgba(13, 148, 136, 0.35); color: #2dd4bf; width: 40px; height: 40px; border-radius: 10px; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                            <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; letter-spacing: -0.5px; margin: 0;">
+                                <i class="fas fa-shield-halved me-2" style="color: #10b981;"></i>Admin Control Center
+                            </h1>
+                        </div>
                         <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
                             Environmental impact performance, user verifications, and marketplace oversight.
                         </p>
