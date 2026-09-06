@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 
 class PayMongoService
 {
-    public function createCheckoutSession(Offer $offer): array
+    public function createCheckoutSession(Offer $offer, string $baseUrl): array
     {
-        $baseUrl = rtrim(config('app.url'), '/');
+        $baseUrl = rtrim($baseUrl, '/');
         $amount = (int) round(((float) $offer->bid_amount) * 100);
 
         $response = Http::withBasicAuth(config('services.paymongo.secret_key'), '')
