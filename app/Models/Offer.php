@@ -146,6 +146,10 @@ class Offer extends Model
      */
     public function canBuyerCancel(): bool
     {
+        if ($this->payments()->where('status', 'paid')->exists()) {
+            return false;
+        }
+
         if ($this->status === 'pending') {
             return true;
         }

@@ -411,7 +411,12 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        if ($offer->isAccepted() && $offer->listing->matched_buyer_id === Auth::id() && $offer->listing->status === 'matched') {
+        if (
+            $offer->isAccepted()
+            && $offer->payments()->where('status', 'paid')->exists()
+            && $offer->listing->matched_buyer_id === Auth::id()
+            && $offer->listing->status === 'matched'
+        ) {
             $offer->listing->update([
                 'status' => 'in_transit',
                 'picked_up_at' => now(),
@@ -422,7 +427,7 @@ class OfferController extends Controller
         }
 
         return redirect()->back()
-            ->with('error', 'Invalid offer status');
+            ->with('error', 'Payment must be confirmed before pickup can be marked.');
     }
 
     /**
