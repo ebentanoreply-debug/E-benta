@@ -161,6 +161,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/seller/transaction-history', [OfferController::class, 'sellerTransactionHistory'])->name('seller.transaction-history');
         Route::get('/seller/wallet', [SellerWalletController::class, 'index'])->name('seller.wallet');
         Route::post('/seller/payouts', [SellerWalletController::class, 'requestPayout'])->name('seller.payouts.request');
+        Route::post('/offers/{offer}/confirm-cash-received', [OfferController::class, 'confirmCashReceived'])->name('offers.confirm-cash-received');
         Route::get('/listings/create', [ListingController::class, 'create'])->name('listings.create');
         Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
         Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->name('listings.edit');
@@ -178,6 +179,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/buyer/saved-items/{listing}', [SavedItemController::class, 'destroy'])->name('buyer.saved-items.destroy');
         Route::get('/offers/create/{listing}', [OfferController::class, 'create'])->name('offers.create');
         Route::post('/offers/{offer}/mark-picked-up', [OfferController::class, 'markPickedUp'])->name('offers.mark-picked-up');
+        Route::post('/offers/{offer}/payment-method', [OfferController::class, 'selectPaymentMethod'])->name('offers.payment-method');
         Route::post('/offers/{offer}/update-status', [OfferController::class, 'updateProcessingStatus'])->name('offers.update-status');
         Route::post('/offers/{offer}/cancel', [OfferController::class, 'cancel'])->name('offers.cancel');
         Route::post('/listings/{listing}/mark-delivered', [ListingController::class, 'markDelivered'])->name('listings.mark-delivered');

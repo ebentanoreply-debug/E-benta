@@ -744,7 +744,7 @@ class ListingController extends Controller
             ->latest()
             ->first();
 
-        if (!$matchedOffer?->payments()->where('status', 'paid')->exists()) {
+        if (!$matchedOffer?->paymentConfirmed()) {
             return redirect()->back()->with('error', 'Payment must be confirmed before delivery can be marked.');
         }
 

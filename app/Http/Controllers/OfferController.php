@@ -401,6 +401,53 @@ class OfferController extends Controller
             ->with('success', 'Offer cancelled successfully');
     }
 
+    public function selectPaymentMethod(Request $request, Offer $offer)
+    {
+        if (Auth::id() !== $offer->buyer_id || !$offer->isAccepted()) {
+            return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        if ($offer->payment_method || $offer->paymentConfirmed()) {
+            return redirect()->back()->with('error', 'The payment method has already been selected.');
+        }
+
+        $validated = $request->validate([
+            'payment_method' => 'required|in:paymongo,cash_pickup',
+        ]);
+
+        $offer->update(['payment_method' => $validated['payment_method']]);
+
+        return redirect()->route('offers.show', $offer)->with('success', 'Payment method selected.');
+    }
+
+    public function confirmCashReceived(Offer $offer)
+    {
+        if (Auth::id() !== $offer->listing->user_id) {
+            return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        if (
+            !$offer->isAccepted()
+            || $offer->payment_method !== 'cash_pickup'
+            || $offer->cash_received_at
+            || $offer->listing->status !== 'in_transit'
+        ) {
+            return redirect()->back()->with('error', 'Cash receipt cannot be confirmed at this stage.');
+        }
+
+        $offer->update(['cash_received_at' => now()]);
+
+        Notification::notify(
+            $offer->buyer,
+            'cash_payment_confirmed',
+            'Cash Payment Confirmed',
+            'The seller confirmed receipt of your cash payment. You can now confirm delivery.',
+            ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
+        );
+
+        return redirect()->route('offers.show', $offer)->with('success', 'Cash receipt confirmed.');
+    }
+
     /**
      * Mark offer as picked up (buyer action).
      */
@@ -413,7 +460,7 @@ class OfferController extends Controller
 
         if (
             $offer->isAccepted()
-            && $offer->payments()->where('status', 'paid')->exists()
+            && ($offer->payment_method === 'cash_pickup' || $offer->paymentConfirmed())
             && $offer->listing->matched_buyer_id === Auth::id()
             && $offer->listing->status === 'matched'
         ) {
@@ -427,7 +474,7 @@ class OfferController extends Controller
         }
 
         return redirect()->back()
-            ->with('error', 'Payment must be confirmed before pickup can be marked.');
+            ->with('error', 'Choose a payment method and complete the required payment step before pickup.');
     }
 
     /**
@@ -442,7 +489,7 @@ class OfferController extends Controller
 
         if (
             !$offer->isAccepted()
-            || !$offer->payments()->where('status', 'paid')->exists()
+            || !$offer->paymentConfirmed()
             || $offer->listing->matched_buyer_id !== Auth::id()
             || $offer->listing->status !== 'delivered'
         ) {

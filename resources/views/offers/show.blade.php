@@ -177,22 +177,41 @@
 
             @php
                 $paidPayment = $offer->payments()->where('status', 'paid')->latest()->first();
+                $paymentConfirmed = $offer->paymentConfirmed();
             @endphp
 
-            <!-- Buyer Payment Action -->
+            <!-- Buyer Payment Method -->
             @if(auth()->id() === $offer->buyer_id && $offer->status === 'accepted')
                 <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.25); border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-credit-card" style="color: #0d9488;"></i>
-                        Payment
+                        Payment Method
                     </h4>
-                    @if($paidPayment)
+                    @if(!$offer->payment_method)
+                        <p style="color: #64748b; margin-bottom: 1rem;">Choose how you will pay for this accepted offer.</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                            <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="paymongo">
+                                <button type="submit" style="background: #0d9488; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem;">
+                                    <i class="fas fa-credit-card me-2"></i>Pay Online
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="cash_pickup">
+                                <button type="submit" style="background: #f59e0b; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem;">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Cash on Pickup
+                                </button>
+                            </form>
+                        </div>
+                    @elseif($offer->payment_method === 'paymongo' && $paymentConfirmed)
                         <p style="color: #0d9488; margin: 0; font-weight: 700;">
                             <i class="fas fa-check-circle me-2"></i>Paid via PayMongo on {{ $paidPayment->paid_at?->format('M d, Y g:i A') }}.
                         </p>
-                    @else
+                    @elseif($offer->payment_method === 'paymongo')
                         <p style="color: #64748b; margin-bottom: 1rem;">
-                            Pay your accepted offer securely through PayMongo. The seller wallet will be credited after PayMongo confirms the payment.
+                            Pay online securely through PayMongo. The seller wallet will be credited after PayMongo confirms the payment.
                         </p>
                         <form method="POST" action="{{ route('offers.pay', $offer) }}">
                             @csrf
@@ -200,12 +219,18 @@
                                 <i class="fas fa-lock me-2"></i>Pay ₱{{ number_format($offer->bid_amount, 2) }}
                             </button>
                         </form>
+                    @elseif($paymentConfirmed)
+                        <p style="color: #0d9488; margin: 0; font-weight: 700;">
+                            <i class="fas fa-check-circle me-2"></i>Seller confirmed the cash payment on {{ $offer->cash_received_at?->format('M d, Y g:i A') }}.
+                        </p>
+                    @else
+                        <p style="color: #92400e; margin: 0;">Cash on Pickup selected. Pay the seller during handover; the seller will confirm receipt after pickup.</p>
                     @endif
                 </div>
             @endif
 
             <!-- Buyer Cancel Action -->
-            @if(auth()->id() === $offer->buyer_id && !$paidPayment && $offer->canBuyerCancel())
+            @if(auth()->id() === $offer->buyer_id && !$paymentConfirmed && $offer->canBuyerCancel())
                 <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-ban" style="color: #e74c3c;"></i>
@@ -275,7 +300,7 @@
             @endif
 
             <!-- Pickup Confirmation -->
-            @if($paidPayment && $offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
+            @if(($paymentConfirmed || $offer->payment_method === 'cash_pickup') && $offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-truck" style="color: #3498db;"></i>
@@ -293,9 +318,21 @@
                 </div>
             @endif
 
+            <!-- Seller Cash Confirmation -->
+            @if(auth()->id() === $offer->listing->user_id && $offer->status === 'accepted' && $offer->payment_method === 'cash_pickup' && !$paymentConfirmed && $offer->listing->status === 'in_transit')
+                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid #f59e0b; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
+                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem;"><i class="fas fa-money-bill-wave me-2" style="color: #f59e0b;"></i>Confirm Cash Received</h4>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Confirm only after receiving the cash from the buyer during pickup.</p>
+                    <form method="POST" action="{{ route('offers.confirm-cash-received', $offer) }}">
+                        @csrf
+                        <button type="submit" style="background: #f59e0b; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem;">Confirm Cash Received</button>
+                    </form>
+                </div>
+            @endif
+
 
             <!-- Processing Status Form -->
-            @if($offer->listing->status === 'in_transit' && auth()->id() === $offer->buyer_id)
+            @if($paymentConfirmed && $offer->listing->status === 'in_transit' && auth()->id() === $offer->buyer_id)
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem;">
                         <i class="fas fa-box-open" style="color: #3498db;"></i> Confirm Delivery
@@ -311,7 +348,7 @@
             @endif
 
             <!-- Processing Status Form -->
-            @if($offer->listing->status === 'delivered' && auth()->id() === $offer->buyer_id)
+            @if($paymentConfirmed && $offer->listing->status === 'delivered' && auth()->id() === $offer->buyer_id)
                 <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.12) 0%, rgba(155, 89, 182, 0.05) 100%); border: 1px solid rgba(155, 89, 182, 0.2); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                     <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-industry" style="color: #9b59b6;"></i>
@@ -446,7 +483,11 @@
                 <div style="margin-bottom: 1rem;">
                     @if($offer->status === 'accepted')
                         <span style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); color: var(--light-green); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(46, 204, 113, 0.3); display: inline-block; font-size: 1.15rem;">
-                            @if(!$paidPayment)
+                            @if(!$offer->payment_method)
+                                <i class="fas fa-hand-pointer me-2"></i>Choose Payment
+                            @elseif(!$paymentConfirmed && $offer->payment_method === 'cash_pickup' && $offer->listing->status === 'in_transit')
+                                <i class="fas fa-money-bill-wave me-2"></i>Awaiting Cash Confirmation
+                            @elseif(!$paymentConfirmed)
                                 <i class="fas fa-credit-card me-2"></i>Awaiting Payment
                             @elseif($offer->listing->status === 'matched')
                                 <i class="fas fa-calendar-check me-2"></i>Pickup Scheduled
@@ -499,12 +540,18 @@
 
                         <!-- Payment Confirmed -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($paidPayment) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($paidPayment) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas @if($paidPayment) fa-check @else fa-circle @endif" style="color: @if($paidPayment) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($paymentConfirmed) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($paymentConfirmed) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($paymentConfirmed) fa-check @else fa-circle @endif" style="color: @if($paymentConfirmed) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
                             </div>
                             <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Payment Confirmed</h6>
                             <small style="color: #64748b; display: block; margin-top: 0.25rem;">
-                                {{ $paidPayment ? $paidPayment->paid_at?->format('M d, Y') : 'Awaiting PayMongo confirmation' }}
+                                @if($paymentConfirmed)
+                                    {{ $offer->payment_method === 'cash_pickup' ? $offer->cash_received_at?->format('M d, Y') : $paidPayment->paid_at?->format('M d, Y') }}
+                                @elseif($offer->payment_method === 'cash_pickup')
+                                    Cash will be confirmed by the seller at pickup
+                                @else
+                                    Awaiting PayMongo confirmation
+                                @endif
                             </small>
                         </div>
 
