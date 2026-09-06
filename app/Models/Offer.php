@@ -24,6 +24,8 @@ class Offer extends Model
         'proposed_pickup_date',
         'pickup_location',
         'status',
+        'payment_method',
+        'cash_received_at',
         'cancellation_reason',
         'responded_at',
     ];
@@ -34,6 +36,7 @@ class Offer extends Model
             'bid_amount' => 'decimal:2',
             'proposed_pickup_date' => 'datetime',
             'responded_at' => 'datetime',
+            'cash_received_at' => 'datetime',
         ];
     }
 
@@ -133,6 +136,15 @@ class Offer extends Model
         return $this->status === 'accepted';
     }
 
+    public function paymentConfirmed(): bool
+    {
+        if ($this->payment_method === 'cash_pickup') {
+            return $this->cash_received_at !== null;
+        }
+
+        return $this->payments()->where('status', 'paid')->exists();
+    }
+
     /**
      * Check if offer is completed.
      */
@@ -146,7 +158,11 @@ class Offer extends Model
      */
     public function canBuyerCancel(): bool
     {
-        if ($this->payments()->where('status', 'paid')->exists()) {
+        if ($this->paymentConfirmed()) {
+            return false;
+        }
+
+        if ($this->payment_method === 'cash_pickup' && $this->listing?->picked_up_at !== null) {
             return false;
         }
 

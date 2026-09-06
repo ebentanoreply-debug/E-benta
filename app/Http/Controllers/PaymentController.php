@@ -20,6 +20,10 @@ class PaymentController extends Controller
             return redirect()->back()->with('error', 'Only accepted offers can be paid.');
         }
 
+        if ($offer->payment_method !== 'paymongo') {
+            return redirect()->back()->with('error', 'Select PayMongo as the payment method before paying online.');
+        }
+
         if ($offer->payments()->where('status', 'paid')->exists()) {
             return redirect()->back()->with('info', 'This offer has already been paid.');
         }

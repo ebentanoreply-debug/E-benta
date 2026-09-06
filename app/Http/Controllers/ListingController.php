@@ -738,6 +738,16 @@ class ListingController extends Controller
             return redirect()->back()->with('error', 'Only items in transit can be marked as delivered');
         }
 
+        $matchedOffer = $listing->offers()
+            ->where('buyer_id', Auth::id())
+            ->where('status', 'accepted')
+            ->latest()
+            ->first();
+
+        if (!$matchedOffer?->paymentConfirmed()) {
+            return redirect()->back()->with('error', 'Payment must be confirmed before delivery can be marked.');
+        }
+
         $listing->update([
             'status' => 'delivered',
             'delivered_at' => now(),
