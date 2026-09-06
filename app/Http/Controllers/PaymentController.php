@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Offer;
 use App\Models\Payment;
 use App\Services\PayMongoService;
+use App\Services\SellerWalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -77,11 +78,53 @@ class PaymentController extends Controller
         return redirect()->away($payment->checkout_url);
     }
 
-    public function success(Request $request)
+    public function success(Request $request, PayMongoService $payMongo, SellerWalletService $wallets)
     {
-        return redirect()
-            ->route('offers.show', $request->query('offer'))
-            ->with('success', 'Payment submitted. We will update the offer once PayMongo confirms it.');
+        $offerId = $request->query('offer');
+        $offer = $offerId ? Offer::find($offerId) : null;
+
+        if ($offer) {
+            $pendingPayment = $offer->payments()->where('status', 'pending')->latest()->first();
+            if ($pendingPayment && $payMongo->syncPaymentStatus($pendingPayment, $wallets)) {
+                return redirect()
+                    ->route('offers.show', $offer)
+                    ->with('success', 'Payment confirmed successfully! Your transaction has been recorded.');
+            }
+
+            return redirect()
+                ->route('offers.show', $offer)
+                ->with('success', 'Payment submitted. We will update the offer once PayMongo confirms it.');
+        }
+
+        return redirect('/')
+            ->with('info', 'Payment callback received.');
+    }
+
+    public function verifyPayment(Offer $offer, PayMongoService $payMongo, SellerWalletService $wallets)
+    {
+        if (
+            Auth::id() !== $offer->buyer_id &&
+            Auth::id() !== $offer->listing->user_id &&
+            !Auth::user()?->isAdmin()
+        ) {
+            return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        if ($offer->paymentConfirmed()) {
+            return redirect()->route('offers.show', $offer)->with('info', 'Payment is already confirmed.');
+        }
+
+        $pendingPayment = $offer->payments()->where('status', 'pending')->latest()->first();
+
+        if (!$pendingPayment) {
+            return redirect()->route('offers.show', $offer)->with('error', 'No pending payment found to verify.');
+        }
+
+        if ($payMongo->syncPaymentStatus($pendingPayment, $wallets)) {
+            return redirect()->route('offers.show', $offer)->with('success', 'Payment verified and confirmed!');
+        }
+
+        return redirect()->route('offers.show', $offer)->with('info', 'PayMongo reports this payment has not completed yet.');
     }
 
     public function failed(Request $request)

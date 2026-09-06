@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/offers/{listing}', [OfferController::class, 'store'])->name('offers.store');
     Route::get('/offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
     Route::post('/offers/{offer}/pay', [PaymentController::class, 'payOffer'])->name('offers.pay');
+    Route::post('/offers/{offer}/verify-payment', [PaymentController::class, 'verifyPayment'])->name('offers.verify-payment');
     Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
     Route::get('/payments/failed', [PaymentController::class, 'failed'])->name('payments.failed');
     Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
