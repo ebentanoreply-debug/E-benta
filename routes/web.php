@@ -16,6 +16,10 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavedItemController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PayMongoWebhookController;
+use App\Http\Controllers\SellerWalletController;
+use App\Http\Controllers\AdminPayoutController;
 use App\Http\Controllers\Api\DeviceModelController;
 use App\Models\Listing;
 use App\Models\User;
@@ -107,6 +111,7 @@ Route::get('/register/set-password', [EmailVerificationController::class, 'showS
 Route::post('/register/set-password', [EmailVerificationController::class, 'savePasswordAndComplete'])->name('register.save-password');
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/webhooks/paymongo', [PayMongoWebhookController::class, 'handle'])->name('webhooks.paymongo');
 
 // Authenticated user routes
 Route::middleware('auth')->group(function () {
@@ -154,6 +159,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/seller/my-listings', [ListingController::class, 'sellerListings'])->name('seller.listings');
         Route::get('/seller/sales-analytics', [OfferController::class, 'sellerSalesAnalytics'])->name('seller.sales-analytics');
         Route::get('/seller/transaction-history', [OfferController::class, 'sellerTransactionHistory'])->name('seller.transaction-history');
+        Route::get('/seller/wallet', [SellerWalletController::class, 'index'])->name('seller.wallet');
+        Route::post('/seller/payouts', [SellerWalletController::class, 'requestPayout'])->name('seller.payouts.request');
         Route::get('/listings/create', [ListingController::class, 'create'])->name('listings.create');
         Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
         Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->name('listings.edit');
@@ -181,6 +188,9 @@ Route::middleware('auth')->group(function () {
     // Offer routes - accessible to authenticated users (controller checks authorization)
     Route::post('/offers/{listing}', [OfferController::class, 'store'])->name('offers.store');
     Route::get('/offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
+    Route::post('/offers/{offer}/pay', [PaymentController::class, 'payOffer'])->name('offers.pay');
+    Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
+    Route::get('/payments/failed', [PaymentController::class, 'failed'])->name('payments.failed');
     Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
     Route::post('/offers/{offer}/reject', [OfferController::class, 'reject'])->name('offers.reject');
 
@@ -208,6 +218,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('admin.reject-user');
         Route::get('/admin/listings', [AdminController::class, 'allListings'])->name('admin.listings');
         Route::get('/admin/offers', [AdminController::class, 'allOffers'])->name('admin.offers');
+        Route::get('/admin/payouts', [AdminPayoutController::class, 'index'])->name('admin.payouts.index');
+        Route::post('/admin/payouts/{payout}/approve', [AdminPayoutController::class, 'approve'])->name('admin.payouts.approve');
+        Route::post('/admin/payouts/{payout}/mark-paid', [AdminPayoutController::class, 'markPaid'])->name('admin.payouts.mark-paid');
+        Route::post('/admin/payouts/{payout}/reject', [AdminPayoutController::class, 'reject'])->name('admin.payouts.reject');
         Route::get('/admin/impact-logs', [AdminController::class, 'impactLogs'])->name('admin.impact-logs');
         Route::get('/admin/generate-reports', [AdminController::class, 'generateReport'])->name('admin.generate-reports');
         Route::get('/admin/statistics', [AdminController::class, 'getStatistics'])->name('admin.statistics');

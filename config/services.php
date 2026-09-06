@@ -45,4 +45,13 @@ return [
         'redirect' => env('GOOGLE_CALLBACK_URL', rtrim(env('APP_URL', 'http://localhost'), '/') . '/auth/google/callback'),
     ],
 
+    'paymongo' => [
+        'public_key' => env('PAYMONGO_PUBLIC_KEY'),
+        'secret_key' => env('PAYMONGO_SECRET_KEY'),
+        'webhook_secret' => env('PAYMONGO_WEBHOOK_SECRET'),
+        'minimum_payout' => env('PAYMONGO_MIN_PAYOUT', 1500),
+        'platform_fee_percent' => env('PAYMONGO_PLATFORM_FEE_PERCENT', 0),
+        'payment_methods' => array_filter(explode(',', env('PAYMONGO_PAYMENT_METHODS', 'gcash,grab_pay,paymaya,card'))),
+    ],
+
 ];

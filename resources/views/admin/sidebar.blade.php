@@ -250,6 +250,10 @@
             <i class="fas fa-handshake"></i>
             <span>Offers & Trades</span>
         </a>
+        <a href="{{ route('admin.payouts.index') }}" class="sidebar-link {{ request()->routeIs('admin.payouts.*') ? 'active' : '' }}">
+            <i class="fas fa-money-bill-transfer"></i>
+            <span>Payouts</span>
+        </a>
 
         <p class="sidebar-section-title">Analytics & Compliance</p>
         <a href="{{ route('admin.impact-logs') }}" class="sidebar-link {{ request()->routeIs('admin.impact-logs') ? 'active' : '' }}">

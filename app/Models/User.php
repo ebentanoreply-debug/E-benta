@@ -123,6 +123,16 @@ class User extends Authenticatable
         return $this->hasMany(Offer::class, 'buyer_id');
     }
 
+    public function sellerWallet()
+    {
+        return $this->hasOne(SellerWallet::class, 'user_id');
+    }
+
+    public function payoutRequests(): HasMany
+    {
+        return $this->hasMany(PayoutRequest::class, 'seller_id');
+    }
+
     /**
      * Get the impact logs where this user is the seller.
      */
