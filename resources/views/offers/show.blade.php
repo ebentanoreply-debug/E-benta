@@ -175,17 +175,20 @@
                 </div>
             @endif
 
+            @php
+                $paidPayment = $offer->payments()->where('status', 'paid')->latest()->first();
+            @endphp
+
             <!-- Buyer Payment Action -->
             @if(auth()->id() === $offer->buyer_id && $offer->status === 'accepted')
-                @php $payment = $offer->payments()->where('status', 'paid')->latest()->first() ?: $offer->payment; @endphp
                 <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.25); border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-credit-card" style="color: #0d9488;"></i>
                         Payment
                     </h4>
-                    @if($payment?->status === 'paid')
+                    @if($paidPayment)
                         <p style="color: #0d9488; margin: 0; font-weight: 700;">
-                            <i class="fas fa-check-circle me-2"></i>Paid via PayMongo on {{ $payment->paid_at?->format('M d, Y g:i A') }}.
+                            <i class="fas fa-check-circle me-2"></i>Paid via PayMongo on {{ $paidPayment->paid_at?->format('M d, Y g:i A') }}.
                         </p>
                     @else
                         <p style="color: #64748b; margin-bottom: 1rem;">
@@ -202,7 +205,7 @@
             @endif
 
             <!-- Buyer Cancel Action -->
-            @if(auth()->id() === $offer->buyer_id && $offer->canBuyerCancel())
+            @if(auth()->id() === $offer->buyer_id && !$paidPayment && $offer->canBuyerCancel())
                 <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-ban" style="color: #e74c3c;"></i>
@@ -272,7 +275,7 @@
             @endif
 
             <!-- Pickup Confirmation -->
-            @if($offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
+            @if($paidPayment && $offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-truck" style="color: #3498db;"></i>
