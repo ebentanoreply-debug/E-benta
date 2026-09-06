@@ -442,6 +442,7 @@ class OfferController extends Controller
 
         if (
             !$offer->isAccepted()
+            || !$offer->payments()->where('status', 'paid')->exists()
             || $offer->listing->matched_buyer_id !== Auth::id()
             || $offer->listing->status !== 'delivered'
         ) {

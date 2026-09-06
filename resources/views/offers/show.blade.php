@@ -446,7 +446,17 @@
                 <div style="margin-bottom: 1rem;">
                     @if($offer->status === 'accepted')
                         <span style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); color: var(--light-green); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(46, 204, 113, 0.3); display: inline-block; font-size: 1.15rem;">
-                            <i class="fas fa-check-circle me-2"></i>Accepted
+                            @if(!$paidPayment)
+                                <i class="fas fa-credit-card me-2"></i>Awaiting Payment
+                            @elseif($offer->listing->status === 'matched')
+                                <i class="fas fa-calendar-check me-2"></i>Pickup Scheduled
+                            @elseif($offer->listing->status === 'in_transit')
+                                <i class="fas fa-truck me-2"></i>In Transit
+                            @elseif($offer->listing->status === 'delivered')
+                                <i class="fas fa-box-open me-2"></i>Ready for Processing
+                            @else
+                                <i class="fas fa-check-circle me-2"></i>Accepted
+                            @endif
                         </span>
                     @elseif($offer->status === 'completed')
                         <span style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); color: var(--light-green); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(46, 204, 113, 0.3); display: inline-block; font-size: 1.15rem;">
@@ -487,6 +497,17 @@
                             </small>
                         </div>
 
+                        <!-- Payment Confirmed -->
+                        <div style="margin-bottom: 1.75rem; position: relative;">
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($paidPayment) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($paidPayment) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($paidPayment) fa-check @else fa-circle @endif" style="color: @if($paidPayment) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            </div>
+                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Payment Confirmed</h6>
+                            <small style="color: #64748b; display: block; margin-top: 0.25rem;">
+                                {{ $paidPayment ? $paidPayment->paid_at?->format('M d, Y') : 'Awaiting PayMongo confirmation' }}
+                            </small>
+                        </div>
+
                         <!-- Item Pickup -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
                             <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($offer->listing->picked_up_at) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($offer->listing->picked_up_at) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
@@ -502,6 +523,17 @@
                                     Awaiting Pickup - {{ $offer->proposed_pickup_date->format('M d, Y') }}
                                 </small>
                             @endif
+                        </div>
+
+                        <!-- Delivery Confirmed -->
+                        <div style="margin-bottom: 1.75rem; position: relative;">
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($offer->listing->delivered_at) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($offer->listing->delivered_at) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($offer->listing->delivered_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->delivered_at) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            </div>
+                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Delivery Confirmed</h6>
+                            <small style="color: #64748b; display: block; margin-top: 0.25rem;">
+                                {{ $offer->listing->delivered_at ? $offer->listing->delivered_at->format('M d, Y') : 'Available after pickup' }}
+                            </small>
                         </div>
 
                         <!-- Processing Complete -->
