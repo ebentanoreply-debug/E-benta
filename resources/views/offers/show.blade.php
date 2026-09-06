@@ -213,12 +213,22 @@
                         <p style="color: #64748b; margin-bottom: 1rem;">
                             Pay online securely through PayMongo. The seller wallet will be credited after PayMongo confirms the payment.
                         </p>
-                        <form method="POST" action="{{ route('offers.pay', $offer) }}">
-                            @csrf
-                            <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); color: white; font-weight: 800; padding: 0.85rem 1.5rem; border: none; border-radius: 0.6rem; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);">
-                                <i class="fas fa-lock me-2"></i>Pay ₱{{ number_format($offer->bid_amount, 2) }}
-                            </button>
-                        </form>
+                        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                            <form method="POST" action="{{ route('offers.pay', $offer) }}">
+                                @csrf
+                                <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); color: white; font-weight: 800; padding: 0.85rem 1.5rem; border: none; border-radius: 0.6rem; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25); cursor: pointer;">
+                                    <i class="fas fa-lock me-2"></i>Pay ₱{{ number_format($offer->bid_amount, 2) }}
+                                </button>
+                            </form>
+                            @if($offer->payments()->where('status', 'pending')->exists())
+                                <form method="POST" action="{{ route('offers.verify-payment', $offer) }}">
+                                    @csrf
+                                    <button type="submit" style="background: rgba(13, 148, 136, 0.1); border: 1px solid #0d9488; color: #0d9488; font-weight: 700; padding: 0.85rem 1.25rem; border-radius: 0.6rem; cursor: pointer; transition: all 0.2s ease;">
+                                        <i class="fas fa-sync-alt me-2"></i>Check Payment Status
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     @elseif($paymentConfirmed)
                         <p style="color: #0d9488; margin: 0; font-weight: 700;">
                             <i class="fas fa-check-circle me-2"></i>Seller confirmed the cash payment on {{ $offer->cash_received_at?->format('M d, Y g:i A') }}.

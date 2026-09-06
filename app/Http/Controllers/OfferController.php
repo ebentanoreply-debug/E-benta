@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\ImpactLog;
 use App\Models\Notification;
 use App\Services\AuditLogger;
+use App\Services\PayMongoService;
+use App\Services\SellerWalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -182,7 +184,7 @@ class OfferController extends Controller
     /**
      * Show a specific offer.
      */
-    public function show(Offer $offer)
+    public function show(Offer $offer, PayMongoService $payMongo, SellerWalletService $wallets)
     {
         // Only seller, buyer, or admin can view
         if (
@@ -191,6 +193,14 @@ class OfferController extends Controller
             !Auth::user()?->isAdmin()
         ) {
             return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        // Auto-reconcile pending PayMongo payment if offer is accepted and not yet marked paid
+        if ($offer->status === 'accepted' && $offer->payment_method === 'paymongo' && !$offer->paymentConfirmed()) {
+            $pendingPayment = $offer->payments()->where('status', 'pending')->latest()->first();
+            if ($pendingPayment?->paymongo_checkout_session_id) {
+                $payMongo->syncPaymentStatus($pendingPayment, $wallets);
+            }
         }
 
         $offer->load(['listing', 'buyer', 'listing.seller']);
