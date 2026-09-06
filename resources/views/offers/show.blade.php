@@ -175,6 +175,32 @@
                 </div>
             @endif
 
+            <!-- Buyer Payment Action -->
+            @if(auth()->id() === $offer->buyer_id && $offer->status === 'accepted')
+                @php $payment = $offer->payments()->where('status', 'paid')->latest()->first() ?: $offer->payment; @endphp
+                <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.25); border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
+                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-credit-card" style="color: #0d9488;"></i>
+                        Payment
+                    </h4>
+                    @if($payment?->status === 'paid')
+                        <p style="color: #0d9488; margin: 0; font-weight: 700;">
+                            <i class="fas fa-check-circle me-2"></i>Paid via PayMongo on {{ $payment->paid_at?->format('M d, Y g:i A') }}.
+                        </p>
+                    @else
+                        <p style="color: #64748b; margin-bottom: 1rem;">
+                            Pay your accepted offer securely through PayMongo. The seller wallet will be credited after PayMongo confirms the payment.
+                        </p>
+                        <form method="POST" action="{{ route('offers.pay', $offer) }}">
+                            @csrf
+                            <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); color: white; font-weight: 800; padding: 0.85rem 1.5rem; border: none; border-radius: 0.6rem; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);">
+                                <i class="fas fa-lock me-2"></i>Pay ₱{{ number_format($offer->bid_amount, 2) }}
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            @endif
+
             <!-- Buyer Cancel Action -->
             @if(auth()->id() === $offer->buyer_id && $offer->canBuyerCancel())
                 <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">

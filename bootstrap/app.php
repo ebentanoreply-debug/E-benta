@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             '/logout',
             'logout',
+            'webhooks/paymongo',
         ]);
 
         $middleware->alias([

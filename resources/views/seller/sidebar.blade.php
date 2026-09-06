@@ -261,6 +261,10 @@
             <span class="nav-icon-box"><i class="fas fa-receipt"></i></span>
             <span>Sales History</span>
         </a>
+        <a href="{{ route('seller.wallet') }}" class="sidebar-link {{ request()->routeIs('seller.wallet') ? 'active' : '' }}">
+            <span class="nav-icon-box"><i class="fas fa-wallet"></i></span>
+            <span>Wallet</span>
+        </a>
 
         <p class="sidebar-section-title">Account & Logistics</p>
         <a href="{{ route('addresses.index') }}" class="sidebar-link {{ request()->routeIs('addresses.*') ? 'active' : '' }}">

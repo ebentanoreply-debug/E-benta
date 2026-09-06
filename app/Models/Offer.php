@@ -53,6 +53,16 @@ class Offer extends Model
         return $this->belongsTo(User::class, 'buyer_id');
     }
 
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * Get the impact log created from this offer.
      */
