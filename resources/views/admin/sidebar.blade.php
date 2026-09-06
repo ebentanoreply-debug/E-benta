@@ -167,7 +167,43 @@
         border-color: rgba(13, 148, 136, 0.4);
     }
 
+    .admin-desktop-toggle-btn {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 1035;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #09171f;
+        border: 1px solid rgba(13, 148, 136, 0.4);
+        color: #2dd4bf;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        transition: all 0.2s ease;
+    }
+
+    .admin-desktop-toggle-btn:hover {
+        background: #0d9488;
+        color: #ffffff;
+        border-color: #0d9488;
+        transform: scale(1.06);
+    }
+
+    @media (min-width: 992px) {
+        .admin-sidebar.hidden ~ .admin-desktop-toggle-btn {
+            display: flex !important;
+        }
+    }
+
     @media (max-width: 991.98px) {
+        .admin-desktop-toggle-btn {
+            display: none !important;
+        }
         .admin-sidebar {
             top: 0 !important;
             height: 100vh !important;
@@ -220,8 +256,8 @@
                 <span style="color: #10b981; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Admin Center</span>
             </div>
         </a>
-        <button type="button" class="d-lg-none" onclick="closeAdminSidebar()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">
-            <i class="fas fa-times"></i>
+        <button type="button" onclick="toggleAdminSidebar()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #94a3b8; width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;" title="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
         </button>
     </div>
 
@@ -238,40 +274,40 @@
         </a>
         <a href="{{ route('admin.reports.index') }}" class="sidebar-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
             <i class="fas fa-flag"></i>
-            <span>User Reports</span>
+            <span>Disputes & Reports</span>
         </a>
 
         <p class="sidebar-section-title">Marketplace Management</p>
         <a href="{{ route('admin.listings') }}" class="sidebar-link {{ request()->routeIs('admin.listings') ? 'active' : '' }}">
             <i class="fas fa-boxes-stacked"></i>
-            <span>Listings</span>
+            <span>Inventory & Listings</span>
         </a>
         <a href="{{ route('admin.offers') }}" class="sidebar-link {{ request()->routeIs('admin.offers') ? 'active' : '' }}">
             <i class="fas fa-handshake"></i>
-            <span>Offers & Trades</span>
+            <span>Bids & Negotiations</span>
         </a>
         <a href="{{ route('admin.payouts.index') }}" class="sidebar-link {{ request()->routeIs('admin.payouts.*') ? 'active' : '' }}">
             <i class="fas fa-money-bill-transfer"></i>
-            <span>Payouts</span>
+            <span>Seller Payouts</span>
         </a>
 
         <p class="sidebar-section-title">Analytics & Compliance</p>
         <a href="{{ route('admin.impact-logs') }}" class="sidebar-link {{ request()->routeIs('admin.impact-logs') ? 'active' : '' }}">
-            <i class="fas fa-leaf"></i>
-            <span>Impact Logs</span>
+            <i class="fas fa-recycle"></i>
+            <span>Impact Ledger</span>
         </a>
         <a href="{{ route('admin.audit-logs.index') }}" class="sidebar-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">
-            <i class="fas fa-history"></i>
+            <i class="fas fa-shield-virus"></i>
             <span>Audit Trail</span>
         </a>
         <a href="{{ route('admin.generate-reports') }}" class="sidebar-link {{ request()->routeIs('admin.generate-reports') ? 'active' : '' }}">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-export"></i>
             <span>Generate Reports</span>
         </a>
 
         <p class="sidebar-section-title">Administration</p>
         <a href="{{ route('settings') }}" class="sidebar-link {{ request()->routeIs('settings*') ? 'active' : '' }}">
-            <i class="fas fa-sliders"></i>
+            <i class="fas fa-gear"></i>
             <span>System Settings</span>
         </a>
     </nav>
@@ -288,11 +324,17 @@
     </div>
 </div>
 
+<!-- Floating Desktop Toggle Button (Visible when sidebar is collapsed) -->
+<button type="button" id="adminSidebarToggleBtn" class="admin-desktop-toggle-btn" onclick="toggleAdminSidebar()" title="Open Admin Sidebar">
+    <i class="fas fa-bars"></i>
+</button>
+
 <script>
     function toggleAdminSidebar() {
         const sidebar = document.querySelector('.admin-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
         const backdrop = document.querySelector('.sidebar-backdrop');
+        const toggleBtn = document.getElementById('adminSidebarToggleBtn');
         const isMobile = window.innerWidth < 992;
         
         if (isMobile) {
@@ -303,6 +345,9 @@
             if (mainContent) {
                 mainContent.style.marginLeft = isHidden ? '0' : '260px';
                 mainContent.style.width = isHidden ? '100%' : 'calc(100% - 260px)';
+            }
+            if (toggleBtn) {
+                toggleBtn.style.display = isHidden ? 'flex' : 'none';
             }
             localStorage.setItem('adminSidebarHidden', isHidden ? 'true' : 'false');
         }
@@ -326,16 +371,19 @@
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.admin-sidebar');
         const mainContent = document.querySelector('.main-content-wrapper');
+        const toggleBtn = document.getElementById('adminSidebarToggleBtn');
         const isMobile = window.innerWidth < 992;
         
-        if (!isMobile) {
+        if (!isMobile && sidebar) {
             const isHidden = localStorage.getItem('adminSidebarHidden') === 'true';
             if (isHidden) {
-                if (sidebar) sidebar.classList.add('hidden');
+                sidebar.classList.add('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '0'; mainContent.style.width = '100%'; }
+                if (toggleBtn) toggleBtn.style.display = 'flex';
             } else {
-                if (sidebar) sidebar.classList.remove('hidden');
+                sidebar.classList.remove('hidden');
                 if (mainContent) { mainContent.style.marginLeft = '260px'; mainContent.style.width = 'calc(100% - 260px)'; }
+                if (toggleBtn) toggleBtn.style.display = 'none';
             }
         }
     });
