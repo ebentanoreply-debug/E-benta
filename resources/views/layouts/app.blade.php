@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'E-Benta - E-Waste Marketplace')</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=1">
@@ -28,6 +28,16 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: clip;
+            max-width: 100vw;
+        }
+        @supports not (overflow-x: clip) {
+            html, body {
+                overflow-x: hidden;
+            }
         }
 
         body {
@@ -58,8 +68,11 @@
             box-shadow: 0 12px 40px rgba(13, 148, 136, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
-        body, html {
-            height: 100%;
+        html {
+            min-height: 100%;
+        }
+        body {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -830,19 +843,20 @@
         }
 
         /* ==========================================================================
-           E-COMMERCE MARKETPLACE MASTER DESIGN SYSTEM
+           E-COMMERCE MARKETPLACE MASTER DESIGN SYSTEM & MOBILE OVERHAUL
            ========================================================================== */
         body.has-commerce-header {
             padding-top: 130px !important;
         }
-        @media (max-width: 991.98px) {
+        @media (max-width: 767.98px) {
             body.has-commerce-header {
-                padding-top: 155px !important;
+                padding-top: 132px !important;
             }
-        }
-        @media (max-width: 576px) {
-            body.has-commerce-header {
-                padding-top: 180px !important;
+            body {
+                padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+            input, select, textarea {
+                font-size: 16px !important;
             }
         }
 
@@ -890,7 +904,7 @@
         .commerce-main-nav {
             background: linear-gradient(135deg, #0f1c2d 0%, #16283d 100%);
             border-bottom: 1px solid rgba(13, 148, 136, 0.25);
-            padding: 0.6rem 0;
+            padding: 0.5rem 0;
         }
 
         .commerce-brand-icon {
@@ -1059,6 +1073,7 @@
             overflow-x: auto;
             white-space: nowrap;
             scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
 
         .commerce-category-strip::-webkit-scrollbar {
@@ -1082,6 +1097,211 @@
         .commerce-cat-link:hover, .commerce-cat-link.active {
             background: rgba(13, 148, 136, 0.18);
             color: #2dd4bf;
+        }
+
+        /* Mobile Sticky Bottom Navigation */
+        .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            height: 60px;
+            background: rgba(9, 17, 27, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(13, 148, 136, 0.28);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 0.68rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            flex: 1;
+            height: 100%;
+            position: relative;
+            padding-top: 4px;
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.15rem;
+            margin-bottom: 3px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-nav-item:hover, .mobile-nav-item.active {
+            color: #2dd4bf;
+        }
+
+        .mobile-nav-item.active i {
+            color: #2dd4bf;
+            transform: translateY(-2px);
+        }
+
+        .mobile-nav-sell {
+            position: relative;
+            top: -12px;
+        }
+
+        .mobile-nav-sell-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.35rem;
+            box-shadow: 0 4px 18px rgba(13, 148, 136, 0.5), 0 0 0 4px #09111b;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .mobile-nav-sell:active .mobile-nav-sell-btn {
+            transform: scale(0.92);
+        }
+
+        .mobile-nav-badge {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.6rem;
+            font-weight: 900;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 3px;
+            border: 1.5px solid #09111b;
+        }
+
+        .mobile-nav-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #2dd4bf;
+            margin-bottom: 3px;
+        }
+
+        /* Modern Eco Footer */
+        .eco-footer {
+            background: linear-gradient(180deg, #09171f 0%, #050d12 100%);
+            color: #94a3b8;
+            border-top: 1px solid rgba(13, 148, 136, 0.25);
+            padding: 4.5rem 0 2.5rem;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            max-width: 100vw;
+        }
+
+        .eco-footer-social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 0.55rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .eco-footer-social-btn:hover {
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        .eco-footer-badge-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.85rem 0.75rem;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+
+        .eco-footer-badge-card:hover {
+            background: rgba(13, 148, 136, 0.1);
+            border-color: rgba(13, 148, 136, 0.3);
+        }
+
+        .eco-footer-contact-chip {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 0.65rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .eco-footer-contact-chip:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(13, 148, 136, 0.35);
+        }
+
+        .eco-legal-link {
+            color: #64748b;
+            text-decoration: none;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.4rem;
+            font-size: 0.82rem;
+            transition: all 0.2s ease;
+        }
+
+        .eco-legal-link:hover {
+            color: #2dd4bf;
+            background: rgba(45, 212, 191, 0.08);
+        }
+
+        @media (max-width: 767.98px) {
+            .eco-footer {
+                padding: 3rem 0 calc(90px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+            .eco-footer-links {
+                gap: 0.35rem !important;
+            }
+            .eco-footer-links a {
+                min-height: 40px;
+                display: inline-flex;
+                align-items: center;
+                font-size: 0.9rem;
+                padding: 0.2rem 0;
+            }
+            .eco-footer-badge-card {
+                padding: 0.65rem 0.5rem;
+                font-size: 0.78rem;
+            }
+            .eco-footer-social-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 1.05rem;
+            }
         }
     </style>
     @yield('styles')
@@ -1202,8 +1422,8 @@
         @else
             <!-- Full E-Commerce Master Header -->
             <header class="commerce-master-header">
-                <!-- 1. Top Utility Strip -->
-                <div class="commerce-topbar">
+                <!-- 1. Top Utility Strip (Desktop only) -->
+                <div class="commerce-topbar d-none d-md-block">
                     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-2 gap-md-3">
                             @auth
@@ -1239,9 +1459,15 @@
                     </div>
                 </div>
 
+                @php
+                    $globalDeviceTypes = \App\Models\DeviceType::orderBy('name')->get();
+                    $activeListingCount = \App\Models\Listing::where('status', 'available')->count();
+                @endphp
+
                 <!-- 2. Main E-Commerce Search & Action Header -->
                 <div class="commerce-main-nav">
-                    <div class="container-fluid px-3 px-lg-4 d-flex align-items-center justify-content-between gap-3">
+                    <!-- Desktop Master Header Row (>= 768px) -->
+                    <div class="container-fluid px-3 px-lg-4 d-none d-md-flex align-items-center justify-content-between gap-3">
                         <!-- Brand Logo -->
                         <a class="d-flex align-items-center gap-2 text-decoration-none flex-shrink-0" href="/">
                             <div class="commerce-brand-icon">
@@ -1254,10 +1480,6 @@
                         </a>
 
                         <!-- Center: Mega Search Input -->
-                        @php
-                            $globalDeviceTypes = \App\Models\DeviceType::orderBy('name')->get();
-                            $activeListingCount = \App\Models\Listing::where('status', 'available')->count();
-                        @endphp
                         <div class="flex-grow-1 mx-1 mx-md-3" style="max-width: 650px;">
                             <form action="{{ route('listings.index') }}" method="GET" class="commerce-search-form">
                                 <select name="category" class="commerce-search-category d-none d-md-block">
@@ -1407,27 +1629,117 @@
                             </a>
                         </div>
                     </div>
+
+                    <!-- Mobile Master Header Rows (< 768px) -->
+                    <div class="d-flex d-md-none flex-column gap-2 px-3">
+                        <!-- Mobile Row 1: Brand & Top Quick Actions -->
+                        <div class="d-flex align-items-center justify-content-between">
+                            <a class="d-flex align-items-center gap-2 text-decoration-none" href="/">
+                                <div class="commerce-brand-icon" style="width: 32px; height: 32px; font-size: 1rem; border-radius: 0.5rem;">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <span class="commerce-brand-name" style="font-size: 1.22rem;">E-Benta</span>
+                            </a>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- Dark Mode Toggle -->
+                                <button type="button" class="commerce-action-item p-1 border-0" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="background: transparent; color: #94a3b8;">
+                                    <i class="fas fa-moon dark-mode-icon" style="font-size: 1rem;"></i>
+                                </button>
+
+                                <!-- Mobile Wishlist -->
+                                <a href="{{ auth()->check() ? (auth()->user()->isBuyer() ? route('buyer.saved-items') : route('listings.index')) : route('login') }}" class="commerce-action-item p-2" title="Wishlist">
+                                    <i class="fas fa-heart" style="font-size: 1rem; color: #f43f5e;"></i>
+                                    @if(auth()->check() && $savedCount > 0)
+                                        <span class="commerce-badge" style="top: -4px; right: -4px;">{{ $savedCount }}</span>
+                                    @endif
+                                </a>
+
+                                @auth
+                                    <!-- Mobile Messages -->
+                                    <a href="{{ route('messages.index') }}" class="commerce-action-item p-2" title="Messages">
+                                        <i class="fas fa-comment-dots" style="font-size: 1rem; color: #38bdf8;"></i>
+                                        @if($unreadMsgCount > 0)
+                                            <span class="commerce-badge bg-info text-white" style="top: -4px; right: -4px;">{{ $unreadMsgCount }}</span>
+                                        @endif
+                                    </a>
+
+                                    <!-- Mobile User Menu -->
+                                    <div class="dropdown">
+                                        <button class="border-0 bg-transparent p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.75rem; border: 1.5px solid #2dd4bf;">
+                                                @if(auth()->user()->avatar)
+                                                    <img src="{{ auth()->user()->avatar }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                @else
+                                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                                @endif
+                                            </div>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: #0f172a; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; min-width: 200px;">
+                                            <li class="px-3 py-2 border-bottom text-white fw-bold" style="font-size: 0.85rem; border-color: rgba(255,255,255,0.08) !important;">
+                                                {{ auth()->user()->name }}
+                                                <small class="d-block text-muted text-capitalize" style="font-size: 0.72rem;">{{ auth()->user()->role }}</small>
+                                            </li>
+                                            @if(auth()->user()->isAdmin())
+                                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2 text-teal-400"></i>Dashboard</a></li>
+                                            @elseif(auth()->user()->isSeller())
+                                                <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2 text-teal-400"></i>Seller Hub</a></li>
+                                                <li><a class="dropdown-item" href="{{ route('listings.create') }}"><i class="fas fa-plus-circle me-2 text-emerald-400"></i>List Tech</a></li>
+                                            @elseif(auth()->user()->isBuyer())
+                                                <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-bag-shopping me-2 text-teal-400"></i>Purchases</a></li>
+                                            @endif
+                                            <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2 text-muted"></i>Profile</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2 text-muted"></i>Settings</a></li>
+                                            <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
+                                            <li>
+                                                <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item w-100 text-start text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-sm text-white px-2 py-1" style="background: rgba(13, 148, 136, 0.3); border: 1px solid rgba(13, 148, 136, 0.4); font-size: 0.78rem; font-weight: 700; border-radius: 0.5rem;">
+                                        Sign In
+                                    </a>
+                                @endauth
+                            </div>
+                        </div>
+
+                        <!-- Mobile Row 2: Dedicated Full-Width Search Bar -->
+                        <div>
+                            <form action="{{ route('listings.index') }}" method="GET" class="commerce-search-form w-100">
+                                <div class="position-relative flex-grow-1">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="commerce-search-input py-2 ps-3 pe-2" placeholder="Search {{ $activeListingCount > 0 ? $activeListingCount . ' items' : 'tech' }}, scrap, brands..." autocomplete="off">
+                                </div>
+                                <button type="submit" class="commerce-search-btn px-3 py-2">
+                                    <i class="fas fa-magnifying-glass"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 3. Subnav Category Strip -->
+                <!-- 3. Subnav Category Strip (Touch-momentum horizontal scroll) -->
                 <div class="commerce-category-strip">
                     <div class="container-fluid px-3 px-lg-4 d-flex align-items-center gap-2">
                         <a href="{{ route('listings.index') }}" class="commerce-cat-link {{ !request('category') && !request('condition') && !request('sort') ? 'active' : '' }}">
                             <i class="fas fa-border-all text-teal-400" style="color: #2dd4bf;"></i> All Tech
                         </a>
-                        @foreach($globalDeviceTypes->take(6) as $dType)
+                        @foreach($globalDeviceTypes->take(8) as $dType)
                             <a href="{{ route('listings.index', ['category' => $dType->name]) }}" class="commerce-cat-link {{ request('category') == $dType->name ? 'active' : '' }}">
                                 {{ $dType->name }}
                             </a>
                         @endforeach
                         <a href="{{ route('listings.index', ['condition' => 'functional']) }}" class="commerce-cat-link {{ request('condition') == 'functional' ? 'active' : '' }}">
-                            <i class="fas fa-certificate" style="color: #10b981;"></i> Certified Working
+                            <i class="fas fa-certificate" style="color: #10b981;"></i> Working
                         </a>
                         <a href="{{ route('listings.index', ['condition' => 'repairable']) }}" class="commerce-cat-link {{ request('condition') == 'repairable' ? 'active' : '' }}">
-                            <i class="fas fa-wrench"></i> Repairable Deals
+                            <i class="fas fa-wrench"></i> Repairable
                         </a>
                         <a href="{{ route('listings.index', ['condition' => 'for_parts']) }}" class="commerce-cat-link {{ request('condition') == 'for_parts' ? 'active' : '' }}">
-                            <i class="fas fa-microchip"></i> Parts & Salvage
+                            <i class="fas fa-microchip"></i> Parts
                         </a>
                     </div>
                 </div>
@@ -1619,22 +1931,22 @@
 
     @if(!request()->routeIs('admin.*') && !(auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
     <!-- Modern Multi-Column Eco Footer -->
-    <footer style="background: linear-gradient(180deg, #09171f 0%, #050d12 100%); color: #94a3b8; border-top: 1px solid rgba(13, 148, 136, 0.25); padding: 5rem 0 2.5rem; margin-top: auto; position: relative; overflow: hidden;">
+    <footer class="eco-footer">
         <!-- Ambient subtle glow -->
-        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 900px; height: 220px; background: radial-gradient(ellipse at top, rgba(13, 148, 136, 0.18), transparent 70%); pointer-events: none;"></div>
+        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 900px; max-width: 100vw; height: 220px; background: radial-gradient(ellipse at top, rgba(13, 148, 136, 0.18), transparent 70%); pointer-events: none;"></div>
 
         <div class="container" style="position: relative; z-index: 2;">
             <!-- Top Footer Grid -->
             <div class="row g-4 g-lg-5 mb-5">
                 <!-- Col 1: Brand & Environmental Mission -->
-                <div class="col-lg-4 col-md-6">
-                    <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1.15rem;">
                         <div style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);">
                             <i class="fas fa-leaf" style="color: #ffffff; font-size: 1.25rem;"></i>
                         </div>
                         <span style="font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">E-Benta</span>
                     </div>
-                    <p style="font-size: 0.92rem; line-height: 1.75; color: #94a3b8; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.92rem; line-height: 1.75; color: #94a3b8; margin-bottom: 1.25rem;">
                         The Philippines' premier circular economy platform for certified e-waste monetization, bulk electronic scrap trading, and verifiable zero-landfill recycling.
                     </p>
 
@@ -1646,22 +1958,22 @@
                     </div>
 
                     <!-- Social Channels -->
-                    <div>
+                    <div class="mb-4 mb-lg-0">
                         <small style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Connect With Us</small>
-                        <div style="display: flex; gap: 0.6rem; align-items: center;">
-                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#0d9488'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+                            <a href="#" class="eco-footer-social-btn" title="Facebook" onmouseover="this.style.background='#0d9488'; this.style.color='#ffffff';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8';">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#06b6d4'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
-                                <i class="fab fa-x-twitter"></i>
+                            <a href="#" class="eco-footer-social-btn" title="Twitter / X" onmouseover="this.style.background='#06b6d4'; this.style.color='#ffffff';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8';">
+                                <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#ec4899'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                            <a href="#" class="eco-footer-social-btn" title="Instagram" onmouseover="this.style.background='#ec4899'; this.style.color='#ffffff';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8';">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#3b82f6'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                            <a href="#" class="eco-footer-social-btn" title="LinkedIn" onmouseover="this.style.background='#3b82f6'; this.style.color='#ffffff';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8';">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
-                            <a href="#" style="width: 36px; height: 36px; border-radius: 0.55rem; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='#10b981'; this.style.color='#ffffff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8'; this.style.transform='translateY(0)';">
+                            <a href="#" class="eco-footer-social-btn" title="Discord" onmouseover="this.style.background='#10b981'; this.style.color='#ffffff';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.color='#94a3b8';">
                                 <i class="fab fa-discord"></i>
                             </a>
                         </div>
@@ -1669,23 +1981,23 @@
                 </div>
 
                 <!-- Col 2: Marketplace Navigation -->
-                <div class="col-lg-2 col-md-6 col-6">
+                <div class="col-lg-2 col-md-3 col-6">
                     <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Marketplace</h6>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
+                    <ul class="eco-footer-links" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
                         <li><a href="{{ route('listings.index') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-arrow-right me-2" style="font-size: 0.75rem; color: #0d9488;"></i>All Listings</a></li>
                         <li><a href="{{ route('listings.index', ['category' => 'Smartphone']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-mobile-screen me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Smartphones</a></li>
                         <li><a href="{{ route('listings.index', ['category' => 'Laptop']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-laptop me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Laptops & PCs</a></li>
-                        <li><a href="{{ route('listings.index', ['category' => 'Tablet']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-tablet-screen-button me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Tablets & iPads</a></li>
-                        <li><a href="{{ route('listings.index', ['condition' => 'non_functional']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-boxes-stacked me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Scrap & Bulk Lots</a></li>
+                        <li><a href="{{ route('listings.index', ['category' => 'Tablet']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-tablet-screen-button me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Tablets</a></li>
+                        <li><a href="{{ route('listings.index', ['condition' => 'non_functional']) }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-boxes-stacked me-2" style="font-size: 0.75rem; color: #0d9488;"></i>Scrap Lots</a></li>
                     </ul>
                 </div>
 
                 <!-- Col 3: Platform Features & How It Works -->
-                <div class="col-lg-2 col-md-6 col-6">
+                <div class="col-lg-2 col-md-3 col-6">
                     <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Platform</h6>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
-                        <li><a href="{{ route('home') }}#process" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-bolt me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>4-Step Process</a></li>
-                        <li><a href="{{ route('home') }}#calculator" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-calculator me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>CO₂ & Price Estimator</a></li>
+                    <ul class="eco-footer-links" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+                        <li><a href="{{ route('home') }}#process" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-bolt me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>How It Works</a></li>
+                        <li><a href="{{ route('home') }}#calculator" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-calculator me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>CO₂ Estimator</a></li>
                         <li><a href="{{ route('home') }}#impact" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-chart-line me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Eco Scoreboard</a></li>
                         <li><a href="{{ route('home') }}#faq" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-circle-question me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Help & FAQ</a></li>
                         <li><a href="{{ route('listings.create') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-plus-circle me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Post a Listing</a></li>
@@ -1693,92 +2005,136 @@
                 </div>
 
                 <!-- Col 4: Support & Contact Details -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6 col-12">
                     <h6 style="color: #ffffff; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">Support & Contact</h6>
                     
-                    <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
-                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <i class="fas fa-envelope" style="color: #0d9488; margin-top: 0.25rem;"></i>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
+                        <a href="mailto:support@e-benta.ph" class="eco-footer-contact-chip">
+                            <i class="fas fa-envelope mt-1" style="color: #0d9488; font-size: 1rem;"></i>
                             <div>
-                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Direct Support Email</span>
-                                <a href="mailto:support@e-benta.ph" style="color: #e2e8f0; font-weight: 600; text-decoration: none;">support@e-benta.ph</a>
+                                <span style="display: block; color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Direct Support Email</span>
+                                <span style="color: #e2e8f0; font-weight: 600;">support@e-benta.ph</span>
+                            </div>
+                        </a>
+
+                        <div class="eco-footer-contact-chip">
+                            <i class="fas fa-location-dot mt-1" style="color: #06b6d4; font-size: 1rem;"></i>
+                            <div>
+                                <span style="display: block; color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Service Coverage</span>
+                                <span style="color: #e2e8f0; font-weight: 500;">Nationwide, Philippines</span>
                             </div>
                         </div>
 
-                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <i class="fas fa-location-dot" style="color: #06b6d4; margin-top: 0.25rem;"></i>
+                        <div class="eco-footer-contact-chip">
+                            <i class="fas fa-clock mt-1" style="color: #f59e0b; font-size: 1rem;"></i>
                             <div>
-                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Service Coverage</span>
-                                <span style="color: #e2e8f0;">Nationwide, Philippines</span>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <i class="fas fa-clock" style="color: #f59e0b; margin-top: 0.25rem;"></i>
-                            <div>
-                                <span style="display: block; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Operating Hours</span>
-                                <span style="color: #e2e8f0;">Mon – Sat: 8:00 AM – 6:00 PM PHT</span>
+                                <span style="display: block; color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Operating Hours</span>
+                                <span style="color: #e2e8f0; font-weight: 500;">Mon – Sat: 8:00 AM – 6:00 PM PHT</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Newsletter / Updates Box -->
-                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.85rem; padding: 0.9rem 1rem;">
-                        <small style="color: #e2e8f0; font-weight: 700; display: block; margin-bottom: 0.4rem;">Stay Updated on Drop-off Drives</small>
-                        <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to E-Benta Eco Updates!');" style="display: flex; gap: 0.4rem;">
-                            <input type="email" placeholder="Enter your email" required style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.5rem; color: #ffffff; font-size: 0.82rem; padding: 0.45rem 0.75rem; flex: 1; outline: none;">
-                            <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.5rem; font-weight: 800; font-size: 0.8rem; padding: 0.45rem 0.85rem; cursor: pointer;">Join</button>
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.85rem; padding: 1rem;">
+                        <small style="color: #e2e8f0; font-weight: 700; display: block; margin-bottom: 0.5rem; font-size: 0.85rem;">Stay Updated on Drop-off Drives</small>
+                        <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to E-Benta Eco Updates!');" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <input type="email" placeholder="Enter your email" required style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.55rem; color: #ffffff; font-size: 0.88rem; padding: 0.55rem 0.85rem; flex: 1 1 180px; min-height: 42px; outline: none;">
+                            <button type="submit" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.55rem; font-weight: 800; font-size: 0.85rem; padding: 0.55rem 1.25rem; min-height: 42px; cursor: pointer; transition: opacity 0.2s ease;">Join</button>
                         </form>
                     </div>
                 </div>
             </div>
 
             <!-- Middle Trust Badges Bar -->
-            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 1.5rem 0; margin-bottom: 2rem;">
-                <div class="row g-3 text-center text-md-start align-items-center">
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem 0; margin-bottom: 2rem;">
+                <div class="row g-2 g-md-3 text-center text-md-start align-items-stretch">
                     <div class="col-6 col-md-3">
-                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
-                            <i class="fas fa-id-card-clip" style="color: #0d9488; font-size: 1.35rem;"></i>
-                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">100% ID Verified Members</span>
+                        <div class="eco-footer-badge-card">
+                            <i class="fas fa-id-card-clip" style="color: #0d9488; font-size: 1.25rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">100% ID Verified</span>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
-                            <i class="fas fa-lock" style="color: #06b6d4; font-size: 1.35rem;"></i>
-                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">256-Bit SSL Encrypted</span>
+                        <div class="eco-footer-badge-card">
+                            <i class="fas fa-lock" style="color: #06b6d4; font-size: 1.25rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">SSL Encrypted</span>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
-                            <i class="fas fa-recycle" style="color: #10b981; font-size: 1.35rem;"></i>
-                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">DENR E-Waste Aligned</span>
+                        <div class="eco-footer-badge-card">
+                            <i class="fas fa-recycle" style="color: #10b981; font-size: 1.25rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Zero-Landfill Aligned</span>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div style="display: flex; align-items: center; justify-content: center; justify-content: md-start; gap: 0.65rem;">
-                            <i class="fas fa-truck-fast" style="color: #f59e0b; font-size: 1.35rem;"></i>
-                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Safe Doorstep Collection</span>
+                        <div class="eco-footer-badge-card">
+                            <i class="fas fa-truck-fast" style="color: #f59e0b; font-size: 1.25rem;"></i>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Doorstep Pickup</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Sub-Footer -->
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem; font-size: 0.85rem;">
-                <p class="mb-0" style="color: #64748b;">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-3" style="font-size: 0.85rem;">
+                <p class="mb-0" style="color: #64748b; font-size: 0.82rem; line-height: 1.6;">
                     &copy; {{ date('Y') }} <strong>E-Benta</strong>. All Rights Reserved. Built for Sustainable Circular Innovation in the Philippines.
                 </p>
-                <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
-                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Privacy Policy</a>
-                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Terms of Service</a>
-                    <a href="{{ route('home') }}#faq" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#64748b'">Recycling Standards</a>
-                    <a href="#" style="color: #2dd4bf; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
-                        <span>Back to Top</span> <i class="fas fa-arrow-up"></i>
+                <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2 gap-md-3 align-items-center">
+                    <a href="{{ route('home') }}#faq" class="eco-legal-link">Privacy</a>
+                    <a href="{{ route('home') }}#faq" class="eco-legal-link">Terms</a>
+                    <a href="{{ route('home') }}#faq" class="eco-legal-link">Standards</a>
+                    <a href="#" style="color: #2dd4bf; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 0.4rem; background: rgba(45, 212, 191, 0.08);" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+                        <span>Top</span> <i class="fas fa-arrow-up"></i>
                     </a>
                 </div>
             </div>
         </div>
     </footer>
+    @endif
+
+    @if(!request()->routeIs('admin.*'))
+    <!-- Sticky Mobile Bottom Navigation Bar (Screens < 768px) -->
+    <nav class="mobile-bottom-nav d-md-none" aria-label="Mobile Bottom Navigation">
+        <a href="{{ route('home') }}" class="mobile-nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <i class="fas fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('listings.index') }}" class="mobile-nav-item {{ request()->routeIs('listings.index') ? 'active' : '' }}">
+            <i class="fas fa-store"></i>
+            <span>Explore</span>
+        </a>
+        <a href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('listings.create') : route('listings.index')) : route('register') }}" class="mobile-nav-item mobile-nav-sell" title="Sell Tech">
+            <div class="mobile-nav-sell-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span>Sell</span>
+        </a>
+        <a href="{{ auth()->check() ? route('messages.index') : route('login') }}" class="mobile-nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
+            <div class="position-relative">
+                <i class="fas fa-comment-dots"></i>
+                @if(auth()->check() && $unreadMsgCount > 0)
+                    <span class="mobile-nav-badge">{{ $unreadMsgCount }}</span>
+                @endif
+            </div>
+            <span>Messages</span>
+        </a>
+        @auth
+            <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isSeller() ? route('seller.dashboard') : route('buyer.dashboard')) }}" class="mobile-nav-item {{ request()->routeIs('*.dashboard') || request()->routeIs('profile') ? 'active' : '' }}">
+                @if(auth()->user()->avatar)
+                    <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="mobile-nav-avatar">
+                @else
+                    <i class="fas fa-circle-user"></i>
+                @endif
+                <span>Account</span>
+            </a>
+        @else
+            <a href="{{ route('login') }}" class="mobile-nav-item {{ request()->routeIs('login') ? 'active' : '' }}">
+                <i class="fas fa-arrow-right-to-bracket"></i>
+                <span>Sign In</span>
+            </a>
+        @endauth
+    </nav>
     @endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
