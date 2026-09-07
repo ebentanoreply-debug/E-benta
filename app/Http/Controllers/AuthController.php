@@ -103,12 +103,21 @@ class AuthController extends Controller
      */
     public function login(Request $request): RedirectResponse
     {
+        // Sanitize email input (lowercase and trim trailing/leading spaces from mobile keyboards)
+        $email = strtolower(trim((string) $request->input('email')));
+        $request->merge(['email' => $email]);
+
         $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        $credentials = [
+            'email' => $email,
+            'password' => $request->input('password'),
+        ];
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             $request->session()->put('auth_via_google', false);
 
@@ -121,7 +130,7 @@ class AuthController extends Controller
 
                 return redirect()->route('login')->withErrors([
                     'email' => $user->isBanned()
-                        ? 'This account has been banned.'
+                        ? 'This account has been banned. Please contact support.'
                         : 'This account is currently suspended.',
                 ]);
             }
@@ -139,11 +148,11 @@ class AuthController extends Controller
             }
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $email)->first();
 
-        if ($user && $user->oauth_provider === 'google') {
+        if ($user && $user->oauth_provider === 'google' && empty($user->password)) {
             return back()->withErrors([
-                'email' => 'This account is linked with Google. Please sign in with Google, or use Forgot Password to set a local password.',
+                'email' => 'This account was registered via Google and does not have a password yet. Please use "Sign in with Google" below.',
             ])->onlyInput('email');
         }
 
