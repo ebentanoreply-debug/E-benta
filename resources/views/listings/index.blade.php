@@ -309,6 +309,29 @@
         border-color: rgba(13, 148, 136, 0.4);
         color: #f1f5f9;
     }
+
+    @media (max-width: 576px) {
+        .m-card-media {
+            height: 140px !important;
+        }
+        .m-card-body {
+            padding: 0.75rem !important;
+        }
+        .m-card-price {
+            font-size: 1.05rem !important;
+        }
+        .m-card-badge {
+            font-size: 0.6rem !important;
+            padding: 0.2rem 0.45rem !important;
+        }
+        .catalog-toolbar {
+            padding: 0.75rem 0.85rem !important;
+        }
+        .catalog-list-view .m-card-media {
+            width: 120px !important;
+            min-height: 120px !important;
+        }
+    }
 </style>
 
 <div class="catalog-wrapper">

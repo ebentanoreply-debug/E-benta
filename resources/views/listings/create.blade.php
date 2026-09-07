@@ -20,7 +20,7 @@
 
                 <!-- Form Card -->
                 <div class="card" style="border: 2px solid rgba(13, 148, 136, 0.15); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08); border-radius: 1.25rem; overflow: hidden;">
-                    <div class="card-body" style="padding: 2.5rem 3rem;">
+                    <div class="card-body p-3 p-sm-4 p-md-5">
                     <form method="POST" action="{{ route('listings.store') }}" enctype="multipart/form-data" id="listingForm">
                         @csrf
 
@@ -270,11 +270,11 @@
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="d-flex gap-3 justify-content-end">
-                            <a href="{{ route('seller.dashboard') }}" class="btn" style="background: #f1f5f9; color: #475569; font-weight: 600; border-radius: 0.8rem; padding: 0.85rem 2rem;">
+                        <div class="d-flex gap-3 justify-content-end flex-wrap">
+                            <a href="{{ route('seller.dashboard') }}" class="btn flex-grow-1 flex-sm-grow-0" style="background: #f1f5f9; color: #475569; font-weight: 600; border-radius: 0.8rem; padding: 0.85rem 1.75rem; text-align: center;">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn" style="background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: white; border: none; padding: 0.85rem 2.5rem; font-weight: 700; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35);">
+                            <button type="submit" class="btn flex-grow-1 flex-sm-grow-0" style="background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%); color: white; border: none; padding: 0.85rem 2.5rem; font-weight: 700; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35);">
                                 <i class="fas fa-check-circle me-2"></i>Publish Listing
                             </button>
                         </div>

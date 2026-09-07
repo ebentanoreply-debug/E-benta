@@ -641,9 +641,78 @@
     }
 
     @media (max-width: 768px) {
-        .eb-hero { padding: 3rem 0 4rem; }
-        .eb-calc-wrapper { padding: 2rem 1.25rem; }
-        .eb-cta-banner { padding: 3rem 1.5rem; }
+        .eb-hero { padding: 2.5rem 0 3.5rem; }
+        .eb-calc-wrapper { padding: 1.85rem 1.25rem; border-radius: 1.5rem; }
+        .eb-cta-banner { padding: 2.75rem 1.25rem; border-radius: 1.5rem; }
+        .eb-section-title { font-size: 1.85rem !important; }
+        .eb-section-header { margin-bottom: 2rem; }
+    }
+
+    @media (max-width: 576px) {
+        .eb-floating-tag {
+            display: none !important;
+        }
+        .eb-hero h1 {
+            font-size: 2rem !important;
+            letter-spacing: -0.5px;
+        }
+        .eb-hero-lead {
+            font-size: 0.95rem !important;
+        }
+        .eb-btn-primary, .eb-btn-outline {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 0.85rem 1.25rem !important;
+            font-size: 0.95rem !important;
+        }
+        .eb-circle-cat-list {
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 0.75rem;
+            gap: 0.85rem;
+        }
+        .eb-circle-cat-card {
+            width: 78px;
+        }
+        .eb-circle-bubble {
+            width: 58px;
+            height: 58px;
+            font-size: 1.35rem;
+        }
+        .eb-circle-name {
+            font-size: 0.72rem;
+        }
+        .eb-pcard-media {
+            height: 145px !important;
+        }
+        .eb-pcard-body {
+            padding: 0.75rem !important;
+        }
+        .eb-pcard-price {
+            font-size: 1.05rem !important;
+        }
+        .eb-pcard-badge {
+            font-size: 0.62rem !important;
+            padding: 0.2rem 0.45rem !important;
+        }
+        .eb-flash-banner {
+            padding: 1.25rem 1rem;
+            border-radius: 1.15rem;
+        }
+        .eb-calc-result-box {
+            padding: 1.25rem;
+            border-radius: 1.15rem;
+        }
+        #calc-res-cash {
+            font-size: 1.85rem !important;
+        }
+        .eb-trust-item {
+            gap: 0.65rem;
+        }
+        .eb-trust-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
     }
 </style>
 @endsection
@@ -783,8 +852,6 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
-                </div>
                     </div>
                 </div>
             </div>
