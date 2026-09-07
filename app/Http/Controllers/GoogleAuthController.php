@@ -42,7 +42,14 @@ class GoogleAuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-        } catch (Exception $e) {
+        } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
+            try {
+                // Fallback to stateless on mobile/ITP cookie mismatch or state expiration
+                $googleUser = Socialite::driver('google')->stateless()->user();
+            } catch (\Throwable $fallbackEx) {
+                return redirect('/login')->with('error', 'Google authentication session expired. Please try signing in again.');
+            }
+        } catch (\Throwable $e) {
             return redirect('/login')->with('error', 'Failed to authenticate with Google. Please try again.');
         }
 

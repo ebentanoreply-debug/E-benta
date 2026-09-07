@@ -311,7 +311,7 @@
         background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%);
         border: 2px solid rgba(231, 76, 60, 0.3);
         border-radius: 1rem;
-        padding: 1.2rem;
+        padding: 1.1rem 1.25rem;
         margin-bottom: 1.5rem;
         animation: slideInLeft 0.4s ease-out;
     }
@@ -325,6 +325,64 @@
     .error-box p:first-child {
         margin: 0;
         font-weight: 700;
+    }
+
+    .info-box {
+        background: rgba(6, 182, 212, 0.1);
+        border: 1.5px solid rgba(6, 182, 212, 0.35);
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        color: #0891b2;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: slideInLeft 0.4s ease-out;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1.5px solid rgba(16, 185, 129, 0.35);
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        color: #059669;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: slideInLeft 0.4s ease-out;
+    }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper input {
+        padding-right: 2.85rem !important;
+    }
+
+    .password-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        padding: 6px 8px;
+        cursor: pointer;
+        font-size: 1.05rem;
+        transition: color 0.2s ease;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .password-toggle-btn:hover {
+        color: var(--light-green);
     }
 
     .security-badge {
@@ -404,9 +462,112 @@
         text-align: center;
     }
 
+    /* Dark Mode Theme Support */
+    body.dark-mode .login-container {
+        background: radial-gradient(circle at 50% 20%, #0d1e2b 0%, #060d13 100%) !important;
+    }
+
+    body.dark-mode .login-wrapper {
+        background: #0d1b2a !important;
+        border: 1px solid rgba(13, 148, 136, 0.25);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    body.dark-mode .login-header h2 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .login-header p {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .form-group label {
+        color: #cbd5e1 !important;
+    }
+
+    body.dark-mode .form-group input {
+        background-color: #0b1522 !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .form-group input::placeholder {
+        color: rgba(148, 163, 184, 0.6) !important;
+    }
+
+    body.dark-mode .form-group input:focus {
+        background-color: #0d1b2a !important;
+        border-color: #2dd4bf !important;
+        box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15) !important;
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .password-toggle-btn {
+        color: #94a3b8;
+    }
+
+    body.dark-mode .password-toggle-btn:hover {
+        color: #2dd4bf;
+    }
+
+    body.dark-mode .remember-me label {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .oauth-btn {
+        background: #0b1522 !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: #e2e8f0 !important;
+    }
+
+    body.dark-mode .oauth-btn:hover {
+        background: #112235 !important;
+        border-color: rgba(13, 148, 136, 0.4) !important;
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .oauth-divider {
+        color: #64748b !important;
+    }
+
+    body.dark-mode .oauth-divider::before,
+    body.dark-mode .oauth-divider::after {
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    body.dark-mode .divider {
+        border-top-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    body.dark-mode .security-badge {
+        color: #64748b !important;
+    }
+
+    body.dark-mode .register-link {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .info-box {
+        background: rgba(6, 182, 212, 0.15);
+        border-color: rgba(6, 182, 212, 0.4);
+        color: #38bdf8;
+    }
+
+    body.dark-mode .success-box {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #34d399;
+    }
+
     @media (max-width: 768px) {
+        .login-container {
+            padding: 2rem 1rem calc(95px + env(safe-area-inset-bottom, 0px)) !important;
+            min-height: auto;
+        }
+
         .login-wrapper {
             grid-template-columns: 1fr;
+            border-radius: 1.5rem;
         }
 
         .login-benefits {
@@ -414,14 +575,13 @@
         }
 
         .login-form-wrapper {
-            padding: 2.5rem 1.5rem;
+            padding: 2.25rem 1.5rem;
         }
     }
 
     @media (max-width: 480px) {
         .login-container {
-            padding: 1.5rem 0.75rem;
-            min-height: auto;
+            padding: 1.5rem 0.75rem calc(95px + env(safe-area-inset-bottom, 0px)) !important;
         }
 
         .login-form-wrapper {
@@ -495,6 +655,34 @@
                 <p>Access your E-Benta dashboard</p>
             </div>
 
+            @if (session('info'))
+                <div class="info-box">
+                    <i class="fas fa-info-circle fa-lg"></i>
+                    <div>{{ session('info') }}</div>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="error-box">
+                    <p><i class="fas fa-exclamation-triangle me-2"></i>Authentication Notice</p>
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
+
+            @if (session('status'))
+                <div class="info-box">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <div>{{ session('status') }}</div>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="success-box">
+                    <i class="fas fa-check-circle fa-lg"></i>
+                    <div>{{ session('success') }}</div>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="error-box">
                     <p><i class="fas fa-exclamation-circle me-2"></i>Login Failed</p>
@@ -504,7 +692,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}">
+            <form id="loginForm" method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <div class="form-group">
@@ -512,7 +700,8 @@
                         <i class="fas fa-envelope me-2" style="color: var(--light-green);"></i>Email Address
                     </label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                         id="email" name="email" value="{{ old('email') }}" placeholder="your@email.com" required autofocus>
+                         id="email" name="email" value="{{ old('email') }}" placeholder="your@email.com" 
+                         autocomplete="username" required autofocus>
                     @error('email')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -522,8 +711,14 @@
                     <label for="password">
                         <i class="fas fa-key me-2" style="color: var(--light-green);"></i>Password
                     </label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                         id="password" name="password" placeholder="••••••••" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                             id="password" name="password" placeholder="••••••••" 
+                             autocomplete="current-password" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility" title="Show/Hide password">
+                            <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -531,7 +726,7 @@
 
                 <div class="remember-forgot">
                     <div class="remember-me">
-                        <input type="checkbox" id="remember" name="remember" value="on">
+                        <input type="checkbox" id="remember" name="remember" value="on" {{ old('remember') ? 'checked' : '' }}>
                         <label for="remember">Remember me</label>
                     </div>
                     <a href="{{ route('password.forgot') }}">
@@ -539,7 +734,7 @@
                     </a>
                 </div>
 
-                <button type="submit" class="login-btn">
+                <button type="submit" id="loginSubmitBtn" class="login-btn">
                     <i class="fas fa-sign-in-alt me-2"></i>Login to Your Account
                 </button>
             </form>
@@ -567,4 +762,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility() {
+        const passInput = document.getElementById('password');
+        const icon = document.getElementById('passwordToggleIcon');
+        if (!passInput || !icon) return;
+
+        if (passInput.type === 'password') {
+            passInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('loginSubmitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                // Prevent duplicate form submissions while processing
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing in...';
+                submitBtn.style.opacity = '0.75';
+            });
+        }
+    });
+</script>
 @endsection
