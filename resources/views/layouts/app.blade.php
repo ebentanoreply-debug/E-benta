@@ -1308,7 +1308,7 @@
 </head>
 @php
     $isWorkspacePage = request()->routeIs('admin.*') || request()->routeIs('seller.*') || request()->routeIs('buyer.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*');
-    $savedCount = auth()->check() ? auth()->user()->savedListings()->count() : 0;
+    $savedCount = auth()->check() && auth()->user()->isBuyer() ? auth()->user()->savedListings()->count() : 0;
     $unreadMsgCount = auth()->check() ? auth()->user()->unreadMessagesCount() : 0;
 @endphp
 <body class="{{ !$isWorkspacePage ? 'has-commerce-header' : '' }}">
@@ -1325,11 +1325,11 @@
             <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
                 <div class="container-fluid px-3 px-md-4">
                     <div class="d-flex align-items-center gap-2">
-                        @if(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                        @if(auth()->check() && auth()->user()->isSeller() && (request()->routeIs('seller.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*')))
                             <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleSellerSidebar()" title="Toggle Sidebar">
                                 <i class="fas fa-bars"></i>
                             </button>
-                        @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                        @elseif(auth()->check() && auth()->user()->isBuyer() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*')))
                             <button type="button" class="admin-topbar-toggle-btn me-1" onclick="toggleBuyerSidebar()" title="Toggle Sidebar">
                                 <i class="fas fa-bars"></i>
                             </button>
@@ -1340,13 +1340,13 @@
                             <span>E-Benta</span>
                         </a>
 
-                        @if(request()->routeIs('seller.*') || (auth()->check() && auth()->user()->isSeller() && (request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                        @if(auth()->check() && auth()->user()->isSeller() && (request()->routeIs('seller.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*')))
                             <div class="d-none d-md-flex align-items-center ms-2">
                                 <span class="admin-workspace-pill">
                                     <i class="fas fa-store" style="color: #10b981;"></i> Seller Hub
                                 </span>
                             </div>
-                        @elseif(request()->routeIs('buyer.*') || (auth()->check() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*'))))
+                        @elseif(auth()->check() && auth()->user()->isBuyer() && (request()->routeIs('buyer.*') || request()->routeIs('messages.*') || request()->routeIs('addresses.*') || request()->routeIs('settings*')))
                             <div class="d-none d-md-flex align-items-center ms-2">
                                 <span class="admin-workspace-pill">
                                     <i class="fas fa-shopping-bag" style="color: #06b6d4;"></i> Buyer Hub
@@ -1447,9 +1447,11 @@
                             @endif
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <a href="{{ route('listings.create') }}" class="d-none d-sm-inline">
-                                <i class="fas fa-recycle me-1 text-teal-400" style="color: #2dd4bf;"></i> Sell / Recycle Tech
-                            </a>
+                            @if(!auth()->check() || auth()->user()->isSeller())
+                                <a href="{{ route('listings.create') }}" class="d-none d-sm-inline">
+                                    <i class="fas fa-recycle me-1 text-teal-400" style="color: #2dd4bf;"></i> Sell / Recycle Tech
+                                </a>
+                            @endif
                             <a href="{{ route('home') }}#process" class="d-none d-md-inline">How It Works</a>
                             <a href="{{ route('home') }}#faq" class="d-none d-lg-inline">Help & FAQ</a>
                             <button type="button" class="btn btn-link text-decoration-none p-0" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="font-size: 0.8rem; color: #94a3b8;">
@@ -1501,16 +1503,18 @@
                         <!-- Right: Actions & User Info -->
                         <div class="d-flex align-items-center gap-2 flex-shrink-0">
                             <!-- Wishlist / Saved Items -->
-                            <a href="{{ auth()->check() ? (auth()->user()->isBuyer() ? route('buyer.saved-items') : route('listings.index')) : route('login') }}" class="commerce-action-item" title="Saved Items / Wishlist">
-                                <i class="fas fa-heart text-danger" style="font-size: 1.05rem; color: #f43f5e !important;"></i>
-                                <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.1;">
-                                    <span style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Wishlist</span>
-                                    <span style="font-size: 0.8rem; font-weight: 800; color: #ffffff;">Saved</span>
-                                </div>
-                                @if(auth()->check() && $savedCount > 0)
-                                    <span class="commerce-badge">{{ $savedCount }}</span>
-                                @endif
-                            </a>
+                            @if(!auth()->check() || auth()->user()->isBuyer())
+                                <a href="{{ auth()->check() ? route('buyer.saved-items') : route('login') }}" class="commerce-action-item" title="Saved Items / Wishlist">
+                                    <i class="fas fa-heart text-danger" style="font-size: 1.05rem; color: #f43f5e !important;"></i>
+                                    <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.1;">
+                                        <span style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Wishlist</span>
+                                        <span style="font-size: 0.8rem; font-weight: 800; color: #ffffff;">Saved</span>
+                                    </div>
+                                    @if(auth()->check() && $savedCount > 0)
+                                        <span class="commerce-badge">{{ $savedCount }}</span>
+                                    @endif
+                                </a>
+                            @endif
 
                             @auth
                                 <!-- Messages / Chat Room -->
@@ -1623,10 +1627,17 @@
                             @endauth
 
                             <!-- Sell Device Action Button -->
-                            <a href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('listings.create') : route('listings.index')) : route('register') }}" class="commerce-sell-btn">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>Sell Tech</span>
-                            </a>
+                            @if(auth()->check() && auth()->user()->isBuyer())
+                                <a href="{{ route('buyer.dashboard') }}" class="commerce-sell-btn">
+                                    <i class="fas fa-bag-shopping"></i>
+                                    <span>My Orders</span>
+                                </a>
+                            @elseif(!auth()->check() || auth()->user()->isSeller())
+                                <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="commerce-sell-btn">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Sell Tech</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -1648,12 +1659,14 @@
                                 </button>
 
                                 <!-- Mobile Wishlist -->
-                                <a href="{{ auth()->check() ? (auth()->user()->isBuyer() ? route('buyer.saved-items') : route('listings.index')) : route('login') }}" class="commerce-action-item p-2" title="Wishlist">
-                                    <i class="fas fa-heart" style="font-size: 1rem; color: #f43f5e;"></i>
-                                    @if(auth()->check() && $savedCount > 0)
-                                        <span class="commerce-badge" style="top: -4px; right: -4px;">{{ $savedCount }}</span>
-                                    @endif
-                                </a>
+                                @if(!auth()->check() || auth()->user()->isBuyer())
+                                    <a href="{{ auth()->check() ? route('buyer.saved-items') : route('login') }}" class="commerce-action-item p-2" title="Wishlist">
+                                        <i class="fas fa-heart" style="font-size: 1rem; color: #f43f5e;"></i>
+                                        @if(auth()->check() && $savedCount > 0)
+                                            <span class="commerce-badge" style="top: -4px; right: -4px;">{{ $savedCount }}</span>
+                                        @endif
+                                    </a>
+                                @endif
 
                                 @auth
                                     <!-- Mobile Messages -->
@@ -2000,7 +2013,9 @@
                         <li><a href="{{ route('home') }}#calculator" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-calculator me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>CO₂ Estimator</a></li>
                         <li><a href="{{ route('home') }}#impact" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-chart-line me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Eco Scoreboard</a></li>
                         <li><a href="{{ route('home') }}#faq" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-circle-question me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Help & FAQ</a></li>
+                        @if(!auth()->check() || auth()->user()->isSeller())
                         <li><a href="{{ route('listings.create') }}" style="color: #94a3b8; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#94a3b8'"><i class="fas fa-plus-circle me-2" style="font-size: 0.75rem; color: #06b6d4;"></i>Post a Listing</a></li>
+                        @endif
                     </ul>
                 </div>
 
@@ -2104,12 +2119,21 @@
             <i class="fas fa-store"></i>
             <span>Explore</span>
         </a>
-        <a href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('listings.create') : route('listings.index')) : route('register') }}" class="mobile-nav-item mobile-nav-sell" title="Sell Tech">
-            <div class="mobile-nav-sell-btn">
-                <i class="fas fa-plus"></i>
-            </div>
-            <span>Sell</span>
-        </a>
+        @if(auth()->check() && auth()->user()->isBuyer())
+            <a href="{{ route('buyer.dashboard') }}" class="mobile-nav-item mobile-nav-sell" title="My Orders">
+                <div class="mobile-nav-sell-btn">
+                    <i class="fas fa-bag-shopping"></i>
+                </div>
+                <span>Orders</span>
+            </a>
+        @elseif(!auth()->check() || auth()->user()->isSeller())
+            <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="mobile-nav-item mobile-nav-sell" title="Sell Tech">
+                <div class="mobile-nav-sell-btn">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <span>Sell</span>
+            </a>
+        @endif
         <a href="{{ auth()->check() ? route('messages.index') : route('login') }}" class="mobile-nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
             <div class="position-relative">
                 <i class="fas fa-comment-dots"></i>
