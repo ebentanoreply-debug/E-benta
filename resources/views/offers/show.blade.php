@@ -136,7 +136,7 @@
                         The item for this offer has been withdrawn (e.g. removed by moderation or seller). This offer is read-only and can no longer be accepted or rejected.
                     </p>
                 </div>
-            @elseif($offer->status === 'pending' && auth()->id() === $offer->listing->user_id)
+            @elseif($offer->status === 'pending' && (auth()->user()->isSeller() && auth()->id() === $offer->listing->user_id))
                 <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%); border: 1px solid rgba(243, 156, 18, 0.2); border-left: 4px solid #f39c12; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-gavel" style="color: #f39c12;"></i>
@@ -181,7 +181,7 @@
             @endphp
 
             <!-- Buyer Payment Method -->
-            @if(auth()->id() === $offer->buyer_id && $offer->status === 'accepted')
+            @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->status === 'accepted')
                 <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.25); border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-credit-card" style="color: #0d9488;"></i>
@@ -240,7 +240,7 @@
             @endif
 
             <!-- Buyer Cancel Action -->
-            @if(auth()->id() === $offer->buyer_id && !$paymentConfirmed && $offer->canBuyerCancel())
+            @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && !$paymentConfirmed && $offer->canBuyerCancel())
                 <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-ban" style="color: #e74c3c;"></i>
@@ -310,7 +310,7 @@
             @endif
 
             <!-- Pickup Confirmation -->
-            @if(($paymentConfirmed || $offer->payment_method === 'cash_pickup') && $offer->status === 'accepted' && auth()->id() === $offer->buyer_id && $offer->listing->status === 'matched')
+            @if(($paymentConfirmed || $offer->payment_method === 'cash_pickup') && $offer->status === 'accepted' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->listing->status === 'matched')
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-truck" style="color: #3498db;"></i>
@@ -329,7 +329,7 @@
             @endif
 
             <!-- Seller Cash Confirmation -->
-            @if(auth()->id() === $offer->listing->user_id && $offer->status === 'accepted' && $offer->payment_method === 'cash_pickup' && !$paymentConfirmed && $offer->listing->status === 'in_transit')
+            @if((auth()->user()->isSeller() && auth()->id() === $offer->listing->user_id) && $offer->status === 'accepted' && $offer->payment_method === 'cash_pickup' && !$paymentConfirmed && $offer->listing->status === 'in_transit')
                 <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid #f59e0b; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem;"><i class="fas fa-money-bill-wave me-2" style="color: #f59e0b;"></i>Confirm Cash Received</h4>
                     <p style="color: #64748b; margin-bottom: 1rem;">Confirm only after receiving the cash from the buyer during pickup.</p>
@@ -342,7 +342,7 @@
 
 
             <!-- Processing Status Form -->
-            @if($paymentConfirmed && $offer->listing->status === 'in_transit' && auth()->id() === $offer->buyer_id)
+            @if($paymentConfirmed && $offer->listing->status === 'in_transit' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id))
                 <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
                     <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem;">
                         <i class="fas fa-box-open" style="color: #3498db;"></i> Confirm Delivery
@@ -358,7 +358,7 @@
             @endif
 
             <!-- Processing Status Form -->
-            @if($paymentConfirmed && $offer->listing->status === 'delivered' && auth()->id() === $offer->buyer_id)
+            @if($paymentConfirmed && $offer->listing->status === 'delivered' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id))
                 <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.12) 0%, rgba(155, 89, 182, 0.05) 100%); border: 1px solid rgba(155, 89, 182, 0.2); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                     <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-industry" style="color: #9b59b6;"></i>

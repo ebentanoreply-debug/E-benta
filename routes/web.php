@@ -136,7 +136,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/payments', [SettingsController::class, 'updatePayments'])
         ->name('settings.payments.update');
     Route::put('/settings/seller', [SettingsController::class, 'updateSellerProfile'])
-        ->name('settings.seller.update');
+        ->middleware('seller')->name('settings.seller.update');
     Route::post('/settings/id-verification', [SettingsController::class, 'submitIdVerification'])
         ->name('settings.id-verification.submit');
     Route::put('/settings/preferences', [SettingsController::class, 'updatePreferences'])
@@ -188,14 +188,14 @@ Route::middleware('auth')->group(function () {
     });
 
     // Offer routes - accessible to authenticated users (controller checks authorization)
-    Route::post('/offers/{listing}', [OfferController::class, 'store'])->name('offers.store');
+    Route::post('/offers/{listing}', [OfferController::class, 'store'])->middleware('buyer')->name('offers.store');
     Route::get('/offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
-    Route::post('/offers/{offer}/pay', [PaymentController::class, 'payOffer'])->name('offers.pay');
-    Route::post('/offers/{offer}/verify-payment', [PaymentController::class, 'verifyPayment'])->name('offers.verify-payment');
+    Route::post('/offers/{offer}/pay', [PaymentController::class, 'payOffer'])->middleware('buyer')->name('offers.pay');
+    Route::post('/offers/{offer}/verify-payment', [PaymentController::class, 'verifyPayment'])->middleware('buyer')->name('offers.verify-payment');
     Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
     Route::get('/payments/failed', [PaymentController::class, 'failed'])->name('payments.failed');
-    Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
-    Route::post('/offers/{offer}/reject', [OfferController::class, 'reject'])->name('offers.reject');
+    Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->middleware('seller')->name('offers.accept');
+    Route::post('/offers/{offer}/reject', [OfferController::class, 'reject'])->middleware('seller')->name('offers.reject');
 
     // Chat & Messaging routes
     Route::get('/messages', [ChatController::class, 'inbox'])->name('messages.index');

@@ -740,10 +740,12 @@
                             <i class="fas fa-store"></i>
                             <span>Explore Tech Deals</span>
                         </a>
-                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-outline">
-                            <i class="fas fa-recycle text-success"></i>
-                            <span>Sell / Recycle a Device</span>
-                        </a>
+                        @if(!auth()->check() || auth()->user()->isSeller())
+                            <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-outline">
+                                <i class="fas fa-recycle text-success"></i>
+                                <span>Sell / Recycle a Device</span>
+                            </a>
+                        @endif
                     </div>
 
                     <!-- Search Shortcuts / Trending Keywords -->
@@ -1082,8 +1084,10 @@
                             <div class="col-12 text-center py-5">
                                 <i class="fas fa-boxes-stacked" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
                                 <h5 class="fw-bold text-dark">No live listings yet</h5>
-                                <p class="text-muted">Be the first to list an electronic device!</p>
-                                <a href="{{ route('listings.create') }}" class="btn btn-primary fw-bold">List Tech Device</a>
+                                <p class="text-muted">New devices will appear here when sellers post them.</p>
+                                @if(!auth()->check() || auth()->user()->isSeller())
+                                    <a href="{{ route('listings.create') }}" class="btn btn-primary fw-bold">List Tech Device</a>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -1287,10 +1291,12 @@
                                 </div>
                             </div>
 
-                            <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: #ffffff; font-weight: 800; border-radius: 0.9rem; padding: 0.9rem; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                                <span>Post This Device for Sale / Recycle</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
+                            @if(!auth()->check() || auth()->user()->isSeller())
+                                <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: #ffffff; font-weight: 800; border-radius: 0.9rem; padding: 0.9rem; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                    <span>Post This Device for Sale / Recycle</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -1336,9 +1342,11 @@
                             </li>
                         </ul>
 
-                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-outline-dark" style="font-weight: 800; border-radius: 0.75rem; padding: 0.75rem 1.5rem;">
-                            Start Selling As Individual <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
+                        @if(!auth()->check() || auth()->user()->isSeller())
+                            <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="btn btn-outline-dark" style="font-weight: 800; border-radius: 0.75rem; padding: 0.75rem 1.5rem;">
+                                Start Selling As Individual <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
 
@@ -1557,10 +1565,12 @@
                     Join {{ $totalUsers > 0 ? number_format($totalUsers) . ' ' : '' }}community members and certified recyclers turning hazardous e-waste into economic and environmental opportunity.
                 </p>
                 <div class="d-flex justify-content-center flex-wrap gap-3">
-                    <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-primary" style="font-size: 1.1rem; padding: 1.1rem 2.8rem;">
-                        <i class="fas fa-rocket"></i>
-                        <span>Start Your Impact Journey</span>
-                    </a>
+                    @if(!auth()->check() || auth()->user()->isSeller())
+                        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="eb-btn-primary" style="font-size: 1.1rem; padding: 1.1rem 2.8rem;">
+                            <i class="fas fa-rocket"></i>
+                            <span>Start Your Impact Journey</span>
+                        </a>
+                    @endif
                     <a href="{{ route('listings.index') }}" class="eb-btn-outline" style="background: rgba(255,255,255,0.1); color: #ffffff !important; border-color: rgba(255,255,255,0.3);">
                         <i class="fas fa-binoculars"></i>
                         <span>Browse Verified Items</span>
