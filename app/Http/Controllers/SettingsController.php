@@ -149,8 +149,7 @@ class SettingsController extends Controller
      */
     public function updatePreferences(Request $request): RedirectResponse
     {
-        // Preferences like dark mode are saved client-side (localStorage).
-        // If we add server-side prefs later, they go here.
+        // If server-side preferences are added, handle them here.
         return redirect()->back()->with('success', 'Preferences saved.');
     }
 }
