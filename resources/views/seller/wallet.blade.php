@@ -88,7 +88,14 @@
                         @forelse($transactions as $transaction)
                             <div class="d-flex justify-content-between align-items-center border-bottom py-3">
                                 <div>
-                                    <strong>{{ str_replace('_', ' ', ucfirst($transaction->type)) }}</strong>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <strong>{{ str_replace('_', ' ', ucfirst($transaction->type)) }}</strong>
+                                        @if($transaction->type === 'platform_fee')
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 0.7rem;">Fee</span>
+                                        @elseif($transaction->type === 'sale_credit')
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem;">Credit</span>
+                                        @endif
+                                    </div>
                                     <div class="text-muted small">{{ $transaction->description }} · {{ $transaction->created_at->format('M d, Y g:i A') }}</div>
                                 </div>
                                 <div class="text-end">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Offer;
 use App\Models\Payment;
+use App\Services\CommissionService;
 use App\Services\PayMongoService;
 use App\Services\SellerWalletService;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function payOffer(Request $request, Offer $offer, PayMongoService $payMongo)
+    public function payOffer(Request $request, Offer $offer, PayMongoService $payMongo, CommissionService $commissions)
     {
         if (Auth::id() !== $offer->buyer_id) {
             return redirect('/')->with('error', 'Unauthorized');
@@ -38,10 +39,10 @@ class PaymentController extends Controller
             return redirect()->away($existingPending->checkout_url);
         }
 
-        $feePercent = (float) config('services.paymongo.platform_fee_percent', 0);
-        $amount = (float) $offer->bid_amount;
-        $feeAmount = round($amount * ($feePercent / 100), 2);
-        $netAmount = $amount - $feeAmount;
+        $calc = $commissions->calculate((float) $offer->bid_amount);
+        $amount = $calc['gross_amount'];
+        $feeAmount = $calc['commission_amount'];
+        $netAmount = $calc['net_amount'];
 
         $payment = Payment::create([
             'offer_id' => $offer->id,

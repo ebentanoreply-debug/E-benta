@@ -290,6 +290,10 @@
             <i class="fas fa-money-bill-transfer"></i>
             <span>Seller Payouts</span>
         </a>
+        <a href="{{ route('admin.commissions.index') }}" class="sidebar-link {{ request()->routeIs('admin.commissions.*') ? 'active' : '' }}">
+            <i class="fas fa-hand-holding-dollar"></i>
+            <span>Platform Revenue & Fees</span>
+        </a>
 
         <p class="sidebar-section-title">Analytics & Compliance</p>
         <a href="{{ route('admin.impact-logs') }}" class="sidebar-link {{ request()->routeIs('admin.impact-logs') ? 'active' : '' }}">

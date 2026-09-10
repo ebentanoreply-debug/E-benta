@@ -41,8 +41,10 @@ class SellerWalletService
                 'amount' => $payment->net_amount,
                 'balance_after' => $wallet->available_balance,
                 'status' => 'posted',
-                'description' => 'Payment received for offer #' . $payment->offer_id,
+                'description' => 'Sale credit for offer #' . $payment->offer_id . ' (Gross: ₱' . number_format($payment->amount, 2) . ', Commission: ₱' . number_format($payment->fee_amount, 2) . ')',
             ]);
+
+            app(CommissionService::class)->recordOnlineCommission($payment);
         });
     }
 

@@ -63,6 +63,10 @@ class AdminController extends Controller
         $totalOffers = Offer::count();
         $totalTransactions = ImpactLog::count();
 
+        $commissionService = app(\App\Services\CommissionService::class);
+        $revenueStats = $commissionService->getRevenueStatistics();
+        $totalPlatformRevenue = $revenueStats['total_commission'];
+
         // Dynamic 6-month, 12-month, and 24-month trend data
         $trend6Months = [];
         $trend6Waste = [];
@@ -119,7 +123,9 @@ class AdminController extends Controller
             'trend12Waste',
             'trend24Months',
             'trend24Waste',
-            'materials'
+            'materials',
+            'revenueStats',
+            'totalPlatformRevenue'
         ));
     }
 

@@ -447,6 +447,9 @@ class OfferController extends Controller
 
         $offer->update(['cash_received_at' => now()]);
 
+        // Process platform commission for Cash on Pickup if enabled
+        $commission = app(\App\Services\CommissionService::class)->processCashCommission($offer);
+
         Notification::notify(
             $offer->buyer,
             'cash_payment_confirmed',
@@ -455,7 +458,12 @@ class OfferController extends Controller
             ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
         );
 
-        return redirect()->route('offers.show', $offer)->with('success', 'Cash receipt confirmed.');
+        $successMsg = 'Cash receipt confirmed.';
+        if ($commission && (float) $commission->commission_amount > 0) {
+            $successMsg .= ' Platform commission (₱' . number_format($commission->commission_amount, 2) . ') recorded.';
+        }
+
+        return redirect()->route('offers.show', $offer)->with('success', $successMsg);
     }
 
     /**

@@ -362,6 +362,13 @@
                                 <span class="badge bg-warning text-dark rounded-pill" style="font-size: 0.7rem; font-weight: 800;">{{ $pendingReportsCount }}</span>
                             @endif
                         </a>
+                        <a href="{{ route('admin.commissions.index') }}" class="admin-pill-btn">
+                            <i class="fas fa-hand-holding-dollar" style="color: #34d399;"></i>
+                            <span>Revenue</span>
+                            <span class="badge rounded-pill" style="background: rgba(16, 185, 129, 0.25); color: #34d399; font-size: 0.72rem; font-weight: 800;">
+                                ₱{{ number_format($totalPlatformRevenue ?? 0, 2) }}
+                            </span>
+                        </a>
                         <a href="{{ route('admin.audit-logs.index') }}" class="admin-pill-btn">
                             <i class="fas fa-history" style="color: #a855f7;"></i>
                             <span>Audit Trail</span>

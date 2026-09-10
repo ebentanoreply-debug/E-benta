@@ -20,6 +20,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayMongoWebhookController;
 use App\Http\Controllers\SellerWalletController;
 use App\Http\Controllers\AdminPayoutController;
+use App\Http\Controllers\AdminCommissionController;
 use App\Http\Controllers\Api\DeviceModelController;
 use App\Models\Listing;
 use App\Models\User;
@@ -225,6 +226,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/payouts/{payout}/approve', [AdminPayoutController::class, 'approve'])->name('admin.payouts.approve');
         Route::post('/admin/payouts/{payout}/mark-paid', [AdminPayoutController::class, 'markPaid'])->name('admin.payouts.mark-paid');
         Route::post('/admin/payouts/{payout}/reject', [AdminPayoutController::class, 'reject'])->name('admin.payouts.reject');
+        Route::get('/admin/commissions', [AdminCommissionController::class, 'index'])->name('admin.commissions.index');
+        Route::post('/admin/commissions/settings', [AdminCommissionController::class, 'updateSettings'])->name('admin.commissions.settings.update');
+        Route::get('/admin/commissions/export', [AdminCommissionController::class, 'export'])->name('admin.commissions.export');
         Route::get('/admin/impact-logs', [AdminController::class, 'impactLogs'])->name('admin.impact-logs');
         Route::get('/admin/generate-reports', [AdminController::class, 'generateReport'])->name('admin.generate-reports');
         Route::get('/admin/statistics', [AdminController::class, 'getStatistics'])->name('admin.statistics');
