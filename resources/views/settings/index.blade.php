@@ -1424,31 +1424,7 @@ body.dark-mode .stt-stat {
                 <div id="stt-preferences" class="stt-panel">
                     <div class="stt-panel-header">
                         <h2 class="stt-panel-title">General <span>Preferences</span></h2>
-                        <p class="stt-panel-sub">Customize interface styling and locale settings.</p>
-                    </div>
-
-                    <div class="stt-card">
-                        <div class="stt-card-header">
-                            <div class="stt-card-icon teal"><i class="fas fa-paint-brush"></i></div>
-                            <div>
-                                <p class="stt-card-title">Theme & Appearance</p>
-                                <p class="stt-card-sub">Choose between Dark Mode and Light Mode.</p>
-                            </div>
-                        </div>
-                        <div class="stt-card-body">
-                            <div class="stt-toggle-row">
-                                <div class="stt-toggle-info">
-                                    <span class="stt-toggle-label"><i class="fas fa-moon me-2" style="color: #9333ea;"></i>Dark Mode</span>
-                                    <span class="stt-toggle-desc">Toggle the sleek obsidian night theme across all workspace views.</span>
-                                </div>
-                                <label class="stt-toggle">
-                                    <input type="checkbox" id="darkModeChk">
-                                    <div class="stt-toggle-track">
-                                        <div class="stt-toggle-thumb"></div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+                        <p class="stt-panel-sub">Localization standards and account preferences.</p>
                     </div>
 
                     <div class="stt-card">
@@ -1524,23 +1500,7 @@ function selectVisibility(val, el) {
     document.getElementById('pvInput').value = val;
 }
 
-// Dark mode state management
 document.addEventListener('DOMContentLoaded', function () {
-    const chk = document.getElementById('darkModeChk');
-    const isDark = localStorage.getItem('darkModeEnabled') === 'true';
-
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        if (chk) chk.checked = true;
-    }
-
-    if (chk) {
-        chk.addEventListener('change', function () {
-            document.body.classList.toggle('dark-mode', this.checked);
-            localStorage.setItem('darkModeEnabled', this.checked ? 'true' : 'false');
-        });
-    }
-
     // Restore active tab from hash
     const hash = window.location.hash.replace('#', '');
     const panels = ['account', 'notifications', 'privacy', 'id-verification', 'payments', 'seller', 'preferences'];

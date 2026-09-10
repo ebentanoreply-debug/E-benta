@@ -438,116 +438,7 @@
             }
         }
 
-        /* Dark Mode Global Styles */
-        body.dark-mode {
-            background-color: #1a1a1a !important;
-            color: #e0e0e0 !important;
-        }
 
-        body.dark-mode .navbar {
-            background: linear-gradient(135deg, #2a2a2a 0%, #242424 100%) !important;
-            border-bottom-color: rgba(6, 182, 212, 0.2) !important;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        body.dark-mode .nav-link {
-            color: #b0b0b0 !important;
-        }
-
-        body.dark-mode .nav-link:hover {
-            color: #06b6d4 !important;
-        }
-
-        body.dark-mode .navbar-brand {
-            color: #06b6d4 !important;
-        }
-
-        body.dark-mode .navbar-toggler {
-            border-color: #06b6d4 !important;
-        }
-
-        body.dark-mode .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(6, 182, 212, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-        }
-
-        body.dark-mode .dropdown-toggle::after {
-            border-top-color: #b0b0b0 !important;
-        }
-
-        body.dark-mode .card {
-            background-color: #2a2a2a;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        body.dark-mode .form-control {
-            background-color: #333333 !important;
-            border-color: rgba(6, 182, 212, 0.3) !important;
-            color: #e0e0e0 !important;
-        }
-
-        body.dark-mode .form-control:focus {
-            background-color: #3a3a3a !important;
-            border-color: #06b6d4 !important;
-            color: #e0e0e0 !important;
-        }
-
-        body.dark-mode main {
-            background-color: #1a1a1a;
-        }
-
-        body.dark-mode .dropdown-menu {
-            background-color: #2a2a2a !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        body.dark-mode .dropdown-item {
-            color: #b0b0b0;
-        }
-
-        body.dark-mode .dropdown-item:hover,
-        body.dark-mode .dropdown-item:focus {
-            background-color: rgba(6, 182, 212, 0.15) !important;
-            color: #06b6d4;
-        }
-
-        body.dark-mode .dropdown-header {
-            color: #e0e0e0 !important;
-        }
-
-        body.dark-mode .dropdown-divider {
-            border-top-color: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        body.dark-mode .btn {
-            color: #e0e0e0 !important;
-        }
-
-        body.dark-mode .btn-close {
-            filter: invert(1) !important;
-        }
-
-        body.dark-mode h1,
-        body.dark-mode h2,
-        body.dark-mode h3,
-        body.dark-mode h4,
-        body.dark-mode h5,
-        body.dark-mode h6,
-        body.dark-mode p,
-        body.dark-mode span,
-        body.dark-mode a {
-            color: #e0e0e0 !important;
-        }
-
-        body.dark-mode .alert {
-            background-color: #2a2a2a !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            color: #e0e0e0;
-        }
-
-        body.dark-mode footer {
-            background-color: #0f0f0f !important;
-            color: #e0e0e0 !important;
-        }
 
         /* ==========================================================================
            GLOBAL MOBILE RESPONSIVE ENHANCEMENTS
@@ -824,23 +715,7 @@
             color: #ffffff;
         }
 
-        body.dark-mode .page-item .page-link {
-            background-color: #1e293b;
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #2dd4bf;
-        }
 
-        body.dark-mode .page-item.active .page-link {
-            background-color: #0d9488;
-            border-color: #0d9488;
-            color: #ffffff;
-        }
-
-        body.dark-mode .page-item.disabled .page-link {
-            background-color: #0f172a;
-            border-color: rgba(255, 255, 255, 0.05);
-            color: #64748b;
-        }
 
         /* ==========================================================================
            E-COMMERCE MARKETPLACE MASTER DESIGN SYSTEM & MOBILE OVERHAUL
@@ -1313,9 +1188,9 @@
 @endphp
 <body class="{{ !$isWorkspacePage ? 'has-commerce-header' : '' }}">
     <script>
-        // Initialize dark mode immediately (before other DOM content)
-        if (localStorage.getItem('darkModeEnabled') === 'true') {
-            document.body.classList.add('dark-mode');
+        // Clean up legacy dark mode preference if previously stored
+        if (localStorage.getItem('darkModeEnabled')) {
+            localStorage.removeItem('darkModeEnabled');
         }
     </script>
     
@@ -1454,9 +1329,6 @@
                             @endif
                             <a href="{{ route('home') }}#process" class="d-none d-md-inline">How It Works</a>
                             <a href="{{ route('home') }}#faq" class="d-none d-lg-inline">Help & FAQ</a>
-                            <button type="button" class="btn btn-link text-decoration-none p-0" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="font-size: 0.8rem; color: #94a3b8;">
-                                <i class="fas fa-moon dark-mode-icon"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -1653,11 +1525,6 @@
                             </a>
 
                             <div class="d-flex align-items-center gap-2">
-                                <!-- Dark Mode Toggle -->
-                                <button type="button" class="commerce-action-item p-1 border-0" onclick="toggleDarkMode()" title="Toggle Dark Mode" style="background: transparent; color: #94a3b8;">
-                                    <i class="fas fa-moon dark-mode-icon" style="font-size: 1rem;"></i>
-                                </button>
-
                                 <!-- Mobile Wishlist -->
                                 @if(!auth()->check() || auth()->user()->isBuyer())
                                     <a href="{{ auth()->check() ? route('buyer.saved-items') : route('login') }}" class="commerce-action-item p-2" title="Wishlist">
