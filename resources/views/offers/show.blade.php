@@ -113,6 +113,51 @@
                         </p>
                     </div>
                 </div>
+
+                @php
+                    $commService = app(\App\Services\CommissionService::class);
+                    $commBreakdown = $commService->calculate((float) $offer->bid_amount);
+                @endphp
+
+                <!-- Transparent Commission & Payout Breakdown -->
+                <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(13, 148, 136, 0.35); border-radius: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <span style="font-weight: 700; color: var(--text-light); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-calculator" style="color: #10b981;"></i> Transaction Breakdown
+                        </span>
+                        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: 99px;">
+                            {{ number_format($commBreakdown['rate'], 1) }}% Platform Fee
+                        </span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                        <div style="background: rgba(0, 0, 0, 0.03); padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <small style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Gross Bid Price</small>
+                            <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-light);">
+                                ₱{{ number_format($commBreakdown['gross_amount'], 2) }}
+                            </span>
+                        </div>
+
+                        <div style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.15); padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <small style="color: #ef4444; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Platform Commission</small>
+                            <span style="font-size: 1.15rem; font-weight: 800; color: #ef4444;">
+                                -₱{{ number_format($commBreakdown['commission_amount'], 2) }}
+                            </span>
+                        </div>
+
+                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <small style="color: #10b981; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; display: block;">Seller Take-Home</small>
+                            <span style="font-size: 1.25rem; font-weight: 900; color: #10b981;">
+                                ₱{{ number_format($commBreakdown['net_amount'], 2) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <small style="display: block; margin-top: 0.75rem; color: #64748b; font-size: 0.8rem;">
+                        <i class="fas fa-shield-halved me-1" style="color: #0d9488;"></i> Platform fee covers secure processing, recycler ID verification, and environmental impact reporting.
+                    </small>
+                </div>
+
                 @if($offer->notes)
                     <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(13, 148, 136, 0.2);">
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">

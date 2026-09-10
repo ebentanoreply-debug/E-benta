@@ -53,4 +53,9 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class, 'seller_id');
     }
+
+    public function commission(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Commission::class);
+    }
 }

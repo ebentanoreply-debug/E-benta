@@ -66,6 +66,16 @@ class Offer extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function commission(): HasOne
+    {
+        return $this->hasOne(Commission::class)->latestOfMany();
+    }
+
+    public function commissions(): HasMany
+    {
+        return $this->hasMany(Commission::class);
+    }
+
     /**
      * Get the impact log created from this offer.
      */
