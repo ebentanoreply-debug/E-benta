@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DeviceType extends Model
 {
@@ -27,5 +28,13 @@ class DeviceType extends Model
     public function listings(): HasMany
     {
         return $this->hasMany(Listing::class, 'device_type_id');
+    }
+
+    /**
+     * Get bulk listings that include this device type.
+     */
+    public function bulkListings(): BelongsToMany
+    {
+        return $this->belongsToMany(Listing::class, 'listing_device_types')->withTimestamps();
     }
 }

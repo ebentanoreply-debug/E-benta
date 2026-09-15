@@ -58,6 +58,95 @@ class NewEbentaFeaturesTest extends TestCase
         ]);
     }
 
+    public function test_seller_can_create_bulk_lot_listing_with_multiple_categories()
+    {
+        $seller = User::factory()->create([
+            'role' => 'seller',
+            'email_verified_at' => now(),
+        ]);
+        $type1 = DeviceType::create(['name' => 'Smartphone', 'base_carbon_footprint' => 50, 'estimated_weight' => 0.2]);
+        $type2 = DeviceType::create(['name' => 'Tablet', 'base_carbon_footprint' => 60, 'estimated_weight' => 0.4]);
+        $type3 = DeviceType::create(['name' => 'Laptop', 'base_carbon_footprint' => 120, 'estimated_weight' => 1.8]);
+        $type4 = DeviceType::create(['name' => 'Charger', 'base_carbon_footprint' => 10, 'estimated_weight' => 0.1]);
+
+        // Seller lists 4 items and picks 4 categories
+        $response = $this->actingAs($seller)->post(route('listings.store'), [
+            'listing_type' => 'bulk_lot',
+            'lot_item_count' => 4,
+            'device_type_ids' => [$type1->id, $type2->id, $type3->id, $type4->id],
+            'device_details' => 'Mixed lot of 4 devices',
+            'condition' => 'non_functional',
+            'intended_action' => 'sell',
+            'suggested_price' => 2500.00,
+            'description' => 'Bundle containing phone, tablet, laptop, and chargers.',
+            'handover_preference' => 'both',
+            'pickup_address' => 'Unit 102 Green Residences, Taft Ave, Manila',
+        ]);
+
+        $response->assertRedirect();
+        $listing = Listing::where('user_id', $seller->id)->latest()->first();
+        $this->assertNotNull($listing);
+        $this->assertEquals('bulk_lot', $listing->listing_type);
+        $this->assertEquals(4, $listing->lot_item_count);
+        $this->assertCount(4, $listing->deviceTypes);
+        $this->assertTrue($listing->deviceTypes->contains($type1));
+        $this->assertTrue($listing->deviceTypes->contains($type2));
+        $this->assertTrue($listing->deviceTypes->contains($type3));
+        $this->assertTrue($listing->deviceTypes->contains($type4));
+    }
+
+    public function test_seller_cannot_select_more_categories_than_bulk_lot_item_count()
+    {
+        $seller = User::factory()->create([
+            'role' => 'seller',
+            'email_verified_at' => now(),
+        ]);
+        $type1 = DeviceType::create(['name' => 'Smartphone', 'base_carbon_footprint' => 50, 'estimated_weight' => 0.2]);
+        $type2 = DeviceType::create(['name' => 'Tablet', 'base_carbon_footprint' => 60, 'estimated_weight' => 0.4]);
+        $type3 = DeviceType::create(['name' => 'Laptop', 'base_carbon_footprint' => 120, 'estimated_weight' => 1.8]);
+
+        // Seller specifies 2 items in lot, but attempts to select 3 categories
+        $response = $this->actingAs($seller)->from(route('listings.create'))->post(route('listings.store'), [
+            'listing_type' => 'bulk_lot',
+            'lot_item_count' => 2,
+            'device_type_ids' => [$type1->id, $type2->id, $type3->id],
+            'device_details' => 'Invalid count bundle',
+            'condition' => 'non_functional',
+            'intended_action' => 'sell',
+            'suggested_price' => 1000.00,
+            'description' => 'Test bundle exceeding category limit.',
+            'handover_preference' => 'both',
+            'pickup_address' => 'Unit 102 Green Residences, Taft Ave, Manila',
+        ]);
+
+        $response->assertSessionHasErrors(['device_type_ids']);
+    }
+
+    public function test_category_filter_matches_bulk_lot_listing_by_secondary_category()
+    {
+        $seller = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);
+        $type1 = DeviceType::create(['name' => 'Smartphone', 'base_carbon_footprint' => 50, 'estimated_weight' => 0.2]);
+        $type2 = DeviceType::create(['name' => 'Tablet', 'base_carbon_footprint' => 60, 'estimated_weight' => 0.4]);
+
+        $listing = Listing::create([
+            'user_id' => $seller->id,
+            'listing_type' => 'bulk_lot',
+            'lot_item_count' => 4,
+            'device_type_id' => $type1->id,
+            'condition' => 'working',
+            'description' => 'Mixed lot',
+            'intended_action' => 'sell',
+            'suggested_price' => 1000,
+            'status' => 'available',
+        ]);
+        $listing->deviceTypes()->sync([$type1->id, $type2->id]);
+
+        // Search by category 'Tablet' (which is the secondary category linked via pivot table)
+        $response = $this->get(route('listings.index', ['category' => 'Tablet']));
+        $response->assertStatus(200);
+        $response->assertSee('Mixed lot');
+    }
+
     public function test_seller_requires_pickup_address_when_doorstep_pickup_is_selected()
     {
         $seller = User::factory()->create(['role' => 'seller', 'email_verified_at' => now()]);

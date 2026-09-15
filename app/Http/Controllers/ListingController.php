@@ -23,7 +23,7 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $query = Listing::where('status', 'available')
-            ->with(['seller', 'offers', 'deviceType', 'deviceBrand', 'deviceModel', 'listingPhotos']);
+            ->with(['seller', 'offers', 'deviceType', 'deviceTypes', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
         $savedListingIds = collect();
         if (Auth::check() && Auth::user()->isBuyer()) {
@@ -37,8 +37,12 @@ class ListingController extends Controller
 
         // Filter by category
         if ($request->filled('category')) {
-            $query->whereHas('deviceType', function ($deviceTypeQuery) use ($request) {
-                $deviceTypeQuery->where('name', $request->category);
+            $query->where(function ($catQuery) use ($request) {
+                $catQuery->whereHas('deviceType', function ($deviceTypeQuery) use ($request) {
+                    $deviceTypeQuery->where('name', $request->category);
+                })->orWhereHas('deviceTypes', function ($deviceTypesQuery) use ($request) {
+                    $deviceTypesQuery->where('name', $request->category);
+                });
             });
         }
 
@@ -72,6 +76,9 @@ class ListingController extends Controller
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
                 $q->whereHas('deviceType', function ($sub) use ($searchTerm) {
+                    $sub->where('name', 'like', '%' . $searchTerm . '%');
+                })
+                ->orWhereHas('deviceTypes', function ($sub) use ($searchTerm) {
                     $sub->where('name', 'like', '%' . $searchTerm . '%');
                 })
                 ->orWhereHas('deviceBrand', function ($sub) use ($searchTerm) {
@@ -114,10 +121,15 @@ class ListingController extends Controller
 
         $listings = $query->paginate(12)->withQueryString();
 
-        // Get faceted options and counts from database
-        $categoriesWithCount = DeviceType::withCount(['listings' => function($q) {
-            $q->where('status', 'available');
-        }])->get();
+        // Get faceted options and counts from database (include bulk lot categories)
+        $categoriesWithCount = DeviceType::all()->map(function ($deviceType) {
+            $deviceType->listings_count = Listing::where('status', 'available')
+                ->where(function ($q) use ($deviceType) {
+                    $q->where('device_type_id', $deviceType->id)
+                      ->orWhereHas('deviceTypes', fn ($dtq) => $dtq->where('device_types.id', $deviceType->id));
+                })->count();
+            return $deviceType;
+        });
 
         $brandsWithCount = DeviceBrand::whereHas('listings', function($q) {
             $q->where('status', 'available');
@@ -342,15 +354,20 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
+        $isBulk = $request->input('listing_type') === 'bulk_lot';
+
         $request->validate([
             'listing_type' => 'nullable|in:single,bulk_lot',
             'lot_item_count' => 'nullable|required_if:listing_type,bulk_lot|integer|min:2|max:1000',
-            'device_type_id' => 'required|exists:device_types,id',
+            'device_type_id' => $isBulk ? 'nullable|exists:device_types,id' : 'required|exists:device_types,id',
+            'device_type_ids' => $isBulk ? 'required_without:device_type_id|array|min:1' : 'nullable|array',
+            'device_type_ids.*' => 'exists:device_types,id',
             'device_brand_id' => 'nullable|exists:device_brands,id',
             'device_model_id' => ['nullable', 'exists:device_models,id', function ($attribute, $value, $fail) use ($request) {
                 if ($value && $request->device_brand_id) {
                     $model = DeviceModel::find($value);
-                    if (!$model || $model->device_type_id != $request->device_type_id || $model->device_brand_id != $request->device_brand_id) {
+                    $deviceTypeId = $request->device_type_id ?: ($request->input('device_type_ids.0'));
+                    if (!$model || ($deviceTypeId && $model->device_type_id != $deviceTypeId) || $model->device_brand_id != $request->device_brand_id) {
                         $fail('The selected model does not match the selected device type and brand.');
                     }
                 }
@@ -379,6 +396,17 @@ class ListingController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
 
+        // Enforce maximum category selections matching lot count for bulk listings
+        $selectedCategoryIds = array_values(array_filter((array) $request->input('device_type_ids', [])));
+        if ($isBulk) {
+            $lotCount = (int) $request->input('lot_item_count', 5);
+            if (!empty($selectedCategoryIds) && count($selectedCategoryIds) > $lotCount) {
+                return back()->withErrors([
+                    'device_type_ids' => "You can select up to {$lotCount} categories matching the {$lotCount} items in this lot.",
+                ])->withInput();
+            }
+        }
+
         if ($request->intended_action === 'sell') {
             $request->validate([
                 'suggested_price' => 'required|numeric|min:0|max:9999999.99',
@@ -393,13 +421,25 @@ class ListingController extends Controller
             }
         }
 
-        $deviceType = DeviceType::find($request->device_type_id);
+        $primaryDeviceTypeId = $request->device_type_id ?: ($selectedCategoryIds[0] ?? null);
+        $deviceType = DeviceType::find($primaryDeviceTypeId);
         $categoryName = $deviceType?->name;
 
-        // Get estimated weight based on category (or scaled if bulk lot)
-        $weight = Listing::getDefaultWeight($categoryName);
-        if ($request->listing_type === 'bulk_lot' && $request->lot_item_count) {
-            $weight = round($weight * (int) $request->lot_item_count * 0.75, 2); // bulk bundle weight estimate
+        // Determine all category IDs for sync
+        $categoryIds = $isBulk && !empty($selectedCategoryIds)
+            ? $selectedCategoryIds
+            : array_filter([$primaryDeviceTypeId]);
+
+        // Get estimated weight based on category (or average across selected categories if bulk lot)
+        if ($isBulk && !empty($categoryIds)) {
+            $selectedTypes = DeviceType::whereIn('id', $categoryIds)->get();
+            $avgWeight = $selectedTypes->avg(fn ($t) => Listing::getDefaultWeight($t->name)) ?: Listing::getDefaultWeight($categoryName);
+            $weight = round($avgWeight * (int) ($request->lot_item_count ?? count($categoryIds)) * 0.75, 2);
+        } else {
+            $weight = Listing::getDefaultWeight($categoryName);
+            if ($isBulk && $request->lot_item_count) {
+                $weight = round($weight * (int) $request->lot_item_count * 0.75, 2);
+            }
         }
 
         // Calculate carbon footprint
@@ -412,7 +452,7 @@ class ListingController extends Controller
             'user_id' => Auth::id(),
             'listing_type' => $request->input('listing_type', 'single'),
             'lot_item_count' => $request->listing_type === 'bulk_lot' ? (int) $request->lot_item_count : null,
-            'device_type_id' => $request->device_type_id,
+            'device_type_id' => $primaryDeviceTypeId,
             'device_brand_id' => $request->device_brand_id,
             'device_model_id' => $request->device_model_id,
             'device_details' => $request->device_details,
@@ -426,6 +466,11 @@ class ListingController extends Controller
             'status' => 'pending',
             'carbon_footprint' => $carbonFootprint,
         ]);
+
+        // Sync categories to pivot table
+        if (!empty($categoryIds)) {
+            $listing->deviceTypes()->sync($categoryIds);
+        }
 
         if (!empty($photos)) {
             $listing->listingPhotos()->createMany(
@@ -481,7 +526,7 @@ class ListingController extends Controller
 
         $listing->load(['seller', 'offers' => function ($query) {
             $query->where('status', 'pending')->with('buyer');
-        }, 'deviceType', 'deviceBrand', 'deviceModel', 'listingPhotos']);
+        }, 'deviceType', 'deviceTypes', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
         $isSaved = false;
         if (Auth::check() && Auth::user()->isBuyer()) {
@@ -495,7 +540,7 @@ class ListingController extends Controller
                     $query->where('device_type_id', $listing->device_type_id);
                 }
             })
-            ->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])
+            ->with(['seller', 'deviceType', 'deviceTypes', 'deviceBrand', 'listingPhotos'])
             ->latest()
             ->take(4)
             ->get();
@@ -519,6 +564,7 @@ class ListingController extends Controller
                 ->with('error', 'Cannot edit a matched listing');
         }
 
+        $listing->load(['deviceTypes', 'deviceBrand', 'deviceModel']);
         $deviceTypes = DeviceType::all();
         $deviceBrands = DeviceBrand::all();
         $deviceModels = $listing->device_type_id ? DeviceModel::where('device_type_id', $listing->device_type_id)->get() : collect();
@@ -548,15 +594,20 @@ class ListingController extends Controller
                 ->with('error', 'Cannot edit a matched listing');
         }
 
+        $isBulk = $request->input('listing_type', $listing->listing_type) === 'bulk_lot';
+
         $request->validate([
             'listing_type' => 'nullable|in:single,bulk_lot',
             'lot_item_count' => 'nullable|required_if:listing_type,bulk_lot|integer|min:2|max:1000',
-            'device_type_id' => 'required|exists:device_types,id',
+            'device_type_id' => $isBulk ? 'nullable|exists:device_types,id' : 'required|exists:device_types,id',
+            'device_type_ids' => $isBulk ? 'required_without:device_type_id|array|min:1' : 'nullable|array',
+            'device_type_ids.*' => 'exists:device_types,id',
             'device_brand_id' => 'nullable|exists:device_brands,id',
             'device_model_id' => ['nullable', 'exists:device_models,id', function ($attribute, $value, $fail) use ($request) {
                 if ($value && $request->device_brand_id) {
                     $model = DeviceModel::find($value);
-                    if (!$model || $model->device_type_id != $request->device_type_id || $model->device_brand_id != $request->device_brand_id) {
+                    $deviceTypeId = $request->device_type_id ?: ($request->input('device_type_ids.0'));
+                    if (!$model || ($deviceTypeId && $model->device_type_id != $deviceTypeId) || $model->device_brand_id != $request->device_brand_id) {
                         $fail('The selected model does not match the selected device type and brand.');
                     }
                 }
@@ -587,6 +638,17 @@ class ListingController extends Controller
             'delete_photos' => 'array',
             'delete_photos.*' => 'integer',
         ]);
+
+        // Enforce maximum category selections matching lot count for bulk listings
+        $selectedCategoryIds = array_values(array_filter((array) $request->input('device_type_ids', [])));
+        if ($isBulk) {
+            $lotCount = (int) $request->input('lot_item_count', $listing->lot_item_count ?? 5);
+            if (!empty($selectedCategoryIds) && count($selectedCategoryIds) > $lotCount) {
+                return back()->withErrors([
+                    'device_type_ids' => "You can select up to {$lotCount} categories matching the {$lotCount} items in this lot.",
+                ])->withInput();
+            }
+        }
 
         if ($request->intended_action === 'sell') {
             $request->validate([
@@ -635,11 +697,26 @@ class ListingController extends Controller
             $listing->listingPhotos()->createMany($newPhotoRows);
         }
 
-        $deviceType = DeviceType::find($request->device_type_id);
+        $primaryDeviceTypeId = $request->device_type_id ?: ($selectedCategoryIds[0] ?? $listing->device_type_id);
+        $deviceType = DeviceType::find($primaryDeviceTypeId);
         $categoryName = $deviceType?->name;
-        $weight = Listing::getDefaultWeight($categoryName);
-        if ($request->listing_type === 'bulk_lot' && $request->lot_item_count) {
-            $weight = round($weight * (int) $request->lot_item_count * 0.75, 2);
+
+        // Determine all category IDs for sync
+        $categoryIds = $isBulk && !empty($selectedCategoryIds)
+            ? $selectedCategoryIds
+            : array_filter([$primaryDeviceTypeId]);
+
+        // Get estimated weight based on category (or average across selected categories if bulk lot)
+        if ($isBulk && !empty($categoryIds)) {
+            $selectedTypes = DeviceType::whereIn('id', $categoryIds)->get();
+            $avgWeight = $selectedTypes->avg(fn ($t) => Listing::getDefaultWeight($t->name)) ?: Listing::getDefaultWeight($categoryName);
+            $lotCount = (int) ($request->lot_item_count ?? $listing->lot_item_count ?? count($categoryIds));
+            $weight = round($avgWeight * $lotCount * 0.75, 2);
+        } else {
+            $weight = Listing::getDefaultWeight($categoryName);
+            if ($isBulk && ($request->lot_item_count || $listing->lot_item_count)) {
+                $weight = round($weight * (int) ($request->lot_item_count ?? $listing->lot_item_count) * 0.75, 2);
+            }
         }
         $carbonFootprint = Listing::calculateCarbonFootprint($categoryName, $weight);
 
@@ -649,7 +726,7 @@ class ListingController extends Controller
         $listing->update([
             'listing_type' => $request->input('listing_type', $listing->listing_type ?? 'single'),
             'lot_item_count' => $request->listing_type === 'bulk_lot' ? (int) $request->lot_item_count : null,
-            'device_type_id' => $request->device_type_id,
+            'device_type_id' => $primaryDeviceTypeId,
             'device_brand_id' => $request->device_brand_id,
             'device_model_id' => $request->device_model_id,
             'device_details' => $request->device_details,
@@ -662,6 +739,11 @@ class ListingController extends Controller
             'estimated_weight' => $weight,
             'carbon_footprint' => $carbonFootprint,
         ]);
+
+        // Sync categories to pivot table
+        if (!empty($categoryIds)) {
+            $listing->deviceTypes()->sync($categoryIds);
+        }
 
         return redirect()->route('listings.show', $listing)
             ->with('success', 'Listing updated successfully');

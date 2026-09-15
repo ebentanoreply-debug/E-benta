@@ -606,7 +606,11 @@
                                 <div class="m-card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <span style="font-size: 0.74rem; font-weight: 800; color: #0d9488; text-transform: uppercase;">
-                                            {{ $listing->category ?: ($listing->deviceType?->name ?: 'Hardware') }}
+                                            @if($listing->listing_type === 'bulk_lot' && $listing->deviceTypes->count() > 1)
+                                                {{ $listing->deviceTypes->pluck('name')->take(2)->join(', ') }}{{ $listing->deviceTypes->count() > 2 ? ' +' . ($listing->deviceTypes->count() - 2) : '' }}
+                                            @else
+                                                {{ $listing->category ?: ($listing->deviceType?->name ?: 'Hardware') }}
+                                            @endif
                                         </span>
                                         @if($listing->carbon_footprint)
                                             <span class="m-card-co2">
