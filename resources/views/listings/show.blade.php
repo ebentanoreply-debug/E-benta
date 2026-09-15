@@ -287,7 +287,17 @@
                         <div class="rounded-3 overflow-hidden" style="border: 1px solid rgba(13, 148, 136, 0.15); background: rgba(13, 148, 136, 0.015);">
                             <div class="pdp-spec-row">
                                 <span class="pdp-spec-label"><i class="fas fa-laptop me-2"></i>Device Category</span>
-                                <span class="pdp-spec-value">{{ $listing->deviceType?->name ?: ($listing->category ?: 'Electronics') }}</span>
+                                <span class="pdp-spec-value">
+                                    @if($listing->listing_type === 'bulk_lot' && $listing->deviceTypes->count() > 0)
+                                        @foreach($listing->deviceTypes as $dType)
+                                            <span class="badge me-1 mb-1" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-weight: 600; font-size: 0.8rem; border: 1px solid rgba(13, 148, 136, 0.25);">
+                                                {{ $dType->name }}
+                                            </span>
+                                        @endforeach
+                                    @else
+                                        {{ $listing->deviceType?->name ?: ($listing->category ?: 'Electronics') }}
+                                    @endif
+                                </span>
                             </div>
                             <div class="pdp-spec-row">
                                 <span class="pdp-spec-label"><i class="fas fa-tag me-2"></i>Manufacturer / Brand</span>
@@ -531,10 +541,25 @@
             <div class="pdp-buy-box">
                 <!-- Device Header & Brand Tag -->
                 <div class="mb-3">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="badge text-uppercase px-2.5 py-1.5" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-weight: 700; font-size: 0.75rem; border: 1px solid rgba(13, 148, 136, 0.25);">
-                            <i class="fas fa-tag me-1"></i>{{ $listing->deviceBrand?->name ?: ($listing->deviceType?->name ?: 'Hardware') }}
-                        </span>
+                    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-1">
+                        <div class="d-flex align-items-center flex-wrap gap-1">
+                            @if($listing->listing_type === 'bulk_lot')
+                                <span class="badge px-2.5 py-1.5" style="background: rgba(245, 158, 11, 0.15); color: #b45309; font-weight: 700; font-size: 0.75rem; border: 1px solid rgba(245, 158, 11, 0.3);">
+                                    <i class="fas fa-boxes me-1"></i>BULK LOT ({{ $listing->lot_item_count }} items)
+                                </span>
+                                @if($listing->deviceTypes->count() > 0)
+                                    @foreach($listing->deviceTypes as $dType)
+                                        <span class="badge px-2 py-1" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-weight: 700; font-size: 0.75rem; border: 1px solid rgba(13, 148, 136, 0.25);">
+                                            {{ $dType->name }}
+                                        </span>
+                                    @endforeach
+                                @endif
+                            @else
+                                <span class="badge text-uppercase px-2.5 py-1.5" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-weight: 700; font-size: 0.75rem; border: 1px solid rgba(13, 148, 136, 0.25);">
+                                    <i class="fas fa-tag me-1"></i>{{ $listing->deviceBrand?->name ?: ($listing->deviceType?->name ?: 'Hardware') }}
+                                </span>
+                            @endif
+                        </div>
                         <span class="badge rounded-pill {{ $listing->status === 'available' ? 'bg-success' : 'bg-secondary' }} px-3 py-1.5" style="font-weight: 700; font-size: 0.75rem;">
                             {{ strtoupper($listing->status) }}
                         </span>

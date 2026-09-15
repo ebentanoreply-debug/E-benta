@@ -63,7 +63,7 @@
                             </h5>
 
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="singleCategoryWrapper">
                                     <label for="device_type_id" class="form-label" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
                                         <i class="fas fa-microchip me-1" style="color: var(--light-green);"></i>Primary Category <span style="color: #e74c3c;">*</span>
                                     </label>
@@ -87,11 +87,57 @@
                                         <i class="fas fa-calculator me-1" style="color: #f59e0b;"></i>Est. Device Count in Lot <span style="color: #e74c3c;">*</span>
                                     </label>
                                     <input type="number" min="2" max="1000" class="form-control @error('lot_item_count') is-invalid @enderror" 
-                                           id="lot_item_count" name="lot_item_count" value="{{ old('lot_item_count', 5) }}"
-                                           placeholder="e.g. 5, 10, 20 devices"
+                                           id="lot_item_count" name="lot_item_count" value="{{ old('lot_item_count', 4) }}"
+                                           placeholder="e.g. 4, 10, 20 devices"
                                            style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">
+                                    <small style="color: #64748b; font-size: 0.82rem; margin-top: 0.35rem; display: block;">Enter how many items are in this lot (e.g. 4).</small>
                                     @error('lot_item_count')
                                         <span class="invalid-feedback d-block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Bulk Multi-Category Checkbox Selector -->
+                                <div class="col-12" id="bulkCategoryWrapper" style="display: none;">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                        <label class="form-label mb-0" style="color: var(--text-light); font-weight: 700; font-size: 0.95rem;">
+                                            <i class="fas fa-layer-group me-1" style="color: var(--light-green);"></i>Categories in this Lot / Bundle <span style="color: #e74c3c;">*</span>
+                                        </label>
+                                        <span class="badge" id="categoryLimitBadge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-weight: 700; font-size: 0.85rem; border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 20px; padding: 0.4rem 0.85rem;">
+                                            Selected: <span id="categoryCount">0</span> / <span id="categoryMax">4</span> categories
+                                        </span>
+                                    </div>
+                                    <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 0.85rem;">
+                                        Select the categories included in this lot (you can select up to <strong id="categoryLimitText" style="color: #0d9488;">4</strong> categories based on your device count).
+                                    </p>
+
+                                    <div class="row g-2" id="bulkCategoryGrid">
+                                        @foreach($deviceTypes as $type)
+                                            @php
+                                                $oldChecked = is_array(old('device_type_ids')) && in_array($type->id, old('device_type_ids'));
+                                            @endphp
+                                            <div class="col-6 col-md-4 col-lg-3">
+                                                <label class="category-checkbox-card" for="cat_check_{{ $type->id }}" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.75rem 0.9rem; border: 1.5px solid rgba(13, 148, 136, 0.25); border-radius: 0.75rem; cursor: pointer; transition: all 0.2s ease; background: white; user-select: none;">
+                                                    <input type="checkbox" class="form-check-input bulk-cat-checkbox m-0" 
+                                                           id="cat_check_{{ $type->id }}" 
+                                                           name="device_type_ids[]" 
+                                                           value="{{ $type->id }}" 
+                                                           {{ $oldChecked ? 'checked' : '' }}
+                                                           onchange="handleCategoryCheckboxChange(this)"
+                                                           style="cursor: pointer; width: 1.15rem; height: 1.15rem; border-color: rgba(13, 148, 136, 0.5); accent-color: #0d9488;">
+                                                    <span style="font-weight: 600; font-size: 0.88rem; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        {{ $type->name }}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <div id="categoryLimitWarning" style="display: none; margin-top: 0.65rem; padding: 0.6rem 0.85rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 0.6rem; color: #b45309; font-size: 0.84rem;">
+                                        <i class="fas fa-exclamation-circle me-1"></i> Maximum category limit reached based on your item count. Increase "Est. Device Count in Lot" if you want to select more categories.
+                                    </div>
+
+                                    @error('device_type_ids')
+                                        <span class="invalid-feedback d-block mt-2">{{ $message }}</span>
                                     @enderror
                                 </div>
 
@@ -288,15 +334,88 @@
 
 @section('scripts')
 <script>
+    // --- Category Checkboxes & Limit Logic ---
+    function getMaxCategoriesAllowed() {
+        const isBulk = document.getElementById('type_bulk').checked;
+        if (!isBulk) return 1;
+        const lotInput = document.getElementById('lot_item_count');
+        const val = parseInt(lotInput ? lotInput.value : 4, 10);
+        return isNaN(val) || val < 1 ? 1 : val;
+    }
+
+    function handleCategoryCheckboxChange(checkbox) {
+        const maxAllowed = getMaxCategoriesAllowed();
+        const checkedBoxes = document.querySelectorAll('.bulk-cat-checkbox:checked');
+        const warningEl = document.getElementById('categoryLimitWarning');
+
+        if (checkbox && checkbox.checked && checkedBoxes.length > maxAllowed) {
+            checkbox.checked = false;
+            if (warningEl) {
+                warningEl.style.display = 'block';
+                warningEl.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i> You can select up to <strong>${maxAllowed}</strong> categories matching your lot count of ${maxAllowed} items. Increase "Est. Device Count in Lot" to add more categories.`;
+            }
+            return;
+        }
+
+        if (warningEl) {
+            warningEl.style.display = 'none';
+        }
+
+        updateCategoryCheckboxesUI();
+    }
+
+    function updateCategoryCheckboxesUI() {
+        const maxAllowed = getMaxCategoriesAllowed();
+        const checkedBoxes = Array.from(document.querySelectorAll('.bulk-cat-checkbox:checked'));
+        const count = checkedBoxes.length;
+
+        const countEl = document.getElementById('categoryCount');
+        const maxEl = document.getElementById('categoryMax');
+        const limitText = document.getElementById('categoryLimitText');
+
+        if (countEl) countEl.textContent = count;
+        if (maxEl) maxEl.textContent = maxAllowed;
+        if (limitText) limitText.textContent = maxAllowed;
+
+        // Card highlight styles
+        document.querySelectorAll('.bulk-cat-checkbox').forEach(cb => {
+            const card = cb.closest('.category-checkbox-card');
+            if (card) {
+                if (cb.checked) {
+                    card.style.borderColor = '#0d9488';
+                    card.style.background = 'rgba(13, 148, 136, 0.08)';
+                    card.style.boxShadow = '0 2px 8px rgba(13, 148, 136, 0.15)';
+                } else {
+                    card.style.borderColor = 'rgba(13, 148, 136, 0.25)';
+                    card.style.background = 'white';
+                    card.style.boxShadow = 'none';
+                }
+            }
+        });
+
+        // Sync first checked category into fallback device_type_id
+        const singleSelect = document.getElementById('device_type_id');
+        if (singleSelect && checkedBoxes.length > 0) {
+            singleSelect.value = checkedBoxes[0].value;
+        }
+    }
+
     // --- Listing Type Toggle ---
     function updateListingTypeView() {
         const isBulk = document.getElementById('type_bulk').checked;
         const bulkWrapper = document.getElementById('bulkCountWrapper');
+        const singleCatWrapper = document.getElementById('singleCategoryWrapper');
+        const bulkCatWrapper = document.getElementById('bulkCategoryWrapper');
+        const singleSelect = document.getElementById('device_type_id');
         const cardSingle = document.getElementById('typeCardSingle');
         const cardBulk = document.getElementById('typeCardBulk');
 
         if (isBulk) {
             bulkWrapper.style.display = 'block';
+            if (singleCatWrapper) singleCatWrapper.style.display = 'none';
+            if (bulkCatWrapper) bulkCatWrapper.style.display = 'block';
+            if (singleSelect) singleSelect.removeAttribute('required');
+
             cardBulk.style.borderColor = '#0d9488';
             cardBulk.style.background = 'rgba(13, 148, 136, 0.05)';
             cardSingle.style.borderColor = 'rgba(13, 148, 136, 0.2)';
@@ -307,8 +426,14 @@
             if (handoverPref && handoverPref.value === 'meetup_only') {
                 handoverPref.value = 'pickup_only';
             }
+
+            updateCategoryCheckboxesUI();
         } else {
             bulkWrapper.style.display = 'none';
+            if (singleCatWrapper) singleCatWrapper.style.display = 'block';
+            if (bulkCatWrapper) bulkCatWrapper.style.display = 'none';
+            if (singleSelect) singleSelect.setAttribute('required', 'required');
+
             cardSingle.style.borderColor = '#0d9488';
             cardSingle.style.background = 'rgba(13, 148, 136, 0.05)';
             cardBulk.style.borderColor = 'rgba(13, 148, 136, 0.2)';
@@ -375,6 +500,42 @@
         const intendedAction = document.getElementById('intended_action');
         if (intendedAction) {
             intendedAction.addEventListener('change', toggleSellerPriceField);
+        }
+
+        const lotCountInput = document.getElementById('lot_item_count');
+        if (lotCountInput) {
+            lotCountInput.addEventListener('input', function() {
+                const maxAllowed = getMaxCategoriesAllowed();
+                const checkedBoxes = Array.from(document.querySelectorAll('.bulk-cat-checkbox:checked'));
+                if (checkedBoxes.length > maxAllowed) {
+                    for (let i = maxAllowed; i < checkedBoxes.length; i++) {
+                        checkedBoxes[i].checked = false;
+                    }
+                }
+                updateCategoryCheckboxesUI();
+            });
+        }
+
+        const listingForm = document.getElementById('listingForm');
+        if (listingForm) {
+            listingForm.addEventListener('submit', function (e) {
+                const isBulk = document.getElementById('type_bulk').checked;
+                if (isBulk) {
+                    const checkedBoxes = document.querySelectorAll('.bulk-cat-checkbox:checked');
+                    if (checkedBoxes.length === 0) {
+                        e.preventDefault();
+                        alert('Please select at least one category for your bulk lot.');
+                        const wrapper = document.getElementById('bulkCategoryWrapper');
+                        if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return false;
+                    }
+                    const singleSelect = document.getElementById('device_type_id');
+                    if (singleSelect) {
+                        singleSelect.removeAttribute('required');
+                        singleSelect.value = checkedBoxes[0].value;
+                    }
+                }
+            });
         }
     });
 

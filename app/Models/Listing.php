@@ -56,11 +56,19 @@ class Listing extends Model
     }
 
     /**
-     * Get the device type for this listing.
+     * Get the primary device type for this listing.
      */
     public function deviceType(): BelongsTo
     {
         return $this->belongsTo(DeviceType::class);
+    }
+
+    /**
+     * Get all device types/categories associated with this listing (for bulk lots).
+     */
+    public function deviceTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(DeviceType::class, 'listing_device_types')->withTimestamps();
     }
 
     /**
