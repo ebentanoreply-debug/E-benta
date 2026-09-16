@@ -465,8 +465,83 @@
             </div>
         </header>
 
+        <!-- VERIFICATION STATUS ALERT BANNER -->
+        <div class="container-fluid px-3 px-md-4 mt-3">
+            @php $seller = auth()->user(); @endphp
+            @if(!$seller->isIdVerified())
+                @if($seller->id_verification_status === 'rejected')
+                    <div class="p-3 p-md-4 mb-3 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-3 shadow-sm"
+                         style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(185, 28, 28, 0.08) 100%); border: 1.5px solid rgba(239, 68, 68, 0.35);">
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 800; color: #dc2626; margin: 0; font-size: 1.05rem;">ID & Location Verification Declined</h6>
+                                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: #475569;" class="dark:text-slate-300">
+                                    <strong>Admin Reason:</strong> {{ $seller->id_rejection_reason ?? 'Document or location mismatch' }}. Please provide a clear ID and valid location proof to enable listing creation.
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-danger d-inline-flex align-items-center gap-2"
+                           style="border-radius: 0.75rem; font-weight: 800; padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                            <i class="fas fa-redo me-1"></i>Re-Submit ID & Location
+                        </a>
+                    </div>
+                @elseif($seller->isIdPending())
+                    <div class="p-3 p-md-4 mb-3 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-3 shadow-sm"
+                         style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(3, 105, 161, 0.08) 100%); border: 1.5px solid rgba(2, 132, 199, 0.35);">
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(2, 132, 199, 0.2); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 800; color: #0369a1; margin: 0; font-size: 1.05rem;">Verification In Review ⏳</h6>
+                                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: #475569;" class="dark:text-slate-300">
+                                    Your government ID and physical pickup location ({{ $seller->getFormattedLocation() }}) were submitted on {{ $seller->id_submitted_at ? $seller->id_submitted_at->format('M d, Y') : 'recently' }} and are being reviewed by administrators.
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+                           style="border-radius: 0.75rem; font-weight: 700; padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                            <i class="fas fa-eye me-1"></i>View Submission
+                        </a>
+                    </div>
+                @else
+                    <div class="p-3 p-md-4 mb-3 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-3 shadow-sm"
+                         style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(217, 119, 6, 0.08) 100%); border: 1.5px solid rgba(245, 158, 11, 0.4);">
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(245, 158, 11, 0.22); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h6 style="font-weight: 800; color: #b45309; margin: 0; font-size: 1.05rem;">ID & Location Verification Required 📍</h6>
+                                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: #475569;" class="dark:text-slate-300">
+                                    To protect buyers and ensure secure pickups, all sellers must upload a valid government ID and verify their physical pickup address before publishing listings.
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-warning d-inline-flex align-items-center gap-2"
+                           style="border-radius: 0.75rem; font-weight: 800; padding: 0.6rem 1.25rem; font-size: 0.9rem; background: #f59e0b; border-color: #d97706; color: #78350f;">
+                            <i class="fas fa-id-card me-1"></i>Verify ID & Location Now
+                        </a>
+                    </div>
+                @endif
+            @else
+                <div class="p-2 px-3 mb-3 rounded-3 d-flex align-items-center justify-content-between gap-2"
+                     style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); font-size: 0.85rem;">
+                    <div class="d-flex align-items-center gap-2">
+                        <span style="color: #10b981; font-weight: 800;"><i class="fas fa-shield-check me-1"></i>Verified Seller</span>
+                        <span style="color: #64748b;">•</span>
+                        <span style="color: #0f172a; font-weight: 700;" class="dark:text-white"><i class="fas fa-location-dot me-1 text-emerald"></i>Verified Pickup: {{ $seller->getFormattedLocation() }}</span>
+                    </div>
+                    <span class="badge bg-success" style="font-size: 0.72rem; padding: 0.3rem 0.6rem;">Active & Trusted</span>
+                </div>
+            @endif
+        </div>
+
         <!-- 2. HIGH-IMPACT 4-COLUMN KPI CARDS -->
-        <div class="container-fluid px-3 px-md-4 mt-4">
+        <div class="container-fluid px-3 px-md-4 mt-2">
             <div class="row g-3 g-lg-4 mb-4">
                 
                 <!-- KPI 1: Active Listings & Value -->

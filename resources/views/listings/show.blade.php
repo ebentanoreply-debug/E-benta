@@ -610,7 +610,13 @@
                     <div class="d-flex align-items-start gap-2 mb-2" style="font-size: 0.86rem; color: #475569;">
                         <i class="fas fa-map-pin mt-1 text-danger"></i>
                         <div>
-                            <strong>Pickup / Inspection Location:</strong><br>
+                            <strong>Pickup / Inspection Location:</strong>
+                            @if($listing->seller->isSellerVerified())
+                                <span class="badge bg-success-subtle text-success border border-success-subtle ms-1" style="font-size: 0.72rem;">
+                                    <i class="fas fa-check-circle me-1"></i>Verified Location
+                                </span>
+                            @endif
+                            <br>
                             {{ $listing->pickup_address ?: 'Contact seller for designated meetup point' }}
                         </div>
                     </div>
@@ -640,9 +646,15 @@
                             <div class="fw-bold" style="color: #0f172a; font-size: 0.95rem;">
                                 {{ $listing->seller->name }}
                             </div>
-                            <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem; color: #64748b;">
-                                <i class="fas fa-shield-alt text-emerald" style="color: #10b981;"></i>
-                                <span>Verified Member</span>
+                            <div class="d-flex align-items-center gap-1 flex-wrap" style="font-size: 0.8rem; color: #64748b;">
+                                @if($listing->seller->isSellerVerified())
+                                    <span class="text-success fw-bold"><i class="fas fa-shield-check me-1" style="color: #10b981;"></i>Verified Seller</span>
+                                    <span>•</span>
+                                    <span title="{{ $listing->seller->getFormattedLocation() }}"><i class="fas fa-location-dot text-danger me-1"></i>{{ $listing->seller->address_city ?: 'Verified Location' }}</span>
+                                @else
+                                    <i class="fas fa-user-circle text-muted"></i>
+                                    <span>Member</span>
+                                @endif
                                 <span>•</span>
                                 <span>{{ $listing->created_at->diffForHumans() }}</span>
                             </div>

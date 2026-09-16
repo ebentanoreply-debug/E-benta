@@ -320,6 +320,14 @@ class ListingController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+
+        // Enforce seller verification (government ID and physical location)
+        if ($user && $user->isSeller() && !$user->isIdVerified()) {
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
+        }
+
         $deviceTypes = DeviceType::all();
         $deviceBrands = DeviceBrand::all();
         $categories = [
@@ -354,6 +362,14 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        // Enforce seller verification (government ID and physical location)
+        if ($user && $user->isSeller() && !$user->isIdVerified()) {
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
+        }
+
         $isBulk = $request->input('listing_type') === 'bulk_lot';
 
         $request->validate([

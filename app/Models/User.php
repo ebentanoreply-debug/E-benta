@@ -34,10 +34,14 @@ class User extends Authenticatable
         'id_type',
         'id_number',
         'id_photo_url',
+        'id_back_photo_url',
         'id_selfie_url',
+        'proof_of_address_url',
+        'proof_of_address_type',
         'id_verification_status',
         'id_rejection_reason',
         'id_submitted_at',
+        'location_verified_at',
         'business_name',
         'business_description',
         'phone',
@@ -54,8 +58,12 @@ class User extends Authenticatable
         'oauth_provider',
         'oauth_token',
         // Settings fields
+        'address_line_1',
+        'barangay',
         'address_city',
         'address_province',
+        'postal_code',
+        'location_notes',
         'gcash_number',
         'bank_name',
         'bank_account_number',
@@ -93,6 +101,7 @@ class User extends Authenticatable
             'warning_count' => 'integer',
             'suspended_until' => 'datetime',
             'id_submitted_at' => 'datetime',
+            'location_verified_at' => 'datetime',
             'email_notifications' => 'boolean',
             'sms_notifications' => 'boolean',
             'marketing_updates' => 'boolean',
@@ -341,6 +350,38 @@ class User extends Authenticatable
     public function isIdPending(): bool
     {
         return $this->id_verification_status === 'pending';
+    }
+
+    /**
+     * Check if seller is verified for identity and physical location.
+     */
+    public function isSellerVerified(): bool
+    {
+        return $this->isSeller() && $this->isIdVerified();
+    }
+
+    /**
+     * Check if user has physical location details filled.
+     */
+    public function hasLocationData(): bool
+    {
+        return !empty($this->address_city) || !empty($this->address_province) || !empty($this->address_line_1) || !empty($this->barangay);
+    }
+
+    /**
+     * Get formatted registered physical location.
+     */
+    public function getFormattedLocation(): string
+    {
+        $parts = array_filter([
+            $this->address_line_1,
+            $this->barangay ? 'Brgy. ' . $this->barangay : null,
+            $this->address_city,
+            $this->address_province,
+            $this->postal_code,
+        ]);
+
+        return !empty($parts) ? implode(', ', $parts) : ($this->address_city ?? 'Registered Location');
     }
 
     /**

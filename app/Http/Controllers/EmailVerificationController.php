@@ -201,7 +201,7 @@ class EmailVerificationController extends Controller
 
         $user->update([
             'password' => \Illuminate\Support\Facades\Hash::make($request->password),
-            'is_verified' => $user->role === 'seller' ? true : $user->is_verified,
+            'is_verified' => (bool) $user->is_verified,
         ]);
 
         // Notify admins about verified registration

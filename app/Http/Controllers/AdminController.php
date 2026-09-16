@@ -132,27 +132,45 @@ class AdminController extends Controller
     /**
      * Show pending buyer verifications.
      */
-    public function pendingVerifications()
+    public function pendingVerifications(Request $request)
     {
         if (!Auth::user()->isAdmin()) {
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        $pendingUsers = User::where(function ($q) {
-                $q->where('id_verification_status', 'pending')
-                  ->orWhere(function ($sub) {
-                      $sub->where('role', 'buyer')->where('is_verified', false);
-                  });
-            })
+        $baseQuery = User::where(function ($q) {
+            $q->where('id_verification_status', 'pending')
+              ->orWhere(function ($sub) {
+                  $sub->where('is_verified', false)
+                      ->where(function ($inner) {
+                          $inner->where('role', 'buyer')
+                                ->orWhereNotNull('id_photo_url')
+                                ->orWhereNotNull('id_type');
+                      });
+              });
+        });
+
+        $totalCount = (clone $baseQuery)->count();
+        $sellerCount = (clone $baseQuery)->where('role', 'seller')->count();
+        $buyerCount = (clone $baseQuery)->where('role', 'buyer')->count();
+
+        $query = clone $baseQuery;
+
+        if ($request->filled('role') && in_array($request->role, ['seller', 'buyer'])) {
+            $query->where('role', $request->role);
+        }
+
+        $pendingUsers = $query->with('addresses')
             ->orderBy('id_submitted_at', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.pending-verifications', compact('pendingUsers'));
+        return view('admin.pending-verifications', compact('pendingUsers', 'totalCount', 'sellerCount', 'buyerCount'));
     }
 
     /**
-     * Verify a user's account and government ID.
+     * Verify a user's account, government ID, and physical location.
      */
     public function verifyUser(User $user)
     {
@@ -164,30 +182,37 @@ class AdminController extends Controller
             'is_verified' => true,
             'id_verification_status' => 'verified',
             'id_rejection_reason' => null,
+            'location_verified_at' => now(),
         ]);
 
         // Log account approval
         AuditLogger::logAccountApproval(
             $user->id,
             'approved',
-            "Admin " . Auth::user()->name . " approved ID verification and verified account"
+            "Admin " . Auth::user()->name . " approved ID & location verification for {$user->role} {$user->name}"
         );
 
-        // Send notification to user - account approved
+        // Send tailored notification to user - account & location approved
+        $title = $user->isSeller() ? 'Seller ID & Location Verified! 🛡️📍' : 'Identity Verified! 🛡️';
+        $locationStr = $user->getFormattedLocation();
+        $body = $user->isSeller()
+            ? "Congratulations! Your government ID and registered physical location ({$locationStr}) have been verified by our team. You can now publish active listings and trade with confidence."
+            : 'Congratulations! Your government ID has been verified by our team. Your Verified badge is now active.';
+
         Notification::notify(
             $user,
             'account_approved',
-            'Identity Verified! 🛡️',
-            'Congratulations! Your government ID has been verified by our team. Your Verified badge is now active.',
+            $title,
+            $body,
             ['verified_at' => now()]
         );
 
         return redirect()->route('admin.pending-verifications')
-            ->with('success', 'User ID and account verified successfully');
+            ->with('success', 'User ID and physical location verified successfully');
     }
 
     /**
-     * Reject a user ID verification.
+     * Reject a user ID and location verification.
      */
     public function rejectUser(Request $request, User $user)
     {
@@ -209,20 +234,20 @@ class AdminController extends Controller
         AuditLogger::logAccountApproval(
             $user->id,
             'rejected',
-            "Admin " . Auth::user()->name . " rejected ID verification. Reason: " . $request->reason
+            "Admin " . Auth::user()->name . " rejected ID/location verification for {$user->name}. Reason: " . $request->reason
         );
 
         // Send rejection notification to user with reason
         Notification::notify(
             $user,
             'account_rejected',
-            'ID Verification Update ⚠️',
-            'Your ID verification could not be approved. Reason: ' . $request->reason . '. You can re-submit clear ID documents in Settings.',
+            'Verification Update ⚠️',
+            'Your verification could not be approved. Reason: ' . $request->reason . '. You can update your ID and location details in Settings.',
             ['rejection_reason' => $request->reason]
         );
 
         return redirect()->route('admin.pending-verifications')
-            ->with('success', 'ID verification rejected and user notified.');
+            ->with('success', 'ID/location verification rejected and user notified.');
     }
 
     /**

@@ -109,7 +109,7 @@ class Notification extends Model
                 return $this->user?->isSeller() ? route('seller.dashboard') : route('buyer.dashboard');
 
             case 'account_rejected':
-                return route('settings.index');
+                return route('settings', ['tab' => 'id-verification']);
 
             default:
                 if (!empty($data['offer_id'])) {

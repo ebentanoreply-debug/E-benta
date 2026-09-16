@@ -834,11 +834,13 @@ body.dark-mode .stt-stat {
                     </button>
                     @if(!auth()->user()->isAdmin())
                     <button class="stt-nav-item" onclick="sttSwitch('id-verification', this)">
-                        <i class="fas fa-id-card"></i> ID Verification
+                        <i class="fas fa-id-card"></i> ID & Location
                         @if(auth()->user()->isIdVerified())
                             <span class="stt-nav-badge" style="background: rgba(34,197,94,0.15); color: #16a34a; border: 1px solid rgba(34,197,94,0.3);">Verified</span>
                         @elseif(auth()->user()->isIdPending())
                             <span class="stt-nav-badge" style="background: rgba(245,158,11,0.15); color: #d97706; border: 1px solid rgba(245,158,11,0.3);">Pending</span>
+                        @elseif(auth()->user()->id_verification_status === 'rejected')
+                            <span class="stt-nav-badge" style="background: rgba(239,68,68,0.15); color: #dc2626; border: 1px solid rgba(239,68,68,0.3);">Action Needed</span>
                         @endif
                     </button>
                     <button class="stt-nav-item" onclick="sttSwitch('payments', this)">
@@ -1142,8 +1144,8 @@ body.dark-mode .stt-stat {
                 @if(!auth()->user()->isAdmin())
                 <div id="stt-id-verification" class="stt-panel">
                     <div class="stt-panel-header">
-                        <h2 class="stt-panel-title">Government <span>ID Verification</span></h2>
-                        <p class="stt-panel-sub">Submit a government-issued ID to get a Verified badge for safe transactions.</p>
+                        <h2 class="stt-panel-title">ID & Location <span>Verification</span></h2>
+                        <p class="stt-panel-sub">Submit your valid government ID and confirm your physical pickup location for safe marketplace transactions.</p>
                     </div>
 
                     @php
@@ -1163,7 +1165,7 @@ body.dark-mode .stt-stat {
                                 <p class="stt-card-title">
                                     Status: 
                                     @if($isVerified)
-                                        <span style="color: #16a34a; font-weight: 800;">VERIFIED 🛡️</span>
+                                        <span style="color: #16a34a; font-weight: 800;">VERIFIED 🛡️📍</span>
                                     @elseif($isPending)
                                         <span style="color: #d97706; font-weight: 800;">PENDING REVIEW ⏳</span>
                                     @elseif($isRejected)
@@ -1174,13 +1176,16 @@ body.dark-mode .stt-stat {
                                 </p>
                                 <p class="stt-card-sub">
                                     @if($isVerified)
-                                        Your government ID is verified. You have full access to marketplace trades and trusted badges.
+                                        Your government ID and physical location have been verified. You hold full access to marketplace trades, pickup coordination, and trusted seller badges.
+                                        @if($user->location_verified_at)
+                                            <span class="d-block mt-1 text-muted" style="font-size: 0.78rem;">Verified on {{ $user->location_verified_at->format('M d, Y') }}</span>
+                                        @endif
                                     @elseif($isPending)
-                                        Submitted on {{ $user->id_submitted_at ? $user->id_submitted_at->format('M d, Y') : 'recently' }} — currently queued for administrator review.
+                                        Submitted on {{ $user->id_submitted_at ? $user->id_submitted_at->format('M d, Y') : 'recently' }} — currently queued for administrator review. We are inspecting your ID and cross-referencing your declared location.
                                     @elseif($isRejected)
-                                        Reason: {{ $user->id_rejection_reason ?? 'Document unreadable or expired' }}. Please re-submit a clear document below.
+                                        <strong style="color: #dc2626;">Reason for Rejection:</strong> {{ $user->id_rejection_reason ?? 'Document unreadable, address mismatch, or expired ID' }}. Please review the feedback and re-submit below.
                                     @else
-                                        Upload a valid Philippine ID to build trust with community recyclers and buyers.
+                                        All sellers must verify their identity and physical location before creating active listings on E-benta to prevent fraudulent pickup points and fake listings.
                                     @endif
                                 </p>
                             </div>
@@ -1191,12 +1196,14 @@ body.dark-mode .stt-stat {
                     {{-- Submission form --}}
                     <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data">
                         @csrf
+
+                        <!-- STEP 1: IDENTITY DETAILS -->
                         <div class="stt-card">
                             <div class="stt-card-header">
-                                <div class="stt-card-icon teal"><i class="fas fa-upload"></i></div>
+                                <div class="stt-card-icon teal"><i class="fas fa-id-card"></i></div>
                                 <div>
-                                    <p class="stt-card-title">{{ $isRejected ? 'Re-Submit Valid ID' : ($isPending ? 'Update Submitted Documents' : 'Submit Valid ID') }}</p>
-                                    <p class="stt-card-sub">Acceptable IDs: PhilSys National ID, Driver's License, UMID, Passport, PRC ID, Postal ID, Voter's ID.</p>
+                                    <p class="stt-card-title">1. Government ID Documents</p>
+                                    <p class="stt-card-sub">Philippine National ID (PhilSys), Driver's License, UMID, Passport, PRC, or Postal ID.</p>
                                 </div>
                             </div>
                             <div class="stt-card-body">
@@ -1212,6 +1219,7 @@ body.dark-mode .stt-stat {
                                             <option value="PRC ID" {{ old('id_type', $user->id_type) === 'PRC ID' ? 'selected' : '' }}>PRC ID</option>
                                             <option value="Postal ID" {{ old('id_type', $user->id_type) === 'Postal ID' ? 'selected' : '' }}>Postal ID</option>
                                             <option value="Voter's ID / Certificate" {{ old('id_type', $user->id_type) === "Voter's ID / Certificate" ? 'selected' : '' }}>Voter's ID / Certificate</option>
+                                            <option value="Barangay ID with Address" {{ old('id_type', $user->id_type) === 'Barangay ID with Address' ? 'selected' : '' }}>Barangay ID with Address</option>
                                             <option value="Other Government ID" {{ old('id_type', $user->id_type) === 'Other Government ID' ? 'selected' : '' }}>Other Government ID</option>
                                         </select>
                                         @error('id_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -1226,22 +1234,157 @@ body.dark-mode .stt-stat {
 
                                     <div class="col-md-6">
                                         <label class="stt-label">Front ID Photo <span class="text-danger">*</span></label>
-                                        <input type="file" name="id_photo" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" required>
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear front side photo (JPG, PNG, WEBP max 4MB)</small>
+                                        <input type="file" name="id_photo" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }}>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of front side (JPG, PNG, WEBP max 4MB)</small>
+                                        @if($user->id_photo_url)
+                                            <div class="mt-1 d-flex align-items-center gap-2">
+                                                <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
+                                                <a href="{{ $user->id_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Uploaded Photo</a>
+                                            </div>
+                                        @endif
                                         @error('id_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="stt-label">Selfie with ID <span style="color: #64748b;">(Optional)</span></label>
+                                        <label class="stt-label">Back ID Photo <span class="text-danger">* (Address Side)</span></label>
+                                        <input type="file" name="id_back_photo" class="stt-input @error('id_back_photo') is-invalid @enderror" accept="image/*">
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of back side showing address (JPG, PNG, WEBP max 4MB)</small>
+                                        @if($user->id_back_photo_url)
+                                            <div class="mt-1 d-flex align-items-center gap-2">
+                                                <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID Uploaded</span>
+                                                <a href="{{ $user->id_back_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Back ID</a>
+                                            </div>
+                                        @endif
+                                        @error('id_back_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label class="stt-label">Selfie Holding ID <span style="color: #64748b;">(Optional for faster approval)</span></label>
                                         <input type="file" name="id_selfie" class="stt-input @error('id_selfie') is-invalid @enderror" accept="image/*">
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Holding your ID next to your face for accelerated approval</small>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face</small>
+                                        @if($user->id_selfie_url)
+                                            <div class="mt-1 d-flex align-items-center gap-2">
+                                                <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
+                                                <a href="{{ $user->id_selfie_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Selfie</a>
+                                            </div>
+                                        @endif
                                         @error('id_selfie')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="stt-form-footer">
-                                    <button type="submit" class="stt-btn">
-                                        <i class="fas fa-paper-plane me-1"></i>Submit for Verification
+                        <!-- STEP 2: REGISTERED LOCATION & PICKUP ADDRESS -->
+                        <div class="stt-card">
+                            <div class="stt-card-header">
+                                <div class="stt-card-icon blue"><i class="fas fa-map-location-dot"></i></div>
+                                <div>
+                                    <p class="stt-card-title">2. Physical Location & Pickup Address</p>
+                                    <p class="stt-card-sub">This address will be verified against your identification to confirm your physical selling location.</p>
+                                </div>
+                            </div>
+                            <div class="stt-card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="stt-label">Street Address / Building / Unit No. <span class="text-danger">*</span></label>
+                                        <input type="text" name="address_line_1" class="stt-input @error('address_line_1') is-invalid @enderror"
+                                            value="{{ old('address_line_1', $user->address_line_1 ?? $user->addresses()->first()?->address_line_1) }}"
+                                            placeholder="e.g. Unit 402 Palm Tower, 123 Emerald Ave" required>
+                                        @error('address_line_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="stt-label">Barangay <span class="text-danger">*</span></label>
+                                        <input type="text" name="barangay" class="stt-input @error('barangay') is-invalid @enderror"
+                                            value="{{ old('barangay', $user->barangay) }}" placeholder="e.g. San Antonio" required>
+                                        @error('barangay')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <label class="stt-label">City / Municipality <span class="text-danger">*</span></label>
+                                        <input type="text" name="address_city" class="stt-input @error('address_city') is-invalid @enderror"
+                                            value="{{ old('address_city', $user->address_city ?? $user->addresses()->first()?->city) }}"
+                                            placeholder="e.g. Pasig City" required>
+                                        @error('address_city')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="stt-label">Province / Region <span class="text-danger">*</span></label>
+                                        <input type="text" name="address_province" class="stt-input @error('address_province') is-invalid @enderror"
+                                            value="{{ old('address_province', $user->address_province ?? $user->addresses()->first()?->state) }}"
+                                            placeholder="e.g. Metro Manila" required>
+                                        @error('address_province')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="stt-label">Postal / ZIP Code <span class="text-danger">*</span></label>
+                                        <input type="text" name="postal_code" class="stt-input @error('postal_code') is-invalid @enderror"
+                                            value="{{ old('postal_code', $user->postal_code ?? $user->addresses()->first()?->postal_code) }}"
+                                            placeholder="e.g. 1600" required>
+                                        @error('postal_code')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="stt-label">Pickup Notes & Specific Landmarks <span style="color: #64748b;">(Optional)</span></label>
+                                        <input type="text" name="location_notes" class="stt-input @error('location_notes') is-invalid @enderror"
+                                            value="{{ old('location_notes', $user->location_notes) }}"
+                                            placeholder="e.g. Near San Antonio de Padua Parish, blue gate with bell">
+                                        @error('location_notes')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: PROOF OF ADDRESS (If ID address differs) -->
+                        <div class="stt-card">
+                            <div class="stt-card-header">
+                                <div class="stt-card-icon purple"><i class="fas fa-file-invoice"></i></div>
+                                <div>
+                                    <p class="stt-card-title">3. Proof of Location / Address</p>
+                                    <p class="stt-card-sub">Confirm how your physical location corresponds with your documents.</p>
+                                </div>
+                            </div>
+                            <div class="stt-card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="stt-label">Address Proof Basis <span class="text-danger">*</span></label>
+                                        <select name="proof_of_address_type" class="stt-input @error('proof_of_address_type') is-invalid @enderror" required>
+                                            <option value="id_address_match" {{ old('proof_of_address_type', $user->proof_of_address_type) === 'id_address_match' ? 'selected' : '' }}>
+                                                Address is clearly stated on my submitted ID card
+                                            </option>
+                                            <option value="barangay_certificate" {{ old('proof_of_address_type', $user->proof_of_address_type) === 'barangay_certificate' ? 'selected' : '' }}>
+                                                Barangay Certificate of Residency / Clearance
+                                            </option>
+                                            <option value="utility_bill" {{ old('proof_of_address_type', $user->proof_of_address_type) === 'utility_bill' ? 'selected' : '' }}>
+                                                Utility Bill (Electricity, Water, Internet, Telco)
+                                            </option>
+                                            <option value="lease_contract" {{ old('proof_of_address_type', $user->proof_of_address_type) === 'lease_contract' ? 'selected' : '' }}>
+                                                Commercial / Residential Lease Contract
+                                            </option>
+                                            <option value="business_permit" {{ old('proof_of_address_type', $user->proof_of_address_type) === 'business_permit' ? 'selected' : '' }}>
+                                                Mayor's Permit / DTI / Business Registration
+                                            </option>
+                                        </select>
+                                        @error('proof_of_address_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="stt-label">Supplemental Proof Document <span style="color: #64748b;">(Required if ID address is different)</span></label>
+                                        <input type="file" name="proof_of_address" class="stt-input @error('proof_of_address') is-invalid @enderror" accept="image/*,application/pdf">
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Barangay Cert, Meralco bill, or lease contract (max 4MB)</small>
+                                        @if($user->proof_of_address_url)
+                                            <div class="mt-1 d-flex align-items-center gap-2">
+                                                <span class="badge bg-purple" style="font-size: 0.72rem; background: #9333ea; color: white;"><i class="fas fa-check me-1"></i>Document Attached</span>
+                                                <a href="{{ $user->proof_of_address_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Proof Document</a>
+                                            </div>
+                                        @endif
+                                        @error('proof_of_address')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+
+                                <div class="stt-form-footer mt-4">
+                                    <button type="submit" class="stt-btn" style="padding: 0.8rem 1.75rem; font-size: 0.95rem;">
+                                        <i class="fas fa-paper-plane me-2"></i>{{ $isRejected ? 'Re-Submit ID & Location for Review' : ($isPending ? 'Update Submitted Documents' : 'Submit ID & Location for Verification') }}
                                     </button>
                                 </div>
                             </div>

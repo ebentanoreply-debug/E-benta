@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\PasswordResetToken;
 use App\Models\Notification;
 use App\Models\UserEmailChangeRequest;
+use App\Models\EmailVerification;
 use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
