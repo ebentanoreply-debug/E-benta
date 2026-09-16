@@ -257,7 +257,7 @@ class GoogleAuthController extends Controller
                 'role' => $validated['role'],
                 'business_name' => $validated['business_name'] ?? null,
                 'phone' => $validated['phone'] ?? null,
-                'is_verified' => $validated['role'] === 'seller', // Sellers auto-verified
+                'is_verified' => false,
                 'email_verified_at' => now(), // Google OAuth emails are verified
                 'password' => Hash::make($validated['password']),
             ]);
