@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'E-Benta - The Circular Economy E-Waste Marketplace')
 

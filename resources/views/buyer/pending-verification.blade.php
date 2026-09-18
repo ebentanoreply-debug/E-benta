@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.buyer')
 
 @section('title', 'Account Under Verification - E-Benta')
 

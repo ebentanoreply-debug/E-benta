@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Audit Event #' . $auditLog->id . ' - E-Benta Admin')
 
@@ -40,7 +40,6 @@
 
 @section('content')
 
-@include('admin.sidebar')
 
 <div class="main-content-wrapper">
     <div class="admin-page-container">

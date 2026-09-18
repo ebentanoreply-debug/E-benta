@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.seller')
 
 @section('title', 'Seller Wallet - E-Benta')
 
 @section('content')
-@include('seller.sidebar')
 
 <div class="main-content-wrapper">
     <div style="background:#f8fafc; min-height:100vh; padding-bottom:4rem;">

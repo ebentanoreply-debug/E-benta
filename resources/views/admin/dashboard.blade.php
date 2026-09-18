@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard & Control Center - E-Benta')
 
@@ -315,7 +315,6 @@
 @section('content')
 
 <!-- Include Admin Sidebar -->
-@include('admin.sidebar')
 
 <div class="main-content-wrapper">
     <div class="admin-dashboard-container">

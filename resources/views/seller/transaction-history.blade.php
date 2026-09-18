@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.seller')
 
 @section('title', 'Transaction History - Seller - E-Benta')
 
@@ -622,7 +622,6 @@
     }
 </style>
 
-@include('seller.sidebar')
 <div class="main-content-wrapper">
     <div class="th-wrapper">
         <!-- Header -->

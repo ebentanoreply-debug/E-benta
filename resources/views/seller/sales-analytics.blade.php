@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.seller')
 
 @section('title', 'Sales Analytics - E-Benta')
 
@@ -256,7 +256,6 @@
 
 @section('content')
 
-@include('seller.sidebar')
 
 <div class="main-content-wrapper">
     <div class="sa-wrapper">

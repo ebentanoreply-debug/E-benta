@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->check() && auth()->user()->isSeller() && auth()->id() === \->user_id ? 'layouts.seller' : (auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public'))
 
 @section('title', ($listing->deviceBrand?->name ? $listing->deviceBrand->name . ' ' : '') . ($listing->deviceModel?->model_name ?: ($listing->category ?: ($listing->deviceType?->name ?: 'Hardware'))) . ' - E-Benta Marketplace')
 

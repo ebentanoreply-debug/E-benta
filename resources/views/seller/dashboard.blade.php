@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.seller')
 
 @section('title', ($isRecentView ?? false) ? 'Seller Dashboard - E-Benta' : 'My Inventory - E-Benta')
 
@@ -420,7 +420,6 @@
 @section('content')
 
 <!-- Include Modern Obsidian Seller Sidebar -->
-@include('seller.sidebar')
 
 <div class="main-content-wrapper">
     <div class="seller-dashboard-container">

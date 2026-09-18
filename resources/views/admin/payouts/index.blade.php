@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Payout Requests - Admin - E-Benta')
 
 @section('content')
-@include('admin.sidebar')
 
 <div class="main-content-wrapper" style="margin-left:260px; width:calc(100% - 260px);">
     <div style="background:#f8fafc; min-height:100vh; padding:2rem;">
