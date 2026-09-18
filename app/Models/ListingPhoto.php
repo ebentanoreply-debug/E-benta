@@ -25,10 +25,10 @@ class ListingPhoto extends Model
     }
 
     /**
-     * Get formatted photo URL (resolves relative keys or Cloudflare URLs).
+     * Get formatted photo URL (resolves relative keys or Cloudinary URLs).
      */
     public function getPhotoUrlAttribute($value): ?string
     {
-        return \App\Services\CloudflareStorageService::url($value);
+        return \App\Services\CloudinaryStorageService::url($value);
     }
 }

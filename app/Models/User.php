@@ -419,7 +419,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's avatar URL (Cloudflare R2 CDN or external URL).
+     * Get the user's avatar URL (Cloudinary CDN or external URL).
      */
     public function getAvatarUrlAttribute(): ?string
     {
@@ -427,7 +427,7 @@ class User extends Authenticatable
             return null;
         }
 
-        return \App\Services\CloudflareStorageService::url($this->avatar);
+        return \App\Services\CloudinaryStorageService::url($this->avatar);
     }
 
     /**

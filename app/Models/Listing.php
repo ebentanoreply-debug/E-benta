@@ -168,7 +168,7 @@ class Listing extends Model
 
         return $photos
             ->filter(fn ($url) => is_string($url) && $url !== '')
-            ->map(fn ($url) => \App\Services\CloudflareStorageService::url($url))
+            ->map(fn ($url) => \App\Services\CloudinaryStorageService::url($url))
             ->values()
             ->all();
     }

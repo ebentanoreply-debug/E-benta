@@ -209,9 +209,9 @@ class AuthController extends Controller
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {
-                \App\Services\CloudflareStorageService::delete($user->avatar);
+                \App\Services\CloudinaryStorageService::delete($user->avatar);
             }
-            $validated['avatar'] = \App\Services\CloudflareStorageService::upload($request->file('avatar'), 'avatars');
+            $validated['avatar'] = \App\Services\CloudinaryStorageService::upload($request->file('avatar'), 'avatars');
         } else {
             unset($validated['avatar']);
         }
@@ -233,12 +233,12 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        // Delete previous avatar file from Cloudflare / Storage
+        // Delete previous avatar file from Cloudinary / Storage
         if ($user->avatar) {
-            \App\Services\CloudflareStorageService::delete($user->avatar);
+            \App\Services\CloudinaryStorageService::delete($user->avatar);
         }
 
-        $path = \App\Services\CloudflareStorageService::upload($request->file('avatar'), 'avatars');
+        $path = \App\Services\CloudinaryStorageService::upload($request->file('avatar'), 'avatars');
         $user->update(['avatar' => $path]);
 
         return redirect()->back()->with('success', 'Profile picture updated successfully!');
@@ -252,7 +252,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user->avatar) {
-            \App\Services\CloudflareStorageService::delete($user->avatar);
+            \App\Services\CloudinaryStorageService::delete($user->avatar);
         }
 
         $user->update(['avatar' => null]);

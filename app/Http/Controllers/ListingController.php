@@ -432,8 +432,8 @@ class ListingController extends Controller
         $photos = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $url = \App\Services\CloudflareStorageService::upload($photo, 'listings');
-                $photos[] = \App\Services\CloudflareStorageService::url($url);
+                $url = \App\Services\CloudinaryStorageService::upload($photo, 'listings');
+                $photos[] = \App\Services\CloudinaryStorageService::url($url);
             }
         }
 
@@ -684,7 +684,7 @@ class ListingController extends Controller
         foreach ($deleteIndices as $index) {
             $photo = $currentPhotos->get($index);
             if ($photo) {
-                \App\Services\CloudflareStorageService::delete($photo->photo_url);
+                \App\Services\CloudinaryStorageService::delete($photo->photo_url);
                 $photo->delete();
             }
         }
@@ -701,9 +701,9 @@ class ListingController extends Controller
         $newPhotoRows = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $url = \App\Services\CloudflareStorageService::upload($photo, 'listings');
+                $url = \App\Services\CloudinaryStorageService::upload($photo, 'listings');
                 $newPhotoRows[] = [
-                    'photo_url' => \App\Services\CloudflareStorageService::url($url),
+                    'photo_url' => \App\Services\CloudinaryStorageService::url($url),
                     'sort_order' => $nextSortOrder++,
                 ];
             }

@@ -133,23 +133,23 @@ class SettingsController extends Controller
         ];
 
         if ($request->hasFile('id_photo')) {
-            $uploaded = \App\Services\CloudflareStorageService::upload($request->file('id_photo'), 'verifications');
-            $updateData['id_photo_url'] = \App\Services\CloudflareStorageService::url($uploaded);
+            $uploaded = \App\Services\CloudinaryStorageService::upload($request->file('id_photo'), 'verifications');
+            $updateData['id_photo_url'] = \App\Services\CloudinaryStorageService::url($uploaded);
         }
 
         if ($request->hasFile('id_back_photo')) {
-            $uploadedBack = \App\Services\CloudflareStorageService::upload($request->file('id_back_photo'), 'verifications');
-            $updateData['id_back_photo_url'] = \App\Services\CloudflareStorageService::url($uploadedBack);
+            $uploadedBack = \App\Services\CloudinaryStorageService::upload($request->file('id_back_photo'), 'verifications');
+            $updateData['id_back_photo_url'] = \App\Services\CloudinaryStorageService::url($uploadedBack);
         }
 
         if ($request->hasFile('id_selfie')) {
-            $uploadedSelfie = \App\Services\CloudflareStorageService::upload($request->file('id_selfie'), 'verifications');
-            $updateData['id_selfie_url'] = \App\Services\CloudflareStorageService::url($uploadedSelfie);
+            $uploadedSelfie = \App\Services\CloudinaryStorageService::upload($request->file('id_selfie'), 'verifications');
+            $updateData['id_selfie_url'] = \App\Services\CloudinaryStorageService::url($uploadedSelfie);
         }
 
         if ($request->hasFile('proof_of_address')) {
-            $uploadedProof = \App\Services\CloudflareStorageService::upload($request->file('proof_of_address'), 'verifications');
-            $updateData['proof_of_address_url'] = \App\Services\CloudflareStorageService::url($uploadedProof);
+            $uploadedProof = \App\Services\CloudinaryStorageService::upload($request->file('proof_of_address'), 'verifications');
+            $updateData['proof_of_address_url'] = \App\Services\CloudinaryStorageService::url($uploadedProof);
         }
 
         if ($request->filled('proof_of_address_type')) {
