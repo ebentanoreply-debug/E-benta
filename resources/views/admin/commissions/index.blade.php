@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Platform Revenue & Commissions - E-Benta')
 
@@ -146,7 +146,6 @@
 
 @section('content')
 
-@include('admin.sidebar')
 
 <div class="main-content-wrapper">
     <div class="admin-commissions-container">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->check() && auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : 'layouts.buyer'))
 
 @section('title', 'My Profile - E-Benta')
 

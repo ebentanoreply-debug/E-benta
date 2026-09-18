@@ -761,7 +761,7 @@ class ListingController extends Controller
             $listing->deviceTypes()->sync($categoryIds);
         }
 
-        return redirect()->route('listings.show', $listing)
+        return redirect()->route('seller.listings')
             ->with('success', 'Listing updated successfully');
     }
 

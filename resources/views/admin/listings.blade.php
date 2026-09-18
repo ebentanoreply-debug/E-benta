@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Marketplace Listings Oversight - E-Benta Admin')
 
@@ -77,7 +77,6 @@
 
 @section('content')
 
-@include('admin.sidebar')
 
 <div class="main-content-wrapper">
     <div class="admin-page-container">

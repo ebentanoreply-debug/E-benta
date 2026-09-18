@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : 'layouts.buyer')
 
 @section('title', 'Verify Email Change - E-Benta')
 

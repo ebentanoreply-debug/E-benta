@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public')
 
 @section('title', 'Browse Tech & E-Waste Marketplace - E-Benta')
 
