@@ -4,8 +4,7 @@
 
 @section('content')
 
-<div class="main-content-wrapper">
-    <div style="background:#f8fafc; min-height:100vh; padding-bottom:4rem;">
+<div style="background:#f8fafc; min-height:100vh; padding-bottom:4rem;">
         <div style="background:#09171f; color:#fff; padding:2rem 0; border-bottom:1px solid rgba(13,148,136,.25);">
             <div class="container-fluid px-3 px-md-4">
                 <h1 style="font-weight:900; margin:0;">Seller Wallet</h1>
@@ -114,5 +113,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

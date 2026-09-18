@@ -256,9 +256,7 @@
 
 @section('content')
 
-
-<div class="main-content-wrapper">
-    <div class="sa-wrapper">
+<div class="sa-wrapper">
         
         <!-- 1. HERO HEADER -->
         <header class="sa-hero-header">
@@ -424,7 +422,6 @@
 
         </div>
     </div>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

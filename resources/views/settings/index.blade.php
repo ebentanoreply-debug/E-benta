@@ -728,17 +728,12 @@ body.dark-mode .stt-stat {
 
 @section('content')
 
-{{-- Include Active Role Workspace Sidebar --}}
-@if(auth()->user()->isAdmin())
-    @include('admin.sidebar')
-@elseif(auth()->user()->isSeller())
-    @include('seller.sidebar')
-@else
+{{-- Include Active Role Workspace Sidebar (Admin and Seller already included by layout) --}}
+@if(!auth()->user()->isAdmin() && !auth()->user()->isSeller())
     @include('buyer.sidebar')
 @endif
 
-<div class="main-content-wrapper">
-    <div class="stt-page">
+<div class="stt-page">
 
         {{-- HERO HEADER --}}
         <div class="stt-hero-header">
@@ -1612,7 +1607,6 @@ body.dark-mode .stt-stat {
             </main>
         </div>
     </div>
-</div>
 
 <script>
 function sttSwitch(panel, btn) {

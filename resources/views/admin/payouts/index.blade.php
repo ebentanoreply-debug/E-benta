@@ -4,8 +4,7 @@
 
 @section('content')
 
-<div class="main-content-wrapper" style="margin-left:260px; width:calc(100% - 260px);">
-    <div style="background:#f8fafc; min-height:100vh; padding:2rem;">
+<div style="background:#f8fafc; min-height:100vh; padding:2rem;">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
             <div>
                 <h1 class="fw-bold mb-1">Payout Requests</h1>
@@ -68,5 +67,4 @@
 
         <div class="mt-3">{{ $payouts->links() }}</div>
     </div>
-</div>
 @endsection

@@ -148,9 +148,7 @@
 
 @section('content')
 
-
-<div class="main-content-wrapper">
-    <div class="admin-page-container">
+<div class="admin-page-container">
         
         <!-- HEADER -->
         <div class="admin-module-header">
@@ -516,6 +514,4 @@
 
         </div>
     </div>
-</div>
-
 @endsection

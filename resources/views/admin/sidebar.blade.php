@@ -25,6 +25,27 @@
         opacity: 0;
         pointer-events: none;
     }
+
+    .main-content-wrapper {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 100vh;
+    }
+
+    .main-content-wrapper .main-content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+    }
+
+    @media (max-width: 991.98px) {
+        .main-content-wrapper {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+    }
     
     .admin-sidebar::-webkit-scrollbar {
         width: 4px;

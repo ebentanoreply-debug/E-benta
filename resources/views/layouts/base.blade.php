@@ -13,6 +13,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-green: #0d9488;
+            --emerald-accent: #059669;
+            --dark-bg: #ffffff;
+            --light-green: #0d9488;
+            --text-light: #0f172a;
+            --secondary-color: #f0fdf4;
+            --accent-green: #06b6d4;
+            --muted-label: #64748b;
+        }
+
+        body.dark-mode {
+            --dark-bg: #09171f;
+            --text-light: #f8fafc;
+            --secondary-color: #0f2735;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { overflow-x: clip; max-width: 100vw; min-height: 100vh; }
         @supports not (overflow-x: clip) { html, body { overflow-x: hidden; } }
