@@ -250,7 +250,7 @@ class OfferController extends Controller
                     $offer->id,
                     'pending',
                     'accepted',
-                    "Seller {$offer->listing->seller->name} accepted offer of ₱" . number_format($offer->bid_amount, 2)
+                    "Seller {$offer->listing->seller->name} accepted offer of ₱" . number_format((float) $offer->bid_amount, 2)
                 );
 
                 // Notify buyer that offer was accepted
@@ -258,7 +258,7 @@ class OfferController extends Controller
                     $offer->buyer,
                     'offer_accepted',
                     'Offer Accepted! 🎉',
-                    "Your offer of ₱" . number_format($offer->bid_amount, 2) . " has been accepted. Pickup scheduled for " . $offer->proposed_pickup_date->format('M d, Y'),
+                    "Your offer of ₱" . number_format((float) $offer->bid_amount, 2) . " has been accepted. Pickup scheduled for " . $offer->proposed_pickup_date->format('M d, Y'),
                     [
                         'listing_id' => $offer->listing->id,
                         'offer_id' => $offer->id,
@@ -271,7 +271,7 @@ class OfferController extends Controller
                     'offer_id' => $offer->id,
                     'sender_id' => $offer->listing->user_id,
                     'receiver_id' => $offer->buyer_id,
-                    'message' => "Hello! I have accepted your offer of ₱" . number_format($offer->bid_amount, 2) . ". Let's coordinate the pickup details and location here.",
+                    'message' => "Hello! I have accepted your offer of ₱" . number_format((float) $offer->bid_amount, 2) . ". Let's coordinate the pickup details and location here.",
                     'is_read' => false,
                 ]);
 
@@ -318,7 +318,7 @@ class OfferController extends Controller
                 $offer->buyer,
                 'offer_rejected',
                 'Offer Rejected',
-                "Your offer of ₱" . number_format($offer->bid_amount, 2) . " for the item has been rejected by the seller.",
+                "Your offer of ₱" . number_format((float) $offer->bid_amount, 2) . " for the item has been rejected by the seller.",
                 [
                     'listing_id' => $offer->listing->id,
                     'offer_id' => $offer->id,
@@ -366,7 +366,7 @@ class OfferController extends Controller
 
             $offer->status = 'cancelled';
             $offer->cancellation_reason = $cancellationReason;
-            $offer->responded_at = now();
+            $offer->responded_at = \Illuminate\Support\Carbon::now();
             $offer->save();
 
             if ($isAccepted) {
@@ -460,7 +460,7 @@ class OfferController extends Controller
 
         $successMsg = 'Cash receipt confirmed.';
         if ($commission && (float) $commission->commission_amount > 0) {
-            $successMsg .= ' Platform commission (₱' . number_format($commission->commission_amount, 2) . ') recorded.';
+            $successMsg .= ' Platform commission (₱' . number_format((float) $commission->commission_amount, 2) . ') recorded.';
         }
 
         return redirect()->route('offers.show', $offer)->with('success', $successMsg);
@@ -595,7 +595,7 @@ class OfferController extends Controller
     {
         $user = Auth::user();
 
-        $status = $request->get('status', 'pending');
+        $status = $request->input('status', 'pending');
         $offers = Offer::where('buyer_id', $user->id)
             ->where('status', $status)
             ->with(['listing', 'listing.seller'])
