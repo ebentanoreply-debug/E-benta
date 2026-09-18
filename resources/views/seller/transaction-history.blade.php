@@ -622,8 +622,7 @@
     }
 </style>
 
-<div class="main-content-wrapper">
-    <div class="th-wrapper">
+<div class="th-wrapper">
         <!-- Header -->
         <div class="th-header">
             <div class="container-fluid px-3 px-md-4">
@@ -812,6 +811,4 @@
         </div>
     </div>
 </div>
-</div>
-
 @endsection

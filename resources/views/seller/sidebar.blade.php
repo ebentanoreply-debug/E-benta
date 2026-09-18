@@ -36,6 +36,13 @@
         min-height: calc(100vh - 60px);
     }
 
+    .main-content-wrapper .main-content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+    }
+
     @media (max-width: 991.98px) {
         .main-content-wrapper {
             margin-left: 0 !important;

@@ -314,10 +314,7 @@
 
 @section('content')
 
-<!-- Include Admin Sidebar -->
-
-<div class="main-content-wrapper">
-    <div class="admin-dashboard-container">
+<div class="admin-dashboard-container">
         
         <!-- 1. EXECUTIVE HEADER & ACTIONS -->
         <div class="admin-exec-header">
@@ -706,7 +703,6 @@
 
         </div>
     </div>
-</div>
 
 @endsection
 

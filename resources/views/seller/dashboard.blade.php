@@ -419,10 +419,7 @@
 
 @section('content')
 
-<!-- Include Modern Obsidian Seller Sidebar -->
-
-<div class="main-content-wrapper">
-    <div class="seller-dashboard-container">
+<div class="seller-dashboard-container">
         
         <!-- 1. EXECUTIVE OBSIDIAN HERO HEADER -->
         <header class="seller-hero-header">
@@ -866,5 +863,4 @@
         </div>
 
     </div>
-</div>
 @endsection

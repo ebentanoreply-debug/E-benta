@@ -332,16 +332,11 @@
     }
 </style>
 
-@if(auth()->check() && auth()->user()->isAdmin())
-    @include('admin.sidebar')
-@elseif(auth()->check() && auth()->user()->isSeller())
-    @include('seller.sidebar')
-@elseif(auth()->check())
+@if(auth()->check() && !auth()->user()->isAdmin() && !auth()->user()->isSeller())
     @include('buyer.sidebar')
 @endif
 
-<div class="main-content-wrapper">
-    <div class="al-page">
+<div class="al-page">
         <div class="container">
         <div class="al-hero">
             <div class="al-hero-icon">
@@ -454,6 +449,5 @@
             </div>
         @endif
     </div>
-</div>
 </div>
 @endsection

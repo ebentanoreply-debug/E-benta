@@ -1,10 +1,9 @@
-@extends('layouts.app')
+@extends(auth()->check() && auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : (auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public')))
 
 @section('title', 'Notifications - E-Benta')
 
 @section('content')
-@section('content')
-<div class="main-content-wrapper">
+<div class="notifications-page-container">
     <div class="container-fluid px-3 px-md-4 py-3 py-md-4" style="max-width: 900px; margin: 0 auto;">
         <!-- Header -->
         <div class="notif-header-card">

@@ -146,9 +146,7 @@
 
 @section('content')
 
-
-<div class="main-content-wrapper">
-    <div class="admin-commissions-container">
+<div class="admin-commissions-container">
         
         <!-- Header -->
         <div class="admin-exec-header">
@@ -489,6 +487,5 @@
 
         </div>
     </div>
-</div>
 
 @endsection
