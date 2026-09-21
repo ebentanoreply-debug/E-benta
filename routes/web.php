@@ -30,6 +30,15 @@ use Illuminate\Support\Facades\Schema;
 
 // Public routes
 Route::get('/', function () {
+    if (auth()->check()) {
+        if (auth()->user()->isSeller()) {
+            return redirect()->route('seller.dashboard');
+        }
+        if (auth()->user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+    }
+
     $hasListings = Schema::hasTable('listings');
     $hasUsers = Schema::hasTable('users');
     $hasImpactLogs = Schema::hasTable('impact_logs');

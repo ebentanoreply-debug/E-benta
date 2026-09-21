@@ -1,4 +1,4 @@
-@extends(auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public')
+@extends(auth()->check() && auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : (auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public')))
 
 @section('title', 'Browse Tech & E-Waste Marketplace - E-Benta')
 
