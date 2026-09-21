@@ -1,4 +1,4 @@
-@extends(auth()->check() && auth()->user()->isSeller() && isset($listing) && auth()->id() === $listing->user_id ? 'layouts.seller' : (auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public'))
+@extends(auth()->check() && auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : (auth()->check() && auth()->user()->isBuyer() ? 'layouts.buyer' : 'layouts.public')))
 
 @section('title', ($listing->deviceBrand?->name ? $listing->deviceBrand->name . ' ' : '') . ($listing->deviceModel?->model_name ?: ($listing->category ?: ($listing->deviceType?->name ?: 'Hardware'))) . ' - E-Benta Marketplace')
 
@@ -699,9 +699,21 @@
                                     </button>
                                 @endif
                             </div>
+                        @elseif(auth()->user()->isSeller())
+                            <div class="d-grid gap-2 mb-3">
+                                <div class="alert alert-info py-2 px-3 mb-2 rounded-3 small">
+                                    <i class="fas fa-store me-1"></i>You are viewing this listing in vendor preview mode. Sellers cannot submit purchase offers.
+                                </div>
+                                <a href="{{ route('seller.listings') }}" class="btn btn-outline-secondary rounded-3 py-2 fw-bold">
+                                    <i class="fas fa-boxes-stacked me-1"></i>Back to My Inventory
+                                </a>
+                                <a href="{{ route('seller.dashboard') }}" class="btn btn-outline-primary rounded-3 py-2 fw-bold">
+                                    <i class="fas fa-arrow-left me-1"></i>Return to Seller Studio
+                                </a>
+                            </div>
                         @else
                             <div class="alert alert-secondary py-2 px-3 mb-3 rounded-3 small">
-                                <i class="fas fa-user-lock me-1"></i>Logged in as non-buyer account. Log in with a buyer profile to submit purchase offers.
+                                <i class="fas fa-user-lock me-1"></i>Logged in as staff or administrator. Only verified buyers can submit purchase offers.
                             </div>
                         @endif
                     @else

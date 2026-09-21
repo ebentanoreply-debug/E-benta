@@ -83,9 +83,23 @@
         box-shadow: 0 0 0 3px rgba(13,148,136,0.15);
     }
     .commerce-search-category {
-        background: rgba(0,0,0,0.2); border: none; border-right: 1.5px solid rgba(13,148,136,0.3);
-        color: #cbd5e1; font-size: 0.82rem; font-weight: 700; padding: 0 1rem;
-        cursor: pointer; outline: none; min-width: 130px; max-width: 160px;
+        background: rgba(0,0,0,0.25);
+        border: none;
+        border-right: 1.5px solid rgba(13,148,136,0.3);
+        color: #cbd5e1;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0 1.75rem 0 0.95rem;
+        cursor: pointer;
+        outline: none;
+        min-width: 155px;
+        max-width: 180px;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%232dd4bf'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.65rem center;
+        background-size: 0.75rem;
     }
     .commerce-search-category option { background: #1e293b; }
     .commerce-search-input {
@@ -201,7 +215,7 @@
     <div class="commerce-main-nav">
         <div class="container-fluid px-3 px-lg-4 d-none d-md-flex align-items-center justify-content-between gap-3">
             {{-- Brand --}}
-            <a class="d-flex align-items-center gap-2 text-decoration-none flex-shrink-0" href="/">
+            <a class="d-flex align-items-center gap-2 text-decoration-none flex-shrink-0" href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('seller.dashboard') : (auth()->user()->isAdmin() ? route('admin.dashboard') : route('home'))) : route('home') }}">
                 <div class="commerce-brand-icon"><i class="fas fa-leaf"></i></div>
                 <div class="d-flex flex-column">
                     <span class="commerce-brand-name">E-Benta</span>
@@ -250,9 +264,9 @@
                     {{-- Messages --}}
                     <a href="{{ route('messages.index') }}" class="commerce-action-item" title="Messages & Offers">
                         <i class="fas fa-comment-dots" style="font-size: 1.05rem; color: #38bdf8 !important;"></i>
-                        <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.1;">
-                            <span style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Offers</span>
-                            <span style="font-size: 0.8rem; font-weight: 800; color: #ffffff;">Messages</span>
+                        <div class="d-none d-xl-flex flex-column text-start" style="line-height: 1.15;">
+                            <span style="font-size: 0.65rem; color: #2dd4bf; text-transform: uppercase; font-weight: 800; letter-spacing: 0.3px;">Offers</span>
+                            <span style="font-size: 0.82rem; font-weight: 800; color: #ffffff;">Messages</span>
                         </div>
                         @if($unreadMsgCount > 0)
                             <span class="commerce-badge bg-info text-white">{{ $unreadMsgCount }}</span>
@@ -318,6 +332,8 @@
                                 <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Seller Centre</a></li>
                                 <li><a class="dropdown-item" href="{{ route('seller.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>My Inventory</a></li>
                                 <li><a class="dropdown-item" href="{{ route('listings.create') }}"><i class="fas fa-plus-circle me-2" style="color: #34d399;"></i>List New Tech</a></li>
+                                <li><a class="dropdown-item" href="{{ route('seller.sales-analytics') }}"><i class="fas fa-chart-line me-2" style="color: #fbbf24;"></i>Sales Analytics</a></li>
+                                <li><a class="dropdown-item" href="{{ route('seller.wallet') }}"><i class="fas fa-wallet me-2" style="color: #a78bfa;"></i>Wallet & Payouts</a></li>
                                 <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.08);"></li>
                             @elseif(auth()->user()->isBuyer())
                                 <li><div class="px-3 py-1 text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Buyer Account</div></li>
@@ -363,7 +379,7 @@
         {{-- Mobile Header --}}
         <div class="d-flex d-md-none flex-column gap-2 px-3">
             <div class="d-flex align-items-center justify-content-between">
-                <a class="d-flex align-items-center gap-2 text-decoration-none" href="/">
+                <a class="d-flex align-items-center gap-2 text-decoration-none" href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('seller.dashboard') : (auth()->user()->isAdmin() ? route('admin.dashboard') : route('home'))) : route('home') }}">
                     <div class="commerce-brand-icon" style="width: 32px; height: 32px; font-size: 1rem; border-radius: 0.5rem;"><i class="fas fa-leaf"></i></div>
                     <span class="commerce-brand-name" style="font-size: 1.22rem;">E-Benta</span>
                 </a>
@@ -395,16 +411,34 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="background: #0f172a; border: 1px solid rgba(13,148,136,0.3); border-radius: 0.8rem; min-width: 200px;">
                                 <li class="px-3 py-2 border-bottom text-white fw-bold" style="font-size: 0.85rem; border-color: rgba(255,255,255,0.08) !important;">
-                                    {{ auth()->user()->name }}
-                                    <small class="d-block text-muted text-capitalize" style="font-size: 0.72rem;">{{ auth()->user()->role }}</small>
+                                    <div>{{ auth()->user()->name }}</div>
+                                    <div class="mt-1">
+                                        @if(auth()->user()->isSeller())
+                                            <span class="badge" style="background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.4); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">
+                                                <i class="fas fa-store me-1"></i>Verified Seller
+                                            </span>
+                                        @elseif(auth()->user()->isAdmin())
+                                            <span class="badge" style="background: rgba(14,165,233,0.2); color: #38bdf8; border: 1px solid rgba(14,165,233,0.4); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">
+                                                <i class="fas fa-shield me-1"></i>Administrator
+                                            </span>
+                                        @else
+                                            <span class="badge" style="background: rgba(13,148,136,0.2); color: #2dd4bf; border: 1px solid rgba(13,148,136,0.4); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">
+                                                <i class="fas fa-bag-shopping me-1"></i>Verified Buyer
+                                            </span>
+                                        @endif
+                                    </div>
                                 </li>
                                 @if(auth()->user()->isAdmin())
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2"></i>Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2" style="color: #2dd4bf;"></i>Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>Listings</a></li>
                                 @elseif(auth()->user()->isSeller())
-                                    <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2"></i>Seller Hub</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('listings.create') }}"><i class="fas fa-plus-circle me-2"></i>List Tech</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}"><i class="fas fa-store me-2" style="color: #2dd4bf;"></i>Seller Hub</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('seller.listings') }}"><i class="fas fa-boxes-stacked me-2" style="color: #38bdf8;"></i>My Inventory</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('listings.create') }}"><i class="fas fa-plus-circle me-2" style="color: #34d399;"></i>List Tech</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('seller.sales-analytics') }}"><i class="fas fa-chart-line me-2" style="color: #fbbf24;"></i>Sales Analytics</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('seller.wallet') }}"><i class="fas fa-wallet me-2" style="color: #a78bfa;"></i>Wallet</a></li>
                                 @elseif(auth()->user()->isBuyer())
-                                    <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-bag-shopping me-2"></i>Purchases</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('buyer.dashboard') }}"><i class="fas fa-bag-shopping me-2" style="color: #2dd4bf;"></i>Purchases</a></li>
                                 @endif
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i>Settings</a></li>

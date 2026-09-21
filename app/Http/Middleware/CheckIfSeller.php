@@ -16,6 +16,12 @@ class CheckIfSeller
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check() || !auth()->user()->isSeller()) {
+            if (auth()->check() && auth()->user()->isBuyer()) {
+                return redirect()->route('buyer.dashboard')->with('error', 'Buyers cannot access the seller portal.');
+            }
+            if (auth()->check() && auth()->user()->isAdmin()) {
+                return redirect()->route('admin.dashboard')->with('info', 'Redirected to Admin Dashboard.');
+            }
             return redirect('/')->with('error', 'Only sellers can access this section');
         }
 

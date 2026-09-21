@@ -40,35 +40,77 @@
     .mobile-nav-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid #2dd4bf; }
 </style>
 <nav class="mobile-bottom-nav d-md-none" aria-label="Mobile Bottom Navigation">
-    <a href="{{ route('home') }}" class="mobile-nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
-        <i class="fas fa-house"></i><span>Home</span>
-    </a>
-    <a href="{{ route('listings.index') }}" class="mobile-nav-item {{ request()->routeIs('listings.index') ? 'active' : '' }}">
-        <i class="fas fa-store"></i><span>Explore</span>
-    </a>
-    @if(auth()->check() && auth()->user()->isBuyer())
+    @if(auth()->check() && auth()->user()->isSeller())
+        {{-- Seller Navigation --}}
+        <a href="{{ route('seller.dashboard') }}" class="mobile-nav-item {{ request()->routeIs('seller.dashboard') ? 'active' : '' }}">
+            <i class="fas fa-chart-pie"></i><span>Hub</span>
+        </a>
+        <a href="{{ route('seller.listings') }}" class="mobile-nav-item {{ request()->routeIs('seller.listings') ? 'active' : '' }}">
+            <i class="fas fa-boxes-stacked"></i><span>Inventory</span>
+        </a>
+        <a href="{{ route('listings.create') }}" class="mobile-nav-item mobile-nav-sell" title="List Tech">
+            <div class="mobile-nav-sell-btn"><i class="fas fa-plus"></i></div>
+            <span>List Tech</span>
+        </a>
+        <a href="{{ route('messages.index') }}" class="mobile-nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
+            <div class="position-relative">
+                <i class="fas fa-comment-dots"></i>
+                @if($unreadMsgCount > 0)
+                    <span class="mobile-nav-badge">{{ $unreadMsgCount }}</span>
+                @endif
+            </div>
+            <span>Messages</span>
+        </a>
+        <a href="{{ route('settings') }}" class="mobile-nav-item {{ request()->routeIs('settings*') || request()->routeIs('profile') ? 'active' : '' }}">
+            @if(auth()->user()->avatar)
+                <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="mobile-nav-avatar">
+            @else
+                <i class="fas fa-sliders"></i>
+            @endif
+            <span>Settings</span>
+        </a>
+
+    @elseif(auth()->check() && auth()->user()->isAdmin())
+        {{-- Admin Navigation --}}
+        <a href="{{ route('admin.dashboard') }}" class="mobile-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <i class="fas fa-chart-line"></i><span>Admin</span>
+        </a>
+        <a href="{{ route('admin.listings') }}" class="mobile-nav-item {{ request()->routeIs('admin.listings') ? 'active' : '' }}">
+            <i class="fas fa-boxes-stacked"></i><span>Listings</span>
+        </a>
+        <a href="{{ route('admin.pending-verifications') }}" class="mobile-nav-item mobile-nav-sell" title="Verifications">
+            <div class="mobile-nav-sell-btn"><i class="fas fa-user-check"></i></div>
+            <span>Verify</span>
+        </a>
+        <a href="{{ route('notifications.index') }}" class="mobile-nav-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+            <i class="fas fa-bell"></i><span>Alerts</span>
+        </a>
+        <a href="{{ route('settings') }}" class="mobile-nav-item {{ request()->routeIs('settings*') ? 'active' : '' }}">
+            <i class="fas fa-gear"></i><span>Settings</span>
+        </a>
+
+    @elseif(auth()->check() && auth()->user()->isBuyer())
+        {{-- Buyer Navigation --}}
+        <a href="{{ route('home') }}" class="mobile-nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <i class="fas fa-house"></i><span>Home</span>
+        </a>
+        <a href="{{ route('listings.index') }}" class="mobile-nav-item {{ request()->routeIs('listings.index') ? 'active' : '' }}">
+            <i class="fas fa-store"></i><span>Explore</span>
+        </a>
         <a href="{{ route('buyer.dashboard') }}" class="mobile-nav-item mobile-nav-sell" title="My Orders">
             <div class="mobile-nav-sell-btn"><i class="fas fa-bag-shopping"></i></div>
             <span>Orders</span>
         </a>
-    @elseif(!auth()->check() || auth()->user()->isSeller())
-        <a href="{{ auth()->check() ? route('listings.create') : route('register') }}" class="mobile-nav-item mobile-nav-sell" title="Sell Tech">
-            <div class="mobile-nav-sell-btn"><i class="fas fa-plus"></i></div>
-            <span>Sell</span>
+        <a href="{{ route('messages.index') }}" class="mobile-nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
+            <div class="position-relative">
+                <i class="fas fa-comment-dots"></i>
+                @if($unreadMsgCount > 0)
+                    <span class="mobile-nav-badge">{{ $unreadMsgCount }}</span>
+                @endif
+            </div>
+            <span>Messages</span>
         </a>
-    @endif
-    <a href="{{ auth()->check() ? route('messages.index') : route('login') }}" class="mobile-nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
-        <div class="position-relative">
-            <i class="fas fa-comment-dots"></i>
-            @if(auth()->check() && $unreadMsgCount > 0)
-                <span class="mobile-nav-badge">{{ $unreadMsgCount }}</span>
-            @endif
-        </div>
-        <span>Messages</span>
-    </a>
-    @auth
-        <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isSeller() ? route('seller.dashboard') : route('buyer.dashboard')) }}"
-           class="mobile-nav-item {{ request()->routeIs('*.dashboard') || request()->routeIs('profile') ? 'active' : '' }}">
+        <a href="{{ route('buyer.dashboard') }}" class="mobile-nav-item {{ request()->routeIs('buyer.*') || request()->routeIs('profile') ? 'active' : '' }}">
             @if(auth()->user()->avatar)
                 <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="mobile-nav-avatar">
             @else
@@ -76,9 +118,24 @@
             @endif
             <span>Account</span>
         </a>
+
     @else
+        {{-- Guest Navigation --}}
+        <a href="{{ route('home') }}" class="mobile-nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <i class="fas fa-house"></i><span>Home</span>
+        </a>
+        <a href="{{ route('listings.index') }}" class="mobile-nav-item {{ request()->routeIs('listings.index') ? 'active' : '' }}">
+            <i class="fas fa-store"></i><span>Explore</span>
+        </a>
+        <a href="{{ route('register') }}" class="mobile-nav-item mobile-nav-sell" title="Sell Tech">
+            <div class="mobile-nav-sell-btn"><i class="fas fa-plus"></i></div>
+            <span>Sell</span>
+        </a>
+        <a href="{{ route('login') }}" class="mobile-nav-item {{ request()->routeIs('login') ? 'active' : '' }}">
+            <i class="fas fa-comment-dots"></i><span>Messages</span>
+        </a>
         <a href="{{ route('login') }}" class="mobile-nav-item {{ request()->routeIs('login') ? 'active' : '' }}">
             <i class="fas fa-arrow-right-to-bracket"></i><span>Sign In</span>
         </a>
-    @endauth
+    @endif
 </nav>

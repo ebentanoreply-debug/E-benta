@@ -22,6 +22,11 @@ class ListingController extends Controller
      */
     public function index(Request $request)
     {
+        if (Auth::check() && Auth::user()->isSeller()) {
+            return redirect()->route('seller.listings')
+                ->with('info', 'As a registered seller, your active inventory is managed in the Seller Studio.');
+        }
+
         $query = Listing::where('status', 'available')
             ->with(['seller', 'offers', 'deviceType', 'deviceTypes', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
