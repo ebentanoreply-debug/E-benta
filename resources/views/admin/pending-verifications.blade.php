@@ -10,12 +10,8 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .admin-page-container {
-        background: #09171f;
-    }
-
     .admin-module-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -44,11 +40,6 @@
         position: relative;
     }
 
-    body.dark-mode .admin-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .admin-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 30px rgba(13, 148, 136, 0.12);
@@ -59,7 +50,7 @@
         border: 1.5px solid rgba(13, 148, 136, 0.25);
         border-radius: 0.75rem;
         overflow: hidden;
-        background: #09171f;
+        background: #f1f5f9;
         position: relative;
         cursor: pointer;
         transition: all 0.2s ease;

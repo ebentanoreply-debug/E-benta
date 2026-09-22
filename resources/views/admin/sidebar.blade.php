@@ -9,15 +9,11 @@
         display: flex;
         flex-direction: column;
         z-index: 1040;
-        background: #09171f;
-        border-right: 1px solid rgba(13, 148, 136, 0.2);
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
         transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
         overflow-y: auto;
-    }
-
-    body.dark-mode .admin-sidebar {
-        background: #060e14;
-        border-right-color: rgba(13, 148, 136, 0.25);
+        box-shadow: 2px 0 16px rgba(15, 23, 42, 0.03);
     }
     
     .admin-sidebar.hidden {
@@ -54,7 +50,7 @@
         background: transparent;
     }
     .admin-sidebar::-webkit-scrollbar-thumb {
-        background: rgba(13, 148, 136, 0.3);
+        background: #cbd5e1;
         border-radius: 4px;
     }
     
@@ -63,7 +59,7 @@
         align-items: center;
         gap: 0.85rem;
         padding: 0.75rem 1.4rem;
-        color: #94a3b8;
+        color: #475569;
         text-decoration: none;
         border-left: 3px solid transparent;
         transition: all 0.2s ease;
@@ -72,15 +68,15 @@
     }
     
     .sidebar-link:hover {
-        background: rgba(13, 148, 136, 0.08);
-        color: #ffffff;
+        background: #f8fafc;
+        color: #0d9488;
         padding-left: 1.6rem;
     }
     
     .sidebar-link.active {
-        color: #2dd4bf;
-        background: linear-gradient(90deg, rgba(13, 148, 136, 0.2) 0%, rgba(13, 148, 136, 0.02) 100%);
-        border-left-color: #10b981;
+        color: #0d9488;
+        background: #f0fdfa;
+        border-left-color: #0d9488;
         font-weight: 800;
     }
     
@@ -93,7 +89,7 @@
     
     .sidebar-section-title {
         padding: 1.25rem 1.4rem 0.4rem;
-        color: #64748b;
+        color: #94a3b8;
         font-size: 0.72rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
@@ -107,23 +103,23 @@
         left: 0;
         right: 0;
         height: 58px;
-        background: #060e14;
-        border-bottom: 1px solid rgba(13, 148, 136, 0.25);
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
         z-index: 1030;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     }
 
     .admin-hamburger-btn {
         width: 38px;
         height: 38px;
         border-radius: 10px;
-        background: rgba(13, 148, 136, 0.15);
-        color: #2dd4bf;
-        border: 1px solid rgba(13, 148, 136, 0.35);
+        background: #f8fafc;
+        color: #0d9488;
+        border: 1px solid #e2e8f0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -152,7 +148,7 @@
     }
 
     .admin-brand-title {
-        color: #ffffff;
+        color: #0f172a;
         font-weight: 900;
         font-size: 1.05rem;
         letter-spacing: -0.3px;
@@ -172,9 +168,9 @@
         width: 36px;
         height: 36px;
         border-radius: 8px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -183,9 +179,9 @@
     }
 
     .admin-icon-btn:hover, .admin-icon-btn:active {
-        background: rgba(13, 148, 136, 0.2);
-        color: #2dd4bf;
-        border-color: rgba(13, 148, 136, 0.4);
+        background: #f0fdfa;
+        color: #0d9488;
+        border-color: #99f6e4;
     }
 
     .admin-desktop-toggle-btn {
@@ -196,15 +192,15 @@
         width: 42px;
         height: 42px;
         border-radius: 10px;
-        background: #09171f;
-        border: 1px solid rgba(13, 148, 136, 0.4);
-        color: #2dd4bf;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        color: #0d9488;
         display: none;
         align-items: center;
         justify-content: center;
         font-size: 1.15rem;
         cursor: pointer;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
         transition: all 0.2s ease;
     }
 
@@ -232,7 +228,7 @@
             opacity: 0 !important;
             pointer-events: none !important;
             z-index: 1050 !important;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
         }
         .admin-sidebar.show-mobile {
             transform: translateX(0) !important;
@@ -263,21 +259,21 @@
     </div>
 </div>
 
-<div class="sidebar-backdrop" onclick="closeAdminSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1045; backdrop-filter: blur(4px);"></div>
+<div class="sidebar-backdrop" onclick="closeAdminSidebar()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); z-index: 1045; backdrop-filter: blur(4px);"></div>
 
 <div class="admin-sidebar">
     <!-- Sidebar Brand Header -->
-    <div style="padding: 1.25rem 1.4rem; border-bottom: 1px solid rgba(13, 148, 136, 0.2); display: flex; align-items: center; justify-content: space-between; background: #060e14;">
+    <div style="padding: 1.25rem 1.4rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; background: #ffffff;">
         <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
                 <i class="fas fa-shield-halved" style="color: #ffffff; font-size: 1.1rem;"></i>
             </div>
             <div>
-                <span style="color: #ffffff; font-weight: 900; font-size: 1.05rem; display: block; line-height: 1.15;">E-Benta</span>
-                <span style="color: #10b981; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Admin Center</span>
+                <span style="color: #0f172a; font-weight: 900; font-size: 1.05rem; display: block; line-height: 1.15;">E-Benta</span>
+                <span style="color: #0d9488; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Admin Center</span>
             </div>
         </a>
-        <button type="button" onclick="toggleAdminSidebar()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #94a3b8; width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;" title="Toggle Sidebar">
+        <button type="button" onclick="toggleAdminSidebar()" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;" title="Toggle Sidebar">
             <i class="fas fa-bars"></i>
         </button>
     </div>
@@ -338,10 +334,10 @@
     </nav>
 
     <!-- Sidebar Footer -->
-    <div style="padding: 1rem 1.4rem; border-top: 1px solid rgba(13, 148, 136, 0.2); background: rgba(0, 0, 0, 0.2);">
+    <div style="padding: 1rem 1.4rem; border-top: 1px solid #f1f5f9; background: #ffffff;">
         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
             @csrf
-            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.55rem; background: rgba(239, 68, 68, 0.12); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 0.6rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">
+            <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.55rem; background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; border-radius: 0.6rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </button>

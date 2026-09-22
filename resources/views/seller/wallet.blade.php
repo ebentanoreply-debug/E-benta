@@ -5,10 +5,10 @@
 @section('content')
 
 <div style="background:#f8fafc; min-height:100vh; padding-bottom:4rem;">
-        <div style="background:#09171f; color:#fff; padding:2rem 0; border-bottom:1px solid rgba(13,148,136,.25);">
+        <div style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color:#fff; padding:2rem 0; box-shadow: 0 4px 15px rgba(13,148,136,.12);">
             <div class="container-fluid px-3 px-md-4">
-                <h1 style="font-weight:900; margin:0;">Seller Wallet</h1>
-                <p style="color:#94a3b8; margin:.35rem 0 0;">Track paid sales and request payouts.</p>
+                <h1 style="font-weight:900; margin:0; color: #ffffff;">Seller Wallet</h1>
+                <p style="color:#ccfbf1; margin:.35rem 0 0; font-weight: 500;">Track paid sales and request payouts.</p>
             </div>
         </div>
 

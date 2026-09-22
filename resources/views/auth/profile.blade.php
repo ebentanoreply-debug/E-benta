@@ -409,81 +409,6 @@
         }
     }
 
-    /* === DARK MODE === */
-    body.dark-mode .profile-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .profile-card {
-        background: #2a2a2a;
-        border-color: rgba(6, 182, 212, 0.2);
-    }
-
-    body.dark-mode .profile-card:hover {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    body.dark-mode .card-header-accent {
-        background: rgba(13, 148, 136, 0.15);
-        border-bottom-color: rgba(13, 148, 136, 0.3);
-    }
-
-    body.dark-mode .card-header-accent h5 {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .form-label {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .form-control {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(13, 148, 136, 0.3);
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .form-control:focus {
-        background: rgba(255, 255, 255, 0.12);
-        border-color: #06b6d4;
-    }
-
-    body.dark-mode .form-control:disabled {
-        background: rgba(255, 255, 255, 0.04);
-        color: #64748b;
-    }
-
-    body.dark-mode .form-text {
-        color: #b0b0b0;
-    }
-
-    body.dark-mode .stats-grid {
-        background: rgba(13, 148, 136, 0.1);
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .action-bar {
-        background: rgba(13, 148, 136, 0.08);
-        border-top-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .quick-link {
-        background: #2a2a2a;
-        border-color: rgba(13, 148, 136, 0.15);
-    }
-
-    body.dark-mode .quick-link:hover {
-        background: #333333;
-        box-shadow: 0 8px 24px rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .quick-link-title {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .quick-link-desc {
-        color: #b0b0b0;
-    }
-
     /* Modern profile presentation */
     .profile-wrapper {
         background:
@@ -658,25 +583,6 @@
         .action-bar .btn-action {
             width: 100%;
         }
-    }
-
-    body.dark-mode .card-header-accent {
-        background: #2a2a2a;
-        border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
-
-    body.dark-mode .profile-sidebar-action {
-        color: #e0e0e0;
-        border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
-
-    body.dark-mode .profile-readonly-item {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    body.dark-mode .profile-readonly-item strong {
-        color: #e0e0e0;
     }
 </style>
 

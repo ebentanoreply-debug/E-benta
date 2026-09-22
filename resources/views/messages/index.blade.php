@@ -10,20 +10,11 @@
         padding-bottom: 2.5rem;
     }
 
-    body.dark-mode .inbox-page-wrapper {
-        background: #09171f;
-    }
-
     .inbox-breadcrumb-bar {
         background: #ffffff;
         border-bottom: 1px solid #e2e8f0;
         padding: 0.75rem 0;
         margin-bottom: 1.5rem;
-    }
-
-    body.dark-mode .inbox-breadcrumb-bar {
-        background: #0c1c24;
-        border-bottom-color: rgba(13, 148, 136, 0.2);
     }
 
     .inbox-container {
@@ -40,12 +31,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .inbox-container {
-        background: linear-gradient(135deg, #0f232d 0%, #09171f 100%);
-        border-color: rgba(13, 148, 136, 0.25);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    }
-
     /* Left Column: Conversations List */
     .inbox-sidebar {
         width: 380px;
@@ -54,11 +39,6 @@
         flex-direction: column;
         background: #f8fafc;
         flex-shrink: 0;
-    }
-
-    body.dark-mode .inbox-sidebar {
-        background: rgba(15, 23, 42, 0.6);
-        border-right-color: rgba(255, 255, 255, 0.08);
     }
 
     .inbox-sidebar-header {
@@ -70,11 +50,6 @@
         justify-content: space-between;
     }
 
-    body.dark-mode .inbox-sidebar-header {
-        background: rgba(15, 23, 42, 0.8);
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-    }
-
     .inbox-sidebar-header h4 {
         margin: 0;
         color: #0f172a;
@@ -83,10 +58,6 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-    }
-
-    body.dark-mode .inbox-sidebar-header h4 {
-        color: #ffffff;
     }
 
     .inbox-conversations-list {
@@ -114,19 +85,10 @@
         background: #f1f5f9;
     }
 
-    body.dark-mode .inbox-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
     .inbox-item.active {
         background: #f0fdfa;
         border-color: rgba(13, 148, 136, 0.35);
         box-shadow: 0 2px 10px rgba(13, 148, 136, 0.08);
-    }
-
-    body.dark-mode .inbox-item.active {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
-        border-color: rgba(13, 148, 136, 0.35);
     }
 
     .inbox-item-avatar {
@@ -165,10 +127,6 @@
         text-overflow: ellipsis;
     }
 
-    body.dark-mode .inbox-item-name {
-        color: #e2e8f0;
-    }
-
     .inbox-item-time {
         font-size: 0.72rem;
         color: #64748b;
@@ -187,10 +145,6 @@
         margin-bottom: 0.15rem;
     }
 
-    body.dark-mode .inbox-item-device {
-        color: #2dd4bf;
-    }
-
     .inbox-item-snippet {
         font-size: 0.8rem;
         color: #64748b;
@@ -198,10 +152,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    body.dark-mode .inbox-item-snippet {
-        color: #94a3b8;
     }
 
     .inbox-badge-locked {
@@ -215,12 +165,6 @@
         flex-shrink: 0;
     }
 
-    body.dark-mode .inbox-badge-locked {
-        background: rgba(239, 68, 68, 0.15);
-        color: #fca5a5;
-        border-color: rgba(239, 68, 68, 0.3);
-    }
-
     /* Right Column: Chat Box */
     .inbox-chat-pane {
         flex: 1;
@@ -228,10 +172,6 @@
         flex-direction: column;
         min-width: 0;
         background: #ffffff;
-    }
-
-    body.dark-mode .inbox-chat-pane {
-        background: rgba(15, 23, 42, 0.3);
     }
 
     .inbox-chat-topbar {
@@ -244,11 +184,6 @@
         gap: 1rem;
     }
 
-    body.dark-mode .inbox-chat-topbar {
-        background: rgba(15, 23, 42, 0.8);
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-    }
-
     .inbox-chat-topbar h5 {
         color: #0f172a;
         font-weight: 800;
@@ -256,17 +191,9 @@
         font-size: 1.05rem;
     }
 
-    body.dark-mode .inbox-chat-topbar h5 {
-        color: #ffffff;
-    }
-
     .inbox-chat-topbar small {
         color: #64748b;
         font-size: 0.82rem;
-    }
-
-    body.dark-mode .inbox-chat-topbar small {
-        color: #94a3b8;
     }
 
     .inbox-chat-topbar-info {
@@ -286,12 +213,6 @@
         font-weight: 700;
     }
 
-    body.dark-mode .chat-role-badge {
-        background: rgba(13, 148, 136, 0.2);
-        color: #2dd4bf;
-        border-color: rgba(13, 148, 136, 0.35);
-    }
-
     .inbox-chat-messages {
         flex: 1;
         overflow-y: auto;
@@ -299,19 +220,10 @@
         background: #f8fafc;
     }
 
-    body.dark-mode .inbox-chat-messages {
-        background: transparent;
-    }
-
     .inbox-chat-inputbar {
         padding: 1rem 1.25rem;
         background: #ffffff;
         border-top: 1px solid #e2e8f0;
-    }
-
-    body.dark-mode .inbox-chat-inputbar {
-        background: rgba(15, 23, 42, 0.85);
-        border-top-color: rgba(255, 255, 255, 0.08);
     }
 
     .inbox-empty-state {
@@ -361,11 +273,6 @@
         flex-shrink: 0;
     }
 
-    body.dark-mode .msg-avatar {
-        background: rgba(255, 255, 255, 0.1);
-        color: #cbd5e1;
-    }
-
     .msg-bubble-wrap {
         max-width: 75%;
         display: flex;
@@ -403,12 +310,6 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
 
-    body.dark-mode .bubble-them {
-        background: #334155;
-        color: #f8fafc;
-        border-color: rgba(255, 255, 255, 0.08);
-    }
-
     .msg-time {
         font-size: 0.72rem;
         color: #94a3b8;
@@ -435,12 +336,6 @@
         outline: none;
         transition: border-color 0.2s ease;
         font-family: inherit;
-    }
-
-    body.dark-mode .chat-textarea {
-        background: rgba(30, 41, 59, 0.9);
-        border-color: rgba(255, 255, 255, 0.15);
-        color: #ffffff;
     }
 
     .chat-textarea::placeholder {
@@ -494,12 +389,6 @@
         font-weight: 600;
     }
 
-    body.dark-mode .chat-locked-notice {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
-    }
-
     .chat-empty {
         text-align: center;
         padding: 3rem 1rem;
@@ -523,14 +412,7 @@
         font-weight: 700;
     }
 
-    body.dark-mode .bg-teal-soft {
-        background: rgba(13, 148, 136, 0.15);
-        color: #2dd4bf;
-        border-color: rgba(13, 148, 136, 0.3);
-    }
-
     .text-teal { color: #0d9488; margin-right: 0.4rem; }
-    body.dark-mode .text-teal { color: #2dd4bf; }
 
     @media (max-width: 768px) {
         .inbox-container {
@@ -544,10 +426,6 @@
             max-height: 260px;
             border-right: none;
             border-bottom: 1px solid #e2e8f0;
-        }
-
-        body.dark-mode .inbox-sidebar {
-            border-bottom-color: rgba(255, 255, 255, 0.08);
         }
     }
 </style>

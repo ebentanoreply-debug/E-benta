@@ -284,32 +284,6 @@
         width: 100% !important;
     }
 
-    /* Dark Mode Adjustments */
-    body.dark-mode .catalog-wrapper {
-        background-color: #09171f;
-    }
-    body.dark-mode .catalog-breadcrumb-bar,
-    body.dark-mode .filter-sidebar,
-    body.dark-mode .catalog-toolbar,
-    body.dark-mode .m-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-        color: #e2e8f0;
-    }
-    body.dark-mode .filter-sidebar-title,
-    body.dark-mode .filter-group-title,
-    body.dark-mode .m-card-price {
-        color: #ffffff;
-    }
-    body.dark-mode .filter-link-item {
-        color: #cbd5e1;
-    }
-    body.dark-mode .catalog-sort-select {
-        background: #1e293b;
-        border-color: rgba(13, 148, 136, 0.4);
-        color: #f1f5f9;
-    }
-
     @media (max-width: 576px) {
         .m-card-media {
             height: 140px !important;

@@ -13,13 +13,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .seller-dashboard-container {
-        background-color: #09171f;
-    }
-
     /* Executive Obsidian Hero Header */
     .seller-hero-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -137,11 +133,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .seller-kpi-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .seller-kpi-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(13, 148, 136, 0.12);
@@ -169,10 +160,6 @@
         font-family: 'Outfit', sans-serif;
     }
 
-    body.dark-mode .seller-kpi-val {
-        color: #ffffff;
-    }
-
     /* Main Workspace Panel */
     .seller-panel-card {
         background: #ffffff;
@@ -180,11 +167,6 @@
         border-radius: 1.15rem;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
         overflow: hidden;
-    }
-
-    body.dark-mode .seller-panel-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .seller-panel-toolbar {
@@ -198,11 +180,6 @@
         flex-wrap: wrap;
     }
 
-    body.dark-mode .seller-panel-toolbar {
-        background: #0d1e27;
-        border-bottom-color: rgba(13, 148, 136, 0.2);
-    }
-
     .seller-filter-pill-group {
         display: inline-flex;
         background: #f1f5f9;
@@ -210,11 +187,6 @@
         border-radius: 0.65rem;
         border: 1px solid #e2e8f0;
         gap: 0.25rem;
-    }
-
-    body.dark-mode .seller-filter-pill-group {
-        background: #08141b;
-        border-color: rgba(13, 148, 136, 0.2);
     }
 
     .seller-filter-pill {
@@ -236,12 +208,6 @@
         background: #ffffff;
         color: #0d9488;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    }
-
-    body.dark-mode .seller-filter-pill.active {
-        background: #0f232d;
-        color: #2dd4bf;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
     .seller-search-box {
@@ -270,21 +236,11 @@
         transition: all 0.2s ease;
     }
 
-    body.dark-mode .seller-search-input {
-        background: #08141b;
-        border-color: rgba(13, 148, 136, 0.25);
-        color: #ffffff;
-    }
-
     .seller-search-input:focus {
         background: #ffffff;
         border-color: #0d9488;
         outline: none;
         box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-    }
-
-    body.dark-mode .seller-search-input:focus {
-        background: #0f232d;
     }
 
     /* Table Styles */
@@ -306,27 +262,13 @@
         white-space: nowrap;
     }
 
-    body.dark-mode .seller-table thead th {
-        background: #08141b;
-        color: #94a3b8;
-        border-bottom-color: rgba(13, 148, 136, 0.2);
-    }
-
     .seller-table tbody tr {
         border-bottom: 1px solid #f1f5f9;
         transition: background-color 0.15s ease;
     }
 
-    body.dark-mode .seller-table tbody tr {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-    }
-
     .seller-table tbody tr:hover {
         background-color: rgba(13, 148, 136, 0.03);
-    }
-
-    body.dark-mode .seller-table tbody tr:hover {
-        background-color: rgba(13, 148, 136, 0.08);
     }
 
     .seller-table td {
@@ -348,11 +290,6 @@
         flex-shrink: 0;
     }
 
-    body.dark-mode .seller-item-thumb {
-        background: #08141b;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .seller-item-thumb img {
         width: 100%;
         height: 100%;
@@ -369,16 +306,8 @@
         margin-bottom: 0.2rem;
     }
 
-    body.dark-mode .seller-item-link {
-        color: #ffffff;
-    }
-
     .seller-item-link:hover {
         color: #0d9488;
-    }
-
-    body.dark-mode .seller-item-link:hover {
-        color: #2dd4bf;
     }
 
     .seller-btn-action {
@@ -394,12 +323,6 @@
         border: 1px solid #e2e8f0;
         text-decoration: none;
         transition: all 0.2s ease;
-    }
-
-    body.dark-mode .seller-btn-action {
-        background: #08141b;
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
     }
 
     .seller-btn-action:hover {

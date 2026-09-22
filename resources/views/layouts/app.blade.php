@@ -84,7 +84,7 @@
         @if(request()->routeIs('admin.*') || (auth()->check() && auth()->user()->isAdmin() && request()->routeIs('settings*')))
         body {
             padding-top: 0 !important;
-            background-color: #09171f;
+            background-color: #f8fafc;
         }
         @endif
 

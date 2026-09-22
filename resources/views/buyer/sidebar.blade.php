@@ -18,12 +18,6 @@
         transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, width 0.25s ease;
         box-shadow: 2px 0 16px rgba(15, 23, 42, 0.03);
     }
-
-    body.dark-mode .buyer-sidebar {
-        background: #09171f;
-        border-right-color: rgba(13, 148, 136, 0.2);
-        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
-    }
     
     .buyer-sidebar.hidden {
         transform: translateX(-100%);
@@ -41,9 +35,6 @@
         background: #e2e8f0;
         border-radius: 4px;
     }
-    body.dark-mode .buyer-sidebar::-webkit-scrollbar-thumb {
-        background: rgba(13, 148, 136, 0.25);
-    }
 
     .buyer-nav-section-title {
         padding: 1.25rem 1.25rem 0.4rem;
@@ -53,10 +44,6 @@
         letter-spacing: 0.08em;
         font-weight: 800;
         margin: 0;
-    }
-
-    body.dark-mode .buyer-nav-section-title {
-        color: #64748b;
     }
 
     .buyer-sidebar-link {
@@ -78,28 +65,12 @@
         color: #0d9488;
         padding-left: 1.45rem;
     }
-
-    body.dark-mode .buyer-sidebar-link {
-        color: #94a3b8;
-    }
-
-    body.dark-mode .buyer-sidebar-link:hover {
-        background: rgba(13, 148, 136, 0.08);
-        color: #ffffff;
-        padding-left: 1.45rem;
-    }
     
     .buyer-sidebar-link.active {
         color: #0d9488;
         background-color: #f0fdfa;
         border-left-color: #0d9488;
         font-weight: 700;
-    }
-
-    body.dark-mode .buyer-sidebar-link.active {
-        color: #2dd4bf;
-        background: rgba(13, 148, 136, 0.15);
-        border-left-color: #14b8a6;
     }
     
     .buyer-sidebar-link i {
@@ -130,11 +101,6 @@
         display: flex;
         align-items: center;
         gap: 0.85rem;
-    }
-
-    body.dark-mode .buyer-user-card {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
-        border-bottom-color: rgba(13, 148, 136, 0.2);
     }
 
     .buyer-avatar-circle {

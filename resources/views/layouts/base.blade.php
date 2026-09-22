@@ -24,12 +24,6 @@
             --muted-label: #64748b;
         }
 
-        body.dark-mode {
-            --dark-bg: #09171f;
-            --text-light: #f8fafc;
-            --secondary-color: #0f2735;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { overflow-x: clip; max-width: 100vw; min-height: 100vh; }
         @supports not (overflow-x: clip) { html, body { overflow-x: hidden; } }

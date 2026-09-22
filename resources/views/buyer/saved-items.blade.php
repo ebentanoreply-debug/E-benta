@@ -10,12 +10,8 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .saved-page-container {
-        background: #09171f;
-    }
-
     .saved-hero-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -52,26 +48,12 @@
         border-color: rgba(13, 148, 136, 0.35);
     }
 
-    body.dark-mode .saved-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .saved-card:hover {
-        border-color: rgba(13, 148, 136, 0.45);
-        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
-    }
-
     .saved-image-wrapper {
         position: relative;
         width: 100%;
         height: 190px;
         background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
         overflow: hidden;
-    }
-
-    body.dark-mode .saved-image-wrapper {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
     }
 
     .saved-image-wrapper img {

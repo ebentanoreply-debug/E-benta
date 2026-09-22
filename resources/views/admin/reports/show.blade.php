@@ -10,12 +10,8 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .admin-page-container {
-        background: #09171f;
-    }
-
     .admin-module-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -29,11 +25,6 @@
         border-radius: 1.25rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         overflow: hidden;
-    }
-
-    body.dark-mode .admin-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
     }
 </style>
 @endsection

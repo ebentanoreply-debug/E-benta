@@ -10,12 +10,8 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .admin-page-container {
-        background: #09171f;
-    }
-
     .admin-module-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -42,11 +38,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .admin-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .admin-table th {
         font-size: 0.75rem;
         font-weight: 800;
@@ -58,11 +49,6 @@
         border: none;
     }
 
-    body.dark-mode .admin-table th {
-        background: rgba(0, 0, 0, 0.2);
-        color: #94a3b8;
-    }
-
     .admin-table td {
         padding: 1.1rem 1.25rem;
         vertical-align: middle;
@@ -71,17 +57,8 @@
         color: #334155;
     }
 
-    body.dark-mode .admin-table td {
-        border-top-color: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
-    }
-
     .admin-table tbody tr:hover {
         background: rgba(13, 148, 136, 0.03);
-    }
-
-    body.dark-mode .admin-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.08);
     }
 </style>
 @endsection

@@ -1,4 +1,4 @@
-<!-- Modern Obsidian Seller Sidebar Navigation -->
+<!-- Modern Light Seller Sidebar Navigation -->
 <style>
     :root {
         --seller-sidebar-w: 260px;
@@ -10,18 +10,13 @@
         top: 60px;
         width: var(--seller-sidebar-w);
         height: calc(100vh - 60px);
-        background: #09171f;
-        border-right: 1px solid rgba(13, 148, 136, 0.2);
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
         display: flex;
         flex-direction: column;
         z-index: 1025;
         transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, width 0.25s ease;
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
-    }
-
-    body.dark-mode .seller-sidebar {
-        background: #060e14;
-        border-right-color: rgba(13, 148, 136, 0.25);
+        box-shadow: 2px 0 16px rgba(15, 23, 42, 0.03);
     }
     
     .seller-sidebar.hidden {
@@ -57,14 +52,14 @@
         background: transparent;
     }
     .seller-sidebar::-webkit-scrollbar-thumb {
-        background: rgba(13, 148, 136, 0.3);
+        background: #cbd5e1;
         border-radius: 4px;
     }
     
     .seller-sidebar-header {
         padding: 1.15rem 1.25rem;
-        background: #060e14;
-        border-bottom: 1px solid rgba(13, 148, 136, 0.2);
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -86,11 +81,11 @@
         justify-content: center;
         color: #ffffff;
         font-size: 1.05rem;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
     }
 
     .seller-brand-text h6 {
-        color: #ffffff;
+        color: #0f172a;
         font-weight: 900;
         font-size: 1rem;
         margin: 0;
@@ -99,7 +94,7 @@
     }
 
     .seller-brand-text span {
-        color: #10b981;
+        color: #0d9488;
         font-size: 0.68rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -108,7 +103,7 @@
 
     .sidebar-section-title {
         padding: 1.15rem 1.25rem 0.35rem;
-        color: #64748b;
+        color: #94a3b8;
         font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
@@ -127,7 +122,7 @@
         align-items: center;
         gap: 0.85rem;
         padding: 0.65rem 0.9rem;
-        color: #94a3b8;
+        color: #475569;
         text-decoration: none;
         border-radius: 0.6rem;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -139,15 +134,15 @@
     }
     
     .sidebar-link:hover {
-        background-color: rgba(13, 148, 136, 0.08);
-        color: #ffffff;
+        background-color: #f8fafc;
+        color: #0d9488;
         padding-left: 1.1rem;
     }
     
     .sidebar-link.active {
-        color: #2dd4bf;
-        background: linear-gradient(90deg, rgba(13, 148, 136, 0.2) 0%, rgba(13, 148, 136, 0.02) 100%);
-        border-left-color: #10b981;
+        color: #0d9488;
+        background: #f0fdfa;
+        border-left-color: #0d9488;
         font-weight: 800;
     }
 
@@ -166,19 +161,19 @@
         font-weight: 800;
         padding: 0.2rem 0.55rem;
         border-radius: 1rem;
-        background: rgba(255, 255, 255, 0.08);
-        color: #cbd5e1;
+        background: #e2e8f0;
+        color: #475569;
     }
 
     .sidebar-link.active .badge-counter {
-        background: rgba(16, 185, 129, 0.25);
-        color: #2dd4bf;
+        background: #dcfce7;
+        color: #166534;
     }
 
     .seller-sidebar-footer {
         padding: 0.85rem 1rem;
-        border-top: 1px solid rgba(13, 148, 136, 0.2);
-        background: #060e14;
+        border-top: 1px solid #f1f5f9;
+        background: #ffffff;
         margin-top: auto;
     }
 
@@ -189,9 +184,9 @@
         justify-content: center;
         gap: 0.5rem;
         padding: 0.6rem;
-        background: rgba(239, 68, 68, 0.1);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.25);
+        background: #fef2f2;
+        color: #ef4444;
+        border: 1px solid #fee2e2;
         border-radius: 0.55rem;
         font-weight: 700;
         font-size: 0.84rem;
@@ -203,7 +198,7 @@
         background: #ef4444;
         color: #ffffff;
         border-color: #ef4444;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
     }
 
     @media (max-width: 991.98px) {
@@ -214,7 +209,7 @@
             opacity: 0 !important;
             pointer-events: none !important;
             z-index: 1050 !important;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
         }
         .seller-sidebar.show-mobile {
             transform: translateX(0) !important;

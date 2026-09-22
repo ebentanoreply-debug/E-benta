@@ -13,13 +13,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .admin-dashboard-container {
-        background: #09171f;
-    }
-
     /* Top Executive Header */
     .admin-exec-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.5rem 0 2.25rem;
@@ -113,12 +109,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .admin-kpi-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
     .admin-kpi-card::before {
         content: '';
         position: absolute;
@@ -162,10 +152,6 @@
         word-break: break-word;
     }
 
-    body.dark-mode .admin-kpi-val {
-        color: #ffffff;
-    }
-
     /* Content Cards */
     .admin-card {
         background: #ffffff;
@@ -178,21 +164,12 @@
         overflow: hidden;
     }
 
-    body.dark-mode .admin-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .admin-card-header {
         padding: 1.25rem 1.5rem;
         border-bottom: 1px solid #f1f5f9;
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-    body.dark-mode .admin-card-header {
-        border-bottom-color: rgba(255, 255, 255, 0.08);
     }
 
     .admin-card-title {
@@ -203,10 +180,6 @@
         display: flex;
         align-items: center;
         gap: 0.6rem;
-    }
-
-    body.dark-mode .admin-card-title {
-        color: #ffffff;
     }
 
     /* Table Styles */
@@ -226,11 +199,6 @@
         border: none;
     }
 
-    body.dark-mode .admin-table th {
-        background: rgba(0, 0, 0, 0.2);
-        color: #94a3b8;
-    }
-
     .admin-table td {
         padding: 1rem 1.25rem;
         vertical-align: middle;
@@ -239,17 +207,8 @@
         color: #334155;
     }
 
-    body.dark-mode .admin-table td {
-        border-top-color: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
-    }
-
     .admin-table tbody tr:hover {
         background: rgba(13, 148, 136, 0.03);
-    }
-
-    body.dark-mode .admin-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.08);
     }
 
     /* Verification Queue Item */
@@ -263,16 +222,8 @@
         transition: background 0.2s ease;
     }
 
-    body.dark-mode .admin-queue-item {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-    }
-
     .admin-queue-item:hover {
         background: #f0fdfa;
-    }
-
-    body.dark-mode .admin-queue-item:hover {
-        background: rgba(13, 148, 136, 0.1);
     }
 
     .admin-queue-item:last-child {
@@ -286,10 +237,6 @@
         display: flex;
         align-items: flex-start;
         gap: 0.85rem;
-    }
-
-    body.dark-mode .admin-audit-item {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
     }
 
     .admin-audit-item:last-child {
