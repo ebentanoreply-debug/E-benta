@@ -13,13 +13,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .sa-wrapper {
-        background-color: #09171f;
-    }
-
     /* Executive Obsidian Header */
     .sa-hero-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -88,11 +84,6 @@
         position: relative;
     }
 
-    body.dark-mode .sa-stat-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .sa-stat-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(13, 148, 136, 0.12);
@@ -115,10 +106,6 @@
         margin: 0;
         font-family: 'Outfit', sans-serif;
         letter-spacing: -0.5px;
-    }
-
-    body.dark-mode .sa-stat-value {
-        color: #ffffff;
     }
 
     .sa-money {
@@ -148,11 +135,6 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    body.dark-mode .sa-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .sa-card-header {
         padding: 1.15rem 1.4rem;
         border-bottom: 1px solid rgba(13, 148, 136, 0.15);
@@ -162,21 +144,12 @@
         justify-content: space-between;
     }
 
-    body.dark-mode .sa-card-header {
-        background: #0d1e27;
-        border-bottom-color: rgba(13, 148, 136, 0.2);
-    }
-
     .sa-card-header h5 {
         margin: 0;
         color: #0f172a;
         font-size: 1rem;
         font-weight: 800;
         letter-spacing: -0.2px;
-    }
-
-    body.dark-mode .sa-card-header h5 {
-        color: #ffffff;
     }
 
     .sa-card-body {
@@ -219,12 +192,6 @@
         border-bottom: 1px solid rgba(13, 148, 136, 0.15);
     }
 
-    body.dark-mode .sa-table thead th {
-        background: #08141b;
-        color: #94a3b8;
-        border-bottom-color: rgba(13, 148, 136, 0.2);
-    }
-
     .sa-table td {
         padding: 0.95rem 1.25rem;
         border-bottom: 1px solid #f1f5f9;
@@ -233,17 +200,8 @@
         color: #334155;
     }
 
-    body.dark-mode .sa-table td {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-        color: #e2e8f0;
-    }
-
     .sa-table tbody tr:hover {
         background: rgba(13, 148, 136, 0.03);
-    }
-
-    body.dark-mode .sa-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.08);
     }
 
     @media (max-width: 991.98px) {

@@ -11,13 +11,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .th-wrapper {
-        background: #09171f;
-    }
-
     /* === HEADER SECTION === */
     .th-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: white;
         padding: 2.25rem 0 2rem;
@@ -66,11 +62,6 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    body.dark-mode .th-filter-wrapper {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .th-filter-form {
         display: flex;
         gap: 1rem;
@@ -93,10 +84,6 @@
         margin-bottom: 0.5rem;
     }
 
-    body.dark-mode .th-filter-group label {
-        color: #94a3b8;
-    }
-
     .th-filter-group select {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -106,12 +93,6 @@
         width: 100%;
         font-weight: 600;
         font-size: 0.88rem;
-    }
-
-    body.dark-mode .th-filter-group select {
-        background: #08141b;
-        border-color: rgba(13, 148, 136, 0.25);
-        color: #ffffff;
     }
 
     .th-filter-btn {
@@ -166,11 +147,6 @@
         transition: all 0.25s ease;
     }
 
-    body.dark-mode .th-stat-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .th-stat-card:hover {
         box-shadow: 0 10px 28px rgba(13, 148, 136, 0.12);
         border-color: rgba(13, 148, 136, 0.4);
@@ -186,10 +162,6 @@
         margin: 0;
     }
 
-    body.dark-mode .th-stat-label {
-        color: #94a3b8;
-    }
-
     .th-stat-value {
         font-size: 1.85rem;
         font-weight: 900;
@@ -197,10 +169,6 @@
         font-family: 'Outfit', sans-serif;
         letter-spacing: -0.5px;
         margin: 0.35rem 0 0;
-    }
-
-    body.dark-mode .th-stat-value {
-        color: #ffffff;
     }
     /* === TRANSACTION CARD === */
     .th-transaction-card {
@@ -211,11 +179,6 @@
         margin-bottom: 1.5rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         transition: all 0.25s ease;
-    }
-
-    body.dark-mode .th-transaction-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .th-transaction-card:hover {
@@ -540,37 +503,6 @@
         border-color: rgba(13, 148, 136, 0.12) !important;
         cursor: not-allowed !important;
         opacity: 0.65 !important;
-    }
-
-    /* === DARK MODE === */
-    body.dark-mode .th-wrapper {
-        background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-    }
-
-    body.dark-mode .th-header {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    }
-
-    body.dark-mode .th-stat-card {
-        background: #2a2a2a;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .th-transaction-card {
-        background: rgba(42, 42, 42, 0.5);
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .th-detail-box {
-        background: rgba(13, 148, 136, 0.1) !important;
-    }
-
-    body.dark-mode .th-tx-title {
-        color: #e0e0e0;
-    }
-
-    body.dark-mode .th-tx-info {
-        color: #a0a0a0;
     }
 
     /* === RESPONSIVE === */

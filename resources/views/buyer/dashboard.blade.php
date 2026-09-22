@@ -10,13 +10,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .buyer-dashboard-container {
-        background: #09171f;
-    }
-
     /* === HERO HEADER === */
     .buyer-hero-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.5rem 0 2.25rem;
@@ -56,17 +52,6 @@
         border-color: rgba(13, 148, 136, 0.35);
     }
 
-    body.dark-mode .buyer-metric-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    body.dark-mode .buyer-metric-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-        border-color: rgba(13, 148, 136, 0.5);
-    }
-
     .buyer-metric-icon {
         width: 52px;
         height: 52px;
@@ -87,11 +72,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .buyer-panel-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .buyer-panel-header {
         padding: 1.25rem 1.5rem;
         border-bottom: 1px solid #f1f5f9;
@@ -100,10 +80,6 @@
         justify-content: space-between;
         gap: 1rem;
         flex-wrap: wrap;
-    }
-
-    body.dark-mode .buyer-panel-header {
-        border-bottom-color: rgba(13, 148, 136, 0.2);
     }
 
     /* === ITEM CARDS === */
@@ -125,26 +101,12 @@
         border-color: rgba(13, 148, 136, 0.35);
     }
 
-    body.dark-mode .listing-grid-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .listing-grid-card:hover {
-        border-color: rgba(13, 148, 136, 0.45);
-        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
-    }
-
     .listing-image-wrapper {
         position: relative;
         width: 100%;
         height: 190px;
         background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
         overflow: hidden;
-    }
-
-    body.dark-mode .listing-image-wrapper {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
     }
 
     .listing-image-wrapper img {
@@ -170,11 +132,6 @@
         border: none;
     }
 
-    body.dark-mode .buyer-table th {
-        background: rgba(0, 0, 0, 0.25);
-        color: #94a3b8;
-    }
-
     .buyer-table td {
         padding: 1rem 1.25rem;
         vertical-align: middle;
@@ -183,17 +140,8 @@
         color: #334155;
     }
 
-    body.dark-mode .buyer-table td {
-        border-top-color: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
-    }
-
     .buyer-table tbody tr:hover {
         background: rgba(13, 148, 136, 0.03);
-    }
-
-    body.dark-mode .buyer-table tbody tr:hover {
-        background: rgba(13, 148, 136, 0.08);
     }
 </style>
 @endsection

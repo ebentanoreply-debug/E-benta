@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('body')
-<body style="background-color: #09171f; color: #e2e8f0; padding-top: 0;">
+<body style="background-color: #f8fafc; color: #0f172a; padding-top: 0;">
     <script>
         if (localStorage.getItem('darkModeEnabled')) { localStorage.removeItem('darkModeEnabled'); }
     </script>

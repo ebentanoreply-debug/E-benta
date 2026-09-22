@@ -3,18 +3,17 @@
 @section('title', 'Offer Details - E-Benta')
 
 @section('content')
-<div class="container-fluid">
-    <div class="container-fluid">
-        <!-- Header -->
-    <div class="row mb-5">
+<div class="container-fluid py-4" style="background: #f8fafc; min-height: 100vh;">
+    <!-- Header -->
+    <div class="row mb-4">
         <div class="col-12">
-            <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.15) 0%, rgba(243, 156, 18, 0.05) 100%); border-left: 4px solid #f39c12; padding: 2rem; border-radius: 1rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; padding: 1.75rem 2rem; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                    <div style="background: rgba(243, 156, 18, 0.2); padding: 0.75rem 1rem; border-radius: 0.8rem;">
-                        <i class="fas fa-file-contract" style="color: #f39c12; font-size: 1.8rem;"></i>
+                    <div style="background: #fef3c7; padding: 0.75rem 1rem; border-radius: 0.8rem;">
+                        <i class="fas fa-file-contract" style="color: #d97706; font-size: 1.8rem;"></i>
                     </div>
                     <div>
-                        <h1 style="color: var(--text-light); font-weight: 800; margin: 0; font-size: 2.5rem; letter-spacing: -0.5px;">
+                        <h1 style="color: #0f172a; font-weight: 800; margin: 0; font-size: 2.2rem; letter-spacing: -0.5px;">
                             Offer Details
                         </h1>
                     </div>
@@ -30,9 +29,9 @@
         <!-- Main Content -->
         <div class="col-lg-8">
             <!-- Listing Information Card -->
-            <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.12) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <i class="fas fa-box-open" style="color: #3498db;"></i>
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                <h3 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-box-open" style="color: #0284c7;"></i>
                     Listing Information
                 </h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
@@ -40,7 +39,7 @@
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
                             Item
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1.1rem; margin: 0;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1.1rem; margin: 0;">
                             {{ $offer->listing->category }}
                         </p>
                     </div>
@@ -48,8 +47,8 @@
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
                             Condition
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1.1rem; margin: 0;">
-                            <span style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.1)); color: #3498db; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 0.5rem; border: 1px solid rgba(52, 152, 219, 0.3); display: inline-block;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1.1rem; margin: 0;">
+                            <span style="background: #eff6ff; color: #2563eb; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 0.5rem; border: 1px solid #bfdbfe; display: inline-block;">
                                 {{ ucfirst(str_replace('_', ' ', $offer->listing->condition)) }}
                             </span>
                         </p>
@@ -58,7 +57,7 @@
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
                             Seller
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1.1rem; margin: 0;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1.1rem; margin: 0;">
                             {{ $offer->listing->seller->name }}
                         </p>
                     </div>
@@ -66,7 +65,7 @@
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
                             Asking Price
                         </small>
-                        <p style="color: var(--light-green); font-weight: 800; font-size: 1.3rem; margin: 0;">
+                        <p style="color: #0d9488; font-weight: 800; font-size: 1.3rem; margin: 0;">
                             ₱{{ number_format($offer->listing->suggested_price, 2) }}
                         </p>
                     </div>
@@ -74,41 +73,41 @@
             </div>
 
             <!-- Offer Details Card -->
-            <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.2); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <i class="fas fa-handshake" style="color: var(--light-green);"></i>
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                <h3 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-handshake" style="color: #0d9488;"></i>
                     Your Offer
                 </h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                    <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.15), rgba(243, 156, 18, 0.05)); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #f39c12;">
-                        <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
-                            <i class="fas fa-coins me-1" style="color: #f39c12;"></i>Your Bid
+                    <div style="background: #fffbeb; padding: 1.25rem; border-radius: 0.8rem; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b;">
+                        <small style="color: #92400e; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
+                            <i class="fas fa-coins me-1" style="color: #d97706;"></i>Your Bid
                         </small>
-                        <p style="color: #f39c12; font-weight: 800; font-size: 1.5rem; margin: 0;">
+                        <p style="color: #b45309; font-weight: 800; font-size: 1.5rem; margin: 0;">
                             ₱{{ number_format($offer->bid_amount, 2) }}
                         </p>
                     </div>
-                    <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05)); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #9b59b6;">
-                        <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
-                            <i class="fas fa-wrench me-1" style="color: #9b59b6;"></i>Processing Method
+                    <div style="background: #faf5ff; padding: 1.25rem; border-radius: 0.8rem; border: 1px solid #f3e8ff; border-left: 4px solid #a855f7;">
+                        <small style="color: #6b21a8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
+                            <i class="fas fa-wrench me-1" style="color: #9333ea;"></i>Processing Method
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1rem; margin: 0;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1rem; margin: 0;">
                             {{ ucfirst(str_replace('_', ' ', $offer->proposed_method)) }}
                         </p>
                     </div>
-                    <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05)); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #3498db;">
-                        <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
-                            <i class="fas fa-calendar-alt me-1" style="color: #3498db;"></i>Proposed Pickup
+                    <div style="background: #eff6ff; padding: 1.25rem; border-radius: 0.8rem; border: 1px solid #dbeafe; border-left: 4px solid #3b82f6;">
+                        <small style="color: #1e40af; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
+                            <i class="fas fa-calendar-alt me-1" style="color: #2563eb;"></i>Proposed Pickup
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1rem; margin: 0;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1rem; margin: 0;">
                             {{ $offer->proposed_pickup_date->format('M d, Y H:i') }}
                         </p>
                     </div>
-                    <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(231, 76, 60, 0.05)); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #e74c3c;">
-                        <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
-                            <i class="fas fa-map-marker-alt me-1" style="color: #e74c3c;"></i>Pickup Location
+                    <div style="background: #fef2f2; padding: 1.25rem; border-radius: 0.8rem; border: 1px solid #fee2e2; border-left: 4px solid #ef4444;">
+                        <small style="color: #991b1b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
+                            <i class="fas fa-map-marker-alt me-1" style="color: #dc2626;"></i>Pickup Location
                         </small>
-                        <p style="color: var(--text-light); font-weight: 700; font-size: 1rem; margin: 0;">
+                        <p style="color: #0f172a; font-weight: 700; font-size: 1rem; margin: 0;">
                             {{ $offer->pickup_location }}
                         </p>
                     </div>
@@ -120,34 +119,34 @@
                 @endphp
 
                 <!-- Transparent Commission & Payout Breakdown -->
-                <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(13, 148, 136, 0.35); border-radius: 0.85rem;">
+                <div style="margin-top: 1.5rem; padding: 1.25rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 0.85rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-                        <span style="font-weight: 700; color: var(--text-light); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-calculator" style="color: #10b981;"></i> Transaction Breakdown
+                        <span style="font-weight: 700; color: #0f172a; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-calculator" style="color: #0d9488;"></i> Transaction Breakdown
                         </span>
-                        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: 99px;">
+                        <span style="font-size: 0.75rem; font-weight: 800; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; padding: 0.2rem 0.6rem; border-radius: 99px;">
                             {{ number_format($commBreakdown['rate'], 1) }}% Platform Fee
                         </span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
-                        <div style="background: rgba(0, 0, 0, 0.03); padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
                             <small style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Gross Bid Price</small>
-                            <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-light);">
+                            <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
                                 ₱{{ number_format($commBreakdown['gross_amount'], 2) }}
                             </span>
                         </div>
 
-                        <div style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.15); padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <small style="color: #ef4444; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Platform Commission</small>
-                            <span style="font-size: 1.15rem; font-weight: 800; color: #ef4444;">
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <small style="color: #dc2626; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Platform Commission</small>
+                            <span style="font-size: 1.15rem; font-weight: 800; color: #dc2626;">
                                 -₱{{ number_format($commBreakdown['commission_amount'], 2) }}
                             </span>
                         </div>
 
-                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <small style="color: #10b981; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; display: block;">Seller Take-Home</small>
-                            <span style="font-size: 1.25rem; font-weight: 900; color: #10b981;">
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <small style="color: #16a34a; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; display: block;">Seller Take-Home</small>
+                            <span style="font-size: 1.25rem; font-weight: 900; color: #16a34a;">
                                 ₱{{ number_format($commBreakdown['net_amount'], 2) }}
                             </span>
                         </div>
@@ -159,11 +158,11 @@
                 </div>
 
                 @if($offer->notes)
-                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(13, 148, 136, 0.2);">
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
                         <small style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem;">
                             <i class="fas fa-sticky-note me-1"></i>Notes
                         </small>
-                        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        <p style="color: #0f172a; font-size: 0.95rem; line-height: 1.6; margin: 0;">
                             {{ $offer->notes }}
                         </p>
                     </div>
@@ -172,8 +171,8 @@
 
             <!-- Seller Actions -->
             @if($offer->listing->status === 'withdrawn')
-                <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h5 style="color: #e74c3c; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <div style="background: #ffffff; border: 1px solid #fee2e2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h5 style="color: #dc2626; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                         <i class="fas fa-exclamation-triangle"></i>
                         Listing Withdrawn
                     </h5>
@@ -182,9 +181,9 @@
                     </p>
                 </div>
             @elseif($offer->status === 'pending' && (auth()->user()->isSeller() && auth()->id() === $offer->listing->user_id))
-                <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%); border: 1px solid rgba(243, 156, 18, 0.2); border-left: 4px solid #f39c12; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-gavel" style="color: #f39c12;"></i>
+                <div style="background: #ffffff; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-gavel" style="color: #f59e0b;"></i>
                         Respond to Offer
                     </h4>
                     <div style="display: flex; gap: 1rem;">
@@ -196,7 +195,7 @@
                         </form>
                         <form method="POST" action="{{ route('offers.reject', $offer) }}" style="flex: 1;">
                             @csrf
-                            <button type="submit" style="width: 100%; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.9rem 1.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(231, 76, 60, 0.25)'; this.style.transform='translateY(0)';">
+                            <button type="submit" style="width: 100%; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-weight: 700; padding: 0.9rem 1.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(239, 68, 68, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.25)'; this.style.transform='translateY(0)';">
                                 <i class="fas fa-times me-2"></i>Reject Offer
                             </button>
                         </form>
@@ -227,8 +226,8 @@
 
             <!-- Buyer Payment Method -->
             @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->status === 'accepted')
-                <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(13, 148, 136, 0.25); border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-credit-card" style="color: #0d9488;"></i>
                         Payment Method
                     </h4>
@@ -268,7 +267,7 @@
                             @if($offer->payments()->where('status', 'pending')->exists())
                                 <form method="POST" action="{{ route('offers.verify-payment', $offer) }}">
                                     @csrf
-                                    <button type="submit" style="background: rgba(13, 148, 136, 0.1); border: 1px solid #0d9488; color: #0d9488; font-weight: 700; padding: 0.85rem 1.25rem; border-radius: 0.6rem; cursor: pointer; transition: all 0.2s ease;">
+                                    <button type="submit" style="background: #f0fdfa; border: 1px solid #0d9488; color: #0d9488; font-weight: 700; padding: 0.85rem 1.25rem; border-radius: 0.6rem; cursor: pointer; transition: all 0.2s ease;">
                                         <i class="fas fa-sync-alt me-2"></i>Check Payment Status
                                     </button>
                                 </form>
@@ -286,9 +285,9 @@
 
             <!-- Buyer Cancel Action -->
             @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && !$paymentConfirmed && $offer->canBuyerCancel())
-                <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%); border: 1px solid rgba(231, 76, 60, 0.2); border-left: 4px solid #e74c3c; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-ban" style="color: #e74c3c;"></i>
+                <div style="background: #ffffff; border: 1px solid #fee2e2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-ban" style="color: #ef4444;"></i>
                         Cancel Offer
                     </h4>
                     @if($offer->status === 'pending')
@@ -297,7 +296,7 @@
                         </p>
                         <form method="POST" action="{{ route('offers.cancel', $offer) }}" onsubmit="return confirm('Are you sure you want to cancel this pending offer?');">
                             @csrf
-                            <button type="submit" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25); cursor: pointer;">
+                            <button type="submit" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); cursor: pointer;">
                                 <i class="fas fa-times me-2"></i>Cancel Offer
                             </button>
                         </form>
@@ -305,7 +304,7 @@
                         <p style="color: #64748b; margin-bottom: 1rem;">
                             The seller has accepted your offer. If you need to cancel before handover, please provide a cancellation reason.
                         </p>
-                        <button type="button" class="btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; cursor: pointer; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);" data-bs-toggle="modal" data-bs-target="#cancelOfferModal">
+                        <button type="button" class="btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-weight: 700; padding: 0.85rem 2rem; border: none; border-radius: 0.6rem; cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);" data-bs-toggle="modal" data-bs-target="#cancelOfferModal">
                             <i class="fas fa-times me-2"></i>Cancel Accepted Offer
                         </button>
 
@@ -344,7 +343,7 @@
                                         </div>
                                         <div class="modal-footer" style="border-top: 1px solid rgba(0,0,0,0.08);">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 0.6rem;">Keep Offer</button>
-                                            <button type="submit" class="btn btn-danger" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border: none; font-weight: 700; border-radius: 0.6rem; padding: 0.6rem 1.5rem;">Confirm Cancellation</button>
+                                            <button type="submit" class="btn btn-danger" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; font-weight: 700; border-radius: 0.6rem; padding: 0.6rem 1.5rem;">Confirm Cancellation</button>
                                         </div>
                                     </form>
                                 </div>
@@ -356,9 +355,9 @@
 
             <!-- Pickup Confirmation -->
             @if(($paymentConfirmed || $offer->payment_method === 'cash_pickup') && $offer->status === 'accepted' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->listing->status === 'matched')
-                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); border-left: 4px solid #3498db; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-truck" style="color: #3498db;"></i>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-truck" style="color: #0284c7;"></i>
                         Pickup Confirmation
                     </h4>
                     <p style="color: #64748b; margin-bottom: 1.25rem;">
@@ -366,7 +365,7 @@
                     </p>
                     <form method="POST" action="{{ route('offers.mark-picked-up', $offer) }}">
                         @csrf
-                        <button type="submit" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; font-weight: 700; padding: 0.9rem 2.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(52, 152, 219, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(52, 152, 219, 0.25)'; this.style.transform='translateY(0)';">
+                        <button type="submit" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; font-weight: 700; padding: 0.9rem 2.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(2, 132, 199, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(2, 132, 199, 0.25)'; this.style.transform='translateY(0)';">
                             <i class="fas fa-check me-2"></i>Confirm Pickup
                         </button>
                     </form>
@@ -375,8 +374,8 @@
 
             <!-- Seller Cash Confirmation -->
             @if((auth()->user()->isSeller() && auth()->id() === $offer->listing->user_id) && $offer->status === 'accepted' && $offer->payment_method === 'cash_pickup' && !$paymentConfirmed && $offer->listing->status === 'in_transit')
-                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid #f59e0b; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem;"><i class="fas fa-money-bill-wave me-2" style="color: #f59e0b;"></i>Confirm Cash Received</h4>
+                <div style="background: #ffffff; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 0.75rem;"><i class="fas fa-money-bill-wave me-2" style="color: #f59e0b;"></i>Confirm Cash Received</h4>
                     <p style="color: #64748b; margin-bottom: 1rem;">Confirm only after receiving the cash from the buyer during pickup.</p>
                     <form method="POST" action="{{ route('offers.confirm-cash-received', $offer) }}">
                         @csrf
@@ -386,16 +385,16 @@
             @endif
 
 
-            <!-- Processing Status Form -->
+            <!-- Delivery Confirmation -->
             @if($paymentConfirmed && $offer->listing->status === 'in_transit' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id))
-                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem;">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem;">
-                        <i class="fas fa-box-open" style="color: #3498db;"></i> Confirm Delivery
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; padding: 1.75rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1rem;">
+                        <i class="fas fa-box-open" style="color: #0284c7;"></i> Confirm Delivery
                     </h4>
                     <p style="color: #64748b; margin-bottom: 1.25rem;">Confirm that you received the item before submitting its processing result.</p>
                     <form method="POST" action="{{ route('listings.mark-delivered', $offer->listing) }}">
                         @csrf
-                        <button type="submit" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; font-weight: 700; padding: 0.9rem 2.5rem; border: none; border-radius: 0.6rem; cursor: pointer;">
+                        <button type="submit" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; font-weight: 700; padding: 0.9rem 2.5rem; border: none; border-radius: 0.6rem; cursor: pointer;">
                             <i class="fas fa-check me-2"></i>Confirm Delivery
                         </button>
                     </form>
@@ -404,19 +403,19 @@
 
             <!-- Processing Status Form -->
             @if($paymentConfirmed && $offer->listing->status === 'delivered' && (auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id))
-                <div style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.12) 0%, rgba(155, 89, 182, 0.05) 100%); border: 1px solid rgba(155, 89, 182, 0.2); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                    <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-industry" style="color: #9b59b6;"></i>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+                    <h3 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-industry" style="color: #9333ea;"></i>
                         Report Processing Status
                     </h3>
                     <form method="POST" action="{{ route('offers.update-status', $offer) }}">
                         @csrf
 
                         <div style="margin-bottom: 1.75rem;">
-                            <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
-                                <i class="fas fa-cogs me-2" style="color: #9b59b6;"></i>Processing Method *
+                            <label style="color: #0f172a; font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-cogs me-2" style="color: #9333ea;"></i>Processing Method *
                             </label>
-                            <select name="processing_method" required style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%; transition: all 0.3s ease;">
+                            <select name="processing_method" required style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%; transition: all 0.3s ease;">
                                 <option value="" style="background: #ffffff;">Select processing method</option>
                                 <option value="repair" style="background: #ffffff;">Repaired for Resale</option>
                                 <option value="harvest" style="background: #ffffff;">Components Harvested</option>
@@ -431,12 +430,12 @@
                         @endphp
 
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 1.25rem; margin-top: 2rem; gap: 0.5rem;">
-                            <h4 style="color: var(--text-light); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.75rem;">
-                                <i class="fas fa-chart-pie" style="color: #9b59b6;"></i>
+                            <h4 style="color: #0f172a; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fas fa-chart-pie" style="color: #9333ea;"></i>
                                 Material Recovery
                             </h4>
-                            <span style="font-size: 0.85rem; font-weight: 700; color: #64748b; background: rgba(155, 89, 182, 0.1); border: 1px solid rgba(155, 89, 182, 0.25); padding: 0.35rem 0.85rem; border-radius: 99px;">
-                                Device Weight: <strong style="color: #9b59b6;">{{ number_format($devWeight, 2) }} kg</strong>
+                            <span style="font-size: 0.85rem; font-weight: 700; color: #64748b; background: #f3e8ff; border: 1px solid #e9d5ff; padding: 0.35rem 0.85rem; border-radius: 99px;">
+                                Device Weight: <strong style="color: #9333ea;">{{ number_format($devWeight, 2) }} kg</strong>
                             </span>
                         </div>
 
@@ -445,10 +444,31 @@
                         </p>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                            <div style="background: rgba(0, 0, 0, 0.1); padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #f39c12;">
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #f59e0b;">
                                 <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
-                                    <i class="fas fa-gem me-1" style="color: #f39c12;"></i>Gold Recovered (kg)
+                                    <i class="fas fa-gem me-1" style="color: #f59e0b;"></i>Gold Recovered (kg)
                                 </label>
+                                <input type="number" step="0.001" min="0" max="{{ $devWeight }}" name="recovered_gold" class="recovery-weight-input form-control" value="{{ old('recovered_gold', $offer->recovered_gold ?? 0) }}" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; padding: 0.65rem 0.85rem; border-radius: 0.5rem;">
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #64748b;">
+                                <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
+                                    <i class="fas fa-coins me-1" style="color: #94a3b8;"></i>Silver Recovered (kg)
+                                </label>
+                                <input type="number" step="0.001" min="0" max="{{ $devWeight }}" name="recovered_silver" class="recovery-weight-input form-control" value="{{ old('recovered_silver', $offer->recovered_silver ?? 0) }}" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; padding: 0.65rem 0.85rem; border-radius: 0.5rem;">
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #b45309;">
+                                <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
+                                    <i class="fas fa-circle-notch me-1" style="color: #b45309;"></i>Copper Recovered (kg)
+                                </label>
+                                <input type="number" step="0.001" min="0" max="{{ $devWeight }}" name="recovered_copper" class="recovery-weight-input form-control" value="{{ old('recovered_copper', $offer->recovered_copper ?? 0) }}" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; padding: 0.65rem 0.85rem; border-radius: 0.5rem;">
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 0.8rem; border-left: 3px solid #0284c7;">
+                                <label style="color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.75rem; font-size: 0.85rem;">
+                                    <i class="fas fa-cubes me-1" style="color: #0284c7;"></i>Plastic / Other Recovered (kg)
+                                </label>
+                                <input type="number" step="0.001" min="0" max="{{ $devWeight }}" name="recovered_plastics" class="recovery-weight-input form-control" value="{{ old('recovered_plastics', $offer->recovered_plastics ?? 0) }}" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; padding: 0.65rem 0.85rem; border-radius: 0.5rem;">
+                            </div>
+                        </div>
                                 <input type="number" name="material_breakdown[0][weight]" class="material-weight-input" step="0.0001" min="0" max="{{ $devWeight }}" value="{{ old('material_breakdown.0.weight', 0) }}" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(155, 89, 182, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem; width: 100%;">
                                 <input type="hidden" name="material_breakdown[0][type]" value="gold">
                             </div>
@@ -531,13 +551,13 @@
         <!-- Sidebar -->
         <div class="col-lg-4">
             <!-- Status Card -->
-            <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.12) 0%, rgba(243, 156, 18, 0.05) 100%); border: 1px solid rgba(243, 156, 18, 0.2); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                <h3 style="color: var(--text-light); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
-                    <i class="fas fa-circle-info" style="color: #f39c12;"></i>Status
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                <h3 style="color: #0f172a; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+                    <i class="fas fa-circle-info" style="color: #d97706;"></i>Status
                 </h3>
                 <div style="margin-bottom: 1rem;">
                     @if($offer->status === 'accepted')
-                        <span style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); color: var(--light-green); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(46, 204, 113, 0.3); display: inline-block; font-size: 1.15rem;">
+                        <span style="background: #ecfdf5; color: #047857; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid #a7f3d0; display: inline-block; font-size: 1.15rem;">
                             @if(!$offer->payment_method)
                                 <i class="fas fa-hand-pointer me-2"></i>Choose Payment
                             @elseif(!$paymentConfirmed && $offer->payment_method === 'cash_pickup' && $offer->listing->status === 'in_transit')
@@ -555,15 +575,15 @@
                             @endif
                         </span>
                     @elseif($offer->status === 'completed')
-                        <span style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); color: var(--light-green); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(46, 204, 113, 0.3); display: inline-block; font-size: 1.15rem;">
+                        <span style="background: #ecfdf5; color: #047857; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid #a7f3d0; display: inline-block; font-size: 1.15rem;">
                             <i class="fas fa-check-circle me-2"></i>Completed
                         </span>
                     @elseif($offer->status === 'pending')
-                        <span style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.2), rgba(243, 156, 18, 0.1)); color: #f39c12; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(243, 156, 18, 0.3); display: inline-block; font-size: 1.15rem;">
+                        <span style="background: #fffbeb; color: #b45309; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid #fde68a; display: inline-block; font-size: 1.15rem;">
                             <i class="fas fa-hourglass-half me-2"></i>Pending
                         </span>
                     @else
-                        <span style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1)); color: #e74c3c; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid rgba(231, 76, 60, 0.3); display: inline-block; font-size: 1.15rem;">
+                        <span style="background: #fef2f2; color: #b91c1c; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.8rem; border: 1px solid #fecaca; display: inline-block; font-size: 1.15rem;">
                             <i class="fas fa-times-circle me-2"></i>{{ ucfirst($offer->status) }}
                         </span>
                     @endif
@@ -577,17 +597,17 @@
 
             <!-- Timeline -->
             @if(in_array($offer->status, ['accepted', 'completed']))
-                <div style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.12) 0%, rgba(52, 152, 219, 0.05) 100%); border: 1px solid rgba(52, 152, 219, 0.2); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-timeline" style="color: #3498db;"></i>Timeline
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-timeline" style="color: #0284c7;"></i>Timeline
                     </h4>
                     <div style="position: relative; padding-left: 1.75rem;">
                         <!-- Offer Accepted -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); border: 2px solid var(--light-green); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-check" style="color: var(--light-green); font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: #ecfdf5; border: 2px solid #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check" style="color: #059669; font-size: 0.75rem;"></i>
                             </div>
-                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Offer Accepted</h6>
+                            <h6 style="color: #0f172a; font-weight: 700; margin: 0;">Offer Accepted</h6>
                             <small style="color: #64748b; display: block; margin-top: 0.25rem;">
                                 {{ $offer->responded_at?->format('M d, Y') }}
                             </small>
@@ -595,10 +615,10 @@
 
                         <!-- Payment Confirmed -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($paymentConfirmed) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($paymentConfirmed) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas @if($paymentConfirmed) fa-check @else fa-circle @endif" style="color: @if($paymentConfirmed) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: @if($paymentConfirmed) #ecfdf5 @else #f1f5f9 @endif; border: 2px solid @if($paymentConfirmed) #10b981 @else #cbd5e1 @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($paymentConfirmed) fa-check @else fa-circle @endif" style="color: @if($paymentConfirmed) #059669 @else #94a3b8 @endif; font-size: 0.75rem;"></i>
                             </div>
-                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Payment Confirmed</h6>
+                            <h6 style="color: #0f172a; font-weight: 700; margin: 0;">Payment Confirmed</h6>
                             <small style="color: #64748b; display: block; margin-top: 0.25rem;">
                                 @if($paymentConfirmed)
                                     {{ $offer->payment_method === 'cash_pickup' ? $offer->cash_received_at?->format('M d, Y') : $paidPayment->paid_at?->format('M d, Y') }}
@@ -612,10 +632,10 @@
 
                         <!-- Item Pickup -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($offer->listing->picked_up_at) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($offer->listing->picked_up_at) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas @if($offer->listing->picked_up_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->picked_up_at) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: @if($offer->listing->picked_up_at) #ecfdf5 @else #f1f5f9 @endif; border: 2px solid @if($offer->listing->picked_up_at) #10b981 @else #cbd5e1 @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($offer->listing->picked_up_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->picked_up_at) #059669 @else #94a3b8 @endif; font-size: 0.75rem;"></i>
                             </div>
-                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Item Picked Up</h6>
+                            <h6 style="color: #0f172a; font-weight: 700; margin: 0;">Item Picked Up</h6>
                             @if($offer->listing->picked_up_at)
                                 <small style="color: #64748b; display: block; margin-top: 0.25rem;">
                                     {{ $offer->listing->picked_up_at->format('M d, Y') }}
@@ -629,10 +649,10 @@
 
                         <!-- Delivery Confirmed -->
                         <div style="margin-bottom: 1.75rem; position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($offer->listing->delivered_at) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($offer->listing->delivered_at) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas @if($offer->listing->delivered_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->delivered_at) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: @if($offer->listing->delivered_at) #ecfdf5 @else #f1f5f9 @endif; border: 2px solid @if($offer->listing->delivered_at) #10b981 @else #cbd5e1 @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($offer->listing->delivered_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->delivered_at) #059669 @else #94a3b8 @endif; font-size: 0.75rem;"></i>
                             </div>
-                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Delivery Confirmed</h6>
+                            <h6 style="color: #0f172a; font-weight: 700; margin: 0;">Delivery Confirmed</h6>
                             <small style="color: #64748b; display: block; margin-top: 0.25rem;">
                                 {{ $offer->listing->delivered_at ? $offer->listing->delivered_at->format('M d, Y') : 'Available after pickup' }}
                             </small>
@@ -640,10 +660,10 @@
 
                         <!-- Processing Complete -->
                         <div style="position: relative;">
-                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, @if($offer->listing->processed_at) rgba(46, 204, 113, 0.2) @else rgba(164, 184, 181, 0.2) @endif, rgba(164, 184, 181, 0.1)); border: 2px solid @if($offer->listing->processed_at) var(--light-green) @else #64748b @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas @if($offer->listing->processed_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->processed_at) var(--light-green) @else #64748b @endif; font-size: 0.75rem;"></i>
+                            <div style="position: absolute; left: -1.75rem; top: 0.25rem; width: 1.5rem; height: 1.5rem; background: @if($offer->listing->processed_at) #ecfdf5 @else #f1f5f9 @endif; border: 2px solid @if($offer->listing->processed_at) #10b981 @else #cbd5e1 @endif; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas @if($offer->listing->processed_at) fa-check @else fa-circle @endif" style="color: @if($offer->listing->processed_at) #059669 @else #94a3b8 @endif; font-size: 0.75rem;"></i>
                             </div>
-                            <h6 style="color: var(--text-light); font-weight: 700; margin: 0;">Processing Complete</h6>
+                            <h6 style="color: #0f172a; font-weight: 700; margin: 0;">Processing Complete</h6>
                             @if($offer->listing->processed_at)
                                 <small style="color: #64748b; display: block; margin-top: 0.25rem;">
                                     {{ $offer->listing->processed_at->format('M d, Y') }}
@@ -661,14 +681,14 @@
             <!-- Report Section -->
             @auth
                 @if(auth()->id() !== $offer->listing->user_id && auth()->id() !== $offer->buyer_id)
-                    <div style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.12) 0%, rgba(231, 76, 60, 0.05) 100%); border: 1px solid rgba(231, 76, 60, 0.2); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                        <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <i class="fas fa-flag" style="color: #e74c3c;"></i>Report Offer
+                    <div style="background: #ffffff; border: 1px solid #fee2e2; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                        <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-flag" style="color: #ef4444;"></i>Report Offer
                         </h4>
                         <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.95rem;">
                             Found something suspicious? Help us keep the marketplace safe by reporting this offer.
                         </p>
-                        <button type="button" class="btn w-100" data-bs-toggle="modal" data-bs-target="#reportOfferModal" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.3), rgba(231, 76, 60, 0.2)); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); font-weight: 700; padding: 0.9rem 1.5rem; border-radius: 0.6rem; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(231, 76, 60, 0.4)';" onmouseout="this.style.backgroundColor='rgba(231, 76, 60, 0.3)';">
+                        <button type="button" class="btn w-100" data-bs-toggle="modal" data-bs-target="#reportOfferModal" style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; font-weight: 700; padding: 0.9rem 1.5rem; border-radius: 0.6rem; transition: all 0.3s ease;">
                             <i class="fas fa-exclamation-triangle me-2"></i>Report This Offer
                         </button>
                     </div>
@@ -677,9 +697,9 @@
 
             <!-- Review Section -->
             @if(in_array($offer->status, ['accepted', 'completed']) && (auth()->id() === $offer->buyer_id || auth()->id() === $offer->listing->user_id))
-                <div style="background: linear-gradient(135deg, rgba(241, 196, 15, 0.12) 0%, rgba(241, 196, 15, 0.05) 100%); border: 1px solid rgba(241, 196, 15, 0.2); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                    <h4 style="color: var(--text-light); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-star" style="color: #f1c40f;"></i>Share Your Feedback
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-star" style="color: #f59e0b;"></i>Share Your Feedback
                     </h4>
                     @php
                         $hasReviewed = auth()->user()->reviewsGiven()
@@ -688,19 +708,19 @@
                     @endphp
                     
                     @if($hasReviewed)
-                        <div style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1)); border-left: 3px solid var(--light-green); padding: 1rem; border-radius: 0.6rem;">
-                            <p style="color: #27ae60; margin: 0; font-weight: 600;">
+                        <div style="background: #ecfdf5; border-left: 3px solid #10b981; padding: 1rem; border-radius: 0.6rem;">
+                            <p style="color: #047857; margin: 0; font-weight: 600;">
                                 <i class="fas fa-check-circle me-2"></i>You've already reviewed this transaction
                             </p>
                         </div>
                     @else
                         <p style="color: #64748b; margin-bottom: 1.5rem;">
                             Help build trust in our marketplace by sharing your experience with 
-                            <strong style="color: var(--text-light);">
+                            <strong style="color: #0f172a;">
                                 {{ auth()->id() === $offer->buyer_id ? $offer->listing->seller->name : $offer->buyer->name }}
                             </strong>
                         </p>
-                        <a href="{{ route('reviews.create', $offer) }}" class="btn" style="width: 100%; background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: #ffffff; border: none; font-weight: 700; padding: 0.9rem 1.5rem; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(241, 196, 15, 0.25); cursor: pointer; display: block; text-align: center;" onmouseover="this.style.boxShadow='0 8px 20px rgba(241, 196, 15, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(241, 196, 15, 0.25)'; this.style.transform='translateY(0)';">
+                        <a href="{{ route('reviews.create', $offer) }}" class="btn" style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; border: none; font-weight: 700; padding: 0.9rem 1.5rem; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); cursor: pointer; display: block; text-align: center;">
                             <i class="fas fa-pen-fancy me-2"></i>Write a Review
                         </a>
                     @endif
@@ -714,14 +734,14 @@
 <style>
 select:focus,
 input:focus {
-    background: rgba(255, 255, 255, 0.12) !important;
-    border-color: rgba(155, 89, 182, 0.4) !important;
-    color: var(--text-light) !important;
-    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.15) !important;
+    background: #ffffff !important;
+    border-color: #0d9488 !important;
+    color: #0f172a !important;
+    box-shadow: 0 0 0 0.2rem rgba(13, 148, 136, 0.15) !important;
 }
 
 input::placeholder {
-    color: #7f9e9a;
+    color: #94a3b8;
 }
 
 input,
@@ -731,44 +751,44 @@ select {
 </style>
 
 <!-- Report Offer Modal -->
-<div class="modal fade" id="reportOfferModal" tabindex="-1" style="backdrop-filter: blur(5px);">
+<div class="modal fade" id="reportOfferModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 40, 24, 0.95) 0%, rgba(15, 40, 24, 0.8) 100%); border: 1px solid rgba(46, 204, 113, 0.2); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);">
-            <div class="modal-header" style="border-bottom: 1px solid rgba(46, 204, 113, 0.2); padding: 2rem;">
-                <h5 class="modal-title" style="color: var(--text-light); font-weight: 800; font-size: 1.3rem;">
-                    <i class="fas fa-flag me-2" style="color: #e74c3c;"></i>Report This Offer
+        <div class="modal-content" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border-radius: 1rem;">
+            <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.5rem 2rem;">
+                <h5 class="modal-title" style="color: #0f172a; font-weight: 800; font-size: 1.25rem;">
+                    <i class="fas fa-flag me-2" style="color: #ef4444;"></i>Report This Offer
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0.8); opacity: 0.6;"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST" action="{{ route('reports.store') }}">
                 @csrf
                 <input type="hidden" name="id" value="{{ $offer->id }}">
                 <input type="hidden" name="type" value="offer">
-                <div class="modal-body" style="padding: 2rem; color: #64748b;">
+                <div class="modal-body" style="padding: 2rem; color: #475569;">
                     <div class="mb-3">
-                        <label style="color: var(--text-light); font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; display: block;">Report Reason</label>
-                        <select name="reason" class="form-select" required style="background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <option value="" style="background: #1a2e24; color: var(--text-light);">Select a reason...</option>
-                            <option value="scam_fraud" style="background: #1a2e24; color: var(--text-light);">Fraudulent Offer</option>
-                            <option value="suspicious_behavior" style="background: #1a2e24; color: var(--text-light);">Suspicious Activity</option>
-                            <option value="false_information" style="background: #1a2e24; color: var(--text-light);">Price Manipulation</option>
-                            <option value="inappropriate_content" style="background: #1a2e24; color: var(--text-light);">Attempting Off-Platform Deal</option>
-                            <option value="other" style="background: #1a2e24; color: var(--text-light);">Other</option>
+                        <label style="color: #0f172a; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; display: block;">Report Reason</label>
+                        <select name="reason" class="form-select" required style="background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                            <option value="" style="color: #94a3b8;">Select a reason...</option>
+                            <option value="scam_fraud">Fraudulent Offer</option>
+                            <option value="suspicious_behavior">Suspicious Activity</option>
+                            <option value="false_information">Price Manipulation</option>
+                            <option value="inappropriate_content">Attempting Off-Platform Deal</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label style="color: var(--text-light); font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; display: block;">Details</label>
-                        <textarea name="description" class="form-control" rows="4" required placeholder="Please provide details about your report..." style="background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; resize: vertical;"></textarea>
+                        <label style="color: #0f172a; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; display: block;">Details</label>
+                        <textarea name="description" class="form-control" rows="4" required placeholder="Please provide details about your report..." style="background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; padding: 0.75rem 1rem; border-radius: 0.6rem; resize: vertical;"></textarea>
                     </div>
-                    <div style="background: rgba(46, 204, 113, 0.1); border-left: 3px solid var(--light-green); padding: 1rem; border-radius: 0.6rem;">
-                        <small style="color: #64748b; display: block; line-height: 1.6;">
-                            <i class="fas fa-info-circle me-1" style="color: var(--light-green);"></i>Your report will be reviewed by our moderation team. Please provide detailed information to help us address the issue quickly.
+                    <div style="background: #f0fdf4; border-left: 3px solid #10b981; padding: 1rem; border-radius: 0.6rem;">
+                        <small style="color: #166534; display: block; line-height: 1.6;">
+                            <i class="fas fa-info-circle me-1" style="color: #10b981;"></i>Your report will be reviewed by our moderation team. Please provide detailed information to help us address the issue quickly.
                         </small>
                     </div>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid rgba(46, 204, 113, 0.2); padding: 1.5rem; gap: 1rem;">
-                    <button type="button" class="btn" data-bs-dismiss="modal" style="background: rgba(255, 255, 255, 0.08); color: var(--text-light); border: 1px solid rgba(46, 204, 113, 0.3); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.6rem; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.12)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.08)';">Cancel</button>
-                    <button type="submit" class="btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; font-weight: 700; padding: 0.75rem 1.5rem; border: none; border-radius: 0.6rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);" onmouseover="this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(231, 76, 60, 0.2)'; this.style.transform='translateY(0)';">Submit Report</button>
+                <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 1.25rem 2rem; gap: 0.75rem;">
+                    <button type="button" class="btn" data-bs-dismiss="modal" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.6rem;">Cancel</button>
+                    <button type="submit" class="btn" style="background: #ef4444; color: white; font-weight: 600; padding: 0.75rem 1.5rem; border: none; border-radius: 0.6rem; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);">Submit Report</button>
                 </div>
             </form>
         </div>

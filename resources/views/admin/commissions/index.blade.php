@@ -10,13 +10,9 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .admin-commissions-container {
-        background: #09171f;
-    }
-
     /* Executive Top Header */
     .admin-exec-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.5rem 0 2.25rem;
@@ -50,12 +46,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .admin-kpi-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
     .admin-kpi-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 30px rgba(13, 148, 136, 0.12);
@@ -83,21 +73,12 @@
         word-break: break-word;
     }
 
-    body.dark-mode .admin-kpi-val {
-        color: #ffffff;
-    }
-
     .admin-card {
         background: #ffffff;
         border: 1px solid rgba(13, 148, 136, 0.15);
         border-radius: 1.25rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         overflow: hidden;
-    }
-
-    body.dark-mode .admin-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .admin-card-header {
@@ -107,11 +88,6 @@
         justify-content: space-between;
         align-items: center;
         background: #ffffff;
-    }
-
-    body.dark-mode .admin-card-header {
-        background: #0f232d;
-        border-bottom-color: rgba(255, 255, 255, 0.08);
     }
 
     .table th {
@@ -125,21 +101,10 @@
         padding: 0.85rem 1rem;
     }
 
-    body.dark-mode .table th {
-        background: #09171f;
-        color: #94a3b8;
-        border-bottom-color: rgba(13, 148, 136, 0.25);
-    }
-
     .table td {
         padding: 1rem;
         vertical-align: middle;
         border-bottom: 1px solid #f1f5f9;
-    }
-
-    body.dark-mode .table td {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-        color: #e2e8f0;
     }
 </style>
 @endsection

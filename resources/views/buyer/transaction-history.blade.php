@@ -10,12 +10,8 @@
         padding-bottom: 4rem;
     }
 
-    body.dark-mode .th-page-container {
-        background: #09171f;
-    }
-
     .th-hero-header {
-        background: linear-gradient(135deg, #09171f 0%, #0d2833 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         border-bottom: 1px solid rgba(13, 148, 136, 0.25);
         color: #ffffff;
         padding: 2.25rem 0 2rem;
@@ -42,11 +38,6 @@
         overflow: hidden;
     }
 
-    body.dark-mode .th-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
-    }
-
     .th-metric-card {
         background: #ffffff;
         border: 1px solid rgba(13, 148, 136, 0.15);
@@ -54,11 +45,6 @@
         padding: 1.25rem 1.5rem;
         box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
         transition: all 0.2s ease;
-    }
-
-    body.dark-mode .th-metric-card {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.25);
     }
 
     .th-transaction-item {
@@ -75,16 +61,6 @@
         transform: translateY(-3px);
         box-shadow: 0 12px 30px rgba(13, 148, 136, 0.1);
         border-color: rgba(13, 148, 136, 0.35);
-    }
-
-    body.dark-mode .th-transaction-item {
-        background: #0f232d;
-        border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    body.dark-mode .th-transaction-item:hover {
-        border-color: rgba(13, 148, 136, 0.45);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     }
 
     /* 5-Stage Order Tracking Stepper */
@@ -108,9 +84,6 @@
         height: 3px;
         background: #e2e8f0;
         z-index: 1;
-    }
-    body.dark-mode .order-stepper::before {
-        background: #1e293b;
     }
     .order-step {
         position: relative;
@@ -159,10 +132,6 @@
     .order-step.active .order-step-title {
         color: #0f172a;
         font-weight: 800;
-    }
-    body.dark-mode .order-step.completed .order-step-title,
-    body.dark-mode .order-step.active .order-step-title {
-        color: #f1f5f9;
     }
     @media (max-width: 576px) {
         .order-step-title {
