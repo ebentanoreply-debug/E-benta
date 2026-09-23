@@ -458,15 +458,22 @@
 @endsection
 
 @section('content')
-@include('buyer.sidebar')
+<div class="pv-page-wrapper py-4" style="background: #f8fafc; min-height: 100vh;">
+    <div class="container-fluid px-3 px-lg-4">
+        <div class="row g-4">
+            <!-- Left: Integrated Buyer Account Navigation -->
+            <aside class="col-lg-3 col-xl-3">
+                @include('buyer.sidebar')
+            </aside>
 
-<div class="main-content-wrapper">
-    <div class="pv-container">
-        <!-- Ambient decorative glows -->
-        <div class="pv-glow-1"></div>
-        <div class="pv-glow-2"></div>
+            <!-- Right: Pending Verification Status Content -->
+            <main class="col-lg-9 col-xl-9">
+                <div class="pv-container" style="padding: 1rem 0 3rem;">
+                    <!-- Ambient decorative glows -->
+                    <div class="pv-glow-1"></div>
+                    <div class="pv-glow-2"></div>
 
-        <div class="container" style="max-width: 760px; position: relative; z-index: 1;">
+                    <div class="container" style="max-width: 760px; position: relative; z-index: 1;">
             <!-- Status Badge -->
             <div class="text-center">
                 <div class="pv-status-pill">
@@ -583,6 +590,8 @@
                     <p>Your approved account gains access to carbon reduction & e-waste sustainability certificates.</p>
                 </div>
             </div>
+        </div>
+    </main>
         </div>
     </div>
 </div>
