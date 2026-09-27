@@ -152,6 +152,11 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'is_verified' => true,
+                'address_line_1' => '14 Palaris Street',
+                'barangay' => 'Brgy. Palaris',
+                'address_city' => 'San Carlos City',
+                'address_province' => 'Pangasinan',
+                'postal_code' => '2420',
             ]
         );
 
@@ -163,10 +168,17 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'seller',
                 'is_verified' => true,
+                'address_line_1' => '88 Rizal Avenue',
+                'barangay' => 'Brgy. Rizal',
+                'address_city' => 'San Carlos City',
+                'address_province' => 'Pangasinan',
+                'postal_code' => '2420',
             ]
         );
 
         // Buyers
+        $buyerBarangays = ['Mabini', 'Bugallon-Posadas', 'Lucban', 'Padilla', 'Talang'];
+        $buyerStreets = ['25 Perez Boulevard', '42 Mabini Street', '52 Bugallon-Posadas Street', '19 Montemayor Street', '31 Gomez Street'];
         for ($i = 1; $i <= 5; $i++) {
             User::firstOrCreate(
                 ['email' => "buyer$i@test.com"],
@@ -175,13 +187,24 @@ class DatabaseSeeder extends Seeder
                     'password' => Hash::make('password123'),
                     'role' => 'buyer',
                     'is_verified' => true,
+                    'address_line_1' => $buyerStreets[($i - 1) % count($buyerStreets)],
+                    'barangay' => 'Brgy. ' . $buyerBarangays[($i - 1) % count($buyerBarangays)],
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
                 ]
             );
         }
 
         // Additional random users if needed
         if (User::count() <= 7 && class_exists(\Database\Factories\UserFactory::class)) {
-            User::factory(5)->create();
+            User::factory(5)->create([
+                'address_city' => 'San Carlos City',
+                'address_province' => 'Pangasinan',
+                'postal_code' => '2420',
+                'barangay' => 'Brgy. Coliling',
+                'address_line_1' => 'Purok 1, San Carlos-Calasiao Road',
+            ]);
         }
     }
 
@@ -198,10 +221,10 @@ class DatabaseSeeder extends Seeder
             Address::firstOrCreate(
                 ['user_id' => $admin->id, 'label' => 'Office'],
                 [
-                    'address_line_1' => '123 Admin Street',
-                    'city' => 'Manila',
-                    'state' => 'Metro Manila',
-                    'postal_code' => '1200',
+                    'address_line_1' => '14 Palaris Street',
+                    'city' => 'San Carlos City',
+                    'state' => 'Pangasinan',
+                    'postal_code' => '2420',
                     'country' => 'Philippines',
                     'is_primary' => true,
                     'type' => 'both',
@@ -213,10 +236,10 @@ class DatabaseSeeder extends Seeder
             Address::firstOrCreate(
                 ['user_id' => $seller->id, 'label' => 'Business Location'],
                 [
-                    'address_line_1' => '456 Business Avenue',
-                    'city' => 'Cebu',
-                    'state' => 'Cebu',
-                    'postal_code' => '6000',
+                    'address_line_1' => '88 Rizal Avenue',
+                    'city' => 'San Carlos City',
+                    'state' => 'Pangasinan',
+                    'postal_code' => '2420',
                     'country' => 'Philippines',
                     'is_primary' => true,
                     'type' => 'pickup',
@@ -224,15 +247,15 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        $buyerCities = ['Davao', 'Quezon City', 'Makati', 'Pasig', 'Caloocan'];
+        $buyerStreets = ['25 Perez Boulevard', '42 Mabini Street', '52 Bugallon-Posadas Street', '19 Montemayor Street', '31 Gomez Street'];
         foreach ($buyers as $index => $buyer) {
             Address::firstOrCreate(
                 ['user_id' => $buyer->id, 'label' => 'Home'],
                 [
-                    'address_line_1' => (($index + 1) * 100) . ' Customer Lane',
-                    'city' => $buyerCities[$index % count($buyerCities)],
-                    'state' => 'Metro Manila',
-                    'postal_code' => '100' . ($index + 1),
+                    'address_line_1' => $buyerStreets[$index % count($buyerStreets)],
+                    'city' => 'San Carlos City',
+                    'state' => 'Pangasinan',
+                    'postal_code' => '2420',
                     'country' => 'Philippines',
                     'is_primary' => true,
                     'type' => 'shipping',

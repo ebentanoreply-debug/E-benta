@@ -21,6 +21,7 @@ use App\Http\Controllers\PayMongoWebhookController;
 use App\Http\Controllers\SellerWalletController;
 use App\Http\Controllers\AdminPayoutController;
 use App\Http\Controllers\AdminCommissionController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Api\DeviceModelController;
 use App\Models\Listing;
 use App\Models\User;
@@ -226,6 +227,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/admin/dashboard/export', [AdminController::class, 'exportDashboardReport'])->name('admin.dashboard.export');
+        
+        // User Management routes
+        Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+        Route::post('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
+        Route::post('/admin/users/{user}/toggle-verification', [AdminUserController::class, 'toggleVerification'])->name('admin.users.toggle-verification');
+        Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+
         Route::get('/admin/verifications/pending', [AdminController::class, 'pendingVerifications'])->name('admin.pending-verifications');
         Route::post('/admin/users/{user}/verify', [AdminController::class, 'verifyUser'])->name('admin.verify-user');
         Route::post('/admin/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('admin.reject-user');

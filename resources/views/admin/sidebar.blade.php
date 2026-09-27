@@ -285,6 +285,10 @@
             <i class="fas fa-chart-line"></i>
             <span>Overview</span>
         </a>
+        <a href="{{ route('admin.users.index') }}" class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+            <i class="fas fa-users-gear"></i>
+            <span>User Management</span>
+        </a>
         <a href="{{ route('admin.pending-verifications') }}" class="sidebar-link {{ request()->routeIs('admin.pending-verifications') ? 'active' : '' }}">
             <i class="fas fa-id-card-clip"></i>
             <span>ID Verifications</span>
