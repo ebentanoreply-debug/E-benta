@@ -600,10 +600,6 @@
 
 @section('content')
 
-{{-- Include Active Role Workspace Sidebar (Admin and Seller already included by layout) --}}
-@if(!auth()->user()->isAdmin() && !auth()->user()->isSeller())
-    @include('buyer.sidebar')
-@endif
 
 <div class="stt-page">
 

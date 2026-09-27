@@ -1,453 +1,432 @@
 @extends(auth()->check() && auth()->user()->isSeller() ? 'layouts.seller' : 'layouts.buyer')
 
-@section('title', 'My Addresses - E-Benta')
+@section('title', 'My Addresses - Buyer Hub - E-Benta')
 
-@section('content')
+@section('styles')
 <style>
-    .al-page {
-        background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(46, 204, 113, 0.05) 100%);
+    .addresses-page-wrapper {
+        background: #f8fafc;
         min-height: 100vh;
-        padding: 3rem 0;
+        padding-bottom: 4rem;
     }
 
-    .al-hero {
-        text-align: center;
-        margin-bottom: 3rem;
+    /* === HERO HEADER === */
+    .addresses-hero-header {
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        border: 1px solid rgba(13, 148, 136, 0.3);
+        border-radius: 1.25rem;
+        color: #ffffff;
+        padding: 2.25rem 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(13, 148, 136, 0.15);
+    }
+
+    .addresses-hero-header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 450px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.25) 0%, rgba(6, 182, 212, 0.12) 50%, transparent 70%);
+        pointer-events: none;
+    }
+
+    /* === ADDRESS CARDS === */
+    .address-card {
+        background: #ffffff;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 1.15rem;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
     }
 
-    .al-hero-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%);
-        padding: 1rem;
-        border-radius: 1rem;
-        margin-bottom: 0.5rem;
-        color: white;
-        font-size: 2rem;
-        width: 72px;
-        height: 72px;
-    }
-
-    .al-hero h1 {
-        color: var(--text-light);
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-        font-size: 2.2rem;
-    }
-
-    .al-hero p {
-        color: #64748b;
-        margin: 0 0 1.5rem 0;
-        font-size: 1rem;
-    }
-
-    .al-add-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.85rem 1.5rem;
-        border-radius: 0.8rem;
-        font-weight: 700;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        font-size: 0.95rem;
-        background: linear-gradient(135deg, var(--light-green) 0%, #0d9488 100%);
-        color: white;
-        box-shadow: 0 8px 18px rgba(13, 148, 136, 0.22);
-    }
-
-    .al-add-btn:hover {
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
-    }
-
-    .al-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .al-card {
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(13, 148, 136, 0.15);
-        border-radius: 1.2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        padding: 1.75rem;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .al-card:hover {
-        transform: translateY(-5px);
+    .address-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 30px rgba(13, 148, 136, 0.12);
         border-color: rgba(13, 148, 136, 0.35);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
     }
 
-    .al-card-head {
+    .address-card.is-primary-card {
+        border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .address-card.is-primary-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    .address-card-header {
+        padding: 1.35rem 1.35rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        gap: 1rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .al-card h3 {
-        margin: 0;
-        color: var(--text-light);
-        font-size: 1.25rem;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .al-card h3 i {
-        color: var(--light-green);
-        font-size: 1rem;
-    }
-
-    .al-address {
-        margin: 0.5rem 0 0;
-        color: #475569;
-        font-size: 0.95rem;
-        line-height: 1.5;
-    }
-
-    .al-badges {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-        align-items: flex-end;
-    }
-
-    .al-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        padding: 0.35rem 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .al-badge-primary {
-        background: rgba(245, 158, 11, 0.15);
-        color: #d97706;
-        border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .al-badge-type {
-        background: rgba(59, 130, 246, 0.15);
-        color: #2563eb;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .al-note {
-        background: rgba(245, 158, 11, 0.08);
-        border: 1px solid rgba(245, 158, 11, 0.2);
-        border-radius: 0.8rem;
-        padding: 0.85rem 1rem;
-        color: #b45309;
-        font-size: 0.85rem;
-        margin-bottom: 1.25rem;
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .al-meta {
-        background: rgba(13, 148, 136, 0.04);
-        border: 1.5px solid rgba(13, 148, 136, 0.15);
-        border-radius: 0.8rem;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        margin-top: auto;
-    }
-
-    .al-meta small {
-        display: block;
-        color: var(--light-green);
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.25rem;
-        font-weight: 800;
-    }
-
-    .al-meta p {
-        margin: 0;
-        color: var(--text-light);
-        font-size: 0.95rem;
-        font-weight: 700;
-    }
-
-    .al-actions {
-        display: flex;
         gap: 0.75rem;
-        flex-wrap: wrap;
     }
 
-    .al-form-inline {
-        flex: 1;
-        min-width: 140px;
-    }
-
-    .al-btn {
-        width: 100%;
-        display: inline-flex;
+    .address-card-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 0.75rem;
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.4rem;
-        border: none;
-        border-radius: 0.6rem;
-        padding: 0.65rem 0.85rem;
-        font-weight: 700;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .address-card-icon.primary {
+        background: rgba(245, 158, 11, 0.15);
+        color: #d97706;
+    }
+
+    .address-card-icon.default {
+        background: rgba(13, 148, 136, 0.1);
+        color: #0d9488;
+    }
+
+    .address-card-body {
+        padding: 0 1.35rem 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .address-label {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .address-text {
+        color: #475569;
         font-size: 0.9rem;
-        text-decoration: none;
-        transition: transform 0.2s ease;
+        line-height: 1.5;
+        margin: 0.65rem 0 1rem;
     }
 
-    .al-btn:hover {
-        transform: translateY(-1px);
-    }
-
-    .al-btn-edit {
-        color: #ffffff;
-        background: linear-gradient(135deg, #3498db 0%, #2563eb 100%);
-    }
-
-    .al-btn-primary {
-        transition: all 0.2s ease;
-    }
-
-    .al-btn:hover {
-        transform: translateY(-2px);
-    }
-
-    .al-btn-view {
-        color: #ffffff;
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    }
-
-    .al-btn-edit {
-        color: #ffffff;
-        background: linear-gradient(135deg, #f59e0b 0%, #e67e22 100%);
-    }
-
-    .al-btn-delete {
-        color: #ffffff;
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    }
-
-    .al-btn-current {
-        color: var(--light-green);
-        background: rgba(13, 148, 136, 0.05);
-        border: 1.5px solid rgba(13, 148, 136, 0.25);
-        cursor: default;
-    }
-
-    .al-btn-current:hover {
-        transform: none;
-    }
-
-    .al-empty {
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(10px);
-        border: 2px dashed rgba(13, 148, 136, 0.3);
-        border-radius: 1.2rem;
-        padding: 4rem 2rem;
-        text-align: center;
-        color: var(--text-light);
-    }
-
-    .al-empty i {
-        display: block;
-        font-size: 3rem;
-        color: var(--light-green);
-        opacity: 0.8;
+    .address-note {
+        background: rgba(245, 158, 11, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.25);
+        border-radius: 0.65rem;
+        padding: 0.6rem 0.85rem;
+        color: #92400e;
+        font-size: 0.82rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
         margin-bottom: 1rem;
     }
 
-    .al-empty h4 {
-        margin: 0;
+    .address-meta-grid {
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: auto;
+        margin-bottom: 1rem;
+    }
+
+    .address-meta-grid small {
+        display: block;
+        color: #94a3b8;
+        font-size: 0.68rem;
         font-weight: 800;
-        font-size: 1.5rem;
-        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.15rem;
     }
 
-    .al-empty p {
-        margin: 0.5rem 0 1.5rem;
-        color: #64748b;
+    .address-meta-grid span {
+        display: block;
+        color: #1e293b;
+        font-size: 0.85rem;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .al-pagination {
-        margin-top: 2rem;
+    .address-card-footer {
+        padding: 0.9rem 1.35rem 1.25rem;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
-    @media (max-width: 991px) {
-        .al-page {
-            padding: 2rem 0;
-        }
+    .btn-action {
+        border-radius: 0.55rem;
+        font-weight: 700;
+        font-size: 0.82rem;
+        padding: 0.45rem 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
     }
 
-    @media (max-width: 767px) {
-        .al-hero h1 {
-            font-size: 1.75rem;
-        }
+    .btn-action-view {
+        background: rgba(13, 148, 136, 0.1);
+        color: #0d9488;
+        border-color: rgba(13, 148, 136, 0.2);
+    }
+    .btn-action-view:hover {
+        background: #0d9488;
+        color: #ffffff;
+    }
 
-        .al-meta {
-            grid-template-columns: 1fr;
-        }
+    .btn-action-edit {
+        background: #f8fafc;
+        color: #475569;
+        border-color: #e2e8f0;
+    }
+    .btn-action-edit:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
 
-        .al-card-head {
-            flex-direction: column;
-        }
+    .btn-action-primary {
+        background: rgba(245, 158, 11, 0.1);
+        color: #d97706;
+        border-color: rgba(245, 158, 11, 0.25);
+    }
+    .btn-action-primary:hover {
+        background: #f59e0b;
+        color: #ffffff;
+    }
 
-        .al-badges {
-            justify-content: flex-start;
-        }
+    .btn-action-delete {
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+    .btn-action-delete:hover {
+        background: #ef4444;
+        color: #ffffff;
+    }
 
-        .al-actions {
-            flex-direction: column;
-        }
+    .badge-primary-pill {
+        background: rgba(245, 158, 11, 0.15);
+        color: #d97706;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        font-weight: 800;
+        font-size: 0.72rem;
+        padding: 0.3rem 0.65rem;
+        border-radius: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
 
-        .al-form-inline {
-            min-width: 100%;
-        }
+    .badge-type-pill {
+        font-weight: 800;
+        font-size: 0.72rem;
+        padding: 0.3rem 0.65rem;
+        border-radius: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 </style>
+@endsection
 
-@if(auth()->check() && !auth()->user()->isAdmin() && !auth()->user()->isSeller())
-    @include('buyer.sidebar')
-@endif
+@section('content')
 
-<div class="al-page">
-        <div class="container">
-        <div class="al-hero">
-            <div class="al-hero-icon">
-                <i class="fas fa-map-marked-alt"></i>
-            </div>
-            <h1>My Addresses</h1>
-            <p>Manage pickup and dropoff locations for faster transactions.</p>
-            <a href="{{ route('addresses.create') }}" class="al-add-btn">
-                <i class="fas fa-plus"></i>
-                Add New Address
-            </a>
-        </div>
+<div class="addresses-page-wrapper py-4">
+    <div class="container-fluid px-3 px-lg-4">
+        <div class="row g-4">
+            
+            @if(auth()->check() && !auth()->user()->isAdmin() && !auth()->user()->isSeller())
+                <!-- LEFT COLUMN: INTEGRATED BUYER ACCOUNT NAVIGATION -->
+                <aside class="col-lg-3 col-xl-3">
+                    @include('buyer.sidebar')
+                </aside>
 
-        @if($addresses->count() > 0)
-            <div class="al-grid">
-                @foreach($addresses as $address)
-                    <article class="al-card">
-                        <div class="al-card-head">
-                            <div>
-                                <h3><i class="fas fa-tag"></i>{{ $address->label }}</h3>
-                                <p class="al-address">{{ $address->getFullAddress() }}</p>
-                            </div>
-
-                            <div class="al-badges">
-                                @if($address->is_primary)
-                                    <span class="al-badge al-badge-primary">
-                                        <i class="fas fa-star"></i>
-                                        Primary
-                                    </span>
-                                @endif
-                                <span class="al-badge al-badge-type">{{ ucfirst($address->type) }}</span>
-                            </div>
-                        </div>
-
-                        @if($address->special_instructions)
-                            <div class="al-note">
-                                <i class="fas fa-sticky-note me-1"></i>
-                                {{ $address->special_instructions }}
-                            </div>
-                        @endif
-
-                        <div class="al-meta">
-                            <div>
-                                <small>City</small>
-                                <p>{{ $address->city }}</p>
-                            </div>
-                            <div>
-                                <small>Postal Code</small>
-                                <p>{{ $address->postal_code }}</p>
-                            </div>
-                            <div>
-                                <small>Country</small>
-                                <p>{{ $address->country }}</p>
-                            </div>
-                        </div>
-
-                        <div class="al-actions">
-                            <a href="{{ route('addresses.show', $address) }}" class="al-btn al-btn-edit al-form-inline">
-                                <i class="fas fa-eye"></i>
-                                View
-                            </a>
-
-                            <a href="{{ route('addresses.edit', $address) }}" class="al-btn al-btn-edit al-form-inline">
-                                <i class="fas fa-edit"></i>
-                                Edit
-                            </a>
-
-                            @if(!$address->is_primary)
-                                <form method="POST" action="{{ route('addresses.mark-primary', $address) }}" class="al-form-inline">
-                                    @csrf
-                                    <button type="submit" class="al-btn al-btn-primary">
-                                        <i class="fas fa-star"></i>
-                                        Set Primary
-                                    </button>
-                                </form>
-                            @else
-                                <span class="al-btn al-btn-current al-form-inline">
-                                    <i class="fas fa-check-circle"></i>
-                                    Primary Address
-                                </span>
-                            @endif
-
-                            <form method="POST" action="{{ route('addresses.destroy', $address) }}" class="al-form-inline" onsubmit="return confirm('Delete this address?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="al-btn al-btn-delete">
-                                    <i class="fas fa-trash"></i>
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
-
-            @if($addresses->hasPages())
-                <div class="al-pagination">
-                    {{ $addresses->links('pagination::bootstrap-5') }}
-                </div>
+                <!-- RIGHT COLUMN: MAIN ADDRESS CONTENT -->
+                <main class="col-lg-9 col-xl-9">
+            @else
+                <!-- FULL WIDTH MAIN FOR SELLER/ADMIN WORKSPACES -->
+                <main class="col-12">
             @endif
-        @else
-            <div class="al-empty">
-                <i class="fas fa-map-marker-alt"></i>
-                <h4>No addresses saved yet</h4>
-                <p>Add your first address to speed up future offers and transactions.</p>
-                <a href="{{ route('addresses.create') }}" class="al-add-btn">
-                    <i class="fas fa-plus"></i>
-                    Add Your First Address
-                </a>
-            </div>
-        @endif
+
+                <!-- HERO HEADER -->
+                <div class="addresses-hero-header mb-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge" style="background: rgba(13, 148, 136, 0.2); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                    <i class="fas fa-map-location-dot me-1"></i>Shipping & Pickups
+                                </span>
+                                <span style="color: #cbd5e1; font-size: 0.85rem;">• {{ $addresses->total() }} Saved {{ Str::plural('Location', $addresses->total()) }}</span>
+                            </div>
+                            <h1 style="font-size: clamp(1.6rem, 2.3vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px; color: #ffffff;">
+                                My Addresses
+                            </h1>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; margin: 0.4rem 0 0;">
+                                Manage pickup, dropoff, and delivery destinations for faster offers and transactions.
+                            </p>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="{{ route('addresses.create') }}" class="btn d-inline-flex align-items-center gap-2" style="background: #ffffff; color: #0d9488; border: none; border-radius: 0.65rem; font-weight: 800; padding: 0.6rem 1.25rem; box-shadow: 0 4px 14px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+                                <i class="fas fa-plus"></i>
+                                <span>Add New Address</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                @if($addresses->count() > 0)
+                    <div class="row g-3 g-md-4">
+                        @foreach($addresses as $address)
+                            <div class="col-md-6 col-xxl-4">
+                                <article class="address-card {{ $address->is_primary ? 'is-primary-card' : '' }}">
+                                    <!-- Card Header -->
+                                    <div class="address-card-header">
+                                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                            <div class="address-card-icon {{ $address->is_primary ? 'primary' : 'default' }}">
+                                                <i class="fas {{ $address->is_primary ? 'fa-star' : 'fa-location-dot' }}"></i>
+                                            </div>
+                                            <div class="overflow-hidden">
+                                                <h3 class="address-label text-truncate" title="{{ $address->label }}">{{ $address->label }}</h3>
+                                                <small style="color: #64748b; font-size: 0.78rem;">{{ $address->city }}, {{ $address->country }}</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-column align-items-end gap-1 flex-shrink-0">
+                                            @if($address->is_primary)
+                                                <span class="badge-primary-pill">
+                                                    <i class="fas fa-star"></i>Primary
+                                                </span>
+                                            @endif
+
+                                            @if($address->type === 'pickup')
+                                                <span class="badge-type-pill" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; border: 1px solid rgba(13, 148, 136, 0.25);">
+                                                    <i class="fas fa-box"></i>Pickup
+                                                </span>
+                                            @elseif($address->type === 'dropoff')
+                                                <span class="badge-type-pill" style="background: rgba(59, 130, 246, 0.12); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.25);">
+                                                    <i class="fas fa-truck-ramp-box"></i>Dropoff
+                                                </span>
+                                            @else
+                                                <span class="badge-type-pill" style="background: rgba(147, 51, 234, 0.12); color: #9333ea; border: 1px solid rgba(147, 51, 234, 0.25);">
+                                                    <i class="fas fa-arrows-split-up-and-left"></i>Both
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="address-card-body">
+                                        <p class="address-text">
+                                            <i class="fas fa-map-pin me-1 text-muted"></i>{{ $address->getFullAddress() }}
+                                        </p>
+
+                                        @if($address->special_instructions)
+                                            <div class="address-note">
+                                                <i class="fas fa-info-circle mt-1 flex-shrink-0" style="color: #d97706;"></i>
+                                                <span>{{ $address->special_instructions }}</span>
+                                            </div>
+                                        @endif
+
+                                        <div class="address-meta-grid">
+                                            <div>
+                                                <small>City</small>
+                                                <span title="{{ $address->city }}">{{ $address->city }}</span>
+                                            </div>
+                                            <div>
+                                                <small>Postal Code</small>
+                                                <span>{{ $address->postal_code }}</span>
+                                            </div>
+                                            <div>
+                                                <small>Country</small>
+                                                <span title="{{ $address->country }}">{{ $address->country }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Footer Actions -->
+                                    <div class="address-card-footer">
+                                        <a href="{{ route('addresses.show', $address) }}" class="btn-action btn-action-view" title="View address details">
+                                            <i class="fas fa-eye"></i>
+                                            <span>View</span>
+                                        </a>
+
+                                        <a href="{{ route('addresses.edit', $address) }}" class="btn-action btn-action-edit" title="Edit address details">
+                                            <i class="fas fa-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+
+                                        @if(!$address->is_primary)
+                                            <form method="POST" action="{{ route('addresses.mark-primary', $address) }}" class="d-inline m-0">
+                                                @csrf
+                                                <button type="submit" class="btn-action btn-action-primary" title="Set as primary address">
+                                                    <i class="fas fa-star"></i>
+                                                    <span>Set Primary</span>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        <div class="ms-auto">
+                                            <form method="POST" action="{{ route('addresses.destroy', $address) }}" class="d-inline m-0" onsubmit="return confirm('Are you sure you want to delete this address?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-action btn-action-delete" title="Delete address">
+                                                    <i class="fas fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    @if($addresses->hasPages())
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-center">
+                            {{ $addresses->links() }}
+                        </div>
+                    @endif
+                @else
+                    <!-- EMPTY STATE -->
+                    <div class="p-5 text-center bg-white rounded-4 border" style="border-color: rgba(13, 148, 136, 0.15) !important; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);">
+                        <div style="width: 76px; height: 76px; border-radius: 50%; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; margin-bottom: 1.25rem;">
+                            <i class="fas fa-map-location-dot"></i>
+                        </div>
+                        <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">No Addresses Saved Yet</h4>
+                        <p style="color: #64748b; font-size: 0.92rem; max-width: 440px; margin: 0 auto 1.75rem; line-height: 1.5;">
+                            Save your pickup, delivery, or dropoff address to speed up device offers, orders, and logistics tracking.
+                        </p>
+                        <a href="{{ route('addresses.create') }}" class="btn d-inline-flex align-items-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: #ffffff; border: none; border-radius: 0.65rem; font-weight: 800; padding: 0.65rem 1.4rem; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.25);">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Your First Address</span>
+                        </a>
+                    </div>
+                @endif
+
+            </main>
+        </div>
     </div>
 </div>
 @endsection
