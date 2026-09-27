@@ -297,7 +297,7 @@
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Verified KYC</span>
                         <div class="stat-icon-wrap" style="background: #ecfdf5; color: #10b981;">
-                            <i class="fas fa-badge-check"></i>
+                            <i class="fas fa-check-circle"></i>
                         </div>
                     </div>
                     <div style="font-size: 1.65rem; font-weight: 900; color: #047857; line-height: 1;">
@@ -488,7 +488,7 @@
                                         </div>
                                         @if($user->barangay)
                                             <div style="font-size: 0.75rem; color: #94a3b8;">
-                                                Brgy. {{ $user->barangay }}
+                                                {{ \Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay }}
                                             </div>
                                         @endif
                                     @else
@@ -568,7 +568,7 @@
                                                     data-role="{{ strtoupper($user->role) }}"
                                                     data-business="{{ $user->business_name ?? 'None' }}"
                                                     data-business-desc="{{ $user->business_description ?? 'None' }}"
-                                                    data-address="{{ trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? 'Brgy. ' . $user->barangay . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified' }}"
+                                                    data-address="{{ trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified' }}"
                                                     data-id-type="{{ $user->id_type ?? 'Not submitted' }}"
                                                     data-id-number="{{ $user->id_number ?? 'Not submitted' }}"
                                                     data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
