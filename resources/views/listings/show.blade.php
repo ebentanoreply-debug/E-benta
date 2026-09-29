@@ -15,35 +15,86 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        user-select: none;
     }
     .pdp-gallery-main img {
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
-        transition: transform 0.35s ease;
+        transition: transform 0.3s ease, opacity 0.2s ease;
     }
     .pdp-gallery-main:hover img {
-        transform: scale(1.04);
+        transform: scale(1.03);
     }
+    .pdp-counter-overlay {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(6px);
+        color: #f8fafc;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        z-index: 2;
+        pointer-events: none;
+    }
+    .pdp-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 3;
+    }
+    .pdp-nav-btn:hover {
+        background: rgba(13, 148, 136, 0.95);
+        color: #ffffff;
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .pdp-prev-btn { left: 1rem; }
+    .pdp-next-btn { right: 1rem; }
     .pdp-thumb-item {
         width: 80px;
         height: 80px;
         border-radius: 0.75rem;
         overflow: hidden;
         cursor: pointer;
-        border: 2px solid transparent;
+        border: 2.5px solid transparent;
         background: #1e293b;
         flex-shrink: 0;
+        padding: 0;
         transition: all 0.2s ease;
+        position: relative;
+    }
+    .pdp-thumb-item:hover {
+        transform: translateY(-2px);
+        border-color: rgba(16, 185, 129, 0.6);
     }
     .pdp-thumb-item.active {
         border-color: #10b981;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+        transform: translateY(-2px);
     }
     .pdp-thumb-item img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
+        pointer-events: none;
     }
     .pdp-buy-box {
         position: sticky;
@@ -202,14 +253,18 @@
             <!-- Gallery Card -->
             <div class="card border-0 rounded-4 shadow-sm p-3 mb-4" style="background: var(--card-bg, #ffffff); border: 1px solid rgba(13, 148, 136, 0.18) !important;">
                 @php
-                    $photosList = $listing->listingPhotos->pluck('photo_url')->toArray();
-                    if (empty($photosList) && !empty($listing->photos)) {
-                        $photosList = is_array($listing->photos) ? $listing->photos : [];
+                    $photosList = $listing->photos;
+                    if (empty($photosList) && $listing->listingPhotos->isNotEmpty()) {
+                        $photosList = $listing->listingPhotos->pluck('photo_url')
+                            ->map(fn($u) => \App\Services\CloudinaryStorageService::url($u))
+                            ->filter()
+                            ->values()
+                            ->all();
                     }
                 @endphp
 
                 <!-- Main Gallery Viewport -->
-                <div class="pdp-gallery-main">
+                <div class="pdp-gallery-main" id="pdpGalleryMain">
                     <!-- Overlay Badges -->
                     <div class="pdp-badge-overlay">
                         @if($listing->condition === 'functional')
@@ -240,7 +295,22 @@
                     </div>
 
                     @if(!empty($photosList))
-                        <img id="mainListingImage" src="{{ $photosList[0] }}" alt="{{ $listing->category ?: 'Listing Image' }}">
+                        @if(count($photosList) > 1)
+                            <div class="pdp-counter-overlay">
+                                <span id="pdpCounterText">1 / {{ count($photosList) }}</span>
+                            </div>
+                        @endif
+
+                        <img id="mainListingImage" src="{{ $photosList[0] }}" alt="{{ $listing->category ?: 'Listing Image' }}" onclick="openImageLightbox()" style="cursor: zoom-in;" title="Click to view full photo">
+
+                        @if(count($photosList) > 1)
+                            <button type="button" class="pdp-nav-btn pdp-prev-btn" onclick="prevImage(event)" aria-label="Previous photo">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button type="button" class="pdp-nav-btn pdp-next-btn" onclick="nextImage(event)" aria-label="Next photo">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        @endif
                     @else
                         <div class="text-center py-5 text-white">
                             <i class="fas fa-microchip fa-4x mb-3 text-emerald" style="color: #10b981; opacity: 0.6;"></i>
@@ -251,11 +321,11 @@
 
                 <!-- Thumbnails Strip -->
                 @if(count($photosList) > 1)
-                    <div class="d-flex gap-2 overflow-auto pt-3 pb-1" id="thumbStrip">
+                    <div class="d-flex gap-2 overflow-auto pt-3 pb-1" id="thumbStrip" style="scroll-behavior: smooth;">
                         @foreach($photosList as $idx => $photoUrl)
-                            <div class="pdp-thumb-item {{ $idx === 0 ? 'active' : '' }}" onclick="changeMainImage('{{ $photoUrl }}', this)">
+                            <button type="button" class="pdp-thumb-item {{ $idx === 0 ? 'active' : '' }}" onclick="changeMainImage('{{ $photoUrl }}', this, {{ $idx }})" data-index="{{ $idx }}" aria-label="Select photo {{ $idx + 1 }}">
                                 <img src="{{ $photoUrl }}" alt="Thumb {{ $idx + 1 }}">
-                            </div>
+                            </button>
                         @endforeach
                     </div>
                 @endif
@@ -881,20 +951,104 @@
         </div>
     </div>
 </div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(10px);">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 bg-transparent shadow-none">
+            <div class="modal-header border-0 pb-0 justify-content-end">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="background-color: rgba(255,255,255,0.85); border-radius: 50%; padding: 0.65rem;"></button>
+            </div>
+            <div class="modal-body text-center p-2 position-relative">
+                <img id="lightboxImage" src="" alt="Full view" style="max-height: 82vh; max-width: 100%; border-radius: 1rem; box-shadow: 0 25px 60px rgba(0,0,0,0.5); object-fit: contain;">
+                @if(count($photosList) > 1)
+                    <button type="button" class="pdp-nav-btn pdp-prev-btn" onclick="prevImage(event)" style="left: 0.5rem;" aria-label="Previous photo">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="pdp-nav-btn pdp-next-btn" onclick="nextImage(event)" style="right: 0.5rem;" aria-label="Next photo">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
-    function changeMainImage(url, el) {
+    const galleryPhotos = @json(array_values($photosList));
+    let currentPhotoIndex = 0;
+
+    function changeMainImage(url, el, index) {
         const mainImg = document.getElementById('mainListingImage');
         if (mainImg) {
-            mainImg.src = url;
+            mainImg.style.opacity = '0.35';
+            setTimeout(() => {
+                mainImg.src = url;
+                mainImg.style.opacity = '1';
+            }, 120);
         }
-        document.querySelectorAll('#thumbStrip .pdp-thumb-item').forEach(item => {
-            item.classList.remove('active');
+
+        const lightboxImg = document.getElementById('lightboxImage');
+        if (lightboxImg) {
+            lightboxImg.src = url;
+        }
+
+        if (typeof index === 'number') {
+            currentPhotoIndex = index;
+        } else if (el && el.hasAttribute('data-index')) {
+            currentPhotoIndex = parseInt(el.getAttribute('data-index'), 10);
+        }
+
+        const counterText = document.getElementById('pdpCounterText');
+        if (counterText && galleryPhotos.length > 0) {
+            counterText.textContent = (currentPhotoIndex + 1) + ' / ' + galleryPhotos.length;
+        }
+
+        const thumbs = document.querySelectorAll('#thumbStrip .pdp-thumb-item');
+        thumbs.forEach((item, idx) => {
+            if (idx === currentPhotoIndex) {
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            } else {
+                item.classList.remove('active');
+            }
         });
-        if (el) {
-            el.classList.add('active');
+    }
+
+    function prevImage(e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        if (!galleryPhotos.length) return;
+        currentPhotoIndex = (currentPhotoIndex - 1 + galleryPhotos.length) % galleryPhotos.length;
+        const targetThumb = document.querySelector(`#thumbStrip .pdp-thumb-item[data-index="${currentPhotoIndex}"]`);
+        changeMainImage(galleryPhotos[currentPhotoIndex], targetThumb, currentPhotoIndex);
+    }
+
+    function nextImage(e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        if (!galleryPhotos.length) return;
+        currentPhotoIndex = (currentPhotoIndex + 1) % galleryPhotos.length;
+        const targetThumb = document.querySelector(`#thumbStrip .pdp-thumb-item[data-index="${currentPhotoIndex}"]`);
+        changeMainImage(galleryPhotos[currentPhotoIndex], targetThumb, currentPhotoIndex);
+    }
+
+    function openImageLightbox() {
+        const mainImg = document.getElementById('mainListingImage');
+        const lightboxImg = document.getElementById('lightboxImage');
+        if (mainImg && lightboxImg) {
+            lightboxImg.src = mainImg.src;
+            const modalEl = document.getElementById('imageLightboxModal');
+            if (modalEl && typeof bootstrap !== 'undefined') {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            }
         }
     }
 
@@ -910,5 +1064,29 @@
             el.classList.add('active');
         }
     }
+
+    // Keyboard navigation (ArrowLeft & ArrowRight to swap listing photos)
+    document.addEventListener('keydown', function(e) {
+        if (!galleryPhotos || galleryPhotos.length <= 1) return;
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
+        if (e.key === 'ArrowLeft') {
+            prevImage();
+        } else if (e.key === 'ArrowRight') {
+            nextImage();
+        }
+    });
+
+    // Ensure thumbnails have click handlers attached
+    document.addEventListener('DOMContentLoaded', function() {
+        const thumbs = document.querySelectorAll('#thumbStrip .pdp-thumb-item');
+        thumbs.forEach((thumb, idx) => {
+            thumb.addEventListener('click', function(e) {
+                e.preventDefault();
+                const img = this.querySelector('img');
+                const url = img ? img.getAttribute('src') : (galleryPhotos[idx] || '');
+                changeMainImage(url, this, idx);
+            });
+        });
+    });
 </script>
-@endpush
+@endsection
