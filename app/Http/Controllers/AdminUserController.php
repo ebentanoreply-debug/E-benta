@@ -225,6 +225,42 @@ class AdminUserController extends Controller
     }
 
     /**
+     * Change user role (e.g. promote buyer to seller or vice versa).
+     */
+    public function updateRole(Request $request, User $user)
+    {
+        if (!Auth::user()->isAdmin()) {
+            return redirect('/')->with('error', 'Unauthorized access.');
+        }
+
+        $validated = $request->validate([
+            'role' => 'required|in:buyer,seller,admin',
+        ]);
+
+        $oldRole = $user->role;
+        $user->update(['role' => $validated['role']]);
+
+        // If promoted to seller and doesn't have business name yet, give default
+        if ($validated['role'] === 'seller' && empty($user->business_name)) {
+            $user->update([
+                'business_name' => $user->name . ' Tech & Scrap Hub',
+                'business_description' => 'E-waste trader and circular electronics partner in San Carlos City, Pangasinan.',
+            ]);
+        }
+
+        AuditLogger::log(
+            action: 'update_user_role',
+            description: "Admin changed role of {$user->name} from {$oldRole} to {$validated['role']}",
+            modelType: 'User',
+            modelId: $user->id,
+            oldValues: ['role' => $oldRole],
+            newValues: ['role' => $validated['role']]
+        );
+
+        return back()->with('success', "Updated {$user->name}'s role to " . ucfirst($validated['role']) . ".");
+    }
+
+    /**
      * Delete user account.
      */
     public function destroy(User $user)

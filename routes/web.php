@@ -233,6 +233,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
         Route::post('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
         Route::post('/admin/users/{user}/toggle-verification', [AdminUserController::class, 'toggleVerification'])->name('admin.users.toggle-verification');
+        Route::post('/admin/users/{user}/update-role', [AdminUserController::class, 'updateRole'])->name('admin.users.update-role');
         Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 
         Route::get('/admin/verifications/pending', [AdminController::class, 'pendingVerifications'])->name('admin.pending-verifications');

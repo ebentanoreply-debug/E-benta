@@ -244,82 +244,92 @@
         </div>
     </div>
 
-    <!-- METRICS OVERVIEW CARDS -->
+    <!-- METRICS OVERVIEW CARDS (Clickable quick filters) -->
     <div class="container-fluid px-3 px-md-4 mt-4">
         <div class="row g-3">
             <div class="col-6 col-md-4 col-xl">
-                <div class="stat-metric-card">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Total Users</span>
-                        <div class="stat-icon-wrap" style="background: #f0fdfa; color: #0d9488;">
-                            <i class="fas fa-users"></i>
+                <a href="{{ route('admin.users.index') }}" class="text-decoration-none d-block h-100">
+                    <div class="stat-metric-card h-100" style="{{ empty($role) && empty($verification) && empty($status) ? 'border-color: #0d9488;' : '' }}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Total Users</span>
+                            <div class="stat-icon-wrap" style="background: #f0fdfa; color: #0d9488;">
+                                <i class="fas fa-users"></i>
+                            </div>
                         </div>
+                        <div style="font-size: 1.65rem; font-weight: 900; color: #0f172a; line-height: 1;">
+                            {{ number_format($stats['total']) }}
+                        </div>
+                        <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Show all participants</span>
                     </div>
-                    <div style="font-size: 1.65rem; font-weight: 900; color: #0f172a; line-height: 1;">
-                        {{ number_format($stats['total']) }}
-                    </div>
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">All platform participants</span>
-                </div>
+                </a>
             </div>
 
             <div class="col-6 col-md-4 col-xl">
-                <div class="stat-metric-card">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Recycler Buyers</span>
-                        <div class="stat-icon-wrap" style="background: #eff6ff; color: #2563eb;">
-                            <i class="fas fa-cart-shopping"></i>
+                <a href="{{ route('admin.users.index', ['role' => 'buyer']) }}" class="text-decoration-none d-block h-100">
+                    <div class="stat-metric-card h-100" style="{{ $role === 'buyer' ? 'border: 2px solid #2563eb; box-shadow: 0 4px 14px rgba(37,99,235,0.15);' : '' }}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Recycler Buyers</span>
+                            <div class="stat-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+                                <i class="fas fa-cart-shopping"></i>
+                            </div>
                         </div>
+                        <div style="font-size: 1.65rem; font-weight: 900; color: #1e3a8a; line-height: 1;">
+                            {{ number_format($stats['buyers']) }}
+                        </div>
+                        <span style="color: {{ $role === 'buyer' ? '#2563eb' : '#94a3b8' }}; font-size: 0.75rem; font-weight: 700;">Click to view {{ number_format($stats['buyers']) }} buyers &rarr;</span>
                     </div>
-                    <div style="font-size: 1.65rem; font-weight: 900; color: #1e3a8a; line-height: 1;">
-                        {{ number_format($stats['buyers']) }}
-                    </div>
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">E-waste buyers & recyclers</span>
-                </div>
+                </a>
             </div>
 
             <div class="col-6 col-md-4 col-xl">
-                <div class="stat-metric-card">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Sellers & Shops</span>
-                        <div class="stat-icon-wrap" style="background: #ecfdf5; color: #059669;">
-                            <i class="fas fa-store"></i>
+                <a href="{{ route('admin.users.index', ['role' => 'seller']) }}" class="text-decoration-none d-block h-100">
+                    <div class="stat-metric-card h-100" style="{{ $role === 'seller' ? 'border: 2px solid #059669; box-shadow: 0 4px 14px rgba(5,150,105,0.2);' : '' }}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Sellers & Shops</span>
+                            <div class="stat-icon-wrap" style="background: #ecfdf5; color: #059669;">
+                                <i class="fas fa-store"></i>
+                            </div>
                         </div>
+                        <div style="font-size: 1.65rem; font-weight: 900; color: #065f46; line-height: 1;">
+                            {{ number_format($stats['sellers']) }}
+                        </div>
+                        <span style="color: {{ $role === 'seller' ? '#059669' : '#059669' }}; font-size: 0.75rem; font-weight: 700;">Click to view {{ number_format($stats['sellers']) }} sellers &rarr;</span>
                     </div>
-                    <div style="font-size: 1.65rem; font-weight: 900; color: #065f46; line-height: 1;">
-                        {{ number_format($stats['sellers']) }}
-                    </div>
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Merchants & scrap dealers</span>
-                </div>
+                </a>
             </div>
 
             <div class="col-6 col-md-4 col-xl">
-                <div class="stat-metric-card">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Verified KYC</span>
-                        <div class="stat-icon-wrap" style="background: #ecfdf5; color: #10b981;">
-                            <i class="fas fa-check-circle"></i>
+                <a href="{{ route('admin.users.index', ['verification' => 'verified']) }}" class="text-decoration-none d-block h-100">
+                    <div class="stat-metric-card h-100" style="{{ $verification === 'verified' ? 'border: 2px solid #10b981; box-shadow: 0 4px 14px rgba(16,185,129,0.15);' : '' }}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Verified KYC</span>
+                            <div class="stat-icon-wrap" style="background: #ecfdf5; color: #10b981;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
                         </div>
+                        <div style="font-size: 1.65rem; font-weight: 900; color: #047857; line-height: 1;">
+                            {{ number_format($stats['verified']) }}
+                        </div>
+                        <span style="color: {{ $verification === 'verified' ? '#047857' : '#94a3b8' }}; font-size: 0.75rem; font-weight: 700;">Click to view verified &rarr;</span>
                     </div>
-                    <div style="font-size: 1.65rem; font-weight: 900; color: #047857; line-height: 1;">
-                        {{ number_format($stats['verified']) }}
-                    </div>
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">PhilSys / ID validated</span>
-                </div>
+                </a>
             </div>
 
             <div class="col-12 col-md-4 col-xl">
-                <div class="stat-metric-card">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Restricted</span>
-                        <div class="stat-icon-wrap" style="background: #fef2f2; color: #dc2626;">
-                            <i class="fas fa-user-slash"></i>
+                <a href="{{ route('admin.users.index', ['status' => 'suspended']) }}" class="text-decoration-none d-block h-100">
+                    <div class="stat-metric-card h-100" style="{{ $status === 'suspended' || $status === 'banned' ? 'border: 2px solid #dc2626; box-shadow: 0 4px 14px rgba(220,38,38,0.15);' : '' }}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Restricted</span>
+                            <div class="stat-icon-wrap" style="background: #fef2f2; color: #dc2626;">
+                                <i class="fas fa-user-slash"></i>
+                            </div>
                         </div>
+                        <div style="font-size: 1.65rem; font-weight: 900; color: #991b1b; line-height: 1;">
+                            {{ number_format($stats['restricted']) }}
+                        </div>
+                        <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Suspended or banned</span>
                     </div>
-                    <div style="font-size: 1.65rem; font-weight: 900; color: #991b1b; line-height: 1;">
-                        {{ number_format($stats['restricted']) }}
-                    </div>
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 600;">Suspended or banned</span>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -338,7 +348,7 @@
 
                 <div class="col-6 col-md-2">
                     <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Role</label>
-                    <select name="role" class="form-select filter-input-control">
+                    <select name="role" class="form-select filter-input-control" onchange="this.form.submit()">
                         <option value="">All Roles</option>
                         <option value="buyer" {{ $role === 'buyer' ? 'selected' : '' }}>Buyer / Recycler</option>
                         <option value="seller" {{ $role === 'seller' ? 'selected' : '' }}>Seller</option>
@@ -348,7 +358,7 @@
 
                 <div class="col-6 col-md-2">
                     <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Verification</label>
-                    <select name="verification" class="form-select filter-input-control">
+                    <select name="verification" class="form-select filter-input-control" onchange="this.form.submit()">
                         <option value="">All KYC Status</option>
                         <option value="verified" {{ $verification === 'verified' ? 'selected' : '' }}>Verified</option>
                         <option value="pending" {{ $verification === 'pending' ? 'selected' : '' }}>Pending Review</option>
@@ -358,7 +368,7 @@
 
                 <div class="col-6 col-md-2">
                     <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Account Standing</label>
-                    <select name="status" class="form-select filter-input-control">
+                    <select name="status" class="form-select filter-input-control" onchange="this.form.submit()">
                         <option value="">All Standing</option>
                         <option value="active" {{ $status === 'active' ? 'selected' : '' }}>Active Only</option>
                         <option value="suspended" {{ $status === 'suspended' ? 'selected' : '' }}>Suspended</option>
@@ -368,7 +378,7 @@
 
                 <div class="col-6 col-md-2">
                     <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Sort Order</label>
-                    <select name="sort" class="form-select filter-input-control">
+                    <select name="sort" class="form-select filter-input-control" onchange="this.form.submit()">
                         <option value="latest" {{ $sort === 'latest' ? 'selected' : '' }}>Newest Registered</option>
                         <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>Oldest Registered</option>
                         <option value="name" {{ $sort === 'name' ? 'selected' : '' }}>Name (A - Z)</option>
@@ -378,8 +388,9 @@
                 </div>
 
                 <div class="col-md-1 d-flex gap-2">
-                    <button type="submit" class="btn btn-teal w-100" style="background: #0d9488; color: #ffffff; border-radius: 0.65rem; font-weight: 700; padding: 0.55rem 0.5rem;" title="Apply Filter">
+                    <button type="submit" class="btn btn-teal w-100 d-inline-flex align-items-center justify-content-center gap-1" style="background: #0d9488; color: #ffffff; border-radius: 0.65rem; font-weight: 700; padding: 0.55rem 0.5rem;" title="Apply Filter">
                         <i class="fas fa-filter"></i>
+                        <span class="d-none d-md-inline" style="font-size: 0.8rem;">Filter</span>
                     </button>
                     @if($search || $role || $verification || $status || $sort !== 'latest')
                         <a href="{{ route('admin.users.index') }}" class="btn btn-light" style="border: 1px solid #cbd5e1; border-radius: 0.65rem; color: #64748b;" title="Reset filters">
@@ -606,6 +617,18 @@
                                             </li>
 
                                             @if($user->id !== Auth::id())
+                                                <!-- Switch Role between Buyer and Seller -->
+                                                <li>
+                                                    <form action="{{ route('admin.users.update-role', $user) }}" method="POST" class="m-0">
+                                                        @csrf
+                                                        <input type="hidden" name="role" value="{{ $user->role === 'seller' ? 'buyer' : 'seller' }}">
+                                                        <button type="submit" class="dropdown-item py-2 text-primary">
+                                                            <i class="fas fa-{{ $user->role === 'seller' ? 'cart-shopping' : 'store' }} me-2"></i>
+                                                            Switch to {{ $user->role === 'seller' ? 'Buyer / Recycler' : 'Seller' }}
+                                                        </button>
+                                                    </form>
+                                                </li>
+
                                                 <!-- Standing / Restriction Controls -->
                                                 @if($user->is_banned)
                                                     <li>
