@@ -289,7 +289,7 @@
             <i class="fas fa-users-gear"></i>
             <span>User Management</span>
         </a>
-        <a href="{{ route('admin.pending-verifications') }}" class="sidebar-link {{ request()->routeIs('admin.pending-verifications') ? 'active' : '' }}">
+        <a href="{{ route('admin.pending-verifications') }}" class="sidebar-link {{ request()->routeIs('admin.pending-verifications') || request()->routeIs('admin.verifications') ? 'active' : '' }}">
             <i class="fas fa-id-card-clip"></i>
             <span>ID Verifications</span>
         </a>

@@ -237,6 +237,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 
         Route::get('/admin/verifications/pending', [AdminController::class, 'pendingVerifications'])->name('admin.pending-verifications');
+        Route::get('/admin/verifications', [AdminController::class, 'pendingVerifications'])->name('admin.verifications');
         Route::post('/admin/users/{user}/verify', [AdminController::class, 'verifyUser'])->name('admin.verify-user');
         Route::post('/admin/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('admin.reject-user');
         Route::get('/admin/listings', [AdminController::class, 'allListings'])->name('admin.listings');

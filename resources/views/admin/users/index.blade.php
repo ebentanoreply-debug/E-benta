@@ -518,8 +518,15 @@
                                                 {{ $user->id_type }}
                                             </div>
                                         @endif
+                                        @if($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url)
+                                            <div class="mt-1">
+                                                <a href="{{ route('admin.pending-verifications', ['status' => 'verified', 'search' => $user->email]) }}" class="badge text-decoration-none" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-size: 0.68rem; font-weight: 700; border: 1px solid rgba(13, 148, 136, 0.25);" title="Inspect submitted verification documents">
+                                                    <i class="fas fa-id-card me-1"></i>View ID Docs
+                                                </a>
+                                            </div>
+                                        @endif
                                     @elseif($user->id_verification_status === 'pending')
-                                        <a href="{{ route('admin.pending-verifications') }}" class="badge-pending text-decoration-none d-inline-flex align-items-center gap-1">
+                                        <a href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}" class="badge-pending text-decoration-none d-inline-flex align-items-center gap-1">
                                             <i class="fas fa-clock"></i>
                                             <span>Pending Review</span>
                                         </a>
@@ -528,6 +535,11 @@
                                                 {{ $user->id_type }}
                                             </div>
                                         @endif
+                                    @elseif($user->id_verification_status === 'rejected')
+                                        <a href="{{ route('admin.pending-verifications', ['status' => 'rejected', 'search' => $user->email]) }}" class="badge-unverified text-danger text-decoration-none d-inline-flex align-items-center gap-1" style="background: #fef2f2; border-color: #fecaca; font-weight: 700;">
+                                            <i class="fas fa-circle-xmark"></i>
+                                            <span>Rejected</span>
+                                        </a>
                                     @else
                                         <span class="badge-unverified d-inline-flex align-items-center gap-1">
                                             <i class="far fa-circle text-muted"></i>
@@ -584,6 +596,14 @@
                                                     data-id-number="{{ $user->id_number ?? 'Not submitted' }}"
                                                     data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
                                                     data-is-verified="{{ $user->is_verified ? 'Yes' : 'No' }}"
+                                                    data-id-photo="{{ $user->id_photo_url ?? '' }}"
+                                                    data-id-back="{{ $user->id_back_photo_url ?? '' }}"
+                                                    data-id-selfie="{{ $user->id_selfie_url ?? '' }}"
+                                                    data-id-proof="{{ $user->proof_of_address_url ?? '' }}"
+                                                    data-id-proof-type="{{ $user->proof_of_address_type ? ucwords(str_replace('_', ' ', $user->proof_of_address_type)) : '' }}"
+                                                    data-verified-date="{{ $user->location_verified_at ? $user->location_verified_at->format('M d, Y • h:i A') : ($user->is_verified ? 'Verified' : 'Unverified') }}"
+                                                    data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
+                                                    data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
                                                     data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
                                                     data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
                                                     data-score="{{ $user->total_impact_score ?? 0 }}"
@@ -596,6 +616,14 @@
                                                     <i class="fas fa-eye text-primary me-2"></i>Full Details
                                                 </button>
                                             </li>
+
+                                            @if($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url || $user->id_type)
+                                                <li>
+                                                    <a class="dropdown-item py-2" href="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}">
+                                                        <i class="fas fa-id-card text-teal me-2" style="color: #0d9488;"></i>Inspect ID Documents
+                                                    </a>
+                                                </li>
+                                            @endif
 
                                             <li>
                                                 <a class="dropdown-item py-2" href="{{ route('users.show', $user) }}" target="_blank">
@@ -785,24 +813,51 @@
 
                 <!-- KYC & Identity Credentials -->
                 <div class="mb-4 p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                    <div class="text-muted font-weight-bold mb-2" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Identity & KYC Records</div>
-                    <div class="row g-2">
-                        <div class="col-sm-4">
+                    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                        <div class="text-muted font-weight-bold" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Identity & KYC Records</div>
+                        <a id="modalQueueLink" href="#" target="_blank" class="btn btn-xs btn-outline-teal" style="font-size: 0.72rem; font-weight: 700; border-radius: 0.4rem; padding: 0.2rem 0.6rem; color: #0d9488; border-color: #0d9488; text-decoration: none; display: none;">
+                            <i class="fas fa-arrow-up-right-from-square me-1"></i>Open in Verification Center
+                        </a>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-3">
                             <span class="text-muted d-block" style="font-size: 0.75rem;">Document Type</span>
                             <strong id="modalIdType" style="color: #0f172a;">-</strong>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <span class="text-muted d-block" style="font-size: 0.75rem;">ID Number</span>
                             <code id="modalIdNumber" style="font-size: 0.85rem; color: #0f766e;">-</code>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <span class="text-muted d-block" style="font-size: 0.75rem;">KYC Status</span>
                             <span id="modalIdStatus" class="font-weight-bold">-</span>
+                        </div>
+                        <div class="col-sm-3">
+                            <span class="text-muted d-block" style="font-size: 0.75rem;">Verified Date</span>
+                            <span id="modalVerifiedDate" style="font-size: 0.82rem; color: #334155; font-weight: 600;">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Rejection Reason if any -->
+                    <div id="modalRejectionWrap" class="mb-3 p-2 rounded bg-danger-subtle border border-danger-subtle text-danger" style="display: none; font-size: 0.8rem;">
+                        <strong><i class="fas fa-circle-exclamation me-1"></i>Rejection Reason:</strong>
+                        <span id="modalRejectionReason"></span>
+                    </div>
+
+                    <!-- Document Images Gallery -->
+                    <div>
+                        <div class="text-muted font-weight-bold mb-2" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fas fa-file-shield me-1 text-teal" style="color: #0d9488;"></i>Attached Verification Documents
+                        </div>
+                        <div class="row g-2" id="modalIdDocsGrid">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+                        <div id="modalNoDocsMsg" class="p-2 rounded text-muted" style="background: #f1f5f9; font-size: 0.8rem; display: none;">
+                            <i class="fas fa-info-circle me-1"></i>No uploaded document images found for this user.
                         </div>
                     </div>
                 </div>
 
-                <!-- Environmental Impact Counters -->
                 <div class="row g-2 text-center">
                     <div class="col-4">
                         <div class="p-2 rounded-3" style="background: #ecfdf5; border: 1px solid #a7f3d0;">
@@ -831,6 +886,27 @@
 
             <div class="modal-footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 1rem 1.5rem;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 0.65rem; font-weight: 600;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 1.1 DOC LIGHTBOX ZOOM MODAL -->
+<div class="modal fade" id="adminUserDocZoomModal" tabindex="-1" aria-hidden="true" style="z-index: 1065;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white py-2">
+                <h6 class="modal-title font-weight-bold" id="adminDocZoomTitle">Document Preview</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 bg-dark text-center">
+                <img id="adminDocZoomImg" src="" alt="Zoomed Document" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+            </div>
+            <div class="modal-footer bg-dark border-0 py-2">
+                <a id="adminDocZoomOpenLink" href="#" target="_blank" class="btn btn-sm btn-outline-light">
+                    <i class="fas fa-up-right-from-square me-1"></i>Open Full Size
+                </a>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -944,10 +1020,84 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('modalIdType').textContent = this.dataset.idType;
             document.getElementById('modalIdNumber').textContent = this.dataset.idNumber;
             document.getElementById('modalIdStatus').textContent = this.dataset.idStatus;
+            document.getElementById('modalVerifiedDate').textContent = this.dataset.verifiedDate || '-';
             document.getElementById('modalWeightDiverted').textContent = this.dataset.weight;
             document.getElementById('modalCo2Saved').textContent = this.dataset.co2;
             document.getElementById('modalImpactScore').textContent = this.dataset.score;
             document.getElementById('modalJoinedDate').textContent = this.dataset.joined;
+
+            // Rejection reason if rejected
+            const rejWrap = document.getElementById('modalRejectionWrap');
+            const rejReason = document.getElementById('modalRejectionReason');
+            if (this.dataset.rejectionReason) {
+                rejWrap.style.display = 'block';
+                rejReason.textContent = this.dataset.rejectionReason;
+            } else {
+                rejWrap.style.display = 'none';
+            }
+
+            // Direct Queue link
+            const queueLink = document.getElementById('modalQueueLink');
+            if (this.dataset.queueUrl && (this.dataset.idPhoto || this.dataset.idBack || this.dataset.idSelfie || this.dataset.idProof || this.dataset.idType !== 'Not submitted')) {
+                queueLink.href = this.dataset.queueUrl;
+                queueLink.style.display = 'inline-flex';
+            } else {
+                queueLink.style.display = 'none';
+            }
+
+            // Document Images Grid
+            const docs = [
+                { url: this.dataset.idPhoto, label: 'Primary ID Front', icon: 'fa-id-card' },
+                { url: this.dataset.idBack, label: 'Back of ID (Address)', icon: 'fa-location-dot' },
+                { url: this.dataset.idSelfie, label: 'Selfie Match', icon: 'fa-user-check' },
+                { url: this.dataset.idProof, label: 'Proof of Location' + (this.dataset.idProofType ? ` (${this.dataset.idProofType})` : ''), icon: 'fa-file-invoice' }
+            ];
+            const grid = document.getElementById('modalIdDocsGrid');
+            const noDocs = document.getElementById('modalNoDocsMsg');
+            grid.innerHTML = '';
+            let docCount = 0;
+            docs.forEach(doc => {
+                if (doc.url) {
+                    docCount++;
+                    const col = document.createElement('div');
+                    col.className = 'col-6 col-md-3';
+                    const isPdf = doc.url.toLowerCase().endsWith('.pdf');
+                    col.innerHTML = `
+                        <div class="user-doc-card p-1 rounded-3 border bg-white shadow-sm" style="cursor: pointer; transition: all 0.2s ease;">
+                            <div style="height: 100px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                                ${isPdf ? `
+                                    <div class="text-white text-center p-2">
+                                        <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
+                                        <div style="font-size: 0.65rem;">PDF Document</div>
+                                    </div>
+                                ` : `
+                                    <img src="${doc.url}" alt="${doc.label}" style="width: 100%; height: 100%; object-fit: cover;">
+                                `}
+                                <span style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(15,23,42,0.85); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <i class="fas ${doc.icon} me-1 text-teal" style="color: #2dd4bf;"></i>${doc.label}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    col.querySelector('.user-doc-card').addEventListener('click', () => {
+                        if (isPdf) {
+                            window.open(doc.url, '_blank');
+                        } else {
+                            document.getElementById('adminDocZoomTitle').textContent = `${this.dataset.name} - ${doc.label}`;
+                            document.getElementById('adminDocZoomImg').src = doc.url;
+                            document.getElementById('adminDocZoomOpenLink').href = doc.url;
+                            const zoomModal = new bootstrap.Modal(document.getElementById('adminUserDocZoomModal'));
+                            zoomModal.show();
+                        }
+                    });
+                    grid.appendChild(col);
+                }
+            });
+            if (docCount === 0) {
+                noDocs.style.display = 'block';
+            } else {
+                noDocs.style.display = 'none';
+            }
 
             // Avatar setup
             const avatarWrap = document.getElementById('modalUserAvatarWrap');

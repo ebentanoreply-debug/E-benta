@@ -114,6 +114,16 @@
         box-shadow: 0 2px 10px rgba(13, 148, 136, 0.4);
     }
 
+    .admin-filter-pill.active-verified {
+        background: #059669 !important;
+        box-shadow: 0 2px 10px rgba(5, 150, 105, 0.4) !important;
+    }
+
+    .admin-filter-pill.active-rejected {
+        background: #dc2626 !important;
+        box-shadow: 0 2px 10px rgba(220, 38, 38, 0.4) !important;
+    }
+
     .quick-reason-chip {
         display: inline-block;
         padding: 0.3rem 0.65rem;
@@ -148,35 +158,84 @@
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
-                                <i class="fas fa-id-card me-1"></i>KYC, Identity & Location Verification Queue
+                                <i class="fas fa-id-card me-1"></i>Identity & Location Verification Center
                             </span>
-                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $totalCount ?? $pendingUsers->total() }} Pending Submissions</span>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $totalCount ?? $pendingUsers->total() }} Records in Filter</span>
                         </div>
                         <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
                             Seller Location & Government ID Verifications
                         </h1>
                         <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
-                            Inspect government IDs, back address cards, and registered physical pickup locations to verify legitimate sellers & recyclers.
+                            Inspect government IDs, back address cards, and registered physical pickup locations for legitimate sellers & buyers anytime.
                         </p>
                     </div>
 
-                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; color: #0f766e;">
+                            <i class="fas fa-users-gear"></i>
+                            <span>User Management</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Status Tabs & Sub-filters Bar -->
+                <div class="mt-4 pt-3 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <!-- Status Filter Tabs -->
+                    <div class="admin-filter-pill-group">
+                        <a href="{{ route('admin.pending-verifications', array_filter(['status' => 'pending', 'role' => request('role'), 'search' => request('search')])) }}" 
+                           class="admin-filter-pill {{ ($status ?? 'pending') === 'pending' ? 'active' : '' }}">
+                            <i class="fas fa-clock"></i> Pending ({{ $pendingCount ?? 0 }})
+                        </a>
+                        <a href="{{ route('admin.pending-verifications', array_filter(['status' => 'verified', 'role' => request('role'), 'search' => request('search')])) }}" 
+                           class="admin-filter-pill {{ ($status ?? '') === 'verified' ? 'active active-verified' : '' }}">
+                            <i class="fas fa-circle-check"></i> Approved & Verified ({{ $verifiedCount ?? 0 }})
+                        </a>
+                        <a href="{{ route('admin.pending-verifications', array_filter(['status' => 'rejected', 'role' => request('role'), 'search' => request('search')])) }}" 
+                           class="admin-filter-pill {{ ($status ?? '') === 'rejected' ? 'active active-rejected' : '' }}">
+                            <i class="fas fa-circle-xmark"></i> Rejected ({{ $rejectedCount ?? 0 }})
+                        </a>
+                        <a href="{{ route('admin.pending-verifications', array_filter(['status' => 'all', 'role' => request('role'), 'search' => request('search')])) }}" 
+                           class="admin-filter-pill {{ ($status ?? '') === 'all' ? 'active' : '' }}">
+                            <i class="fas fa-layer-group"></i> All ({{ $allCount ?? 0 }})
+                        </a>
+                    </div>
+
+                    <!-- Role Filters & Search -->
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
                         <div class="admin-filter-pill-group">
-                            <a href="{{ route('admin.pending-verifications') }}" class="admin-filter-pill {{ !request('role') ? 'active' : '' }}">
-                                <i class="fas fa-list"></i> All ({{ $totalCount ?? 0 }})
+                            <a href="{{ route('admin.pending-verifications', array_filter(['status' => $status, 'search' => request('search')])) }}" class="admin-filter-pill {{ !request('role') ? 'active' : '' }}">
+                                <i class="fas fa-list"></i> All Roles
                             </a>
-                            <a href="{{ route('admin.pending-verifications', ['role' => 'seller']) }}" class="admin-filter-pill {{ request('role') === 'seller' ? 'active' : '' }}">
-                                <i class="fas fa-store"></i> Sellers & Location ({{ $sellerCount ?? 0 }})
+                            <a href="{{ route('admin.pending-verifications', array_filter(['status' => $status, 'role' => 'seller', 'search' => request('search')])) }}" class="admin-filter-pill {{ request('role') === 'seller' ? 'active' : '' }}">
+                                <i class="fas fa-store"></i> Sellers ({{ $sellerCount ?? 0 }})
                             </a>
-                            <a href="{{ route('admin.pending-verifications', ['role' => 'buyer']) }}" class="admin-filter-pill {{ request('role') === 'buyer' ? 'active' : '' }}">
+                            <a href="{{ route('admin.pending-verifications', array_filter(['status' => $status, 'role' => 'buyer', 'search' => request('search')])) }}" class="admin-filter-pill {{ request('role') === 'buyer' ? 'active' : '' }}">
                                 <i class="fas fa-shopping-bag"></i> Buyers ({{ $buyerCount ?? 0 }})
                             </a>
                         </div>
 
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.2);">
-                            <i class="fas fa-arrow-left"></i>
-                            <span>Dashboard Overview</span>
-                        </a>
+                        <!-- Search Form -->
+                        <form method="GET" action="{{ route('admin.pending-verifications') }}" class="d-flex align-items-center">
+                            <input type="hidden" name="status" value="{{ $status ?? 'pending' }}">
+                            @if(request('role'))
+                                <input type="hidden" name="role" value="{{ request('role') }}">
+                            @endif
+                            <div class="input-group">
+                                <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="Search name, ID..." style="border-radius: 0.6rem 0 0 0.6rem; min-width: 160px; background: rgba(255,255,255,0.95); font-size: 0.82rem;">
+                                <button class="btn btn-sm btn-dark" type="submit" style="border-radius: 0 0.6rem 0.6rem 0; border: 1px solid rgba(255,255,255,0.2);">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            @if(request('search'))
+                                <a href="{{ route('admin.pending-verifications', array_filter(['status' => $status, 'role' => request('role')])) }}" class="btn btn-sm btn-outline-light ms-1" title="Clear Search">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            @endif
+                        </form>
                     </div>
                 </div>
             </div>
@@ -214,15 +273,32 @@
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        @if($user->isSeller())
-                                            <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #0d9488; font-weight: 800; font-size: 0.75rem; border-radius: 2rem; padding: 0.35rem 0.7rem;">
-                                                <i class="fas fa-store me-1"></i>Seller Account
-                                            </span>
-                                        @else
-                                            <span class="badge" style="background: rgba(2, 132, 199, 0.15); color: #0284c7; font-weight: 800; font-size: 0.75rem; border-radius: 2rem; padding: 0.35rem 0.7rem;">
-                                                <i class="fas fa-shopping-bag me-1"></i>Buyer/Recycler
-                                            </span>
-                                        @endif
+                                        <div class="mb-1">
+                                            @if($user->isSeller())
+                                                <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #0d9488; font-weight: 800; font-size: 0.72rem; border-radius: 2rem; padding: 0.3rem 0.65rem;">
+                                                    <i class="fas fa-store me-1"></i>Seller
+                                                </span>
+                                            @else
+                                                <span class="badge" style="background: rgba(2, 132, 199, 0.15); color: #0284c7; font-weight: 800; font-size: 0.72rem; border-radius: 2rem; padding: 0.3rem 0.65rem;">
+                                                    <i class="fas fa-shopping-bag me-1"></i>Buyer
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            @if($user->is_verified)
+                                                <span class="badge bg-success" style="font-weight: 800; font-size: 0.7rem; border-radius: 2rem; padding: 0.25rem 0.6rem;">
+                                                    <i class="fas fa-circle-check me-1"></i>Verified
+                                                </span>
+                                            @elseif($user->id_verification_status === 'rejected')
+                                                <span class="badge bg-danger" style="font-weight: 800; font-size: 0.7rem; border-radius: 2rem; padding: 0.25rem 0.6rem;">
+                                                    <i class="fas fa-circle-xmark me-1"></i>Rejected
+                                                </span>
+                                            @else
+                                                <span class="badge bg-warning text-dark" style="font-weight: 800; font-size: 0.7rem; border-radius: 2rem; padding: 0.25rem 0.6rem;">
+                                                    <i class="fas fa-clock me-1"></i>Pending Review
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
 
@@ -348,17 +424,49 @@
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="p-3 border-top d-flex gap-2" style="background: rgba(0,0,0,0.02);">
-                                    <form method="POST" action="{{ route('admin.verify-user', $user) }}" style="flex: 1;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100" style="font-weight: 800; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem;">
-                                            <i class="fas fa-check-circle me-1"></i>Approve ID & Location
+                                @if($user->is_verified)
+                                    <div class="p-3 border-top d-flex align-items-center justify-content-between gap-2" style="background: rgba(16, 185, 129, 0.05);">
+                                        <div class="d-flex align-items-center gap-2 text-success" style="font-size: 0.85rem; font-weight: 700;">
+                                            <i class="fas fa-shield-check fa-lg"></i>
+                                            <div>
+                                                <div>Approved & Legit</div>
+                                                <small style="font-size: 0.7rem; color: #64748b; font-weight: normal;">
+                                                    Verified {{ $user->location_verified_at ? $user->location_verified_at->format('M d, Y') : 'Active' }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}" style="font-weight: 700; border-radius: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                                            <i class="fas fa-user-xmark me-1"></i>Revoke / Reject
                                         </button>
-                                    </form>
-                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}" style="font-weight: 700; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem 1rem;">
-                                        <i class="fas fa-times-circle me-1"></i>Reject
-                                    </button>
-                                </div>
+                                    </div>
+                                @elseif($user->id_verification_status === 'rejected')
+                                    <div class="p-3 border-top" style="background: rgba(239, 68, 68, 0.04);">
+                                        <div class="mb-2 text-danger" style="font-size: 0.8rem;">
+                                            <strong><i class="fas fa-circle-exclamation me-1"></i>Rejection Reason:</strong>
+                                            <div class="p-2 rounded bg-white mt-1 border" style="font-size: 0.78rem; color: #475569;">
+                                                {{ $user->id_rejection_reason ?: 'No specific reason given.' }}
+                                            </div>
+                                        </div>
+                                        <form method="POST" action="{{ route('admin.verify-user', $user) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success btn-sm w-100" style="font-weight: 700; border-radius: 0.5rem; font-size: 0.82rem; padding: 0.45rem;">
+                                                <i class="fas fa-rotate-left me-1"></i>Re-approve ID & Location
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="p-3 border-top d-flex gap-2" style="background: rgba(0,0,0,0.02);">
+                                        <form method="POST" action="{{ route('admin.verify-user', $user) }}" style="flex: 1;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success w-100" style="font-weight: 800; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem;">
+                                                <i class="fas fa-check-circle me-1"></i>Approve ID & Location
+                                            </button>
+                                        </form>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}" style="font-weight: 700; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem 1rem;">
+                                            <i class="fas fa-times-circle me-1"></i>Reject
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -493,13 +601,38 @@
                 </div>
             @else
                 <div class="text-center py-5">
-                    <div style="width: 70px; height: 70px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem;">
-                        <i class="fas fa-circle-check"></i>
+                    <div style="width: 70px; height: 70px; border-radius: 50%; background: {{ ($status ?? 'pending') === 'verified' ? '#ecfdf5; color: #059669;' : (($status ?? '') === 'rejected' ? '#fef2f2; color: #dc2626;' : '#f0fdf4; color: #16a34a;') }} display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem;">
+                        <i class="fas {{ ($status ?? 'pending') === 'verified' ? 'fa-id-card' : (($status ?? '') === 'rejected' ? 'fa-circle-xmark' : 'fa-circle-check') }}"></i>
                     </div>
-                    <h4 style="font-weight: 900; color: #0f172a;" class="dark:text-white">All Caught Up!</h4>
-                    <p style="color: #64748b; font-size: 0.95rem; max-width: 450px; margin: 0 auto;">
-                        There are no pending verification submissions matching this criteria. All seller locations and buyer IDs are processed.
+                    <h4 style="font-weight: 900; color: #0f172a;" class="dark:text-white">
+                        @if(($status ?? 'pending') === 'verified')
+                            No Approved Verifications Found
+                        @elseif(($status ?? '') === 'rejected')
+                            No Rejected Verifications
+                        @elseif(($status ?? '') === 'all')
+                            No Verification Records Found
+                        @else
+                            All Caught Up!
+                        @endif
+                    </h4>
+                    <p style="color: #64748b; font-size: 0.95rem; max-width: 480px; margin: 0 auto;">
+                        @if(($status ?? 'pending') === 'verified')
+                            There are currently no approved users matching this role or search filter.
+                        @elseif(($status ?? '') === 'rejected')
+                            There are currently no rejected ID or location submissions in this view.
+                        @elseif(($status ?? '') === 'all')
+                            No user records with submitted verification documents match the selected filters.
+                        @else
+                            There are no pending verification submissions matching this criteria. All seller locations and buyer IDs are processed.
+                        @endif
                     </p>
+                    @if(request('search') || request('role') || ($status ?? 'pending') !== 'pending')
+                        <div class="mt-3">
+                            <a href="{{ route('admin.pending-verifications') }}" class="btn btn-sm btn-outline-teal" style="font-weight: 700; border-radius: 0.5rem;">
+                                <i class="fas fa-rotate-left me-1"></i>Reset to Pending Verifications
+                            </a>
+                        </div>
+                    @endif
                 </div>
             @endif
 
