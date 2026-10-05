@@ -105,15 +105,15 @@ class SettingsController extends Controller
     {
         $user = $request->user();
 
-        $photoRule = $user->id_photo_url ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'] : ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'];
+        $photoRule = $user->id_photo_url ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'] : ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'];
 
         $validated = $request->validate([
             'id_type' => ['required', 'string', 'max:100'],
             'id_number' => ['required', 'string', 'max:100'],
             'id_photo' => $photoRule,
-            'id_back_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
-            'id_selfie' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
-            'proof_of_address' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:4096'],
+            'id_back_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'],
+            'id_selfie' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'],
+            'proof_of_address' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:25600'],
             'proof_of_address_type' => ['nullable', 'string', 'max:100'],
             // Location fields
             'address_line_1' => ['nullable', 'string', 'max:255'],

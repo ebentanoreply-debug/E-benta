@@ -414,7 +414,7 @@ class ListingController extends Controller
             ],
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
             'photos' => 'nullable|array|max:8',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:25600',
         ]);
 
         // Enforce maximum category selections matching lot count for bulk listings
@@ -655,7 +655,7 @@ class ListingController extends Controller
             ],
             'suggested_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
             'photos' => 'nullable|array|max:8',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:25600',
             'delete_photos' => 'array',
             'delete_photos.*' => 'integer',
         ]);
