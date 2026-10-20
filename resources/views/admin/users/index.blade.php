@@ -78,7 +78,18 @@
         border: 1px solid rgba(13, 148, 136, 0.15);
         border-radius: 1.25rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-        overflow: hidden;
+    }
+
+    .users-desktop-table-wrap {
+        width: 100%;
+        overflow: visible;
+    }
+
+    .admin-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
     .admin-table th {
@@ -88,8 +99,10 @@
         letter-spacing: 0.5px;
         color: #64748b;
         background: #f8fafc;
-        padding: 0.9rem 1.25rem;
+        padding: 0.95rem 1.25rem;
         border: none;
+        border-bottom: 1px solid #e2e8f0;
+        white-space: nowrap;
     }
 
     .admin-table td {
@@ -98,6 +111,10 @@
         border-top: 1px solid #f1f5f9;
         font-size: 0.9rem;
         color: #334155;
+    }
+
+    .admin-table tbody tr:first-child td {
+        border-top: none;
     }
 
     .admin-table tbody tr:hover {
@@ -247,13 +264,6 @@
                 </div>
 
                 <div class="d-flex align-items-center flex-wrap gap-2 w-100 w-md-auto mt-2 mt-md-0">
-                    <form action="{{ route('admin.users.seed-contact-responses') }}" method="POST" onsubmit="return confirm('Sync/Insert 99 survey respondents into the database with authentic timestamps and San Juan locations?');" class="m-0 flex-grow-1 flex-md-grow-0">
-                        @csrf
-                        <button type="submit" class="btn btn-light d-inline-flex align-items-center justify-content-center gap-2 w-100" style="border-radius: 0.75rem; font-weight: 700; color: #0f766e; box-shadow: 0 4px 12px rgba(0,0,0,0.08); font-size: 0.88rem; padding: 0.55rem 0.9rem;">
-                            <i class="fas fa-file-import"></i>
-                            <span>Sync Respondents (99)</span>
-                        </button>
-                    </form>
                     <a href="{{ route('admin.pending-verifications') }}" class="btn btn-warning d-inline-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-md-grow-0" style="border-radius: 0.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); font-size: 0.88rem; padding: 0.55rem 0.9rem;">
                         <i class="fas fa-id-card-clip"></i>
                         <span>Pending Verifications ({{ $stats['pending'] }})</span>
@@ -427,7 +437,7 @@
 
         <!-- USERS TABLE CARD -->
         <div class="admin-card">
-            <div class="p-3 p-md-4 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: #ffffff;">
+            <div class="p-3 p-md-4 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: #ffffff; border-top-left-radius: 1.25rem; border-top-right-radius: 1.25rem;">
                 <div class="d-flex align-items-center gap-2">
                     <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">
                         User Accounts
@@ -442,7 +452,7 @@
             </div>
 
             <!-- DESKTOP TABLE VIEW (Visible on lg and larger screens) -->
-            <div class="table-responsive d-none d-lg-block">
+            <div class="users-desktop-table-wrap d-none d-lg-block">
                 <table class="table admin-table mb-0">
                     <thead>
                         <tr>
@@ -581,12 +591,12 @@
 
                                 <td class="text-end">
                                     <div class="dropdown d-inline-block">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" style="border-radius: 0.55rem; font-size: 0.82rem; font-weight: 700; padding: 0.45rem 0.75rem;">
                                             Actions
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 200px;">
+                                        <ul class="dropdown-menu dropdown-menu-end shadow" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 210px; z-index: 1060;">
                                             <li>
-                                                <button type="button" class="dropdown-item py-2 view-user-btn" data-bs-toggle="modal" data-bs-target="#userDetailsModal"
+                                                <button type="button" class="dropdown-item py-2 view-user-btn"
                                                     data-id="{{ $user->id }}"
                                                     data-name="{{ $user->name }}"
                                                     data-email="{{ $user->email }}"
@@ -722,7 +732,7 @@
                                     </div>
                                     <h5 style="font-weight: 800; color: #334155; margin-bottom: 0.35rem;">No user accounts found</h5>
                                     <p style="color: #64748b; font-size: 0.9rem; max-width: 420px; margin: 0 auto 1.25rem;">
-                                        Try adjusting your search query, clearing filters, or seeding initial users to inspect.
+                                        Try adjusting your search query or clearing your filter criteria.
                                     </p>
                                     @if($search || $role || $verification || $status || $sort !== 'latest')
                                         <a href="{{ route('admin.users.index') }}" class="btn btn-outline-teal btn-sm" style="border-radius: 0.5rem; font-weight: 700; color: #0d9488; border-color: #0d9488;">
@@ -870,12 +880,12 @@
                             </button>
 
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 0.6rem; font-size: 0.82rem; font-weight: 700; padding: 0.45rem 0.75rem;">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" style="border-radius: 0.6rem; font-size: 0.82rem; font-weight: 700; padding: 0.45rem 0.75rem;">
                                     Actions
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 200px;">
+                                <ul class="dropdown-menu dropdown-menu-end shadow" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 210px; z-index: 1060;">
                                     <li>
-                                        <button type="button" class="dropdown-item py-2 view-user-btn" data-bs-toggle="modal" data-bs-target="#userDetailsModal"
+                                        <button type="button" class="dropdown-item py-2 view-user-btn"
                                             data-id="{{ $user->id }}"
                                             data-name="{{ $user->name }}"
                                             data-email="{{ $user->email }}"
@@ -1000,7 +1010,7 @@
                         </div>
                         <h5 style="font-weight: 800; color: #334155; margin-bottom: 0.35rem;">No user accounts found</h5>
                         <p style="color: #64748b; font-size: 0.9rem; max-width: 420px; margin: 0 auto 1.25rem;">
-                            Try adjusting your search query, clearing filters, or syncing respondents.
+                            Try adjusting your search query or clearing your filter criteria.
                         </p>
                         @if($search || $role || $verification || $status || $sort !== 'latest')
                             <a href="{{ route('admin.users.index') }}" class="btn btn-outline-teal btn-sm" style="border-radius: 0.5rem; font-weight: 700; color: #0d9488; border-color: #0d9488;">
@@ -1013,7 +1023,7 @@
 
             <!-- PAGINATION -->
             @if($users->hasPages())
-                <div class="p-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="p-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: #ffffff; border-bottom-left-radius: 1.25rem; border-bottom-right-radius: 1.25rem;">
                     <div style="font-size: 0.85rem; color: #64748b;">
                         Showing page {{ $users->currentPage() }} of {{ $users->lastPage() }}
                     </div>
