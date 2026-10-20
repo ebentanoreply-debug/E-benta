@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->seedUsers();
         $this->seedAddresses();
         $this->seedOffers();
+        $this->call(ContactResponsesUsersSeeder::class);
     }
 
     /**

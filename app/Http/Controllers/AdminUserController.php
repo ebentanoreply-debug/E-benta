@@ -287,4 +287,19 @@ class AdminUserController extends Controller
 
         return back()->with('success', "User account {$name} has been removed successfully.");
     }
+
+    /**
+     * Seed or sync 99 survey respondent users into the live database.
+     */
+    public function seedContactResponses(Request $request)
+    {
+        if (!Auth::user()->isAdmin()) {
+            return redirect('/')->with('error', 'Unauthorized access.');
+        }
+
+        $seeder = new \Database\Seeders\ContactResponsesUsersSeeder();
+        $seeder->run();
+
+        return back()->with('success', 'Successfully synced all 99 thesis evaluation respondents into the database with authentic timestamps and San Juan locations!');
+    }
 }

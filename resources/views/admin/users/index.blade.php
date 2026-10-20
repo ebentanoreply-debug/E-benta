@@ -231,6 +231,13 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
+                    <form action="{{ route('admin.users.seed-contact-responses') }}" method="POST" onsubmit="return confirm('Sync/Insert 99 survey respondents into the database with authentic timestamps and San Juan locations?');" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; color: #0f766e; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                            <i class="fas fa-file-import"></i>
+                            <span>Sync Respondents (99)</span>
+                        </button>
+                    </form>
                     <a href="{{ route('admin.pending-verifications') }}" class="btn btn-warning d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);">
                         <i class="fas fa-id-card-clip"></i>
                         <span>Pending Verifications ({{ $stats['pending'] }})</span>
