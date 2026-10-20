@@ -19,6 +19,54 @@ class AdminUserController extends Controller
             return redirect('/')->with('error', 'Unauthorized access.');
         }
 
+        // Auto-heal defense buyer locations if still displaying legacy seed barangay
+        try {
+            if (User::where('email', 'krisaquino817@gmail.com')->where('barangay', '!=', 'Bonifacio')->exists()) {
+                User::where('email', 'krisaquino817@gmail.com')->update([
+                    'role' => 'buyer',
+                    'address_line_1' => 'Malong Street',
+                    'barangay' => 'Bonifacio',
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
+                ]);
+                User::where('email', 'Abeaustria@gmail.com')->update([
+                    'role' => 'buyer',
+                    'address_line_1' => 'Purok 1, San Juan',
+                    'barangay' => 'San Juan',
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
+                ]);
+                User::where('email', 'lomibaojerwin@gmail.com')->update([
+                    'role' => 'buyer',
+                    'address_line_1' => 'Purok 2, San Juan',
+                    'barangay' => 'San Juan',
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
+                ]);
+                User::where('email', 'jimmybeltran@gmail.com')->update([
+                    'role' => 'buyer',
+                    'address_line_1' => 'Sitio Agtas',
+                    'barangay' => 'San Juan',
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
+                ]);
+                User::whereIn('email', ['benignogarcia23@gmail.com', 'Benignogarcia@gmail.com'])->update([
+                    'role' => 'buyer',
+                    'address_line_1' => 'Purok 1, Doyong',
+                    'barangay' => 'Doyong',
+                    'address_city' => 'San Carlos City',
+                    'address_province' => 'Pangasinan',
+                    'postal_code' => '2420',
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // Silently continue if DB table not available yet
+        }
+
         $query = User::query();
 
         // 1. Text Search across name, email, phone, city, id number, and business name
@@ -300,10 +348,47 @@ class AdminUserController extends Controller
         $seeder = new \Database\Seeders\ContactResponsesUsersSeeder();
         $seeder->run();
 
-        // Ensure legacy dummy store names are cleared
-        \Illuminate\Support\Facades\DB::table('users')
-            ->whereNotNull('business_name')
-            ->update(['business_name' => null, 'business_description' => null]);
+        // Explicitly update buyer locations for thesis defense
+        \Illuminate\Support\Facades\DB::table('users')->where('email', 'krisaquino817@gmail.com')->update([
+            'role' => 'buyer',
+            'address_line_1' => 'Malong Street',
+            'barangay' => 'Bonifacio',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+        ]);
+        \Illuminate\Support\Facades\DB::table('users')->where('email', 'Abeaustria@gmail.com')->update([
+            'role' => 'buyer',
+            'address_line_1' => 'Purok 1, San Juan',
+            'barangay' => 'San Juan',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+        ]);
+        \Illuminate\Support\Facades\DB::table('users')->where('email', 'lomibaojerwin@gmail.com')->update([
+            'role' => 'buyer',
+            'address_line_1' => 'Purok 2, San Juan',
+            'barangay' => 'San Juan',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+        ]);
+        \Illuminate\Support\Facades\DB::table('users')->where('email', 'jimmybeltran@gmail.com')->update([
+            'role' => 'buyer',
+            'address_line_1' => 'Sitio Agtas',
+            'barangay' => 'San Juan',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+        ]);
+        \Illuminate\Support\Facades\DB::table('users')->whereIn('email', ['benignogarcia23@gmail.com', 'Benignogarcia@gmail.com'])->update([
+            'role' => 'buyer',
+            'address_line_1' => 'Purok 1, Doyong',
+            'barangay' => 'Doyong',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+        ]);
 
         return back()->with('success', 'Successfully synced all 99 thesis evaluation respondents into the database with authentic timestamps and San Juan locations!');
     }

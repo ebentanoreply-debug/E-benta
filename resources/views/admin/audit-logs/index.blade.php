@@ -104,8 +104,11 @@
                         <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase;">Action Filter</label>
                         <select name="action" class="form-select form-select-sm" style="border-radius: 0.6rem; font-weight: 600;">
                             <option value="">All Actions</option>
-                            <option value="user_login" {{ request('action') == 'user_login' ? 'selected' : '' }}>User Login</option>
-                            <option value="user_verified" {{ request('action') == 'user_verified' ? 'selected' : '' }}>User Verified</option>
+                            <option value="user_login" {{ in_array(request('action'), ['user_login', 'login']) ? 'selected' : '' }}>User Login</option>
+                            <option value="logout" {{ in_array(request('action'), ['logout', 'user_logout']) ? 'selected' : '' }}>User Logout</option>
+                            <option value="register" {{ request('action') == 'register' ? 'selected' : '' }}>User Registration</option>
+                            <option value="email_verified" {{ request('action') == 'email_verified' ? 'selected' : '' }}>Email Verification</option>
+                            <option value="user_verified" {{ in_array(request('action'), ['user_verified', 'verified']) ? 'selected' : '' }}>ID / KYC Approval</option>
                             <option value="user_warning_strike" {{ request('action') == 'user_warning_strike' ? 'selected' : '' }}>Warning / Strike</option>
                             <option value="user_suspended" {{ request('action') == 'user_suspended' ? 'selected' : '' }}>User Suspended</option>
                             <option value="user_banned" {{ request('action') == 'user_banned' ? 'selected' : '' }}>User Banned</option>
