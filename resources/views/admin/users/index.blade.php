@@ -473,11 +473,6 @@
                                                     <span>• <i class="fas fa-phone me-1"></i>{{ $user->phone }}</span>
                                                 @endif
                                             </div>
-                                            @if($user->business_name)
-                                                <div style="font-size: 0.75rem; color: #0d9488; font-weight: 600;">
-                                                    <i class="fas fa-briefcase me-1"></i>{{ $user->business_name }}
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -525,13 +520,11 @@
                                                 {{ $user->id_type }}
                                             </div>
                                         @endif
-                                        @if($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url)
-                                            <div class="mt-1">
-                                                <a href="{{ route('admin.pending-verifications', ['status' => 'verified', 'search' => $user->email]) }}" class="badge text-decoration-none" style="background: rgba(13, 148, 136, 0.1); color: #0d9488; font-size: 0.68rem; font-weight: 700; border: 1px solid rgba(13, 148, 136, 0.25);" title="Inspect submitted verification documents">
-                                                    <i class="fas fa-id-card me-1"></i>View ID Docs
-                                                </a>
-                                            </div>
-                                        @endif
+                                        <div class="mt-1">
+                                            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: 0.68rem; font-weight: 700; border: 1px solid #e2e8f0;" title="Government ID records secured & protected under RA 10173">
+                                                <i class="fas fa-shield-halved me-1 text-success"></i>ID Protected
+                                            </span>
+                                        </div>
                                     @elseif($user->id_verification_status === 'pending')
                                         <a href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}" class="badge-pending text-decoration-none d-inline-flex align-items-center gap-1">
                                             <i class="fas fa-clock"></i>
@@ -596,11 +589,9 @@
                                                     data-email="{{ $user->email }}"
                                                     data-phone="{{ $user->phone ?? 'Not provided' }}"
                                                     data-role="{{ strtoupper($user->role) }}"
-                                                    data-business="{{ $user->business_name ?? 'None' }}"
-                                                    data-business-desc="{{ $user->business_description ?? 'None' }}"
                                                     data-address="{{ trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified' }}"
                                                     data-id-type="{{ $user->id_type ?? 'Not submitted' }}"
-                                                    data-id-number="{{ $user->id_number ?? 'Not submitted' }}"
+                                                    data-id-number="{{ ($user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number) ?? 'Not submitted' }}"
                                                     data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
                                                     data-is-verified="{{ $user->is_verified ? 'Yes' : 'No' }}"
                                                     data-id-photo="{{ $user->id_photo_url ?? '' }}"
@@ -624,10 +615,10 @@
                                                 </button>
                                             </li>
 
-                                            @if($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url || $user->id_type)
+                                            @if(!$user->is_verified && ($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url || $user->id_type))
                                                 <li>
-                                                    <a class="dropdown-item py-2" href="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}">
-                                                        <i class="fas fa-id-card text-teal me-2" style="color: #0d9488;"></i>Inspect ID Documents
+                                                    <a class="dropdown-item py-2" href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}">
+                                                        <i class="fas fa-id-card text-teal me-2" style="color: #0d9488;"></i>Review ID Submission
                                                     </a>
                                                 </li>
                                             @endif
@@ -809,13 +800,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Business Info (for sellers) -->
-                <div id="modalBusinessWrap" class="mb-4 p-3 rounded-3" style="background: #f0fdfa; border: 1px solid #ccfbf1; display: none;">
-                    <div class="text-teal font-weight-bold mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #0f766e;">Merchant / Business Profile</div>
-                    <div class="font-weight-bold mb-1" id="modalBusinessName" style="color: #0f172a; font-size: 1rem;">-</div>
-                    <div class="text-muted" id="modalBusinessDesc" style="font-size: 0.85rem;">-</div>
                 </div>
 
                 <!-- KYC & Identity Credentials -->
@@ -1043,67 +1027,88 @@ document.addEventListener('DOMContentLoaded', function () {
                 rejWrap.style.display = 'none';
             }
 
-            // Direct Queue link
+            // Direct Queue link - only show for pending/unverified review
             const queueLink = document.getElementById('modalQueueLink');
-            if (this.dataset.queueUrl && (this.dataset.idPhoto || this.dataset.idBack || this.dataset.idSelfie || this.dataset.idProof || this.dataset.idType !== 'Not submitted')) {
+            if (this.dataset.isVerified !== 'Yes' && this.dataset.queueUrl && (this.dataset.idPhoto || this.dataset.idBack || this.dataset.idSelfie || this.dataset.idProof || this.dataset.idType !== 'Not submitted')) {
                 queueLink.href = this.dataset.queueUrl;
                 queueLink.style.display = 'inline-flex';
             } else {
                 queueLink.style.display = 'none';
             }
 
-            // Document Images Grid
-            const docs = [
-                { url: this.dataset.idPhoto, label: 'Primary ID Front', icon: 'fa-id-card' },
-                { url: this.dataset.idBack, label: 'Back of ID (Address)', icon: 'fa-location-dot' },
-                { url: this.dataset.idSelfie, label: 'Selfie Match', icon: 'fa-user-check' },
-                { url: this.dataset.idProof, label: 'Proof of Location' + (this.dataset.idProofType ? ` (${this.dataset.idProofType})` : ''), icon: 'fa-file-invoice' }
-            ];
+            // Document Images Grid & Data Privacy Control
             const grid = document.getElementById('modalIdDocsGrid');
             const noDocs = document.getElementById('modalNoDocsMsg');
             grid.innerHTML = '';
-            let docCount = 0;
-            docs.forEach(doc => {
-                if (doc.url) {
-                    docCount++;
-                    const col = document.createElement('div');
-                    col.className = 'col-6 col-md-3';
-                    const isPdf = doc.url.toLowerCase().endsWith('.pdf');
-                    col.innerHTML = `
-                        <div class="user-doc-card p-1 rounded-3 border bg-white shadow-sm" style="cursor: pointer; transition: all 0.2s ease;">
-                            <div style="height: 100px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
-                                ${isPdf ? `
-                                    <div class="text-white text-center p-2">
-                                        <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
-                                        <div style="font-size: 0.65rem;">PDF Document</div>
-                                    </div>
-                                ` : `
-                                    <img src="${doc.url}" alt="${doc.label}" style="width: 100%; height: 100%; object-fit: cover;">
-                                `}
-                                <span style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(15,23,42,0.85); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                    <i class="fas ${doc.icon} me-1 text-teal" style="color: #2dd4bf;"></i>${doc.label}
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                    col.querySelector('.user-doc-card').addEventListener('click', () => {
-                        if (isPdf) {
-                            window.open(doc.url, '_blank');
-                        } else {
-                            document.getElementById('adminDocZoomTitle').textContent = `${this.dataset.name} - ${doc.label}`;
-                            document.getElementById('adminDocZoomImg').src = doc.url;
-                            document.getElementById('adminDocZoomOpenLink').href = doc.url;
-                            const zoomModal = new bootstrap.Modal(document.getElementById('adminUserDocZoomModal'));
-                            zoomModal.show();
-                        }
-                    });
-                    grid.appendChild(col);
-                }
-            });
-            if (docCount === 0) {
-                noDocs.style.display = 'block';
-            } else {
+
+            if (this.dataset.isVerified === 'Yes') {
                 noDocs.style.display = 'none';
+                const col = document.createElement('div');
+                col.className = 'col-12';
+                col.innerHTML = `
+                    <div class="p-3 rounded-3 border d-flex align-items-center gap-3" style="background: rgba(13, 148, 136, 0.05); border-color: rgba(13, 148, 136, 0.25);">
+                        <div style="width: 44px; height: 44px; border-radius: 50%; background: #ccfbf1; color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <strong style="color: #0f172a; font-size: 0.88rem; display: block;">Government ID & Physical Location Verified</strong>
+                            <span style="font-size: 0.78rem; color: #64748b; line-height: 1.35; display: block;">
+                                In compliance with RA 10173 (Data Privacy Act of 2012), physical government ID photos and unmasked credentials are automatically protected and concealed once identity verification is approved.
+                            </span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(col);
+            } else {
+                const docs = [
+                    { url: this.dataset.idPhoto, label: 'Primary ID Front', icon: 'fa-id-card' },
+                    { url: this.dataset.idBack, label: 'Back of ID (Address)', icon: 'fa-location-dot' },
+                    { url: this.dataset.idSelfie, label: 'Selfie Match', icon: 'fa-user-check' },
+                    { url: this.dataset.idProof, label: 'Proof of Location' + (this.dataset.idProofType ? ` (${this.dataset.idProofType})` : ''), icon: 'fa-file-invoice' }
+                ];
+                let docCount = 0;
+                docs.forEach(doc => {
+                    if (doc.url) {
+                        docCount++;
+                        const col = document.createElement('div');
+                        col.className = 'col-6 col-md-3';
+                        const isPdf = doc.url.toLowerCase().endsWith('.pdf');
+                        col.innerHTML = `
+                            <div class="user-doc-card p-1 rounded-3 border bg-white shadow-sm" style="cursor: pointer; transition: all 0.2s ease;">
+                                <div style="height: 100px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                                    ${isPdf ? `
+                                        <div class="text-white text-center p-2">
+                                            <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
+                                            <div style="font-size: 0.65rem;">PDF Document</div>
+                                        </div>
+                                    ` : `
+                                        <img src="${doc.url}" alt="${doc.label}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    `}
+                                    <span style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(15,23,42,0.85); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <i class="fas ${doc.icon} me-1 text-teal" style="color: #2dd4bf;"></i>${doc.label}
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+                        col.querySelector('.user-doc-card').addEventListener('click', () => {
+                            if (isPdf) {
+                                window.open(doc.url, '_blank');
+                            } else {
+                                document.getElementById('adminDocZoomTitle').textContent = `${this.dataset.name} - ${doc.label}`;
+                                document.getElementById('adminDocZoomImg').src = doc.url;
+                                document.getElementById('adminDocZoomOpenLink').href = doc.url;
+                                const zoomModal = new bootstrap.Modal(document.getElementById('adminUserDocZoomModal'));
+                                zoomModal.show();
+                            }
+                        });
+                        grid.appendChild(col);
+                    }
+                });
+                if (docCount === 0) {
+                    noDocs.style.display = 'block';
+                } else {
+                    noDocs.style.display = 'none';
+                }
             }
 
             // Avatar setup

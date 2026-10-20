@@ -311,7 +311,7 @@
                                                 <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Government ID' }}
                                             </span>
                                             @if($user->id_number)
-                                                <span style="color: #475569; font-weight: 700; font-size: 0.85rem;" class="dark:text-slate-300"># {{ $user->id_number }}</span>
+                                                <span style="color: #475569; font-weight: 700; font-size: 0.85rem;" class="dark:text-slate-300"># {{ $user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -347,74 +347,81 @@
                                         @endif
                                     </div>
 
-                                    @if($user->phone || $user->business_name)
+                                    @if($user->phone)
                                         <div class="mb-3 p-2 rounded" style="background: #f8fafc; font-size: 0.85rem;" class="dark:bg-slate-800">
-                                            @if($user->business_name)
-                                                <div><strong style="color: #0f172a;" class="dark:text-white">Store/Entity:</strong> {{ $user->business_name }}</div>
-                                            @endif
-                                            @if($user->phone)
-                                                <div><strong style="color: #0f172a;" class="dark:text-white">Contact:</strong> {{ $user->phone }}</div>
-                                            @endif
+                                            <div><strong style="color: #0f172a;" class="dark:text-white">Contact:</strong> {{ $user->phone }}</div>
                                         </div>
                                     @endif
 
                                     <!-- Document Attachments Grid -->
                                     <div class="mb-3">
                                         <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">ATTACHED VERIFICATION DOCUMENTS</small>
-                                        <div class="row g-2 mt-1">
-                                            <!-- Front ID -->
-                                            @if($user->id_photo_url)
-                                                <div class="col-6">
-                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}id">
-                                                        <img src="{{ $user->id_photo_url }}" alt="Primary ID Front">
-                                                        <span class="doc-badge-overlay"><i class="fas fa-magnifying-glass me-1"></i>Front ID</span>
+                                        @if($user->is_verified)
+                                            <div class="p-3 rounded-3 mt-2 text-center" style="background: rgba(16, 185, 129, 0.08); border: 1.5px dashed rgba(16, 185, 129, 0.4);">
+                                                <div class="d-flex align-items-center justify-content-center gap-2 mb-1" style="color: #059669; font-weight: 800; font-size: 0.85rem;">
+                                                    <i class="fas fa-user-shield fa-lg"></i>
+                                                    <span>Identity Verified & Encrypted</span>
+                                                </div>
+                                                <p class="mb-0 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
+                                                    This user has passed KYC government verification. Under <strong>Republic Act No. 10173 (Philippine Data Privacy Act of 2012)</strong>, unredacted physical identification copies and biometric selfies are protected from public exposure.
+                                                </p>
+                                            </div>
+                                        @else
+                                            <div class="row g-2 mt-1">
+                                                <!-- Front ID -->
+                                                @if($user->id_photo_url)
+                                                    <div class="col-6">
+                                                        <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}id">
+                                                            <img src="{{ $user->id_photo_url }}" alt="Primary ID Front">
+                                                            <span class="doc-badge-overlay"><i class="fas fa-magnifying-glass me-1"></i>Front ID</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
 
-                                            <!-- Back ID (Address Side) -->
-                                            @if($user->id_back_photo_url)
-                                                <div class="col-6">
-                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}back">
-                                                        <img src="{{ $user->id_back_photo_url }}" alt="ID Back Address">
-                                                        <span class="doc-badge-overlay" style="background: rgba(13, 148, 136, 0.85);"><i class="fas fa-location-dot me-1"></i>Back / Address</span>
+                                                <!-- Back ID (Address Side) -->
+                                                @if($user->id_back_photo_url)
+                                                    <div class="col-6">
+                                                        <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}back">
+                                                            <img src="{{ $user->id_back_photo_url }}" alt="ID Back Address">
+                                                            <span class="doc-badge-overlay" style="background: rgba(13, 148, 136, 0.85);"><i class="fas fa-location-dot me-1"></i>Back / Address</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
 
-                                            <!-- Selfie with ID -->
-                                            @if($user->id_selfie_url)
-                                                <div class="col-6">
-                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}selfie">
-                                                        <img src="{{ $user->id_selfie_url }}" alt="Selfie with ID">
-                                                        <span class="doc-badge-overlay"><i class="fas fa-user-check me-1"></i>Selfie Match</span>
+                                                <!-- Selfie with ID -->
+                                                @if($user->id_selfie_url)
+                                                    <div class="col-6">
+                                                        <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}selfie">
+                                                            <img src="{{ $user->id_selfie_url }}" alt="Selfie with ID">
+                                                            <span class="doc-badge-overlay"><i class="fas fa-user-check me-1"></i>Selfie Match</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
 
-                                            <!-- Proof of Address / Barangay Cert -->
-                                            @if($user->proof_of_address_url)
-                                                <div class="col-6">
-                                                    <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}proof">
-                                                        @if(Str::endsWith(strtolower($user->proof_of_address_url), ['.pdf']))
-                                                            <div class="d-flex flex-column align-items-center justify-content-center h-100 text-white p-2 text-center" style="background: #1e293b;">
-                                                                <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
-                                                                <span style="font-size: 0.72rem;">PDF Document</span>
-                                                            </div>
-                                                        @else
-                                                            <img src="{{ $user->proof_of_address_url }}" alt="Proof of Address">
-                                                        @endif
-                                                        <span class="doc-badge-overlay" style="background: rgba(147, 51, 234, 0.85);"><i class="fas fa-file-invoice me-1"></i>Proof of Location</span>
+                                                <!-- Proof of Address / Barangay Cert -->
+                                                @if($user->proof_of_address_url)
+                                                    <div class="col-6">
+                                                        <div class="user-doc-preview" data-bs-toggle="modal" data-bs-target="#docModal{{ $user->id }}proof">
+                                                            @if(Str::endsWith(strtolower($user->proof_of_address_url), ['.pdf']))
+                                                                <div class="d-flex flex-column align-items-center justify-content-center h-100 text-white p-2 text-center" style="background: #1e293b;">
+                                                                    <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
+                                                                    <span style="font-size: 0.72rem;">PDF Document</span>
+                                                                </div>
+                                                            @else
+                                                                <img src="{{ $user->proof_of_address_url }}" alt="Proof of Address">
+                                                            @endif
+                                                            <span class="doc-badge-overlay" style="background: rgba(147, 51, 234, 0.85);"><i class="fas fa-file-invoice me-1"></i>Proof of Location</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
 
-                                            @if(!$user->id_photo_url && !$user->id_back_photo_url && !$user->id_selfie_url && !$user->proof_of_address_url)
-                                                <div class="col-12 text-muted" style="font-size: 0.85rem; font-style: italic;">
-                                                    No direct photo uploaded (Manual verification required).
-                                                </div>
-                                            @endif
-                                        </div>
+                                                @if(!$user->id_photo_url && !$user->id_back_photo_url && !$user->id_selfie_url && !$user->proof_of_address_url)
+                                                    <div class="col-12 text-muted" style="font-size: 0.85rem; font-style: italic;">
+                                                        No direct photo uploaded (Manual verification required).
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
                                     
                                     <small style="color: #94a3b8; font-size: 0.75rem;">
@@ -470,81 +477,83 @@
                             </div>
                         </div>
 
-                        <!-- 1. Front ID Zoom Modal -->
-                        @if($user->id_photo_url)
-                            <div class="modal fade" id="docModal{{ $user->id }}id" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 shadow-lg">
-                                        <div class="modal-header bg-dark text-white">
-                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-id-card me-2"></i>{{ $user->name }} - Front ID Document</h6>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body p-0 bg-dark text-center">
-                                            <img src="{{ $user->id_photo_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                        @if(!$user->is_verified)
+                            <!-- 1. Front ID Zoom Modal -->
+                            @if($user->id_photo_url)
+                                <div class="modal fade" id="docModal{{ $user->id }}id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 shadow-lg">
+                                            <div class="modal-header bg-dark text-white">
+                                                <h6 class="modal-title font-weight-bold"><i class="fas fa-id-card me-2"></i>{{ $user->name }} - Front ID Document</h6>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body p-0 bg-dark text-center">
+                                                <img src="{{ $user->id_photo_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        <!-- 2. Back ID (Address Side) Zoom Modal -->
-                        @if($user->id_back_photo_url)
-                            <div class="modal fade" id="docModal{{ $user->id }}back" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 shadow-lg">
-                                        <div class="modal-header bg-dark text-white">
-                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-map-location-dot me-2 text-emerald"></i>{{ $user->name }} - Back of ID (Address Verification)</h6>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body p-0 bg-dark text-center">
-                                            <img src="{{ $user->id_back_photo_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                            <!-- 2. Back ID (Address Side) Zoom Modal -->
+                            @if($user->id_back_photo_url)
+                                <div class="modal fade" id="docModal{{ $user->id }}back" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 shadow-lg">
+                                            <div class="modal-header bg-dark text-white">
+                                                <h6 class="modal-title font-weight-bold"><i class="fas fa-map-location-dot me-2 text-emerald"></i>{{ $user->name }} - Back of ID (Address Verification)</h6>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body p-0 bg-dark text-center">
+                                                <img src="{{ $user->id_back_photo_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        <!-- 3. Selfie Zoom Modal -->
-                        @if($user->id_selfie_url)
-                            <div class="modal fade" id="docModal{{ $user->id }}selfie" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 shadow-lg">
-                                        <div class="modal-header bg-dark text-white">
-                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-user-check me-2"></i>{{ $user->name }} - Selfie with ID</h6>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body p-0 bg-dark text-center">
-                                            <img src="{{ $user->id_selfie_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                            <!-- 3. Selfie Zoom Modal -->
+                            @if($user->id_selfie_url)
+                                <div class="modal fade" id="docModal{{ $user->id }}selfie" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 shadow-lg">
+                                            <div class="modal-header bg-dark text-white">
+                                                <h6 class="modal-title font-weight-bold"><i class="fas fa-user-check me-2"></i>{{ $user->name }} - Selfie with ID</h6>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body p-0 bg-dark text-center">
+                                                <img src="{{ $user->id_selfie_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        <!-- 4. Proof of Address Zoom Modal -->
-                        @if($user->proof_of_address_url)
-                            <div class="modal fade" id="docModal{{ $user->id }}proof" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 shadow-lg">
-                                        <div class="modal-header bg-dark text-white">
-                                            <h6 class="modal-title font-weight-bold"><i class="fas fa-file-invoice me-2 text-purple"></i>{{ $user->name }} - Proof of Location Document</h6>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body p-0 bg-dark text-center">
-                                            @if(Str::endsWith(strtolower($user->proof_of_address_url), ['.pdf']))
-                                                <div class="p-4 text-white">
-                                                    <p class="mb-3">This document was uploaded as a PDF file.</p>
-                                                    <a href="{{ $user->proof_of_address_url }}" target="_blank" class="btn btn-primary">
-                                                        <i class="fas fa-external-link-alt me-1"></i>Open PDF in New Window
-                                                    </a>
-                                                </div>
-                                            @else
-                                                <img src="{{ $user->proof_of_address_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
-                                            @endif
+                            <!-- 4. Proof of Address Zoom Modal -->
+                            @if($user->proof_of_address_url)
+                                <div class="modal fade" id="docModal{{ $user->id }}proof" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 shadow-lg">
+                                            <div class="modal-header bg-dark text-white">
+                                                <h6 class="modal-title font-weight-bold"><i class="fas fa-file-invoice me-2 text-purple"></i>{{ $user->name }} - Proof of Location Document</h6>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body p-0 bg-dark text-center">
+                                                @if(Str::endsWith(strtolower($user->proof_of_address_url), ['.pdf']))
+                                                    <div class="p-4 text-white">
+                                                        <p class="mb-3">This document was uploaded as a PDF file.</p>
+                                                        <a href="{{ $user->proof_of_address_url }}" target="_blank" class="btn btn-primary">
+                                                            <i class="fas fa-external-link-alt me-1"></i>Open PDF in New Window
+                                                        </a>
+                                                    </div>
+                                                @else
+                                                    <img src="{{ $user->proof_of_address_url }}" style="max-height: 80vh; max-width: 100%; object-fit: contain;">
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
 
                         <!-- Reject Modal with Reason & Quick Chips -->

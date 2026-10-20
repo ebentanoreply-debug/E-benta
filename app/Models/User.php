@@ -437,4 +437,26 @@ class User extends Authenticatable
     {
         return !empty($this->avatar);
     }
+
+    /**
+     * Get masked ID number for Data Privacy Act (RA 10173) compliance (e.g. 55*********************65).
+     */
+    public function getMaskedIdNumberAttribute(): ?string
+    {
+        if (!$this->id_number) {
+            return null;
+        }
+
+        $raw = trim($this->id_number);
+        $len = strlen($raw);
+
+        if ($len <= 4) {
+            return '****';
+        }
+
+        $firstTwo = substr($raw, 0, 2);
+        $lastTwo = substr($raw, -2);
+
+        return $firstTwo . '*********************' . $lastTwo;
+    }
 }

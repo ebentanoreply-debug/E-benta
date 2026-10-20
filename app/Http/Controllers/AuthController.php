@@ -171,7 +171,7 @@ class AuthController extends Controller
         
         // Log logout before clearing session
         if ($user) {
-            AuditLogger::logLogout("User {$user->name} logged out");
+            AuditLogger::logLogout("User {$user->name} logged out", $user->id);
         }
 
         Auth::logout();

@@ -70,7 +70,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Abe Austria', 'Abeaustria@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'buyer', 1, 'verified',
-    '2026-10-14 21:46:05', '09178078673', '25 Perez Boulevard', 'Mabini', 'San Carlos City',
+    '2026-10-14 21:46:05', '09178078673', 'Purok 1, San Juan', 'San Juan', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '1520-1499914-2', '2026-10-14 21:59:35',
     '2026-10-14 21:59:35', NULL, NULL, 2,
     2.9, 6.4, 29, '2026-10-14 21:43:39', '2026-10-14 21:59:35'
@@ -125,7 +125,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Kris Aquino', 'krisaquino817@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'buyer', 1, 'unverified',
-    '2026-10-15 12:13:26', '09268038374', '42 Mabini Street', 'Bugallon-Posadas', 'San Carlos City',
+    '2026-10-15 12:13:26', '09268038374', 'Malong Street', 'Bonifacio', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5528-8359C-46463', NULL,
     NULL, NULL, NULL, 1,
     6.7, 14.7, 67, '2026-10-15 12:08:52', '2026-10-15 12:32:26'
@@ -176,7 +176,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Benigno Garcia', 'benignogarcia23@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'buyer', 1, 'verified',
-    '2026-10-15 12:15:15', '09276708456', '52 Bugallon-Posadas Street', 'Lucban', 'San Carlos City',
+    '2026-10-15 12:15:15', '09276708456', 'Purok 1, Doyong', 'Doyong', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-47295260', '2026-10-15 12:51:26',
     '2026-10-15 12:51:26', NULL, NULL, 2,
     2.8, 6.2, 28, '2026-10-15 12:12:35', '2026-10-15 12:51:26'
@@ -231,7 +231,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jerwin Lomibao', 'lomibaojerwin@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'buyer', 1, 'unverified',
-    '2026-10-15 12:24:00', '09352556017', '19 Montemayor Street', 'Padilla', 'San Carlos City',
+    '2026-10-15 12:24:00', '09352556017', 'Purok 2, San Juan', 'San Juan', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P7374122A', NULL,
     NULL, NULL, NULL, 3,
     7.4, 16.3, 74, '2026-10-15 12:18:45', '2026-10-15 12:35:43'
@@ -282,7 +282,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jimmy Beltran', 'jimmybeltran@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'buyer', 1, 'verified',
-    '2026-10-15 12:39:46', '09458707870', '31 Gomez Street', 'Talang', 'San Carlos City',
+    '2026-10-15 12:39:46', '09458707870', 'Sitio Agtas', 'San Juan', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '9785-3045-7201-2291', '2026-10-15 12:48:09',
     '2026-10-15 12:48:09', NULL, NULL, 5,
     3.3, 7.3, 33, '2026-10-15 12:35:12', '2026-10-15 12:48:09'
