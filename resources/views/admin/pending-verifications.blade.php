@@ -316,37 +316,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- REGISTERED PHYSICAL LOCATION (Crucial for Sellers) -->
-                                    <div class="mb-3 p-3 rounded-3" style="background: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.2);">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <small style="color: #0d9488; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                                <i class="fas fa-location-dot me-1"></i>REGISTERED PICKUP LOCATION
-                                            </small>
-                                            @php
-                                                $locQuery = $user->getFormattedLocation();
-                                            @endphp
-                                            <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($locQuery) }}" target="_blank"
-                                               class="btn btn-xs btn-outline-primary" style="font-size: 0.72rem; font-weight: 700; border-radius: 0.4rem; padding: 0.15rem 0.45rem;">
-                                                <i class="fas fa-map me-1"></i>View on Map
-                                            </a>
-                                        </div>
-                                        <div style="font-size: 0.88rem; font-weight: 700; color: #0f172a;" class="dark:text-white">
-                                            {{ $user->getFormattedLocation() }}
-                                        </div>
-                                        @if($user->location_notes)
-                                            <div class="mt-1" style="font-size: 0.78rem; color: #64748b;">
-                                                <strong>Landmark:</strong> {{ $user->location_notes }}
-                                            </div>
-                                        @endif
-                                        @if($user->proof_of_address_type)
-                                            <div class="mt-1">
-                                                <span class="badge" style="background: rgba(147, 51, 234, 0.12); color: #9333ea; font-size: 0.72rem; font-weight: 700;">
-                                                    <i class="fas fa-file-check me-1"></i>Proof: {{ ucwords(str_replace('_', ' ', $user->proof_of_address_type)) }}
-                                                </span>
-                                            </div>
-                                        @endif
-                                    </div>
-
                                     @if($user->phone)
                                         <div class="mb-3 p-2 rounded" style="background: #f8fafc; font-size: 0.85rem;" class="dark:bg-slate-800">
                                             <div><strong style="color: #0f172a;" class="dark:text-white">Contact:</strong> {{ $user->phone }}</div>
@@ -466,7 +435,7 @@
                                         <form method="POST" action="{{ route('admin.verify-user', $user) }}" style="flex: 1;">
                                             @csrf
                                             <button type="submit" class="btn btn-success w-100" style="font-weight: 800; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem;">
-                                                <i class="fas fa-check-circle me-1"></i>Approve ID & Location
+                                                <i class="fas fa-check-circle me-1"></i>Approve ID Verification
                                             </button>
                                         </form>
                                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $user->id }}" style="font-weight: 700; border-radius: 0.65rem; font-size: 0.88rem; padding: 0.6rem 1rem;">

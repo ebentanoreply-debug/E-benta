@@ -15,22 +15,45 @@ class AuditLogController extends Controller
     {
         $query = AuditLog::with('user');
 
-        // Filter by action
-        if ($request->has('action') && $request->action) {
-            $query->byAction($request->action);
+        // Filter by action (handling variations like user_login / login)
+        if ($request->filled('action')) {
+            $act = $request->action;
+            if ($act === 'user_login' || $act === 'login') {
+                $query->whereIn('action', ['user_login', 'login']);
+            } elseif ($act === 'user_logout' || $act === 'logout') {
+                $query->whereIn('action', ['user_logout', 'logout']);
+            } elseif ($act === 'user_verified' || $act === 'verified') {
+                $query->whereIn('action', ['user_verified', 'verified']);
+            } else {
+                $query->where('action', $act);
+            }
         }
 
         // Filter by user
-        if ($request->has('user_id') && $request->user_id) {
+        if ($request->filled('user_id')) {
             $query->byUser($request->user_id);
         }
 
         // Filter by model type
-        if ($request->has('model_type') && $request->model_type) {
+        if ($request->filled('model_type')) {
             $query->byModel($request->model_type);
         }
 
-        $logs = $query->orderBy('created_at', 'desc')->paginate(50);
+        // Search across event description, actor name, user email, IP address, or action
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('ip_address', 'like', "%{$search}%")
+                  ->orWhere('action', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($uq) use ($search) {
+                      $uq->where('name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $logs = $query->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
         $users = \App\Models\User::select('id', 'name')->get();
 
         return view('admin.audit-logs.index', compact('logs', 'users'));

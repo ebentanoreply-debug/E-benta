@@ -8,6 +8,22 @@
         background: #f8fafc;
         min-height: 100vh;
         padding-bottom: 4rem;
+        overflow-x: hidden;
+    }
+
+    .user-mobile-card {
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.15rem 1rem;
+        transition: background-color 0.2s ease;
+    }
+
+    .user-mobile-card:hover {
+        background-color: #f8fafc;
+    }
+
+    .user-mobile-card:last-child {
+        border-bottom: none;
     }
 
     .admin-module-header {
@@ -230,19 +246,19 @@
                     </p>
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
-                    <form action="{{ route('admin.users.seed-contact-responses') }}" method="POST" onsubmit="return confirm('Sync/Insert 99 survey respondents into the database with authentic timestamps and San Juan locations?');" class="m-0">
+                <div class="d-flex align-items-center flex-wrap gap-2 w-100 w-md-auto mt-2 mt-md-0">
+                    <form action="{{ route('admin.users.seed-contact-responses') }}" method="POST" onsubmit="return confirm('Sync/Insert 99 survey respondents into the database with authentic timestamps and San Juan locations?');" class="m-0 flex-grow-1 flex-md-grow-0">
                         @csrf
-                        <button type="submit" class="btn btn-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; color: #0f766e; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                        <button type="submit" class="btn btn-light d-inline-flex align-items-center justify-content-center gap-2 w-100" style="border-radius: 0.75rem; font-weight: 700; color: #0f766e; box-shadow: 0 4px 12px rgba(0,0,0,0.08); font-size: 0.88rem; padding: 0.55rem 0.9rem;">
                             <i class="fas fa-file-import"></i>
                             <span>Sync Respondents (99)</span>
                         </button>
                     </form>
-                    <a href="{{ route('admin.pending-verifications') }}" class="btn btn-warning d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);">
+                    <a href="{{ route('admin.pending-verifications') }}" class="btn btn-warning d-inline-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-md-grow-0" style="border-radius: 0.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); font-size: 0.88rem; padding: 0.55rem 0.9rem;">
                         <i class="fas fa-id-card-clip"></i>
                         <span>Pending Verifications ({{ $stats['pending'] }})</span>
                     </a>
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center gap-2" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.25);">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light d-inline-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-md-grow-0" style="border-radius: 0.75rem; font-weight: 700; border-color: rgba(255,255,255,0.25); font-size: 0.88rem; padding: 0.55rem 0.9rem;">
                         <i class="fas fa-arrow-left"></i>
                         <span>Dashboard</span>
                     </a>
@@ -342,8 +358,8 @@
 
         <!-- SEARCH & FILTER TOOLBAR -->
         <div class="admin-card my-4 p-3 p-md-4">
-            <form method="GET" action="{{ route('admin.users.index') }}" class="row g-3 align-items-end">
-                <div class="col-md-3">
+            <form method="GET" action="{{ route('admin.users.index') }}" class="row g-2 g-md-3 align-items-end">
+                <div class="col-12 col-md-3">
                     <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Search Query</label>
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0" style="border-radius: 0.65rem 0 0 0.65rem; border-color: #cbd5e1; color: #94a3b8;">
@@ -374,7 +390,7 @@
                 </div>
 
                 <div class="col-6 col-md-2">
-                    <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Account Standing</label>
+                    <label class="form-label font-weight-bold" style="font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Standing</label>
                     <select name="status" class="form-select filter-input-control" onchange="this.form.submit()">
                         <option value="">All Standing</option>
                         <option value="active" {{ $status === 'active' ? 'selected' : '' }}>Active Only</option>
@@ -394,9 +410,10 @@
                     </select>
                 </div>
 
-                <div class="col-md-1 d-flex gap-2">
+                <div class="col-12 col-md-1 d-flex gap-2">
                     <button type="submit" class="btn btn-teal w-100 d-inline-flex align-items-center justify-content-center gap-1" style="background: #0d9488; color: #ffffff; border-radius: 0.65rem; font-weight: 700; padding: 0.55rem 0.5rem;" title="Apply Filter">
                         <i class="fas fa-filter"></i>
+                        <span class="d-md-none" style="font-size: 0.85rem;">Filter</span>
                         <span class="d-none d-md-inline" style="font-size: 0.8rem;">Filter</span>
                     </button>
                     @if($search || $role || $verification || $status || $sort !== 'latest')
@@ -424,14 +441,15 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
+            <!-- DESKTOP TABLE VIEW (Visible on lg and larger screens) -->
+            <div class="table-responsive d-none d-lg-block">
                 <table class="table admin-table mb-0">
                     <thead>
                         <tr>
                             <th>User Profile</th>
                             <th>Role</th>
                             <th>Location</th>
-                            <th>KYC / Identity</th>
+                            <th>KYC Status</th>
                             <th>Account Standing</th>
                             <th>Eco Metrics</th>
                             <th class="text-end">Actions</th>
@@ -515,26 +533,11 @@
                                             <i class="fas fa-circle-check text-success"></i>
                                             <span>Verified</span>
                                         </span>
-                                        @if($user->id_type)
-                                            <div style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem;">
-                                                {{ $user->id_type }}
-                                            </div>
-                                        @endif
-                                        <div class="mt-1">
-                                            <span class="badge" style="background: #f1f5f9; color: #475569; font-size: 0.68rem; font-weight: 700; border: 1px solid #e2e8f0;" title="Government ID records secured & protected under RA 10173">
-                                                <i class="fas fa-shield-halved me-1 text-success"></i>ID Protected
-                                            </span>
-                                        </div>
                                     @elseif($user->id_verification_status === 'pending')
                                         <a href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}" class="badge-pending text-decoration-none d-inline-flex align-items-center gap-1">
                                             <i class="fas fa-clock"></i>
                                             <span>Pending Review</span>
                                         </a>
-                                        @if($user->id_type)
-                                            <div style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem;">
-                                                {{ $user->id_type }}
-                                            </div>
-                                        @endif
                                     @elseif($user->id_verification_status === 'rejected')
                                         <a href="{{ route('admin.pending-verifications', ['status' => 'rejected', 'search' => $user->email]) }}" class="badge-unverified text-danger text-decoration-none d-inline-flex align-items-center gap-1" style="background: #fef2f2; border-color: #fecaca; font-weight: 700;">
                                             <i class="fas fa-circle-xmark"></i>
@@ -583,7 +586,7 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 200px;">
                                             <li>
-                                                <button type="button" class="dropdown-item py-2 view-user-btn"
+                                                <button type="button" class="dropdown-item py-2 view-user-btn" data-bs-toggle="modal" data-bs-target="#userDetailsModal"
                                                     data-id="{{ $user->id }}"
                                                     data-name="{{ $user->name }}"
                                                     data-email="{{ $user->email }}"
@@ -733,6 +736,281 @@
                 </table>
             </div>
 
+            <!-- MOBILE CARDS VIEW (Clean responsive stack, ZERO horizontal scroll on mobile) -->
+            <div class="d-lg-none">
+                @forelse($users as $user)
+                    @php
+                        $initials = collect(explode(' ', $user->name))->map(fn($segment) => strtoupper(substr($segment, 0, 1)))->take(2)->join('');
+                        $avatarGradients = [
+                            'linear-gradient(135deg, #0d9488, #10b981)',
+                            'linear-gradient(135deg, #2563eb, #3b82f6)',
+                            'linear-gradient(135deg, #7c3aed, #a855f7)',
+                            'linear-gradient(135deg, #d97706, #f59e0b)',
+                            'linear-gradient(135deg, #0891b2, #06b6d4)',
+                        ];
+                        $bgGrad = $avatarGradients[$user->id % count($avatarGradients)];
+                        $userFullAddress = trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified';
+                    @endphp
+                    <div class="user-mobile-card">
+                        <!-- Top Row: Avatar, Name, Email, Standing Badge -->
+                        <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                            <div class="d-flex align-items-center gap-2 min-w-0" style="flex: 1;">
+                                @if($user->avatar)
+                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="user-avatar-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                @else
+                                    <div class="user-avatar-circle" style="width: 40px; height: 40px; font-size: 0.88rem; background: {{ $bgGrad }}; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                                        {{ $initials ?: 'U' }}
+                                    </div>
+                                @endif
+                                <div class="min-w-0" style="flex: 1;">
+                                    <div class="d-flex align-items-center gap-1 flex-wrap">
+                                        <strong style="color: #0f172a; font-size: 0.95rem;">{{ $user->name }}</strong>
+                                        @if($user->id === Auth::id())
+                                            <span class="badge bg-secondary" style="font-size: 0.6rem; padding: 0.15rem 0.35rem;">YOU</span>
+                                        @endif
+                                    </div>
+                                    <div class="text-muted text-truncate" style="font-size: 0.78rem;">
+                                        <i class="far fa-envelope me-1"></i>{{ $user->email }}
+                                    </div>
+                                    @if($user->phone)
+                                        <div class="text-muted text-truncate" style="font-size: 0.75rem;">
+                                            <i class="fas fa-phone me-1"></i>{{ $user->phone }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="flex-shrink-0">
+                                @if($user->is_banned)
+                                    <span class="badge-banned" style="font-size: 0.68rem; padding: 0.2rem 0.45rem;"><i class="fas fa-ban me-1"></i>Banned</span>
+                                @elseif($user->is_suspended)
+                                    <span class="badge-suspended" style="font-size: 0.68rem; padding: 0.2rem 0.45rem;"><i class="fas fa-triangle-exclamation me-1"></i>Suspended</span>
+                                @else
+                                    <span class="badge-active" style="font-size: 0.68rem; padding: 0.2rem 0.45rem;"><i class="fas fa-circle-check me-1"></i>Active</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Details Row: Role, KYC, Metrics -->
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2" style="font-size: 0.78rem;">
+                            @if($user->role === 'admin')
+                                <span class="badge-role-admin" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-shield-halved me-1"></i>Admin</span>
+                            @elseif($user->role === 'seller')
+                                <span class="badge-role-seller" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-store me-1"></i>Seller</span>
+                            @else
+                                <span class="badge-role-buyer" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-cart-shopping me-1"></i>Buyer</span>
+                            @endif
+
+                            @if($user->is_verified)
+                                <span class="badge-verified d-inline-flex align-items-center gap-1" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                                    <i class="fas fa-circle-check text-success"></i>Verified
+                                </span>
+                            @elseif($user->id_verification_status === 'pending')
+                                <a href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}" class="badge-pending text-decoration-none d-inline-flex align-items-center gap-1" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                                    <i class="fas fa-clock"></i>Pending
+                                </a>
+                            @elseif($user->id_verification_status === 'rejected')
+                                <a href="{{ route('admin.pending-verifications', ['status' => 'rejected', 'search' => $user->email]) }}" class="badge-unverified text-danger text-decoration-none d-inline-flex align-items-center gap-1" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; background: #fef2f2; border-color: #fecaca;">
+                                    <i class="fas fa-circle-xmark"></i>Rejected
+                                </a>
+                            @else
+                                <span class="badge-unverified d-inline-flex align-items-center gap-1" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                                    <i class="far fa-circle text-muted"></i>Unverified
+                                </span>
+                            @endif
+
+                            <span class="badge" style="background: #ecfdf5; color: #047857; font-weight: 700; font-size: 0.7rem; border: 1px solid #a7f3d0; padding: 0.25rem 0.5rem;">
+                                <i class="fas fa-recycle me-1"></i>{{ number_format((float) $user->total_weight_diverted, 1) }} kg
+                            </span>
+                        </div>
+
+                        <!-- Location Row -->
+                        <div class="mb-3 d-flex align-items-center gap-1 text-muted" style="font-size: 0.8rem;">
+                            <i class="fas fa-location-dot text-danger flex-shrink-0" style="width: 14px;"></i>
+                            <span class="text-truncate">
+                                @if($user->barangay)
+                                    {{ \Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay }}, 
+                                @endif
+                                {{ $user->address_city ?? 'San Carlos City' }}{{ $user->address_province ? ', ' . $user->address_province : '' }}
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons: See Details + Quick Actions Menu -->
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-teal btn-sm flex-grow-1 d-inline-flex align-items-center justify-content-center gap-2 view-user-btn" data-bs-toggle="modal" data-bs-target="#userDetailsModal" style="background: #0d9488; color: #ffffff; border-radius: 0.6rem; font-weight: 700; padding: 0.45rem 0.85rem; box-shadow: 0 2px 6px rgba(13,148,136,0.18);"
+                                data-id="{{ $user->id }}"
+                                data-name="{{ $user->name }}"
+                                data-email="{{ $user->email }}"
+                                data-phone="{{ $user->phone ?? 'Not provided' }}"
+                                data-role="{{ strtoupper($user->role) }}"
+                                data-address="{{ $userFullAddress }}"
+                                data-id-type="{{ $user->id_type ?? 'Not submitted' }}"
+                                data-id-number="{{ ($user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number) ?? 'Not submitted' }}"
+                                data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
+                                data-is-verified="{{ $user->is_verified ? 'Yes' : 'No' }}"
+                                data-id-photo="{{ $user->id_photo_url ?? '' }}"
+                                data-id-back="{{ $user->id_back_photo_url ?? '' }}"
+                                data-id-selfie="{{ $user->id_selfie_url ?? '' }}"
+                                data-id-proof="{{ $user->proof_of_address_url ?? '' }}"
+                                data-id-proof-type="{{ $user->proof_of_address_type ? ucwords(str_replace('_', ' ', $user->proof_of_address_type)) : '' }}"
+                                data-verified-date="{{ $user->location_verified_at ? $user->location_verified_at->format('M d, Y • h:i A') : ($user->is_verified ? 'Verified' : 'Unverified') }}"
+                                data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
+                                data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
+                                data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
+                                data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
+                                data-score="{{ $user->total_impact_score ?? 0 }}"
+                                data-status="{{ $user->is_banned ? 'Banned' : ($user->is_suspended ? 'Suspended' : 'Active') }}"
+                                data-joined="{{ $user->created_at ? $user->created_at->format('M d, Y h:i A') : 'Unknown' }}"
+                                data-email-verified="{{ $user->email_verified_at ? $user->email_verified_at->format('M d, Y') : 'Unverified' }}"
+                                data-avatar="{{ $user->avatar ? asset('storage/' . $user->avatar) : '' }}"
+                                data-initials="{{ $initials ?: 'U' }}"
+                                data-bg="{{ $bgGrad }}">
+                                <i class="fas fa-eye"></i>
+                                <span>See Details</span>
+                            </button>
+
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 0.6rem; font-size: 0.82rem; font-weight: 700; padding: 0.45rem 0.75rem;">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 0.75rem; font-size: 0.85rem; border-color: #e2e8f0; min-width: 200px;">
+                                    <li>
+                                        <button type="button" class="dropdown-item py-2 view-user-btn" data-bs-toggle="modal" data-bs-target="#userDetailsModal"
+                                            data-id="{{ $user->id }}"
+                                            data-name="{{ $user->name }}"
+                                            data-email="{{ $user->email }}"
+                                            data-phone="{{ $user->phone ?? 'Not provided' }}"
+                                            data-role="{{ strtoupper($user->role) }}"
+                                            data-address="{{ $userFullAddress }}"
+                                            data-id-type="{{ $user->id_type ?? 'Not submitted' }}"
+                                            data-id-number="{{ ($user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number) ?? 'Not submitted' }}"
+                                            data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
+                                            data-is-verified="{{ $user->is_verified ? 'Yes' : 'No' }}"
+                                            data-id-photo="{{ $user->id_photo_url ?? '' }}"
+                                            data-id-back="{{ $user->id_back_photo_url ?? '' }}"
+                                            data-id-selfie="{{ $user->id_selfie_url ?? '' }}"
+                                            data-id-proof="{{ $user->proof_of_address_url ?? '' }}"
+                                            data-id-proof-type="{{ $user->proof_of_address_type ? ucwords(str_replace('_', ' ', $user->proof_of_address_type)) : '' }}"
+                                            data-verified-date="{{ $user->location_verified_at ? $user->location_verified_at->format('M d, Y • h:i A') : ($user->is_verified ? 'Verified' : 'Unverified') }}"
+                                            data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
+                                            data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
+                                            data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
+                                            data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
+                                            data-score="{{ $user->total_impact_score ?? 0 }}"
+                                            data-status="{{ $user->is_banned ? 'Banned' : ($user->is_suspended ? 'Suspended' : 'Active') }}"
+                                            data-joined="{{ $user->created_at ? $user->created_at->format('M d, Y h:i A') : 'Unknown' }}"
+                                            data-email-verified="{{ $user->email_verified_at ? $user->email_verified_at->format('M d, Y') : 'Unverified' }}"
+                                            data-avatar="{{ $user->avatar ? asset('storage/' . $user->avatar) : '' }}"
+                                            data-initials="{{ $initials ?: 'U' }}"
+                                            data-bg="{{ $bgGrad }}">
+                                            <i class="fas fa-eye text-primary me-2"></i>Full Details
+                                        </button>
+                                    </li>
+
+                                    @if(!$user->is_verified && ($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url || $user->id_type))
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('admin.pending-verifications', ['status' => 'pending', 'search' => $user->email]) }}">
+                                                <i class="fas fa-id-card text-teal me-2" style="color: #0d9488;"></i>Review ID Submission
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ route('users.show', $user) }}" target="_blank">
+                                            <i class="fas fa-arrow-up-right-from-square text-secondary me-2"></i>Public Profile
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+                                        <form action="{{ route('admin.users.toggle-verification', $user) }}" method="POST" class="m-0">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item py-2 text-{{ $user->is_verified ? 'secondary' : 'teal' }}" style="{{ !$user->is_verified ? 'color: #0d9488;' : '' }}">
+                                                <i class="fas fa-{{ $user->is_verified ? 'times-circle text-muted' : 'check-circle text-success' }} me-2"></i>
+                                                {{ $user->is_verified ? 'Revoke Verification' : 'Mark as Verified' }}
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                    @if($user->id !== Auth::id())
+                                        <li>
+                                            <form action="{{ route('admin.users.update-role', $user) }}" method="POST" class="m-0">
+                                                @csrf
+                                                <input type="hidden" name="role" value="{{ $user->role === 'seller' ? 'buyer' : 'seller' }}">
+                                                <button type="submit" class="dropdown-item py-2 text-primary">
+                                                    <i class="fas fa-{{ $user->role === 'seller' ? 'cart-shopping' : 'store' }} me-2"></i>
+                                                    Switch to {{ $user->role === 'seller' ? 'Buyer / Recycler' : 'Seller' }}
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                        @if($user->is_banned)
+                                            <li>
+                                                <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST" class="m-0">
+                                                    @csrf
+                                                    <input type="hidden" name="action" value="unban">
+                                                    <button type="submit" class="dropdown-item py-2 text-success">
+                                                        <i class="fas fa-user-check me-2"></i>Lift Ban (Restore)
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        @else
+                                            @if($user->is_suspended)
+                                                <li>
+                                                    <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST" class="m-0">
+                                                        @csrf
+                                                        <input type="hidden" name="action" value="unsuspend">
+                                                        <button type="submit" class="dropdown-item py-2 text-success">
+                                                            <i class="fas fa-circle-check me-2"></i>Lift Suspension
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <button type="button" class="dropdown-item py-2 text-warning action-suspend-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
+                                                        <i class="fas fa-clock me-2"></i>Suspend (7 Days)
+                                                    </button>
+                                                </li>
+                                            @endif
+
+                                            <li>
+                                                <button type="button" class="dropdown-item py-2 text-danger action-ban-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
+                                                    <i class="fas fa-ban me-2"></i>Ban Permanently
+                                                </button>
+                                            </li>
+                                        @endif
+
+                                        <li><hr class="dropdown-divider"></li>
+
+                                        <li>
+                                            <button type="button" class="dropdown-item py-2 text-danger action-delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
+                                                <i class="fas fa-trash-can me-2"></i>Delete User Account
+                                            </button>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5 text-muted px-3">
+                        <div style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 0.75rem;">
+                            <i class="fas fa-users-slash"></i>
+                        </div>
+                        <h5 style="font-weight: 800; color: #334155; margin-bottom: 0.35rem;">No user accounts found</h5>
+                        <p style="color: #64748b; font-size: 0.9rem; max-width: 420px; margin: 0 auto 1.25rem;">
+                            Try adjusting your search query, clearing filters, or syncing respondents.
+                        </p>
+                        @if($search || $role || $verification || $status || $sort !== 'latest')
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-teal btn-sm" style="border-radius: 0.5rem; font-weight: 700; color: #0d9488; border-color: #0d9488;">
+                                Reset Filter Criteria
+                            </a>
+                        @endif
+                    </div>
+                @endforelse
+            </div>
+
             <!-- PAGINATION -->
             @if($users->hasPages())
                 <div class="p-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -805,25 +1083,17 @@
                 <!-- KYC & Identity Credentials -->
                 <div class="mb-4 p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                     <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
-                        <div class="text-muted font-weight-bold" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Identity & KYC Records</div>
+                        <div class="text-muted font-weight-bold" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Account Verification Status</div>
                         <a id="modalQueueLink" href="#" target="_blank" class="btn btn-xs btn-outline-teal" style="font-size: 0.72rem; font-weight: 700; border-radius: 0.4rem; padding: 0.2rem 0.6rem; color: #0d9488; border-color: #0d9488; text-decoration: none; display: none;">
                             <i class="fas fa-arrow-up-right-from-square me-1"></i>Open in Verification Center
                         </a>
                     </div>
                     <div class="row g-2 mb-3">
-                        <div class="col-sm-3">
-                            <span class="text-muted d-block" style="font-size: 0.75rem;">Document Type</span>
-                            <strong id="modalIdType" style="color: #0f172a;">-</strong>
-                        </div>
-                        <div class="col-sm-3">
-                            <span class="text-muted d-block" style="font-size: 0.75rem;">ID Number</span>
-                            <code id="modalIdNumber" style="font-size: 0.85rem; color: #0f766e;">-</code>
-                        </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <span class="text-muted d-block" style="font-size: 0.75rem;">KYC Status</span>
                             <span id="modalIdStatus" class="font-weight-bold">-</span>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <span class="text-muted d-block" style="font-size: 0.75rem;">Verified Date</span>
                             <span id="modalVerifiedDate" style="font-size: 0.82rem; color: #334155; font-weight: 600;">-</span>
                         </div>
@@ -997,139 +1267,160 @@
 document.addEventListener('DOMContentLoaded', function () {
     // 1. Details Modal Trigger
     const viewButtons = document.querySelectorAll('.view-user-btn');
-    const userModal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
+    const modalEl = document.getElementById('userDetailsModal');
 
     viewButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalUserName').textContent = this.dataset.name;
-            document.getElementById('modalUserEmail').textContent = this.dataset.email;
-            document.getElementById('modalUserPhone').textContent = this.dataset.phone;
-            document.getElementById('modalUserRole').textContent = this.dataset.role;
-            document.getElementById('modalUserStanding').textContent = this.dataset.status;
-            document.getElementById('modalEmailVerified').textContent = this.dataset.emailVerified;
-            document.getElementById('modalUserAddress').textContent = this.dataset.address;
-            document.getElementById('modalIdType').textContent = this.dataset.idType;
-            document.getElementById('modalIdNumber').textContent = this.dataset.idNumber;
-            document.getElementById('modalIdStatus').textContent = this.dataset.idStatus;
-            document.getElementById('modalVerifiedDate').textContent = this.dataset.verifiedDate || '-';
-            document.getElementById('modalWeightDiverted').textContent = this.dataset.weight;
-            document.getElementById('modalCo2Saved').textContent = this.dataset.co2;
-            document.getElementById('modalImpactScore').textContent = this.dataset.score;
-            document.getElementById('modalJoinedDate').textContent = this.dataset.joined;
+        btn.addEventListener('click', function (e) {
+            try {
+                const setText = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val || '-';
+                };
 
-            // Rejection reason if rejected
-            const rejWrap = document.getElementById('modalRejectionWrap');
-            const rejReason = document.getElementById('modalRejectionReason');
-            if (this.dataset.rejectionReason) {
-                rejWrap.style.display = 'block';
-                rejReason.textContent = this.dataset.rejectionReason;
-            } else {
-                rejWrap.style.display = 'none';
-            }
+                setText('modalUserName', this.dataset.name);
+                setText('modalUserEmail', this.dataset.email);
+                setText('modalUserPhone', this.dataset.phone);
+                setText('modalUserRole', this.dataset.role);
+                setText('modalUserStanding', this.dataset.status);
+                setText('modalEmailVerified', this.dataset.emailVerified);
+                setText('modalUserAddress', this.dataset.address);
+                setText('modalIdStatus', this.dataset.idStatus);
+                setText('modalVerifiedDate', this.dataset.verifiedDate || '-');
+                setText('modalWeightDiverted', this.dataset.weight);
+                setText('modalCo2Saved', this.dataset.co2);
+                setText('modalImpactScore', this.dataset.score);
+                setText('modalJoinedDate', this.dataset.joined);
 
-            // Direct Queue link - only show for pending/unverified review
-            const queueLink = document.getElementById('modalQueueLink');
-            if (this.dataset.isVerified !== 'Yes' && this.dataset.queueUrl && (this.dataset.idPhoto || this.dataset.idBack || this.dataset.idSelfie || this.dataset.idProof || this.dataset.idType !== 'Not submitted')) {
-                queueLink.href = this.dataset.queueUrl;
-                queueLink.style.display = 'inline-flex';
-            } else {
-                queueLink.style.display = 'none';
-            }
+                // Rejection reason if rejected
+                const rejWrap = document.getElementById('modalRejectionWrap');
+                const rejReason = document.getElementById('modalRejectionReason');
+                if (rejWrap) {
+                    if (this.dataset.rejectionReason) {
+                        rejWrap.style.display = 'block';
+                        if (rejReason) rejReason.textContent = this.dataset.rejectionReason;
+                    } else {
+                        rejWrap.style.display = 'none';
+                    }
+                }
 
-            // Document Images Grid & Data Privacy Control
-            const grid = document.getElementById('modalIdDocsGrid');
-            const noDocs = document.getElementById('modalNoDocsMsg');
-            grid.innerHTML = '';
+                // Direct Queue link - only show for pending/unverified review
+                const queueLink = document.getElementById('modalQueueLink');
+                if (queueLink) {
+                    if (this.dataset.isVerified !== 'Yes' && this.dataset.queueUrl && (this.dataset.idPhoto || this.dataset.idBack || this.dataset.idSelfie || this.dataset.idProof || this.dataset.idType !== 'Not submitted')) {
+                        queueLink.href = this.dataset.queueUrl;
+                        queueLink.style.display = 'inline-flex';
+                    } else {
+                        queueLink.style.display = 'none';
+                    }
+                }
 
-            if (this.dataset.isVerified === 'Yes') {
-                noDocs.style.display = 'none';
-                const col = document.createElement('div');
-                col.className = 'col-12';
-                col.innerHTML = `
-                    <div class="p-3 rounded-3 border d-flex align-items-center gap-3" style="background: rgba(13, 148, 136, 0.05); border-color: rgba(13, 148, 136, 0.25);">
-                        <div style="width: 44px; height: 44px; border-radius: 50%; background: #ccfbf1; color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            <i class="fas fa-shield-halved"></i>
-                        </div>
-                        <div>
-                            <strong style="color: #0f172a; font-size: 0.88rem; display: block;">Government ID & Physical Location Verified</strong>
-                            <span style="font-size: 0.78rem; color: #64748b; line-height: 1.35; display: block;">
-                                In compliance with RA 10173 (Data Privacy Act of 2012), physical government ID photos and unmasked credentials are automatically protected and concealed once identity verification is approved.
-                            </span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(col);
-            } else {
-                const docs = [
-                    { url: this.dataset.idPhoto, label: 'Primary ID Front', icon: 'fa-id-card' },
-                    { url: this.dataset.idBack, label: 'Back of ID (Address)', icon: 'fa-location-dot' },
-                    { url: this.dataset.idSelfie, label: 'Selfie Match', icon: 'fa-user-check' },
-                    { url: this.dataset.idProof, label: 'Proof of Location' + (this.dataset.idProofType ? ` (${this.dataset.idProofType})` : ''), icon: 'fa-file-invoice' }
-                ];
-                let docCount = 0;
-                docs.forEach(doc => {
-                    if (doc.url) {
-                        docCount++;
+                // Document Images Grid & Data Privacy Control
+                const grid = document.getElementById('modalIdDocsGrid');
+                const noDocs = document.getElementById('modalNoDocsMsg');
+                if (grid) {
+                    grid.innerHTML = '';
+                    if (this.dataset.isVerified === 'Yes') {
+                        if (noDocs) noDocs.style.display = 'none';
                         const col = document.createElement('div');
-                        col.className = 'col-6 col-md-3';
-                        const isPdf = doc.url.toLowerCase().endsWith('.pdf');
+                        col.className = 'col-12';
                         col.innerHTML = `
-                            <div class="user-doc-card p-1 rounded-3 border bg-white shadow-sm" style="cursor: pointer; transition: all 0.2s ease;">
-                                <div style="height: 100px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
-                                    ${isPdf ? `
-                                        <div class="text-white text-center p-2">
-                                            <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
-                                            <div style="font-size: 0.65rem;">PDF Document</div>
-                                        </div>
-                                    ` : `
-                                        <img src="${doc.url}" alt="${doc.label}" style="width: 100%; height: 100%; object-fit: cover;">
-                                    `}
-                                    <span style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(15,23,42,0.85); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        <i class="fas ${doc.icon} me-1 text-teal" style="color: #2dd4bf;"></i>${doc.label}
+                            <div class="p-3 rounded-3 border d-flex align-items-center gap-3" style="background: rgba(13, 148, 136, 0.05); border-color: rgba(13, 148, 136, 0.25);">
+                                <div style="width: 44px; height: 44px; border-radius: 50%; background: #ccfbf1; color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #0f172a; font-size: 0.88rem; display: block;">Government ID & Physical Location Verified</strong>
+                                    <span style="font-size: 0.78rem; color: #64748b; line-height: 1.35; display: block;">
+                                        In compliance with RA 10173 (Data Privacy Act of 2012), physical government ID photos and credentials are automatically protected and concealed once identity verification is approved.
                                     </span>
                                 </div>
                             </div>
                         `;
-                        col.querySelector('.user-doc-card').addEventListener('click', () => {
-                            if (isPdf) {
-                                window.open(doc.url, '_blank');
-                            } else {
-                                document.getElementById('adminDocZoomTitle').textContent = `${this.dataset.name} - ${doc.label}`;
-                                document.getElementById('adminDocZoomImg').src = doc.url;
-                                document.getElementById('adminDocZoomOpenLink').href = doc.url;
-                                const zoomModal = new bootstrap.Modal(document.getElementById('adminUserDocZoomModal'));
-                                zoomModal.show();
+                        grid.appendChild(col);
+                    } else {
+                        const docs = [
+                            { url: this.dataset.idPhoto, label: 'Primary ID Front', icon: 'fa-id-card' },
+                            { url: this.dataset.idBack, label: 'Back of ID (Address)', icon: 'fa-location-dot' },
+                            { url: this.dataset.idSelfie, label: 'Selfie Match', icon: 'fa-user-check' },
+                            { url: this.dataset.idProof, label: 'Proof of Location' + (this.dataset.idProofType ? ` (${this.dataset.idProofType})` : ''), icon: 'fa-file-invoice' }
+                        ];
+                        let docCount = 0;
+                        docs.forEach(doc => {
+                            if (doc.url) {
+                                docCount++;
+                                const col = document.createElement('div');
+                                col.className = 'col-6 col-md-3';
+                                const isPdf = doc.url.toLowerCase().endsWith('.pdf');
+                                col.innerHTML = `
+                                    <div class="user-doc-card p-1 rounded-3 border bg-white shadow-sm" style="cursor: pointer; transition: all 0.2s ease;">
+                                        <div style="height: 100px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                                            ${isPdf ? `
+                                                <div class="text-white text-center p-2">
+                                                    <i class="fas fa-file-pdf fa-2x text-danger mb-1"></i>
+                                                    <div style="font-size: 0.65rem;">PDF Document</div>
+                                                </div>
+                                            ` : `
+                                                <img src="${doc.url}" alt="${doc.label}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            `}
+                                            <span style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(15,23,42,0.85); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <i class="fas ${doc.icon} me-1 text-teal" style="color: #2dd4bf;"></i>${doc.label}
+                                            </span>
+                                        </div>
+                                    </div>
+                                `;
+                                col.querySelector('.user-doc-card').addEventListener('click', () => {
+                                    if (isPdf) {
+                                        window.open(doc.url, '_blank');
+                                    } else {
+                                        const zoomTitle = document.getElementById('adminDocZoomTitle');
+                                        const zoomImg = document.getElementById('adminDocZoomImg');
+                                        const zoomLink = document.getElementById('adminDocZoomOpenLink');
+                                        if (zoomTitle) zoomTitle.textContent = `${this.dataset.name} - ${doc.label}`;
+                                        if (zoomImg) zoomImg.src = doc.url;
+                                        if (zoomLink) zoomLink.href = doc.url;
+                                        const zoomModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('adminUserDocZoomModal'));
+                                        zoomModal.show();
+                                    }
+                                });
+                                grid.appendChild(col);
                             }
                         });
-                        grid.appendChild(col);
+                        if (noDocs) {
+                            noDocs.style.display = docCount === 0 ? 'block' : 'none';
+                        }
                     }
-                });
-                if (docCount === 0) {
-                    noDocs.style.display = 'block';
-                } else {
-                    noDocs.style.display = 'none';
                 }
+
+                // Avatar setup
+                const avatarWrap = document.getElementById('modalUserAvatarWrap');
+                if (avatarWrap) {
+                    if (this.dataset.avatar) {
+                        avatarWrap.innerHTML = `<img src="${this.dataset.avatar}" alt="${this.dataset.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.7);">`;
+                    } else {
+                        avatarWrap.innerHTML = `<div style="width: 48px; height: 48px; border-radius: 50%; background: ${this.dataset.bg}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.7);">${this.dataset.initials}</div>`;
+                    }
+                }
+
+                // Business info for sellers if elements exist
+                const bWrap = document.getElementById('modalBusinessWrap');
+                if (bWrap) {
+                    if (this.dataset.business && this.dataset.business !== 'None') {
+                        bWrap.style.display = 'block';
+                        const bName = document.getElementById('modalBusinessName');
+                        const bDesc = document.getElementById('modalBusinessDesc');
+                        if (bName) bName.textContent = this.dataset.business;
+                        if (bDesc) bDesc.textContent = this.dataset.businessDesc;
+                    } else {
+                        bWrap.style.display = 'none';
+                    }
+                }
+            } catch (err) {
+                console.error('Error populating user modal:', err);
             }
 
-            // Avatar setup
-            const avatarWrap = document.getElementById('modalUserAvatarWrap');
-            if (this.dataset.avatar) {
-                avatarWrap.innerHTML = `<img src="${this.dataset.avatar}" alt="${this.dataset.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.7);">`;
-            } else {
-                avatarWrap.innerHTML = `<div style="width: 48px; height: 48px; border-radius: 50%; background: ${this.dataset.bg}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.7);">${this.dataset.initials}</div>`;
+            if (modalEl) {
+                bootstrap.Modal.getOrCreateInstance(modalEl).show();
             }
-
-            // Business info for sellers
-            const bWrap = document.getElementById('modalBusinessWrap');
-            if (this.dataset.business && this.dataset.business !== 'None') {
-                bWrap.style.display = 'block';
-                document.getElementById('modalBusinessName').textContent = this.dataset.business;
-                document.getElementById('modalBusinessDesc').textContent = this.dataset.businessDesc;
-            } else {
-                bWrap.style.display = 'none';
-            }
-
-            userModal.show();
         });
     });
 
