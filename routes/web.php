@@ -230,12 +230,15 @@ Route::middleware('auth')->group(function () {
         
         // User Management routes
         Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::post('/admin/users/seed-contact-responses', [AdminUserController::class, 'seedContactResponses'])->name('admin.users.seed-contact-responses');
         Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
         Route::post('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
         Route::post('/admin/users/{user}/toggle-verification', [AdminUserController::class, 'toggleVerification'])->name('admin.users.toggle-verification');
+        Route::post('/admin/users/{user}/update-role', [AdminUserController::class, 'updateRole'])->name('admin.users.update-role');
         Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 
         Route::get('/admin/verifications/pending', [AdminController::class, 'pendingVerifications'])->name('admin.pending-verifications');
+        Route::get('/admin/verifications', [AdminController::class, 'pendingVerifications'])->name('admin.verifications');
         Route::post('/admin/users/{user}/verify', [AdminController::class, 'verifyUser'])->name('admin.verify-user');
         Route::post('/admin/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('admin.reject-user');
         Route::get('/admin/listings', [AdminController::class, 'allListings'])->name('admin.listings');

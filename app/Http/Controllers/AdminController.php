@@ -130,7 +130,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Show pending buyer verifications.
+     * Show buyer and seller ID & location verifications (pending, verified, rejected, or all).
      */
     public function pendingVerifications(Request $request)
     {
@@ -138,7 +138,13 @@ class AdminController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        $baseQuery = User::where(function ($q) {
+        $status = $request->input('status', 'pending');
+        if (!in_array($status, ['pending', 'verified', 'rejected', 'all'])) {
+            $status = 'pending';
+        }
+
+        // Global status queries for count statistics
+        $pendingQuery = User::where(function ($q) {
             $q->where('id_verification_status', 'pending')
               ->orWhere(function ($sub) {
                   $sub->where('is_verified', false)
@@ -149,6 +155,58 @@ class AdminController extends Controller
                       });
               });
         });
+        $pendingCount = (clone $pendingQuery)->count();
+
+        $verifiedQuery = User::where(function ($q) {
+            $q->where('is_verified', true)
+              ->orWhere('id_verification_status', 'verified');
+        })->where(function ($q) {
+            $q->whereNotNull('id_photo_url')
+              ->orWhereNotNull('id_type');
+        });
+        $verifiedCount = (clone $verifiedQuery)->count();
+
+        $rejectedQuery = User::where('id_verification_status', 'rejected');
+        $rejectedCount = (clone $rejectedQuery)->count();
+
+        $allQuery = User::where(function ($q) {
+            $q->whereNotNull('id_photo_url')
+              ->orWhereNotNull('id_type')
+              ->orWhereIn('id_verification_status', ['pending', 'verified', 'rejected']);
+        });
+        $allCount = (clone $allQuery)->count();
+
+        // Select active query based on status
+        switch ($status) {
+            case 'verified':
+                $baseQuery = clone $verifiedQuery;
+                break;
+            case 'rejected':
+                $baseQuery = clone $rejectedQuery;
+                break;
+            case 'all':
+                $baseQuery = clone $allQuery;
+                break;
+            case 'pending':
+            default:
+                $baseQuery = clone $pendingQuery;
+                break;
+        }
+
+        // Optional search filter
+        $search = trim($request->input('q', $request->input('search', '')));
+        if ($search !== '') {
+            $baseQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('id_number', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('user_id')) {
+            $baseQuery->where('id', $request->input('user_id'));
+        }
 
         $totalCount = (clone $baseQuery)->count();
         $sellerCount = (clone $baseQuery)->where('role', 'seller')->count();
@@ -156,8 +214,9 @@ class AdminController extends Controller
 
         $query = clone $baseQuery;
 
-        if ($request->filled('role') && in_array($request->role, ['seller', 'buyer'])) {
-            $query->where('role', $request->role);
+        $role = $request->input('role');
+        if ($request->filled('role') && in_array($role, ['seller', 'buyer'])) {
+            $query->where('role', $role);
         }
 
         $pendingUsers = $query->with('addresses')
@@ -166,7 +225,19 @@ class AdminController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.pending-verifications', compact('pendingUsers', 'totalCount', 'sellerCount', 'buyerCount'));
+        return view('admin.pending-verifications', compact(
+            'pendingUsers',
+            'status',
+            'role',
+            'search',
+            'totalCount',
+            'sellerCount',
+            'buyerCount',
+            'pendingCount',
+            'verifiedCount',
+            'rejectedCount',
+            'allCount'
+        ));
     }
 
     /**
