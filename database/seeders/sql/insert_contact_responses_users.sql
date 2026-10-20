@@ -15,10 +15,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Rhona Mae Bulatao', 'rhonamaebulatao@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'admin', 1, 'verified',
-    '2026-10-20 08:25:27', '09165614226', '88 Rizal Avenue', 'Rizal', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'A38-27-872246', '2026-10-20 08:32:26',
-    '2026-10-20 08:32:26', NULL, NULL, 0,
-    0.0, 0.0, 0, '2026-10-20 08:20:44', '2026-10-20 08:32:26'
+    '2026-10-18 08:25:27', '09165614226', '88 Rizal Avenue', 'Rizal', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'A38-27-872246', '2026-10-18 08:32:26',
+    '2026-10-18 08:32:26', NULL, NULL, 0,
+    0.0, 0.0, 0, '2026-10-18 08:20:44', '2026-10-18 08:32:26'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -47,19 +47,19 @@ INSERT INTO `users` (
 
 -- Audit logs for rhonamaebulatao@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as admin (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:20:44', '2026-10-20 08:20:44'
+SELECT id, 'register', 'User', id, 'User registered as admin (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:20:44', '2026-10-18 08:20:44'
 FROM `users` WHERE `email` = 'rhonamaebulatao@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:25:27', '2026-10-20 08:25:27'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:25:27', '2026-10-18 08:25:27'
 FROM `users` WHERE `email` = 'rhonamaebulatao@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Rhona Mae Bulatao logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:26:04', '2026-10-20 08:26:04'
+SELECT id, 'user_login', 'User', id, 'User Rhona Mae Bulatao logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:26:04', '2026-10-18 08:26:04'
 FROM `users` WHERE `email` = 'rhonamaebulatao@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for admin Rhona Mae Bulatao', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 08:32:26', '2026-10-20 08:32:26'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for admin Rhona Mae Bulatao', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 08:32:26', '2026-10-18 08:32:26'
 FROM `users` WHERE `email` = 'rhonamaebulatao@gmail.com';
 
 INSERT INTO `users` (
@@ -3307,10 +3307,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Princess Villarin', 'princessvillarin20@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:06:37', '09918658158', '21 Binalatongan Street', 'Mamarlao', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'A69-95-656932', '2026-10-19 11:19:00',
-    '2026-10-19 11:19:00', 'Prime Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Mamarlao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
-    36.3, 83.5, 428, '2026-10-19 11:00:43', '2026-10-19 11:19:00'
+    '2026-10-17 11:06:37', '09918658158', '21 Binalatongan Street', 'Mamarlao', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'A69-95-656932', '2026-10-17 11:19:00',
+    '2026-10-17 11:19:00', 'Prime Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Mamarlao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
+    36.3, 83.5, 428, '2026-10-17 11:00:43', '2026-10-17 11:19:00'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3339,19 +3339,19 @@ INSERT INTO `users` (
 
 -- Audit logs for princessvillarin20@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:00:43', '2026-10-19 11:00:43'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:00:43', '2026-10-17 11:00:43'
 FROM `users` WHERE `email` = 'princessvillarin20@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:06:37', '2026-10-19 11:06:37'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:06:37', '2026-10-17 11:06:37'
 FROM `users` WHERE `email` = 'princessvillarin20@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Princess Villarin logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:08:01', '2026-10-19 11:08:01'
+SELECT id, 'user_login', 'User', id, 'User Princess Villarin logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:08:01', '2026-10-17 11:08:01'
 FROM `users` WHERE `email` = 'princessvillarin20@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Princess Villarin', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:19:00', '2026-10-19 11:19:00'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Princess Villarin', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:19:00', '2026-10-17 11:19:00'
 FROM `users` WHERE `email` = 'princessvillarin20@gmail.com';
 
 INSERT INTO `users` (
@@ -3362,10 +3362,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Roberto Campos', 'robertocampos06@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:07:34', '09928159521', '18 P. Gomez Street', 'Tarece', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '9976-8481188-3', '2026-10-19 11:46:13',
-    '2026-10-19 11:46:13', 'Pure Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tarece, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
-    19.6, 45.1, 286, '2026-10-19 11:01:46', '2026-10-19 11:46:13'
+    '2026-10-17 11:07:34', '09928159521', '18 P. Gomez Street', 'Tarece', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '9976-8481188-3', '2026-10-17 11:46:13',
+    '2026-10-17 11:46:13', 'Pure Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tarece, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
+    19.6, 45.1, 286, '2026-10-17 11:01:46', '2026-10-17 11:46:13'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3394,19 +3394,19 @@ INSERT INTO `users` (
 
 -- Audit logs for robertocampos06@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:01:46', '2026-10-19 11:01:46'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:01:46', '2026-10-17 11:01:46'
 FROM `users` WHERE `email` = 'robertocampos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:07:34', '2026-10-19 11:07:34'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:07:34', '2026-10-17 11:07:34'
 FROM `users` WHERE `email` = 'robertocampos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Roberto Campos logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:08:32', '2026-10-19 11:08:32'
+SELECT id, 'user_login', 'User', id, 'User Roberto Campos logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:08:32', '2026-10-17 11:08:32'
 FROM `users` WHERE `email` = 'robertocampos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Roberto Campos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:46:13', '2026-10-19 11:46:13'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Roberto Campos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:46:13', '2026-10-17 11:46:13'
 FROM `users` WHERE `email` = 'robertocampos06@gmail.com';
 
 INSERT INTO `users` (
@@ -3417,10 +3417,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Danielle Coronel', 'daniellecoronel25@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:10:50', '09159745959', '27 Malong Street', 'Magtaking', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5562-4919B-67654', '2026-10-19 11:34:33',
-    '2026-10-19 11:34:33', 'EcoSphere Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Magtaking, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
-    28.4, 65.3, 309, '2026-10-19 11:05:38', '2026-10-19 11:34:33'
+    '2026-10-17 11:10:50', '09159745959', '27 Malong Street', 'Magtaking', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5562-4919B-67654', '2026-10-17 11:34:33',
+    '2026-10-17 11:34:33', 'EcoSphere Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Magtaking, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
+    28.4, 65.3, 309, '2026-10-17 11:05:38', '2026-10-17 11:34:33'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3449,19 +3449,19 @@ INSERT INTO `users` (
 
 -- Audit logs for daniellecoronel25@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:05:38', '2026-10-19 11:05:38'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:05:38', '2026-10-17 11:05:38'
 FROM `users` WHERE `email` = 'daniellecoronel25@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:10:50', '2026-10-19 11:10:50'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:10:50', '2026-10-17 11:10:50'
 FROM `users` WHERE `email` = 'daniellecoronel25@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Danielle Coronel logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:11:35', '2026-10-19 11:11:35'
+SELECT id, 'user_login', 'User', id, 'User Danielle Coronel logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:11:35', '2026-10-17 11:11:35'
 FROM `users` WHERE `email` = 'daniellecoronel25@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Danielle Coronel', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:34:33', '2026-10-19 11:34:33'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Danielle Coronel', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:34:33', '2026-10-17 11:34:33'
 FROM `users` WHERE `email` = 'daniellecoronel25@gmail.com';
 
 INSERT INTO `users` (
@@ -3472,10 +3472,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Arvin Barrameda', 'arvinbarrameda11@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:10:48', '09166363836', '50 Quezon Boulevard', 'Baldog', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-82498004', '2026-10-19 11:40:43',
-    '2026-10-19 11:40:43', 'BioScrap E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Baldog, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
-    9.1, 20.9, 116, '2026-10-19 11:07:48', '2026-10-19 11:40:43'
+    '2026-10-17 11:10:48', '09166363836', '50 Quezon Boulevard', 'Baldog', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-82498004', '2026-10-17 11:40:43',
+    '2026-10-17 11:40:43', 'BioScrap E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Baldog, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
+    9.1, 20.9, 116, '2026-10-17 11:07:48', '2026-10-17 11:40:43'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3504,19 +3504,19 @@ INSERT INTO `users` (
 
 -- Audit logs for arvinbarrameda11@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:07:48', '2026-10-19 11:07:48'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:07:48', '2026-10-17 11:07:48'
 FROM `users` WHERE `email` = 'arvinbarrameda11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:10:48', '2026-10-19 11:10:48'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:10:48', '2026-10-17 11:10:48'
 FROM `users` WHERE `email` = 'arvinbarrameda11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Arvin Barrameda logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:11:35', '2026-10-19 11:11:35'
+SELECT id, 'user_login', 'User', id, 'User Arvin Barrameda logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:11:35', '2026-10-17 11:11:35'
 FROM `users` WHERE `email` = 'arvinbarrameda11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Arvin Barrameda', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:40:43', '2026-10-19 11:40:43'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Arvin Barrameda', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:40:43', '2026-10-17 11:40:43'
 FROM `users` WHERE `email` = 'arvinbarrameda11@gmail.com';
 
 INSERT INTO `users` (
@@ -3527,10 +3527,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Marielle De Santos', 'marielledesantos17@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:13:54', '09174589533', '38 Mabini Extension', 'Tamayo', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P2077581B', '2026-10-19 11:31:20',
-    '2026-10-19 11:31:20', 'TechnoCycle Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Tamayo, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
-    15.6, 35.9, 236, '2026-10-19 11:10:55', '2026-10-19 11:31:20'
+    '2026-10-17 11:13:54', '09174589533', '38 Mabini Extension', 'Tamayo', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P2077581B', '2026-10-17 11:31:20',
+    '2026-10-17 11:31:20', 'TechnoCycle Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Tamayo, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
+    15.6, 35.9, 236, '2026-10-17 11:10:55', '2026-10-17 11:31:20'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3559,19 +3559,19 @@ INSERT INTO `users` (
 
 -- Audit logs for marielledesantos17@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:10:55', '2026-10-19 11:10:55'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:10:55', '2026-10-17 11:10:55'
 FROM `users` WHERE `email` = 'marielledesantos17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:13:54', '2026-10-19 11:13:54'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:13:54', '2026-10-17 11:13:54'
 FROM `users` WHERE `email` = 'marielledesantos17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Marielle De Santos logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:14:48', '2026-10-19 11:14:48'
+SELECT id, 'user_login', 'User', id, 'User Marielle De Santos logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:14:48', '2026-10-17 11:14:48'
 FROM `users` WHERE `email` = 'marielledesantos17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Marielle De Santos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:31:20', '2026-10-19 11:31:20'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Marielle De Santos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:31:20', '2026-10-17 11:31:20'
 FROM `users` WHERE `email` = 'marielledesantos17@gmail.com';
 
 INSERT INTO `users` (
@@ -3582,10 +3582,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Noel Balagtas', 'noelbalagtas08@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:20:44', '09264470105', '14 Palaris Street', 'Tandoc', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '7883-7381-1320-7232', '2026-10-19 11:31:00',
-    '2026-10-19 11:31:00', 'Urban Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tandoc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
-    4.7, 10.8, 137, '2026-10-19 11:16:45', '2026-10-19 11:31:00'
+    '2026-10-17 11:20:44', '09264470105', '14 Palaris Street', 'Tandoc', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '7883-7381-1320-7232', '2026-10-17 11:31:00',
+    '2026-10-17 11:31:00', 'Urban Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tandoc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
+    4.7, 10.8, 137, '2026-10-17 11:16:45', '2026-10-17 11:31:00'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3614,19 +3614,19 @@ INSERT INTO `users` (
 
 -- Audit logs for noelbalagtas08@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:16:45', '2026-10-19 11:16:45'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:16:45', '2026-10-17 11:16:45'
 FROM `users` WHERE `email` = 'noelbalagtas08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:20:44', '2026-10-19 11:20:44'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:20:44', '2026-10-17 11:20:44'
 FROM `users` WHERE `email` = 'noelbalagtas08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Noel Balagtas logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:21:40', '2026-10-19 11:21:40'
+SELECT id, 'user_login', 'User', id, 'User Noel Balagtas logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:21:40', '2026-10-17 11:21:40'
 FROM `users` WHERE `email` = 'noelbalagtas08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Noel Balagtas', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:31:00', '2026-10-19 11:31:00'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Noel Balagtas', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:31:00', '2026-10-17 11:31:00'
 FROM `users` WHERE `email` = 'noelbalagtas08@gmail.com';
 
 INSERT INTO `users` (
@@ -3637,10 +3637,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Krystine Vergara', 'krystinevergara19@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:30:19', '09278030010', '88 Rizal Avenue', 'Caoayan Kiling', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'A72-38-386193', '2026-10-19 12:03:26',
-    '2026-10-19 12:03:26', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Caoayan Kiling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
-    20.8, 47.8, 288, '2026-10-19 11:26:49', '2026-10-19 12:03:26'
+    '2026-10-17 11:30:19', '09278030010', '88 Rizal Avenue', 'Caoayan Kiling', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'A72-38-386193', '2026-10-17 12:03:26',
+    '2026-10-17 12:03:26', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Caoayan Kiling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
+    20.8, 47.8, 288, '2026-10-17 11:26:49', '2026-10-17 12:03:26'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3669,19 +3669,19 @@ INSERT INTO `users` (
 
 -- Audit logs for krystinevergara19@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:26:49', '2026-10-19 11:26:49'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:26:49', '2026-10-17 11:26:49'
 FROM `users` WHERE `email` = 'krystinevergara19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:30:19', '2026-10-19 11:30:19'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:30:19', '2026-10-17 11:30:19'
 FROM `users` WHERE `email` = 'krystinevergara19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Krystine Vergara logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 11:31:08', '2026-10-19 11:31:08'
+SELECT id, 'user_login', 'User', id, 'User Krystine Vergara logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 11:31:08', '2026-10-17 11:31:08'
 FROM `users` WHERE `email` = 'krystinevergara19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Krystine Vergara', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:03:26', '2026-10-19 12:03:26'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Krystine Vergara', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:03:26', '2026-10-17 12:03:26'
 FROM `users` WHERE `email` = 'krystinevergara19@gmail.com';
 
 INSERT INTO `users` (
@@ -3692,10 +3692,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Paolo Miranda', 'paolomiranda03@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:34:54', '09353768991', '25 Perez Boulevard', 'Ilang', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '8657-3141239-9', '2026-10-19 12:08:51',
-    '2026-10-19 12:08:51', 'San Carlos E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Ilang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
-    34.9, 80.3, 364, '2026-10-19 11:31:15', '2026-10-19 12:08:51'
+    '2026-10-17 11:34:54', '09353768991', '25 Perez Boulevard', 'Ilang', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '8657-3141239-9', '2026-10-17 12:08:51',
+    '2026-10-17 12:08:51', 'San Carlos E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Ilang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
+    34.9, 80.3, 364, '2026-10-17 11:31:15', '2026-10-17 12:08:51'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3724,19 +3724,19 @@ INSERT INTO `users` (
 
 -- Audit logs for paolomiranda03@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:31:15', '2026-10-19 11:31:15'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:31:15', '2026-10-17 11:31:15'
 FROM `users` WHERE `email` = 'paolomiranda03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:34:54', '2026-10-19 11:34:54'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:34:54', '2026-10-17 11:34:54'
 FROM `users` WHERE `email` = 'paolomiranda03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Paolo Miranda logged in from 180.190.45.19', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 11:35:45', '2026-10-19 11:35:45'
+SELECT id, 'user_login', 'User', id, 'User Paolo Miranda logged in from 180.190.45.19', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 11:35:45', '2026-10-17 11:35:45'
 FROM `users` WHERE `email` = 'paolomiranda03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Paolo Miranda', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:08:51', '2026-10-19 12:08:51'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Paolo Miranda', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:08:51', '2026-10-17 12:08:51'
 FROM `users` WHERE `email` = 'paolomiranda03@gmail.com';
 
 INSERT INTO `users` (
@@ -3747,10 +3747,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Maureen Abello', 'maureenabello14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:40:47', '09452408404', '42 Mabini Street', 'San Pedro-Taloy', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5582-8022A-70515', '2026-10-19 11:48:07',
-    '2026-10-19 11:48:07', 'Pangasinan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Pedro-Taloy, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
-    6.2, 14.3, 102, '2026-10-19 11:36:16', '2026-10-19 11:48:07'
+    '2026-10-17 11:40:47', '09452408404', '42 Mabini Street', 'San Pedro-Taloy', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5582-8022A-70515', '2026-10-17 11:48:07',
+    '2026-10-17 11:48:07', 'Pangasinan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Pedro-Taloy, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
+    6.2, 14.3, 102, '2026-10-17 11:36:16', '2026-10-17 11:48:07'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3779,19 +3779,19 @@ INSERT INTO `users` (
 
 -- Audit logs for maureenabello14@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:36:16', '2026-10-19 11:36:16'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:36:16', '2026-10-17 11:36:16'
 FROM `users` WHERE `email` = 'maureenabello14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:40:47', '2026-10-19 11:40:47'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:40:47', '2026-10-17 11:40:47'
 FROM `users` WHERE `email` = 'maureenabello14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Maureen Abello logged in from 180.190.112.7', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 11:41:53', '2026-10-19 11:41:53'
+SELECT id, 'user_login', 'User', id, 'User Maureen Abello logged in from 180.190.112.7', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 11:41:53', '2026-10-17 11:41:53'
 FROM `users` WHERE `email` = 'maureenabello14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Maureen Abello', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 11:48:07', '2026-10-19 11:48:07'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Maureen Abello', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 11:48:07', '2026-10-17 11:48:07'
 FROM `users` WHERE `email` = 'maureenabello14@gmail.com';
 
 INSERT INTO `users` (
@@ -3802,10 +3802,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Ryan Panganiban', 'ryanpanganiban26@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:45:29', '09558628588', '52 Bugallon-Posadas Street', 'Antipangol', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-53868501', '2026-10-19 12:06:18',
-    '2026-10-19 12:06:18', 'Central Luzon Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Antipangol, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
-    30.0, 69.0, 365, '2026-10-19 11:41:52', '2026-10-19 12:06:18'
+    '2026-10-17 11:45:29', '09558628588', '52 Bugallon-Posadas Street', 'Antipangol', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-53868501', '2026-10-17 12:06:18',
+    '2026-10-17 12:06:18', 'Central Luzon Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Antipangol, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
+    30.0, 69.0, 365, '2026-10-17 11:41:52', '2026-10-17 12:06:18'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3834,19 +3834,19 @@ INSERT INTO `users` (
 
 -- Audit logs for ryanpanganiban26@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:41:52', '2026-10-19 11:41:52'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:41:52', '2026-10-17 11:41:52'
 FROM `users` WHERE `email` = 'ryanpanganiban26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:45:29', '2026-10-19 11:45:29'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:45:29', '2026-10-17 11:45:29'
 FROM `users` WHERE `email` = 'ryanpanganiban26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Ryan Panganiban logged in from 49.145.22.88', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 11:46:19', '2026-10-19 11:46:19'
+SELECT id, 'user_login', 'User', id, 'User Ryan Panganiban logged in from 49.145.22.88', '49.145.22.88', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 11:46:19', '2026-10-17 11:46:19'
 FROM `users` WHERE `email` = 'ryanpanganiban26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Ryan Panganiban', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:06:18', '2026-10-19 12:06:18'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Ryan Panganiban', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:06:18', '2026-10-17 12:06:18'
 FROM `users` WHERE `email` = 'ryanpanganiban26@gmail.com';
 
 INSERT INTO `users` (
@@ -3857,10 +3857,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jennifer Delos Reyes', 'jenniferdelosreyes10@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 11:59:17', '09665232413', '19 Montemayor Street', 'Bega', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P2374158B', '2026-10-19 12:34:26',
-    '2026-10-19 12:34:26', 'GreenTech Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Bega, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
-    29.6, 68.1, 311, '2026-10-19 11:55:40', '2026-10-19 12:34:26'
+    '2026-10-17 11:59:17', '09665232413', '19 Montemayor Street', 'Bega', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P2374158B', '2026-10-17 12:34:26',
+    '2026-10-17 12:34:26', 'GreenTech Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Bega, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
+    29.6, 68.1, 311, '2026-10-17 11:55:40', '2026-10-17 12:34:26'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3889,19 +3889,19 @@ INSERT INTO `users` (
 
 -- Audit logs for jenniferdelosreyes10@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:55:40', '2026-10-19 11:55:40'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:55:40', '2026-10-17 11:55:40'
 FROM `users` WHERE `email` = 'jenniferdelosreyes10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 11:59:17', '2026-10-19 11:59:17'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 11:59:17', '2026-10-17 11:59:17'
 FROM `users` WHERE `email` = 'jenniferdelosreyes10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Jennifer Delos Reyes logged in from 49.145.189.63', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 12:00:04', '2026-10-19 12:00:04'
+SELECT id, 'user_login', 'User', id, 'User Jennifer Delos Reyes logged in from 49.145.189.63', '49.145.189.63', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 12:00:04', '2026-10-17 12:00:04'
 FROM `users` WHERE `email` = 'jenniferdelosreyes10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Jennifer Delos Reyes', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:34:26', '2026-10-19 12:34:26'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Jennifer Delos Reyes', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:34:26', '2026-10-17 12:34:26'
 FROM `users` WHERE `email` = 'jenniferdelosreyes10@gmail.com';
 
 INSERT INTO `users` (
@@ -3912,10 +3912,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Aljon Macapagal', 'aljonmacapagal22@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:05:29', '09774761823', '31 Gomez Street', 'Dalandan', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '2124-1659-1508-5051', '2026-10-19 12:37:09',
-    '2026-10-19 12:37:09', 'EcoRecover E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Dalandan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
-    32.6, 75.0, 371, '2026-10-19 12:03:16', '2026-10-19 12:37:09'
+    '2026-10-17 12:05:29', '09774761823', '31 Gomez Street', 'Dalandan', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '2124-1659-1508-5051', '2026-10-17 12:37:09',
+    '2026-10-17 12:37:09', 'EcoRecover E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Dalandan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
+    32.6, 75.0, 371, '2026-10-17 12:03:16', '2026-10-17 12:37:09'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3944,19 +3944,19 @@ INSERT INTO `users` (
 
 -- Audit logs for aljonmacapagal22@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:03:16', '2026-10-19 12:03:16'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:03:16', '2026-10-17 12:03:16'
 FROM `users` WHERE `email` = 'aljonmacapagal22@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:05:29', '2026-10-19 12:05:29'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:05:29', '2026-10-17 12:05:29'
 FROM `users` WHERE `email` = 'aljonmacapagal22@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Aljon Macapagal logged in from 124.106.15.110', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:06:59', '2026-10-19 12:06:59'
+SELECT id, 'user_login', 'User', id, 'User Aljon Macapagal logged in from 124.106.15.110', '124.106.15.110', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:06:59', '2026-10-17 12:06:59'
 FROM `users` WHERE `email` = 'aljonmacapagal22@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Aljon Macapagal', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:37:09', '2026-10-19 12:37:09'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Aljon Macapagal', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:37:09', '2026-10-17 12:37:09'
 FROM `users` WHERE `email` = 'aljonmacapagal22@gmail.com';
 
 INSERT INTO `users` (
@@ -3967,10 +3967,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Francis Caballero', 'franciscaballero05@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:14:42', '09953117636', '76 Roxas Boulevard', 'Gamata', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'C95-24-691364', '2026-10-19 12:36:20',
-    '2026-10-19 12:36:20', 'Agri-Tech Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Gamata, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
-    20.1, 46.2, 246, '2026-10-19 12:10:03', '2026-10-19 12:36:20'
+    '2026-10-17 12:14:42', '09953117636', '76 Roxas Boulevard', 'Gamata', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'C95-24-691364', '2026-10-17 12:36:20',
+    '2026-10-17 12:36:20', 'Agri-Tech Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Gamata, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
+    20.1, 46.2, 246, '2026-10-17 12:10:03', '2026-10-17 12:36:20'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -3999,19 +3999,19 @@ INSERT INTO `users` (
 
 -- Audit logs for franciscaballero05@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 12:10:03', '2026-10-19 12:10:03'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 12:10:03', '2026-10-17 12:10:03'
 FROM `users` WHERE `email` = 'franciscaballero05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 12:14:42', '2026-10-19 12:14:42'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 12:14:42', '2026-10-17 12:14:42'
 FROM `users` WHERE `email` = 'franciscaballero05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Francis Caballero logged in from 124.106.230.41', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 12:15:21', '2026-10-19 12:15:21'
+SELECT id, 'user_login', 'User', id, 'User Francis Caballero logged in from 124.106.230.41', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 12:15:21', '2026-10-17 12:15:21'
 FROM `users` WHERE `email` = 'franciscaballero05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Francis Caballero', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:36:20', '2026-10-19 12:36:20'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Francis Caballero', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:36:20', '2026-10-17 12:36:20'
 FROM `users` WHERE `email` = 'franciscaballero05@gmail.com';
 
 INSERT INTO `users` (
@@ -4022,10 +4022,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Charmaine Ocampo', 'charmaineocampo13@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:24:36', '09183815034', 'Purok 1, San Carlos-Calasiao Road', 'Balococ', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '2876-3747534-5', '2026-10-19 12:56:41',
-    '2026-10-19 12:56:41', 'Palaris Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Balococ, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
-    23.9, 55.0, 269, '2026-10-19 12:21:31', '2026-10-19 12:56:41'
+    '2026-10-17 12:24:36', '09183815034', 'Purok 1, San Carlos-Calasiao Road', 'Balococ', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '2876-3747534-5', '2026-10-17 12:56:41',
+    '2026-10-17 12:56:41', 'Palaris Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Balococ, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
+    23.9, 55.0, 269, '2026-10-17 12:21:31', '2026-10-17 12:56:41'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4054,19 +4054,19 @@ INSERT INTO `users` (
 
 -- Audit logs for charmaineocampo13@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 12:21:31', '2026-10-19 12:21:31'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 12:21:31', '2026-10-17 12:21:31'
 FROM `users` WHERE `email` = 'charmaineocampo13@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 12:24:36', '2026-10-19 12:24:36'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 12:24:36', '2026-10-17 12:24:36'
 FROM `users` WHERE `email` = 'charmaineocampo13@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Charmaine Ocampo logged in from 175.158.48.92', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 12:25:55', '2026-10-19 12:25:55'
+SELECT id, 'user_login', 'User', id, 'User Charmaine Ocampo logged in from 175.158.48.92', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 12:25:55', '2026-10-17 12:25:55'
 FROM `users` WHERE `email` = 'charmaineocampo13@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Charmaine Ocampo', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:56:41', '2026-10-19 12:56:41'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Charmaine Ocampo', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:56:41', '2026-10-17 12:56:41'
 FROM `users` WHERE `email` = 'charmaineocampo13@gmail.com';
 
 INSERT INTO `users` (
@@ -4077,10 +4077,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jaymark Payopay', 'jaymarkpayopay23@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:36:46', '09197654757', 'San Juan Proper', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5591-4249A-87607', '2026-10-19 13:06:26',
-    '2026-10-19 13:06:26', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
-    7.9, 18.2, 129, '2026-10-19 12:30:49', '2026-10-19 13:06:26'
+    '2026-10-17 12:36:46', '09197654757', 'San Juan Proper', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5591-4249A-87607', '2026-10-17 13:06:26',
+    '2026-10-17 13:06:26', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
+    7.9, 18.2, 129, '2026-10-17 12:30:49', '2026-10-17 13:06:26'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4109,19 +4109,19 @@ INSERT INTO `users` (
 
 -- Audit logs for jaymarkpayopay23@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 12:30:49', '2026-10-19 12:30:49'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 12:30:49', '2026-10-17 12:30:49'
 FROM `users` WHERE `email` = 'jaymarkpayopay23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 12:36:46', '2026-10-19 12:36:46'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 12:36:46', '2026-10-17 12:36:46'
 FROM `users` WHERE `email` = 'jaymarkpayopay23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Jaymark Payopay logged in from 175.158.210.15', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 12:37:35', '2026-10-19 12:37:35'
+SELECT id, 'user_login', 'User', id, 'User Jaymark Payopay logged in from 175.158.210.15', '175.158.210.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 12:37:35', '2026-10-17 12:37:35'
 FROM `users` WHERE `email` = 'jaymarkpayopay23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Jaymark Payopay', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:06:26', '2026-10-19 13:06:26'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Jaymark Payopay', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:06:26', '2026-10-17 13:06:26'
 FROM `users` WHERE `email` = 'jaymarkpayopay23@gmail.com';
 
 INSERT INTO `users` (
@@ -4132,10 +4132,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Aries Austria', 'ariesaustria24@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:44:41', '09201689025', 'San Juan Road', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-56600900', '2026-10-19 12:57:39',
-    '2026-10-19 12:57:39', 'Solid E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
-    26.7, 61.4, 347, '2026-10-19 12:39:24', '2026-10-19 12:57:39'
+    '2026-10-17 12:44:41', '09201689025', 'San Juan Road', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-56600900', '2026-10-17 12:57:39',
+    '2026-10-17 12:57:39', 'Solid E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
+    26.7, 61.4, 347, '2026-10-17 12:39:24', '2026-10-17 12:57:39'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4164,19 +4164,19 @@ INSERT INTO `users` (
 
 -- Audit logs for ariesaustria24@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 12:39:24', '2026-10-19 12:39:24'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 12:39:24', '2026-10-17 12:39:24'
 FROM `users` WHERE `email` = 'ariesaustria24@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 12:44:41', '2026-10-19 12:44:41'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 12:44:41', '2026-10-17 12:44:41'
 FROM `users` WHERE `email` = 'ariesaustria24@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Aries Austria logged in from 136.158.12.83', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 12:45:30', '2026-10-19 12:45:30'
+SELECT id, 'user_login', 'User', id, 'User Aries Austria logged in from 136.158.12.83', '136.158.12.83', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 12:45:30', '2026-10-17 12:45:30'
 FROM `users` WHERE `email` = 'ariesaustria24@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Aries Austria', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 12:57:39', '2026-10-19 12:57:39'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Aries Austria', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 12:57:39', '2026-10-17 12:57:39'
 FROM `users` WHERE `email` = 'ariesaustria24@gmail.com';
 
 INSERT INTO `users` (
@@ -4187,10 +4187,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Joven Menor', 'jovenmenor18@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:49:20', '09281212267', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P8047416B', '2026-10-19 13:20:20',
-    '2026-10-19 13:20:20', 'Apex Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
-    19.0, 43.7, 220, '2026-10-19 12:47:03', '2026-10-19 13:20:20'
+    '2026-10-17 12:49:20', '09281212267', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P8047416B', '2026-10-17 13:20:20',
+    '2026-10-17 13:20:20', 'Apex Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
+    19.0, 43.7, 220, '2026-10-17 12:47:03', '2026-10-17 13:20:20'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4219,19 +4219,19 @@ INSERT INTO `users` (
 
 -- Audit logs for jovenmenor18@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:47:03', '2026-10-19 12:47:03'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:47:03', '2026-10-17 12:47:03'
 FROM `users` WHERE `email` = 'jovenmenor18@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:49:20', '2026-10-19 12:49:20'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:49:20', '2026-10-17 12:49:20'
 FROM `users` WHERE `email` = 'jovenmenor18@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Joven Menor logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 12:50:22', '2026-10-19 12:50:22'
+SELECT id, 'user_login', 'User', id, 'User Joven Menor logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 12:50:22', '2026-10-17 12:50:22'
 FROM `users` WHERE `email` = 'jovenmenor18@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Joven Menor', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:20:20', '2026-10-19 13:20:20'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Joven Menor', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:20:20', '2026-10-17 13:20:20'
 FROM `users` WHERE `email` = 'jovenmenor18@gmail.com';
 
 INSERT INTO `users` (
@@ -4242,10 +4242,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Justine Rosario', 'justinerosario07@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 12:59:36', '09393566765', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '8135-3885-9548-5425', '2026-10-19 13:37:27',
-    '2026-10-19 13:37:27', 'San Juan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
-    20.1, 46.2, 291, '2026-10-19 12:56:04', '2026-10-19 13:37:27'
+    '2026-10-17 12:59:36', '09393566765', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '8135-3885-9548-5425', '2026-10-17 13:37:27',
+    '2026-10-17 13:37:27', 'San Juan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
+    20.1, 46.2, 291, '2026-10-17 12:56:04', '2026-10-17 13:37:27'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4274,19 +4274,19 @@ INSERT INTO `users` (
 
 -- Audit logs for justinerosario07@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 12:56:04', '2026-10-19 12:56:04'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 12:56:04', '2026-10-17 12:56:04'
 FROM `users` WHERE `email` = 'justinerosario07@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 12:59:36', '2026-10-19 12:59:36'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 12:59:36', '2026-10-17 12:59:36'
 FROM `users` WHERE `email` = 'justinerosario07@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Justine Rosario logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-19 13:00:46', '2026-10-19 13:00:46'
+SELECT id, 'user_login', 'User', id, 'User Justine Rosario logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-17 13:00:46', '2026-10-17 13:00:46'
 FROM `users` WHERE `email` = 'justinerosario07@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Justine Rosario', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:37:27', '2026-10-19 13:37:27'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Justine Rosario', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:37:27', '2026-10-17 13:37:27'
 FROM `users` WHERE `email` = 'justinerosario07@gmail.com';
 
 INSERT INTO `users` (
@@ -4297,10 +4297,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Ariel Serafica', 'arielserafica21@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 13:10:17', '09476407373', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'A21-45-572700', '2026-10-19 13:33:05',
-    '2026-10-19 13:33:05', 'Pure Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
-    29.6, 68.1, 346, '2026-10-19 13:04:46', '2026-10-19 13:33:05'
+    '2026-10-17 13:10:17', '09476407373', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'A21-45-572700', '2026-10-17 13:33:05',
+    '2026-10-17 13:33:05', 'Pure Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
+    29.6, 68.1, 346, '2026-10-17 13:04:46', '2026-10-17 13:33:05'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4329,19 +4329,19 @@ INSERT INTO `users` (
 
 -- Audit logs for arielserafica21@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 13:04:46', '2026-10-19 13:04:46'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 13:04:46', '2026-10-17 13:04:46'
 FROM `users` WHERE `email` = 'arielserafica21@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 13:10:17', '2026-10-19 13:10:17'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 13:10:17', '2026-10-17 13:10:17'
 FROM `users` WHERE `email` = 'arielserafica21@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Ariel Serafica logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-19 13:11:33', '2026-10-19 13:11:33'
+SELECT id, 'user_login', 'User', id, 'User Ariel Serafica logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-17 13:11:33', '2026-10-17 13:11:33'
 FROM `users` WHERE `email` = 'arielserafica21@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Ariel Serafica', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:33:05', '2026-10-19 13:33:05'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Ariel Serafica', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:33:05', '2026-10-17 13:33:05'
 FROM `users` WHERE `email` = 'arielserafica21@gmail.com';
 
 INSERT INTO `users` (
@@ -4352,10 +4352,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Tricia Mae Rosario', 'triciamaerosariol2@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 13:23:39', '09496643798', 'Purok 1, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '1470-9293086-6', '2026-10-19 13:55:06',
-    '2026-10-19 13:55:06', 'EcoSphere E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
-    20.8, 47.8, 248, '2026-10-19 13:19:14', '2026-10-19 13:55:06'
+    '2026-10-17 13:23:39', '09496643798', 'Purok 1, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '1470-9293086-6', '2026-10-17 13:55:06',
+    '2026-10-17 13:55:06', 'EcoSphere E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
+    20.8, 47.8, 248, '2026-10-17 13:19:14', '2026-10-17 13:55:06'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4384,19 +4384,19 @@ INSERT INTO `users` (
 
 -- Audit logs for triciamaerosariol2@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 13:19:14', '2026-10-19 13:19:14'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 13:19:14', '2026-10-17 13:19:14'
 FROM `users` WHERE `email` = 'triciamaerosariol2@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 13:23:39', '2026-10-19 13:23:39'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 13:23:39', '2026-10-17 13:23:39'
 FROM `users` WHERE `email` = 'triciamaerosariol2@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Tricia Mae Rosario logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-19 13:24:48', '2026-10-19 13:24:48'
+SELECT id, 'user_login', 'User', id, 'User Tricia Mae Rosario logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-17 13:24:48', '2026-10-17 13:24:48'
 FROM `users` WHERE `email` = 'triciamaerosariol2@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Tricia Mae Rosario', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:55:06', '2026-10-19 13:55:06'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Tricia Mae Rosario', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:55:06', '2026-10-17 13:55:06'
 FROM `users` WHERE `email` = 'triciamaerosariol2@gmail.com';
 
 INSERT INTO `users` (
@@ -4407,10 +4407,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Danica Fajardo', 'danicafajardo16@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 13:34:48', '09986709938', 'Purok 2, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5535-5526C-11330', '2026-10-19 13:58:56',
-    '2026-10-19 13:58:56', 'San Juan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
-    7.4, 17.0, 119, '2026-10-19 13:31:18', '2026-10-19 13:58:56'
+    '2026-10-17 13:34:48', '09986709938', 'Purok 2, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5535-5526C-11330', '2026-10-17 13:58:56',
+    '2026-10-17 13:58:56', 'San Juan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
+    7.4, 17.0, 119, '2026-10-17 13:31:18', '2026-10-17 13:58:56'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4439,19 +4439,19 @@ INSERT INTO `users` (
 
 -- Audit logs for danicafajardo16@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 13:31:18', '2026-10-19 13:31:18'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 13:31:18', '2026-10-17 13:31:18'
 FROM `users` WHERE `email` = 'danicafajardo16@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 13:34:48', '2026-10-19 13:34:48'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 13:34:48', '2026-10-17 13:34:48'
 FROM `users` WHERE `email` = 'danicafajardo16@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Danica Fajardo logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-19 13:36:09', '2026-10-19 13:36:09'
+SELECT id, 'user_login', 'User', id, 'User Danica Fajardo logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-17 13:36:09', '2026-10-17 13:36:09'
 FROM `users` WHERE `email` = 'danicafajardo16@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Danica Fajardo', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 13:58:56', '2026-10-19 13:58:56'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Danica Fajardo', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 13:58:56', '2026-10-17 13:58:56'
 FROM `users` WHERE `email` = 'danicafajardo16@gmail.com';
 
 INSERT INTO `users` (
@@ -4462,10 +4462,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Anthony Sorio', 'anthonysorio09@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-19 13:45:17', '09915031966', 'Purok 3, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-73900135', '2026-10-19 14:23:34',
-    '2026-10-19 14:23:34', 'TechnoCycle Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
-    19.5, 44.8, 285, '2026-10-19 13:40:13', '2026-10-19 14:23:34'
+    '2026-10-17 13:45:17', '09915031966', 'Purok 3, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-73900135', '2026-10-17 14:23:34',
+    '2026-10-17 14:23:34', 'TechnoCycle Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
+    19.5, 44.8, 285, '2026-10-17 13:40:13', '2026-10-17 14:23:34'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4494,19 +4494,19 @@ INSERT INTO `users` (
 
 -- Audit logs for anthonysorio09@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 13:40:13', '2026-10-19 13:40:13'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 13:40:13', '2026-10-17 13:40:13'
 FROM `users` WHERE `email` = 'anthonysorio09@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 13:45:17', '2026-10-19 13:45:17'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 13:45:17', '2026-10-17 13:45:17'
 FROM `users` WHERE `email` = 'anthonysorio09@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Anthony Sorio logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-19 13:46:13', '2026-10-19 13:46:13'
+SELECT id, 'user_login', 'User', id, 'User Anthony Sorio logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-17 13:46:13', '2026-10-17 13:46:13'
 FROM `users` WHERE `email` = 'anthonysorio09@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Anthony Sorio', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-19 14:23:34', '2026-10-19 14:23:34'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Anthony Sorio', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-17 14:23:34', '2026-10-17 14:23:34'
 FROM `users` WHERE `email` = 'anthonysorio09@gmail.com';
 
 INSERT INTO `users` (
@@ -4517,10 +4517,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Abraham Delos Reyes', 'abrahamdeslosreyes@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:26:33', '09924717770', 'Purok 4, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P7784725A', '2026-10-20 08:54:34',
-    '2026-10-20 08:54:34', 'Urban Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
-    26.7, 61.4, 327, '2026-10-20 08:24:29', '2026-10-20 08:54:34'
+    '2026-10-18 08:26:33', '09924717770', 'Purok 4, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P7784725A', '2026-10-18 08:54:34',
+    '2026-10-18 08:54:34', 'Urban Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
+    26.7, 61.4, 327, '2026-10-18 08:24:29', '2026-10-18 08:54:34'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4549,19 +4549,19 @@ INSERT INTO `users` (
 
 -- Audit logs for abrahamdeslosreyes@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:24:29', '2026-10-20 08:24:29'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:24:29', '2026-10-18 08:24:29'
 FROM `users` WHERE `email` = 'abrahamdeslosreyes@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:26:33', '2026-10-20 08:26:33'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:26:33', '2026-10-18 08:26:33'
 FROM `users` WHERE `email` = 'abrahamdeslosreyes@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Abraham Delos Reyes logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:27:08', '2026-10-20 08:27:08'
+SELECT id, 'user_login', 'User', id, 'User Abraham Delos Reyes logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:27:08', '2026-10-18 08:27:08'
 FROM `users` WHERE `email` = 'abrahamdeslosreyes@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Abraham Delos Reyes', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 08:54:34', '2026-10-20 08:54:34'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Abraham Delos Reyes', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 08:54:34', '2026-10-18 08:54:34'
 FROM `users` WHERE `email` = 'abrahamdeslosreyes@gmail.com';
 
 INSERT INTO `users` (
@@ -4572,10 +4572,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jeslyn Muñoz', 'jeslynmunoz15@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:30:46', '09158138769', 'Purok 5, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '6419-6764-8434-5438', '2026-10-20 09:00:40',
-    '2026-10-20 09:00:40', 'San Juan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
-    12.9, 29.7, 189, '2026-10-20 08:27:12', '2026-10-20 09:00:40'
+    '2026-10-18 08:30:46', '09158138769', 'Purok 5, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '6419-6764-8434-5438', '2026-10-18 09:00:40',
+    '2026-10-18 09:00:40', 'San Juan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
+    12.9, 29.7, 189, '2026-10-18 08:27:12', '2026-10-18 09:00:40'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4604,19 +4604,19 @@ INSERT INTO `users` (
 
 -- Audit logs for jeslynmunoz15@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:27:12', '2026-10-20 08:27:12'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:27:12', '2026-10-18 08:27:12'
 FROM `users` WHERE `email` = 'jeslynmunoz15@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:30:46', '2026-10-20 08:30:46'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:30:46', '2026-10-18 08:30:46'
 FROM `users` WHERE `email` = 'jeslynmunoz15@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Jeslyn Muñoz logged in from 180.190.45.19', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:31:46', '2026-10-20 08:31:46'
+SELECT id, 'user_login', 'User', id, 'User Jeslyn Muñoz logged in from 180.190.45.19', '180.190.45.19', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:31:46', '2026-10-18 08:31:46'
 FROM `users` WHERE `email` = 'jeslynmunoz15@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Jeslyn Muñoz', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:00:40', '2026-10-20 09:00:40'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Jeslyn Muñoz', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:00:40', '2026-10-18 09:00:40'
 FROM `users` WHERE `email` = 'jeslynmunoz15@gmail.com';
 
 INSERT INTO `users` (
@@ -4627,10 +4627,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Christian Gonzales', 'christiangonzales@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:31:55', '09166294016', 'San Juan Proper', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'N78-98-294143', '2026-10-20 08:52:33',
-    '2026-10-20 08:52:33', 'San Carlos Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
-    11.7, 26.9, 162, '2026-10-20 08:29:25', '2026-10-20 08:52:33'
+    '2026-10-18 08:31:55', '09166294016', 'San Juan Proper', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'N78-98-294143', '2026-10-18 08:52:33',
+    '2026-10-18 08:52:33', 'San Carlos Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
+    11.7, 26.9, 162, '2026-10-18 08:29:25', '2026-10-18 08:52:33'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4659,19 +4659,19 @@ INSERT INTO `users` (
 
 -- Audit logs for christiangonzales@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:29:25', '2026-10-20 08:29:25'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:29:25', '2026-10-18 08:29:25'
 FROM `users` WHERE `email` = 'christiangonzales@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:31:55', '2026-10-20 08:31:55'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:31:55', '2026-10-18 08:31:55'
 FROM `users` WHERE `email` = 'christiangonzales@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Christian Gonzales logged in from 180.190.112.7', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:33:11', '2026-10-20 08:33:11'
+SELECT id, 'user_login', 'User', id, 'User Christian Gonzales logged in from 180.190.112.7', '180.190.112.7', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:33:11', '2026-10-18 08:33:11'
 FROM `users` WHERE `email` = 'christiangonzales@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Christian Gonzales', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 08:52:33', '2026-10-20 08:52:33'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Christian Gonzales', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 08:52:33', '2026-10-18 08:52:33'
 FROM `users` WHERE `email` = 'christiangonzales@gmail.com';
 
 INSERT INTO `users` (
@@ -4682,10 +4682,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Alexander Bonggot', 'alexanderbonggot@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:36:18', '09172686548', 'San Juan Road', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '4180-5970190-4', '2026-10-20 09:01:34',
-    '2026-10-20 09:01:34', 'Pangasinan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 14,
-    10.5, 24.1, 175, '2026-10-20 08:32:15', '2026-10-20 09:01:34'
+    '2026-10-18 08:36:18', '09172686548', 'San Juan Road', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '4180-5970190-4', '2026-10-18 09:01:34',
+    '2026-10-18 09:01:34', 'Pangasinan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 14,
+    10.5, 24.1, 175, '2026-10-18 08:32:15', '2026-10-18 09:01:34'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4714,19 +4714,19 @@ INSERT INTO `users` (
 
 -- Audit logs for alexanderbonggot@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:32:15', '2026-10-20 08:32:15'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:32:15', '2026-10-18 08:32:15'
 FROM `users` WHERE `email` = 'alexanderbonggot@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:36:18', '2026-10-20 08:36:18'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:36:18', '2026-10-18 08:36:18'
 FROM `users` WHERE `email` = 'alexanderbonggot@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Alexander Bonggot logged in from 49.145.22.88', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:37:05', '2026-10-20 08:37:05'
+SELECT id, 'user_login', 'User', id, 'User Alexander Bonggot logged in from 49.145.22.88', '49.145.22.88', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:37:05', '2026-10-18 08:37:05'
 FROM `users` WHERE `email` = 'alexanderbonggot@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Alexander Bonggot', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:01:34', '2026-10-20 09:01:34'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Alexander Bonggot', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:01:34', '2026-10-18 09:01:34'
 FROM `users` WHERE `email` = 'alexanderbonggot@gmail.com';
 
 INSERT INTO `users` (
@@ -4737,10 +4737,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Christian Beltran', 'christianbeltran11@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:36:26', '09265602180', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5505-1893C-48290', '2026-10-20 08:53:01',
-    '2026-10-20 08:53:01', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
-    25.9, 59.6, 294, '2026-10-20 08:34:23', '2026-10-20 08:53:01'
+    '2026-10-18 08:36:26', '09265602180', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5505-1893C-48290', '2026-10-18 08:53:01',
+    '2026-10-18 08:53:01', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
+    25.9, 59.6, 294, '2026-10-18 08:34:23', '2026-10-18 08:53:01'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4769,19 +4769,19 @@ INSERT INTO `users` (
 
 -- Audit logs for christianbeltran11@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:34:23', '2026-10-20 08:34:23'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:34:23', '2026-10-18 08:34:23'
 FROM `users` WHERE `email` = 'christianbeltran11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:36:26', '2026-10-20 08:36:26'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:36:26', '2026-10-18 08:36:26'
 FROM `users` WHERE `email` = 'christianbeltran11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Christian Beltran logged in from 49.145.189.63', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:37:41', '2026-10-20 08:37:41'
+SELECT id, 'user_login', 'User', id, 'User Christian Beltran logged in from 49.145.189.63', '49.145.189.63', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:37:41', '2026-10-18 08:37:41'
 FROM `users` WHERE `email` = 'christianbeltran11@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Christian Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 08:53:01', '2026-10-20 08:53:01'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Christian Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 08:53:01', '2026-10-18 08:53:01'
 FROM `users` WHERE `email` = 'christianbeltran11@gmail.com';
 
 INSERT INTO `users` (
@@ -4792,10 +4792,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Maritess Austria', 'maritessaustria17@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:45:25', '09271205779', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-87049595', '2026-10-20 08:57:13',
-    '2026-10-20 08:57:13', 'GreenTech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
-    20.2, 46.5, 262, '2026-10-20 08:40:13', '2026-10-20 08:57:13'
+    '2026-10-18 08:45:25', '09271205779', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-87049595', '2026-10-18 08:57:13',
+    '2026-10-18 08:57:13', 'GreenTech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
+    20.2, 46.5, 262, '2026-10-18 08:40:13', '2026-10-18 08:57:13'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4824,19 +4824,19 @@ INSERT INTO `users` (
 
 -- Audit logs for maritessaustria17@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:40:13', '2026-10-20 08:40:13'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:40:13', '2026-10-18 08:40:13'
 FROM `users` WHERE `email` = 'maritessaustria17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:45:25', '2026-10-20 08:45:25'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:45:25', '2026-10-18 08:45:25'
 FROM `users` WHERE `email` = 'maritessaustria17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Maritess Austria logged in from 124.106.15.110', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:46:26', '2026-10-20 08:46:26'
+SELECT id, 'user_login', 'User', id, 'User Maritess Austria logged in from 124.106.15.110', '124.106.15.110', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:46:26', '2026-10-18 08:46:26'
 FROM `users` WHERE `email` = 'maritessaustria17@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Maritess Austria', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 08:57:13', '2026-10-20 08:57:13'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Maritess Austria', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 08:57:13', '2026-10-18 08:57:13'
 FROM `users` WHERE `email` = 'maritessaustria17@gmail.com';
 
 INSERT INTO `users` (
@@ -4847,10 +4847,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Steven Hermogeno', 'stevenhermogeno08@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:47:05', '09351861958', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P5235884B', '2026-10-20 09:05:48',
-    '2026-10-20 09:05:48', 'EcoRecover Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
-    32.0, 73.6, 350, '2026-10-20 08:43:13', '2026-10-20 09:05:48'
+    '2026-10-18 08:47:05', '09351861958', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P5235884B', '2026-10-18 09:05:48',
+    '2026-10-18 09:05:48', 'EcoRecover Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
+    32.0, 73.6, 350, '2026-10-18 08:43:13', '2026-10-18 09:05:48'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4879,19 +4879,19 @@ INSERT INTO `users` (
 
 -- Audit logs for stevenhermogeno08@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:43:13', '2026-10-20 08:43:13'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:43:13', '2026-10-18 08:43:13'
 FROM `users` WHERE `email` = 'stevenhermogeno08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:47:05', '2026-10-20 08:47:05'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:47:05', '2026-10-18 08:47:05'
 FROM `users` WHERE `email` = 'stevenhermogeno08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Steven Hermogeno logged in from 124.106.230.41', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:47:56', '2026-10-20 08:47:56'
+SELECT id, 'user_login', 'User', id, 'User Steven Hermogeno logged in from 124.106.230.41', '124.106.230.41', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:47:56', '2026-10-18 08:47:56'
 FROM `users` WHERE `email` = 'stevenhermogeno08@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Steven Hermogeno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:05:48', '2026-10-20 09:05:48'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Steven Hermogeno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:05:48', '2026-10-18 09:05:48'
 FROM `users` WHERE `email` = 'stevenhermogeno08@gmail.com';
 
 INSERT INTO `users` (
@@ -4902,10 +4902,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Angeline Hermogeno', 'angelinehermogeno14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:49:49', '09451899411', 'Purok 1, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '3485-3444-5978-2395', '2026-10-20 09:01:10',
-    '2026-10-20 09:01:10', 'San Juan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
-    8.5, 19.5, 135, '2026-10-20 08:46:07', '2026-10-20 09:01:10'
+    '2026-10-18 08:49:49', '09451899411', 'Purok 1, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '3485-3444-5978-2395', '2026-10-18 09:01:10',
+    '2026-10-18 09:01:10', 'San Juan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
+    8.5, 19.5, 135, '2026-10-18 08:46:07', '2026-10-18 09:01:10'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4934,19 +4934,19 @@ INSERT INTO `users` (
 
 -- Audit logs for angelinehermogeno14@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:46:07', '2026-10-20 08:46:07'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:46:07', '2026-10-18 08:46:07'
 FROM `users` WHERE `email` = 'angelinehermogeno14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:49:49', '2026-10-20 08:49:49'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:49:49', '2026-10-18 08:49:49'
 FROM `users` WHERE `email` = 'angelinehermogeno14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Angeline Hermogeno logged in from 175.158.48.92', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 08:50:50', '2026-10-20 08:50:50'
+SELECT id, 'user_login', 'User', id, 'User Angeline Hermogeno logged in from 175.158.48.92', '175.158.48.92', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 08:50:50', '2026-10-18 08:50:50'
 FROM `users` WHERE `email` = 'angelinehermogeno14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Angeline Hermogeno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:01:10', '2026-10-20 09:01:10'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller Angeline Hermogeno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:01:10', '2026-10-18 09:01:10'
 FROM `users` WHERE `email` = 'angelinehermogeno14@gmail.com';
 
 INSERT INTO `users` (
@@ -4957,10 +4957,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Kevin Beltran', 'kevinbeltran23@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:54:28', '09559767312', 'Purok 2, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'C67-66-411797', '2026-10-20 09:14:37',
-    '2026-10-20 09:14:37', 'Palaris Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
-    14.7, 33.8, 227, '2026-10-20 08:49:13', '2026-10-20 09:14:37'
+    '2026-10-18 08:54:28', '09559767312', 'Purok 2, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'C67-66-411797', '2026-10-18 09:14:37',
+    '2026-10-18 09:14:37', 'Palaris Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
+    14.7, 33.8, 227, '2026-10-18 08:49:13', '2026-10-18 09:14:37'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -4989,19 +4989,19 @@ INSERT INTO `users` (
 
 -- Audit logs for kevinbeltran23@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:49:13', '2026-10-20 08:49:13'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:49:13', '2026-10-18 08:49:13'
 FROM `users` WHERE `email` = 'kevinbeltran23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:54:28', '2026-10-20 08:54:28'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:54:28', '2026-10-18 08:54:28'
 FROM `users` WHERE `email` = 'kevinbeltran23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Kevin Beltran logged in from 175.158.210.15', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 08:55:24', '2026-10-20 08:55:24'
+SELECT id, 'user_login', 'User', id, 'User Kevin Beltran logged in from 175.158.210.15', '175.158.210.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 08:55:24', '2026-10-18 08:55:24'
 FROM `users` WHERE `email` = 'kevinbeltran23@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Kevin Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:14:37', '2026-10-20 09:14:37'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Kevin Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:14:37', '2026-10-18 09:14:37'
 FROM `users` WHERE `email` = 'kevinbeltran23@gmail.com';
 
 INSERT INTO `users` (
@@ -5012,10 +5012,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jan Rex Rovillos', 'janrexrovillos06@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:56:36', '09664486102', 'Purok 3, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '4457-5440025-2', '2026-10-20 09:08:44',
-    '2026-10-20 09:08:44', 'North Tech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
-    12.5, 28.7, 165, '2026-10-20 08:51:58', '2026-10-20 09:08:44'
+    '2026-10-18 08:56:36', '09664486102', 'Purok 3, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '4457-5440025-2', '2026-10-18 09:08:44',
+    '2026-10-18 09:08:44', 'North Tech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
+    12.5, 28.7, 165, '2026-10-18 08:51:58', '2026-10-18 09:08:44'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5044,19 +5044,19 @@ INSERT INTO `users` (
 
 -- Audit logs for janrexrovillos06@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:51:58', '2026-10-20 08:51:58'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:51:58', '2026-10-18 08:51:58'
 FROM `users` WHERE `email` = 'janrexrovillos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:56:36', '2026-10-20 08:56:36'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:56:36', '2026-10-18 08:56:36'
 FROM `users` WHERE `email` = 'janrexrovillos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Jan Rex Rovillos logged in from 136.158.12.83', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 08:57:09', '2026-10-20 08:57:09'
+SELECT id, 'user_login', 'User', id, 'User Jan Rex Rovillos logged in from 136.158.12.83', '136.158.12.83', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 08:57:09', '2026-10-18 08:57:09'
 FROM `users` WHERE `email` = 'janrexrovillos06@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Jan Rex Rovillos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:08:44', '2026-10-20 09:08:44'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Jan Rex Rovillos', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:08:44', '2026-10-18 09:08:44'
 FROM `users` WHERE `email` = 'janrexrovillos06@gmail.com';
 
 INSERT INTO `users` (
@@ -5067,10 +5067,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Rex Pascual', 'rexpascual19@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 08:59:37', '09771044891', 'Purok 4, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5552-8381C-87832', '2026-10-20 09:15:57',
-    '2026-10-20 09:15:57', 'San Juan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
-    14.3, 32.9, 233, '2026-10-20 08:55:16', '2026-10-20 09:15:57'
+    '2026-10-18 08:59:37', '09771044891', 'Purok 4, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5552-8381C-87832', '2026-10-18 09:15:57',
+    '2026-10-18 09:15:57', 'San Juan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
+    14.3, 32.9, 233, '2026-10-18 08:55:16', '2026-10-18 09:15:57'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5099,19 +5099,19 @@ INSERT INTO `users` (
 
 -- Audit logs for rexpascual19@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:55:16', '2026-10-20 08:55:16'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:55:16', '2026-10-18 08:55:16'
 FROM `users` WHERE `email` = 'rexpascual19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 08:59:37', '2026-10-20 08:59:37'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 08:59:37', '2026-10-18 08:59:37'
 FROM `users` WHERE `email` = 'rexpascual19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Rex Pascual logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 09:00:11', '2026-10-20 09:00:11'
+SELECT id, 'user_login', 'User', id, 'User Rex Pascual logged in from 136.158.74.29', '136.158.74.29', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 09:00:11', '2026-10-18 09:00:11'
 FROM `users` WHERE `email` = 'rexpascual19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Rex Pascual', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:15:57', '2026-10-20 09:15:57'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Rex Pascual', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:15:57', '2026-10-18 09:15:57'
 FROM `users` WHERE `email` = 'rexpascual19@gmail.com';
 
 INSERT INTO `users` (
@@ -5122,10 +5122,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jay Ann Lomboy', 'jayannlomboy10@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:02:05', '09958617381', 'Purok 5, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Postal ID', 'PID-19553585', '2026-10-20 09:28:24',
-    '2026-10-20 09:28:24', 'Apex Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
-    35.5, 81.6, 405, '2026-10-20 08:59:06', '2026-10-20 09:28:24'
+    '2026-10-18 09:02:05', '09958617381', 'Purok 5, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Postal ID', 'PID-19553585', '2026-10-18 09:28:24',
+    '2026-10-18 09:28:24', 'Apex Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
+    35.5, 81.6, 405, '2026-10-18 08:59:06', '2026-10-18 09:28:24'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5154,19 +5154,19 @@ INSERT INTO `users` (
 
 -- Audit logs for jayannlomboy10@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 08:59:06', '2026-10-20 08:59:06'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 08:59:06', '2026-10-18 08:59:06'
 FROM `users` WHERE `email` = 'jayannlomboy10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 09:02:05', '2026-10-20 09:02:05'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 09:02:05', '2026-10-18 09:02:05'
 FROM `users` WHERE `email` = 'jayannlomboy10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Jay Ann Lomboy logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 09:02:53', '2026-10-20 09:02:53'
+SELECT id, 'user_login', 'User', id, 'User Jay Ann Lomboy logged in from 152.32.100.14', '152.32.100.14', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 09:02:53', '2026-10-18 09:02:53'
 FROM `users` WHERE `email` = 'jayannlomboy10@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Jay Ann Lomboy', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:28:24', '2026-10-20 09:28:24'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Postal ID) & registered location for seller Jay Ann Lomboy', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:28:24', '2026-10-18 09:28:24'
 FROM `users` WHERE `email` = 'jayannlomboy10@gmail.com';
 
 INSERT INTO `users` (
@@ -5177,10 +5177,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mac Mac Tigno', 'macmactigno26@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:07:36', '09188132648', 'San Juan Proper', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Passport', 'P2925626A', '2026-10-20 09:25:45',
-    '2026-10-20 09:25:45', 'Prime Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
-    34.9, 80.3, 384, '2026-10-20 09:02:15', '2026-10-20 09:25:45'
+    '2026-10-18 09:07:36', '09188132648', 'San Juan Proper', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Passport', 'P2925626A', '2026-10-18 09:25:45',
+    '2026-10-18 09:25:45', 'Prime Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
+    34.9, 80.3, 384, '2026-10-18 09:02:15', '2026-10-18 09:25:45'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5209,19 +5209,19 @@ INSERT INTO `users` (
 
 -- Audit logs for macmactigno26@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 09:02:15', '2026-10-20 09:02:15'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 09:02:15', '2026-10-18 09:02:15'
 FROM `users` WHERE `email` = 'macmactigno26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 09:07:36', '2026-10-20 09:07:36'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 09:07:36', '2026-10-18 09:07:36'
 FROM `users` WHERE `email` = 'macmactigno26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Mac Mac Tigno logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-20 09:08:56', '2026-10-20 09:08:56'
+SELECT id, 'user_login', 'User', id, 'User Mac Mac Tigno logged in from 152.32.118.99', '152.32.118.99', 'Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.88 Mobile Safari/537.36', '2026-10-18 09:08:56', '2026-10-18 09:08:56'
 FROM `users` WHERE `email` = 'macmactigno26@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Mac Mac Tigno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:25:45', '2026-10-20 09:25:45'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Passport) & registered location for seller Mac Mac Tigno', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:25:45', '2026-10-18 09:25:45'
 FROM `users` WHERE `email` = 'macmactigno26@gmail.com';
 
 INSERT INTO `users` (
@@ -5232,10 +5232,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'John Mark Esteban', 'johnmarkesteban03@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:11:34', '09192000560', 'San Juan Road', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '3718-6039-5728-8195', '2026-10-20 09:20:55',
-    '2026-10-20 09:20:55', 'San Juan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
-    20.2, 46.5, 232, '2026-10-20 09:06:03', '2026-10-20 09:20:55'
+    '2026-10-18 09:11:34', '09192000560', 'San Juan Road', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '3718-6039-5728-8195', '2026-10-18 09:20:55',
+    '2026-10-18 09:20:55', 'San Juan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
+    20.2, 46.5, 232, '2026-10-18 09:06:03', '2026-10-18 09:20:55'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5264,19 +5264,19 @@ INSERT INTO `users` (
 
 -- Audit logs for johnmarkesteban03@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 09:06:03', '2026-10-20 09:06:03'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 09:06:03', '2026-10-18 09:06:03'
 FROM `users` WHERE `email` = 'johnmarkesteban03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 09:11:34', '2026-10-20 09:11:34'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 09:11:34', '2026-10-18 09:11:34'
 FROM `users` WHERE `email` = 'johnmarkesteban03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User John Mark Esteban logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-20 09:12:13', '2026-10-20 09:12:13'
+SELECT id, 'user_login', 'User', id, 'User John Mark Esteban logged in from 112.198.42.15', '112.198.42.15', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', '2026-10-18 09:12:13', '2026-10-18 09:12:13'
 FROM `users` WHERE `email` = 'johnmarkesteban03@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller John Mark Esteban', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:20:55', '2026-10-20 09:20:55'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Philippine National ID (PhilSys)) & registered location for seller John Mark Esteban', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:20:55', '2026-10-18 09:20:55'
 FROM `users` WHERE `email` = 'johnmarkesteban03@gmail.com';
 
 INSERT INTO `users` (
@@ -5287,10 +5287,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Renz Beltran', 'renzbeltran19@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:14:17', '09205567533', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Driver\'s License', 'C66-20-727086', '2026-10-20 09:48:28',
-    '2026-10-20 09:48:28', 'EcoSphere Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
-    34.3, 78.9, 363, '2026-10-20 09:11:00', '2026-10-20 09:48:28'
+    '2026-10-18 09:14:17', '09205567533', 'Purok Ilang-Ilang, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Driver\'s License', 'C66-20-727086', '2026-10-18 09:48:28',
+    '2026-10-18 09:48:28', 'EcoSphere Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
+    34.3, 78.9, 363, '2026-10-18 09:11:00', '2026-10-18 09:48:28'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5319,19 +5319,19 @@ INSERT INTO `users` (
 
 -- Audit logs for renzbeltran19@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 09:11:00', '2026-10-20 09:11:00'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 09:11:00', '2026-10-18 09:11:00'
 FROM `users` WHERE `email` = 'renzbeltran19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 09:14:17', '2026-10-20 09:14:17'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 09:14:17', '2026-10-18 09:14:17'
 FROM `users` WHERE `email` = 'renzbeltran19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Renz Beltran logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-20 09:15:31', '2026-10-20 09:15:31'
+SELECT id, 'user_login', 'User', id, 'User Renz Beltran logged in from 112.198.77.201', '112.198.77.201', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36', '2026-10-18 09:15:31', '2026-10-18 09:15:31'
 FROM `users` WHERE `email` = 'renzbeltran19@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Renz Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:48:28', '2026-10-20 09:48:28'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Driver\'s License) & registered location for seller Renz Beltran', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:48:28', '2026-10-18 09:48:28'
 FROM `users` WHERE `email` = 'renzbeltran19@gmail.com';
 
 INSERT INTO `users` (
@@ -5342,10 +5342,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Zyrell Menor', 'zyrellmenor14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:18:37', '09281433940', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'UMID / SSS ID', '2496-4840714-1', '2026-10-20 09:40:34',
-    '2026-10-20 09:40:34', 'BioScrap Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
-    23.8, 54.7, 293, '2026-10-20 09:13:29', '2026-10-20 09:40:34'
+    '2026-10-18 09:18:37', '09281433940', 'Purok Centro, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'UMID / SSS ID', '2496-4840714-1', '2026-10-18 09:40:34',
+    '2026-10-18 09:40:34', 'BioScrap Electronics Exchange', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
+    23.8, 54.7, 293, '2026-10-18 09:13:29', '2026-10-18 09:40:34'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5374,19 +5374,19 @@ INSERT INTO `users` (
 
 -- Audit logs for zyrellmenor14@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 09:13:29', '2026-10-20 09:13:29'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 09:13:29', '2026-10-18 09:13:29'
 FROM `users` WHERE `email` = 'zyrellmenor14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 09:18:37', '2026-10-20 09:18:37'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 09:18:37', '2026-10-18 09:18:37'
 FROM `users` WHERE `email` = 'zyrellmenor14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Zyrell Menor logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-20 09:19:27', '2026-10-20 09:19:27'
+SELECT id, 'user_login', 'User', id, 'User Zyrell Menor logged in from 120.28.9.44', '120.28.9.44', 'Mozilla/5.0 (Linux; Android 14; 2201117PG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36', '2026-10-18 09:19:27', '2026-10-18 09:19:27'
 FROM `users` WHERE `email` = 'zyrellmenor14@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Zyrell Menor', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:40:34', '2026-10-20 09:40:34'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (UMID / SSS ID) & registered location for seller Zyrell Menor', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:40:34', '2026-10-18 09:40:34'
 FROM `users` WHERE `email` = 'zyrellmenor14@gmail.com';
 
 INSERT INTO `users` (
@@ -5397,10 +5397,10 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Gabriel Pioquinto', 'gabrielpioquinto05@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-20 09:21:13', '09398893693', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
-    'Pangasinan', '2420', 'Voter\'s ID', '5566-8245B-33788', '2026-10-20 09:37:55',
-    '2026-10-20 09:37:55', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
-    25.8, 59.3, 338, '2026-10-20 09:15:58', '2026-10-20 09:37:55'
+    '2026-10-18 09:21:13', '09398893693', 'Purok Riverside, San Juan', 'San Juan', 'San Carlos City',
+    'Pangasinan', '2420', 'Voter\'s ID', '5566-8245B-33788', '2026-10-18 09:37:55',
+    '2026-10-18 09:37:55', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Juan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
+    25.8, 59.3, 338, '2026-10-18 09:15:58', '2026-10-18 09:37:55'
 ) ON DUPLICATE KEY UPDATE
     `name` = VALUES(`name`),
     `password` = VALUES(`password`),
@@ -5429,17 +5429,17 @@ INSERT INTO `users` (
 
 -- Audit logs for gabrielpioquinto05@gmail.com
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 09:15:58', '2026-10-20 09:15:58'
+SELECT id, 'register', 'User', id, 'User registered as seller (pending email verification)', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 09:15:58', '2026-10-18 09:15:58'
 FROM `users` WHERE `email` = 'gabrielpioquinto05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 09:21:13', '2026-10-20 09:21:13'
+SELECT id, 'email_verified', 'User', id, 'User verified their email address with 6-digit code', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 09:21:13', '2026-10-18 09:21:13'
 FROM `users` WHERE `email` = 'gabrielpioquinto05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT id, 'user_login', 'User', id, 'User Gabriel Pioquinto logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-20 09:22:31', '2026-10-20 09:22:31'
+SELECT id, 'user_login', 'User', id, 'User Gabriel Pioquinto logged in from 120.28.105.82', '120.28.105.82', 'Mozilla/5.0 (Linux; Android 12; Infinix X6816) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.134 Mobile Safari/537.36', '2026-10-18 09:22:31', '2026-10-18 09:22:31'
 FROM `users` WHERE `email` = 'gabrielpioquinto05@gmail.com';
 
 INSERT INTO `audit_logs` (`user_id`, `action`, `model_type`, `model_id`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`)
-SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Gabriel Pioquinto', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-20 09:37:55', '2026-10-20 09:37:55'
+SELECT 1, 'user_verified', 'User', id, 'Admin approved government ID (Voter\'s ID) & registered location for seller Gabriel Pioquinto', '120.28.9.14', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0', '2026-10-18 09:37:55', '2026-10-18 09:37:55'
 FROM `users` WHERE `email` = 'gabrielpioquinto05@gmail.com';

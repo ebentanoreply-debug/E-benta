@@ -153,11 +153,15 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'is_verified' => true,
+                'email_verified_at' => '2026-10-14 08:05:00',
+                'location_verified_at' => '2026-10-14 08:15:00',
                 'address_line_1' => '14 Palaris Street',
                 'barangay' => 'Brgy. Palaris',
                 'address_city' => 'San Carlos City',
                 'address_province' => 'Pangasinan',
                 'postal_code' => '2420',
+                'created_at' => '2026-10-14 08:00:00',
+                'updated_at' => '2026-10-14 08:30:00',
             ]
         );
 
@@ -169,11 +173,15 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'seller',
                 'is_verified' => true,
+                'email_verified_at' => '2026-10-14 08:20:00',
+                'location_verified_at' => '2026-10-14 08:35:00',
                 'address_line_1' => '88 Rizal Avenue',
                 'barangay' => 'Brgy. Rizal',
                 'address_city' => 'San Carlos City',
                 'address_province' => 'Pangasinan',
                 'postal_code' => '2420',
+                'created_at' => '2026-10-14 08:15:00',
+                'updated_at' => '2026-10-14 08:45:00',
             ]
         );
 
@@ -188,11 +196,15 @@ class DatabaseSeeder extends Seeder
                     'password' => Hash::make('password123'),
                     'role' => 'buyer',
                     'is_verified' => true,
+                    'email_verified_at' => '2026-10-14 08:35:00',
+                    'location_verified_at' => '2026-10-14 08:50:00',
                     'address_line_1' => $buyerStreets[($i - 1) % count($buyerStreets)],
                     'barangay' => 'Brgy. ' . $buyerBarangays[($i - 1) % count($buyerBarangays)],
                     'address_city' => 'San Carlos City',
                     'address_province' => 'Pangasinan',
                     'postal_code' => '2420',
+                    'created_at' => '2026-10-14 08:30:00',
+                    'updated_at' => '2026-10-14 09:00:00',
                 ]
             );
         }
