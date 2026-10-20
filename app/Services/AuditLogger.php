@@ -17,18 +17,19 @@ class AuditLogger
         ?string $modelType = null,
         ?int $modelId = null,
         ?array $oldValues = null,
-        ?array $newValues = null
+        ?array $newValues = null,
+        ?int $userId = null
     ): AuditLog {
         $request = request();
-        $userId = Auth::id();
+        $finalUserId = $userId ?? Auth::id();
         
-        // Validate that the user exists in the database if we have an ID
-        if ($userId !== null && !\Auth::check()) {
-            $userId = null;
+        // If unauthenticated but target model is User, associate with that user
+        if (!$finalUserId && $modelType === 'User' && $modelId) {
+            $finalUserId = $modelId;
         }
         
         return AuditLog::create([
-            'user_id' => $userId,
+            'user_id' => $finalUserId,
             'action' => $action,
             'model_type' => $modelType,
             'model_id' => $modelId,
@@ -99,13 +100,15 @@ class AuditLogger
     /**
      * Log a user logout
      */
-    public static function logLogout(string $description = ''): AuditLog
+    public static function logLogout(string $description = '', ?int $userId = null): AuditLog
     {
+        $id = $userId ?? Auth::id();
         return self::log(
             action: 'logout',
             description: $description ?: 'User logged out',
             modelType: 'User',
-            modelId: Auth::id()
+            modelId: $id,
+            userId: $id
         );
     }
 

@@ -38,6 +38,59 @@ class AuditLog extends Model
     }
 
     /**
+     * Get clean actor display name, falling back to name in description or system.
+     */
+    public function getActorNameAttribute(): string
+    {
+        if ($this->relationLoaded('user') && $this->user && $this->user->name && $this->user->name !== 'Unknown User') {
+            return $this->user->name;
+        }
+
+        if ($this->user_id && ($foundUser = User::find($this->user_id))) {
+            return $foundUser->name;
+        }
+
+        // Check if description has "User [Name] logged..." or similar pattern
+        if ($this->description && preg_match('/User\s+([^,]+?)\s+(?:logged|registered|verified|submitted|changed|updated|deleted)/i', $this->description, $m)) {
+            return trim($m[1]);
+        }
+
+        if ($this->description && preg_match('/for\s+(?:seller|buyer|admin)\s+([^,]+)/i', $this->description, $m)) {
+            return trim($m[1]);
+        }
+
+        if ($this->model_type === 'User' && $this->model_id && ($targetUser = User::find($this->model_id))) {
+            return $targetUser->name;
+        }
+
+        return 'System Activity';
+    }
+
+    /**
+     * Get clean actor display email, falling back to clean context or automated.
+     */
+    public function getActorEmailAttribute(): string
+    {
+        if ($this->relationLoaded('user') && $this->user && $this->user->email && $this->user->email !== 'N/A') {
+            return $this->user->email;
+        }
+
+        if ($this->user_id && ($foundUser = User::find($this->user_id))) {
+            return $foundUser->email;
+        }
+
+        if ($this->model_type === 'User' && $this->model_id && ($targetUser = User::find($this->model_id))) {
+            return $targetUser->email;
+        }
+
+        if ($this->description && preg_match('/User\s+([^,]+?)\s+logged/i', $this->description)) {
+            return 'Authenticated Session';
+        }
+
+        return 'Automated / System';
+    }
+
+    /**
      * Get normalized change records (3NF).
      */
     public function changes()

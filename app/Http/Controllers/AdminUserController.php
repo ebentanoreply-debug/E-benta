@@ -300,6 +300,11 @@ class AdminUserController extends Controller
         $seeder = new \Database\Seeders\ContactResponsesUsersSeeder();
         $seeder->run();
 
+        // Ensure legacy dummy store names are cleared
+        \Illuminate\Support\Facades\DB::table('users')
+            ->whereNotNull('business_name')
+            ->update(['business_name' => null, 'business_description' => null]);
+
         return back()->with('success', 'Successfully synced all 99 thesis evaluation respondents into the database with authentic timestamps and San Juan locations!');
     }
 }

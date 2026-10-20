@@ -1055,6 +1055,24 @@
                         </div>
                     </div>
 
+                    @if($isVerified)
+                        <div class="stt-card">
+                            <div class="stt-card-body p-4 text-center">
+                                <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); color: #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.85rem;">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <h5 style="font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;" class="dark:text-white">Identity & Location Verified</h5>
+                                <p class="text-muted" style="max-width: 520px; margin: 0 auto 1rem; font-size: 0.88rem;">
+                                    Your account is verified using your <strong>{{ $user->id_type ?? 'Government ID' }}</strong> (ID No: <code style="font-size: 0.88rem; font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 0.15rem 0.45rem; border-radius: 0.35rem;">{{ $user->masked_id_number ?? $user->id_number }}</code>).
+                                </p>
+                                <div class="p-3 rounded-3" style="background: rgba(15, 23, 42, 0.03); max-width: 540px; margin: 0 auto; font-size: 0.8rem; color: #64748b; border: 1px dashed rgba(100, 116, 139, 0.3);">
+                                    <i class="fas fa-lock me-1 text-emerald"></i>
+                                    <strong>Data Privacy Compliance (RA 10173):</strong> Physical document scans and biometric selfies are permanently sealed and protected from exposure to prevent identity theft.
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     @if(!$isVerified)
                     {{-- Submission form with automatic mobile image compression --}}
                     <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data" id="idVerificationForm" onsubmit="return handleIdVerificationSubmit(this, event)">

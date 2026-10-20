@@ -149,8 +149,8 @@
                                         <i class="fas fa-clock me-1"></i>{{ $log->created_at->format('M d, Y • g:i:s A') }}
                                     </td>
                                     <td>
-                                        <strong style="display: block; font-size: 0.88rem;">{{ $log->user?->name ?? 'System' }}</strong>
-                                        <small class="text-muted">{{ $log->user?->email }}</small>
+                                        <strong style="display: block; font-size: 0.88rem;">{{ $log->actor_name }}</strong>
+                                        <small class="text-muted">{{ $log->actor_email }}</small>
                                     </td>
                                     <td>
                                         <span class="badge" style="background: rgba(168, 85, 247, 0.12); color: #9333ea; font-weight: 700; font-size: 0.78rem; text-transform: uppercase;">
