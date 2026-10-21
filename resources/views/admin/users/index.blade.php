@@ -601,8 +601,7 @@
                                                     data-name="{{ $user->name }}"
                                                     data-email="{{ $user->email }}"
                                                     data-phone="{{ $user->phone ?? 'Not provided' }}"
-                                                    data-role="{{ strtoupper($user->role) }}"
-                                                    data-address="{{ trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified' }}"
+                                                    data-address="{{ trim(((($user->address_line_1 && !preg_match('/\b(purok|sitio|proper)\b/i', $user->address_line_1)) ? $user->address_line_1 . ', ' : '')) . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified' }}"
                                                     data-id-type="{{ $user->id_type ?? 'Not submitted' }}"
                                                     data-id-number="{{ ($user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number) ?? 'Not submitted' }}"
                                                     data-id-status="{{ ucfirst($user->id_verification_status ?? 'Unsubmitted') }}"
@@ -758,8 +757,8 @@
                             'linear-gradient(135deg, #d97706, #f59e0b)',
                             'linear-gradient(135deg, #0891b2, #06b6d4)',
                         ];
-                        $bgGrad = $avatarGradients[$user->id % count($avatarGradients)];
-                        $userFullAddress = trim(($user->address_line_1 ? $user->address_line_1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified';
+                        $cleanLine1 = ($user->address_line_1 && !preg_match('/\b(purok|sitio|proper)\b/i', $user->address_line_1)) ? $user->address_line_1 : null;
+                        $userFullAddress = trim(($cleanLine1 ? $cleanLine1 . ', ' : '') . ($user->barangay ? (\Illuminate\Support\Str::startsWith(trim($user->barangay), 'Brgy.') ? $user->barangay : 'Brgy. ' . $user->barangay) . ', ' : '') . ($user->address_city ? $user->address_city . ', ' : '') . ($user->address_province ? $user->address_province : '') . ($user->postal_code ? ' ' . $user->postal_code : '')) ?: 'No address specified';
                     @endphp
                     <div class="user-mobile-card">
                         <!-- Top Row: Avatar, Name, Email, Standing Badge -->
