@@ -159,14 +159,15 @@ sc_barangays = [
     'San Pedro-Taloy', 'Antipangol', 'Bega', 'Dalandan', 'Gamata', 'Balococ'
 ]
 
-sc_streets = [
-    '14 Palaris Street', '88 Rizal Avenue', '25 Perez Boulevard', '42 Mabini Street',
-    '52 Bugallon-Posadas Street', '19 Montemayor Street', '31 Gomez Street',
-    '76 Roxas Boulevard', 'Purok 1, San Carlos-Calasiao Road', '63 Bonifacio Street',
-    '12 Burgos Street', '45 Zamora Street', '8 Del Pilar Street', '29 Tandang Sora Street',
-    '15 Aurora Boulevard', '90 MacArthur Highway', '33 Posadas Street', '21 Binalatongan Street',
-    '18 P. Gomez Street', '27 Malong Street', '50 Quezon Boulevard', '38 Mabini Extension'
-]
+poblacion_streets = {
+    'Palaris': ['14 Palaris Street', '28 Palaris Street'],
+    'Rizal': ['88 Rizal Avenue', '45 Rizal Avenue', '112 Rizal Avenue'],
+    'Mabini': ['42 Mabini Street', '65 Mabini Street', '28 Mabini Extension'],
+    'Bugallon-Posadas': ['33 Posadas Street', '52 Bugallon Street', '18 Posadas Street'],
+    'Lucban': ['8 Del Pilar Street', '31 Gomez Street', '12 Burgos Street'],
+    'Padilla': ['19 Montemayor Street', '8 Padilla Street', '24 Montemayor Street'],
+    'Bonifacio': ['Malong Street', '63 Bonifacio Street'],
+}
 
 phone_prefixes = ['0915', '0916', '0917', '0926', '0927', '0935', '0945', '0955', '0966', '0977', '0995', '0918', '0919', '0920', '0928', '0939', '0947', '0949', '0998', '0991', '0992']
 
@@ -275,7 +276,11 @@ with zipfile.ZipFile(xlsx_path, 'r') as z:
             address_line_1 = san_juan_streets[idx % len(san_juan_streets)]
         else:
             barangay = sc_barangays[idx % len(sc_barangays)]
-            address_line_1 = sc_streets[idx % len(sc_streets)]
+            if barangay in poblacion_streets:
+                streets = poblacion_streets[barangay]
+                address_line_1 = streets[idx % len(streets)]
+            else:
+                address_line_1 = f"Purok {(idx % 4) + 1}"
             
         address_city = 'San Carlos City'
         address_province = 'Pangasinan'
