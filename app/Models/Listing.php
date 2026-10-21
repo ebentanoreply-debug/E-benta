@@ -38,11 +38,13 @@ class Listing extends Model
         'delivered_at',
         'processed_at',
         'carbon_footprint',
+        'photos',
     ];
 
     protected function casts(): array
     {
         return [
+            'photos' => 'array',
             'lot_item_count' => 'integer',
             'estimated_weight' => 'decimal:2',
             'suggested_price' => 'decimal:2',

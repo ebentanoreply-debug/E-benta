@@ -237,6 +237,83 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'image_filename' => 'product_14.jpg',
                 'minutes_after_user' => 52,
             ],
+
+            // 5 Products specifically for seller@test.com (Test Seller)
+            15 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 1, // Laptop
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 2, // MacBook Air M1
+                'device_details' => 'Apple MacBook Air 13" M1 (2020), 8GB Unified RAM, 256GB SSD, Space Gray',
+                'condition' => 'minor_damage',
+                'description' => 'Broken left hinge mechanism but Retina display panel and M1 logic board function 100%. Battery health at 88%. Good for student or home workstation.',
+                'estimated_weight' => 1.29,
+                'carbon_footprint' => 2.97,
+                'suggested_price' => 12500.00,
+                'intended_action' => 'sell',
+                'image_filename' => 'product_15.jpg',
+                'minutes_after_user' => 30,
+            ],
+            16 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 2, // Desktop Computer
+                'device_brand_id' => 2, // Dell
+                'device_model_id' => 8, // Dell OptiPlex
+                'device_details' => 'Dell OptiPlex 7070 Micro PC (Intel Core i5-9500T, 16GB DDR4, 256GB NVMe SSD, Original 65W Power Brick)',
+                'condition' => 'working',
+                'description' => 'Compact mini PC decommissioned from office. Clean internals, tested USB and DisplayPort video output. Fully bootable to Windows 11.',
+                'estimated_weight' => 1.18,
+                'carbon_footprint' => 2.71,
+                'suggested_price' => 4200.00,
+                'intended_action' => 'sell',
+                'image_filename' => 'product_16.jpg',
+                'minutes_after_user' => 55,
+            ],
+            17 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 3, // Smartphone
+                'device_brand_id' => 6, // Samsung
+                'device_model_id' => 13, // Samsung Galaxy S22
+                'device_details' => 'Samsung Galaxy S22 5G (Phantom Black, 128GB Storage, 8GB RAM, Dynamic AMOLED 2X)',
+                'condition' => 'minor_damage',
+                'description' => 'Hairline crack on back glass cover. Dynamic AMOLED screen, camera modules, ultrasonic fingerprint scanner, and motherboard are completely flawless.',
+                'estimated_weight' => 0.17,
+                'carbon_footprint' => 0.39,
+                'suggested_price' => 6500.00,
+                'intended_action' => 'sell',
+                'image_filename' => 'product_17.jpg',
+                'minutes_after_user' => 80,
+            ],
+            18 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 4, // Tablet
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 14, // iPad Pro 12.9"
+                'device_details' => 'Apple iPad Pro 12.9" 3rd Gen (64GB Wi-Fi, Space Gray, A12X Bionic, ProMotion 120Hz)',
+                'condition' => 'working',
+                'description' => 'Clean iCloud account, Face ID fully working, flawless 120Hz Liquid Retina display. Great for digital drawing, multimedia, and repair spare parts.',
+                'estimated_weight' => 0.63,
+                'carbon_footprint' => 1.45,
+                'suggested_price' => 9000.00,
+                'intended_action' => 'sell',
+                'image_filename' => 'product_18.jpg',
+                'minutes_after_user' => 110,
+            ],
+            19 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 5, // Monitor
+                'device_brand_id' => 7, // LG
+                'device_model_id' => 18, // LG UltraWide 34"
+                'device_details' => 'LG UltraWide 34-inch Curved IPS LED Monitor (3440x1440 UWQHD, HDMI x 2, DisplayPort)',
+                'condition' => 'minor_damage',
+                'description' => 'Missing desktop stand, includes VESA mounting bracket and power supply. Display panel is completely scratch-free with zero dead pixels.',
+                'estimated_weight' => 6.80,
+                'carbon_footprint' => 15.64,
+                'suggested_price' => 4800.00,
+                'intended_action' => 'sell',
+                'image_filename' => 'product_19.jpg',
+                'minutes_after_user' => 140,
+            ],
         ];
 
         // 2. Insert or Update Listings
@@ -459,6 +536,107 @@ class ProductsAndTransactionsSeeder extends Seeder
                     ['seller', 'Yes po Maam Kris, complete with original heavy-duty stand at power cable po.'],
                     ['buyer', 'Good to know. Offered ₱1,500 po, hope you can accept so we can test the DisplayPort.'],
                     ['seller', 'Offer accepted po Maam Kris! Ready for collection na po dito sa Tamayo.'],
+                ],
+            ],
+
+            // 5 Offers / Transactions for seller@test.com from the 5 Buyers (1 offer each)
+            // Transaction 8: Jimmy Beltran -> MacBook Air M1 (Product 15)
+            8 => [
+                'product_index' => 15,
+                'buyer_email' => 'jimmybeltran@gmail.com', // Jimmy Beltran
+                'bid_amount' => 11800.00,
+                'proposed_method' => 'repair',
+                'notes' => 'Replacing hinge bracket assembly and deploying for student coding workstation.',
+                'pickup_location' => 'Brgy. Mabini Plaza, San Carlos City',
+                'status' => 'completed',
+                'hours_after_listing' => 2.0,
+                'hours_to_respond' => 0.5,
+                'hours_to_pickup' => 18.0,
+                'messages' => [
+                    ['buyer', 'Good morning po Test Seller! Interesado po ako sa MacBook Air M1. Original po ba ang charger nito?'],
+                    ['seller', 'Magandang umaga po Jimmy! Opo, original Apple 30W USB-C charger and cable ang kasama. Fully working ang logic board at keyboard.'],
+                    ['buyer', 'Sige po, nag-offer po ako ng ₱11,800. Pwede po ba meetup sa Mabini Plaza mamayang 3 PM?'],
+                    ['seller', 'Deal po sir! See you po sa Mabini Plaza. Salamat po!'],
+                ],
+            ],
+
+            // Transaction 9: Jerwin Lomibao -> Dell OptiPlex Micro PC (Product 16)
+            9 => [
+                'product_index' => 16,
+                'buyer_email' => 'lomibaojerwin@gmail.com', // Jerwin Lomibao
+                'bid_amount' => 3900.00,
+                'proposed_method' => 'repair',
+                'notes' => 'Refurbishing small form factor PC for barangay community desk digitization.',
+                'pickup_location' => 'San Carlos City Public Market, San Carlos City',
+                'status' => 'completed',
+                'hours_after_listing' => 3.5,
+                'hours_to_respond' => 0.8,
+                'hours_to_pickup' => 22.0,
+                'messages' => [
+                    ['buyer', 'Hi seller, working po ba lahat ng USB ports at display output nitong Dell OptiPlex Micro?'],
+                    ['seller', 'Hello Jerwin! Yes po, tested and working both DisplayPort and HDMI, bootable sa Windows 11.'],
+                    ['buyer', 'Ayos po! In-offeran ko po kayo ng ₱3,900. Pickup ko po bukas ng umaga.'],
+                    ['seller', 'Accepted po sir Jerwin! Naka-pack na po with power adapter. Ingat po sa biyahe.'],
+                ],
+            ],
+
+            // Transaction 10: Benigno Garcia -> Samsung Galaxy S22 (Product 17)
+            10 => [
+                'product_index' => 17,
+                'buyer_email' => 'benignogarcia23@gmail.com', // Benigno Garcia
+                'bid_amount' => 6000.00,
+                'proposed_method' => 'repair',
+                'notes' => 'Replacing back glass panel and battery calibration for personal daily driver.',
+                'pickup_location' => 'Brgy. Mabini Barangay Hall, San Carlos City',
+                'status' => 'completed',
+                'hours_after_listing' => 4.2,
+                'hours_to_respond' => 0.6,
+                'hours_to_pickup' => 16.0,
+                'messages' => [
+                    ['buyer', 'Good day po! Working po ba 100% yung screen digitizer at cameras nitong S22?'],
+                    ['seller', 'Good day Benigno! Opo, back glass lang may crack. Flawless ang AMOLED display and 120Hz refresh.'],
+                    ['buyer', 'Sige po, kukunin ko for ₱6,000 para palitan ko na lang ng back housing.'],
+                    ['seller', 'Deal po Sir Benigno, accepted na po ang offer ninyo. Salamat po!'],
+                ],
+            ],
+
+            // Transaction 11: Kris Aquino -> iPad Pro 12.9" (Product 18)
+            11 => [
+                'product_index' => 18,
+                'buyer_email' => 'krisaquino817@gmail.com', // Kris Aquino
+                'bid_amount' => 8500.00,
+                'proposed_method' => 'repair',
+                'notes' => 'Testing Apple Pencil latency and graphic apps for art studio workstation.',
+                'pickup_location' => 'San Carlos Town Plaza, San Carlos City',
+                'status' => 'accepted',
+                'hours_after_listing' => 5.0,
+                'hours_to_respond' => 0.7,
+                'hours_to_pickup' => 30.0,
+                'messages' => [
+                    ['buyer', 'Hello po Test Seller! Clean iCloud and working po ba Apple Pencil compatibility nito?'],
+                    ['seller', 'Yes Maam Kris! Signed out na po ang iCloud, factory reset, at tested sa Apple Pencil 2nd gen.'],
+                    ['buyer', 'Great! Nag-submit po ako ng bid na ₱8,500 for inspection and pickup.'],
+                    ['seller', 'Offer accepted po Maam Kris! Ihanda ko na po ang unit para sa ating pickup schedule.'],
+                ],
+            ],
+
+            // Transaction 12: Abe Austria -> LG UltraWide 34" Monitor (Product 19)
+            12 => [
+                'product_index' => 19,
+                'buyer_email' => 'Abeaustria@gmail.com', // Abe Austria
+                'bid_amount' => 4500.00,
+                'proposed_method' => 'harvest',
+                'notes' => 'Harvesting UWQHD controller board and panel testing in e-waste repair lab.',
+                'pickup_location' => 'Brgy. Mabini Crossing, San Carlos City',
+                'status' => 'accepted',
+                'hours_after_listing' => 6.0,
+                'hours_to_respond' => 1.0,
+                'hours_to_pickup' => 28.0,
+                'messages' => [
+                    ['buyer', 'Sir available pa po itong LG UltraWide? Kasama po ba power supply at HDMI cable?'],
+                    ['seller', 'Opo Sir Abe! Complete with original power brick at high-speed HDMI cable.'],
+                    ['buyer', 'Nag-offer po ako ₱4,500 for testing and pickup.'],
+                    ['seller', 'Accepted na po Sir Abe! Available po ako for meetup dito sa Mabini Crossing. Salamat!'],
                 ],
             ],
         ];
@@ -706,7 +884,7 @@ class ProductsAndTransactionsSeeder extends Seeder
             'bulk electronics recycling depot',
         ];
 
-        $activeUsers = User::whereIn('id', [16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 29, 32, 39, 40])->get();
+        $activeUsers = User::whereIn('id', [2, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 29, 32, 39, 40])->get();
         foreach ($activeUsers as $u) {
             $baseTime = Carbon::parse($u->created_at ?? '2026-10-14 20:00:00');
             $loginTime = (clone $baseTime)->addHours(4)->toDateTimeString();
