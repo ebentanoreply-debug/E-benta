@@ -337,7 +337,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mia Shiela Grace Uson', 'miashielagraceuson@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 12:08:06', '09554226067', '76 Roxas Boulevard', 'Coliling', 'San Carlos City',
+    '2026-10-14 12:08:06', '09554226067', 'Purok 2', 'Coliling', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'N15-94-338968', '2026-10-14 12:38:07',
     '2026-10-14 12:38:07', 'North Tech Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Coliling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
     37.5, 86.2, 435, '2026-10-14 12:03:26', '2026-10-14 12:38:07'
@@ -447,7 +447,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Daisy Gee Garcia', 'daisygeegarcia21@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 19:04:51', '09772197935', '63 Bonifacio Street', 'Agdao', 'San Carlos City',
+    '2026-10-14 19:04:51', '09772197935', 'Purok 1, Agdao Proper', 'Agdao', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5577-3803C-42087', '2026-10-14 19:30:11',
     '2026-10-14 19:30:11', 'Apex Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Agdao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
     20.0, 46.0, 240, '2026-10-14 19:01:58', '2026-10-14 19:30:11'
@@ -502,7 +502,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Antonette Muñoz', 'munozantonette5@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 19:16:50', '09956440561', '12 Burgos Street', 'Bocboc', 'San Carlos City',
+    '2026-10-14 19:16:50', '09956440561', 'Purok 1', 'Bocboc', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-17507864', '2026-10-14 19:38:40',
     '2026-10-14 19:38:40', 'Prime Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Bocboc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
     32.0, 73.6, 370, '2026-10-14 19:13:41', '2026-10-14 19:38:40'
@@ -557,7 +557,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Daisy Garcia', 'dg3946922@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 19:29:41', '09185491946', '45 Zamora Street', 'Mamarlao', 'San Carlos City',
+    '2026-10-14 19:29:41', '09185491946', 'Purok 2', 'Mamarlao', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P2110460A', '2026-10-14 20:01:38',
     '2026-10-14 20:01:38', 'Pure Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Mamarlao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
     11.6, 26.7, 181, '2026-10-14 19:24:15', '2026-10-14 20:01:38'
@@ -612,7 +612,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mark Yvan Garcia', 'markyvangarcia@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 19:30:39', '09193396987', '8 Del Pilar Street', 'Tarece', 'San Carlos City',
+    '2026-10-14 19:30:39', '09193396987', 'Purok 1', 'Tarece', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '5339-3287-5040-9830', '2026-10-14 20:07:51',
     '2026-10-14 20:07:51', 'EcoSphere E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Tarece, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
     29.5, 67.8, 350, '2026-10-14 19:26:32', '2026-10-14 20:07:51'
@@ -667,7 +667,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jhomari Beltran', 'jhomaribeltran423@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-14 22:09:39', '09207073292', '29 Tandang Sora Street', 'Magtaking', 'San Carlos City',
+    '2026-10-14 22:09:39', '09207073292', 'Purok 1', 'Magtaking', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'A27-75-617488', '2026-10-14 22:43:05',
     '2026-10-14 22:43:05', 'BioScrap Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Magtaking, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     29.8, 68.5, 323, '2026-10-14 22:05:50', '2026-10-14 22:43:05'
@@ -722,7 +722,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jensen Vince Javier', 'jensenvincejavier@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:07:21', '09283684052', '15 Aurora Boulevard', 'Baldog', 'San Carlos City',
+    '2026-10-15 12:07:21', '09283684052', 'Purok 1', 'Baldog', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '7916-2065818-7', '2026-10-15 12:22:07',
     '2026-10-15 12:22:07', 'TechnoCycle Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Baldog, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 15,
     24.5, 56.3, 320, '2026-10-15 12:01:41', '2026-10-15 12:22:07'
@@ -777,7 +777,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mark Rejie Rosario', 'markrejierosario12@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:09:17', '09391192619', '90 MacArthur Highway', 'Tamayo', 'San Carlos City',
+    '2026-10-15 12:09:17', '09391192619', 'Purok 1', 'Tamayo', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5587-2876C-80381', '2026-10-15 12:32:27',
     '2026-10-15 12:32:27', 'Urban Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Tamayo, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
     30.2, 69.5, 357, '2026-10-15 12:05:18', '2026-10-15 12:32:27'
@@ -832,7 +832,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mark Lhemuel Ramos', 'marklhemuel50@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:10:54', '09478294150', '33 Posadas Street', 'Tandoc', 'San Carlos City',
+    '2026-10-15 12:10:54', '09478294150', 'Purok 1', 'Tandoc', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-31227574', '2026-10-15 12:37:29',
     '2026-10-15 12:37:29', 'San Juan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Tandoc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 17,
     4.6, 10.6, 131, '2026-10-15 12:07:27', '2026-10-15 12:37:29'
@@ -887,7 +887,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mc Lester Soriano', 'mclestersoriano43@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:15:28', '09499398441', '21 Binalatongan Street', 'Caoayan Kiling', 'San Carlos City',
+    '2026-10-15 12:15:28', '09499398441', 'Purok 1', 'Caoayan Kiling', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P3997281A', '2026-10-15 12:38:22',
     '2026-10-15 12:38:22', 'San Carlos Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Caoayan Kiling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
     32.7, 75.2, 387, '2026-10-15 12:10:24', '2026-10-15 12:38:22'
@@ -942,7 +942,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Vincent Agbuya', 'vincentagbuya67@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:20:18', '09983564217', '18 P. Gomez Street', 'Ilang', 'San Carlos City',
+    '2026-10-15 12:20:18', '09983564217', 'Purok 1, Ilang', 'Ilang', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '7126-3646-9837-9689', '2026-10-15 12:39:43',
     '2026-10-15 12:39:43', 'Pangasinan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Ilang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
     24.6, 56.6, 261, '2026-10-15 12:16:09', '2026-10-15 12:39:43'
@@ -997,7 +997,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Joseph Cariño', 'carinojoseph2489@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:25:43', '09917089806', '27 Malong Street', 'San Pedro-Taloy', 'San Carlos City',
+    '2026-10-15 12:25:43', '09917089806', 'Purok 1', 'San Pedro-Taloy', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'B40-17-352572', '2026-10-15 12:39:16',
     '2026-10-15 12:39:16', 'Central Luzon Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at San Pedro-Taloy, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     7.4, 17.0, 99, '2026-10-15 12:21:38', '2026-10-15 12:39:16'
@@ -1052,7 +1052,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Shin Jay Rak', 'shinjay.rak@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:27:25', '09929937326', '50 Quezon Boulevard', 'Antipangol', 'San Carlos City',
+    '2026-10-15 12:27:25', '09929937326', 'Purok 1', 'Antipangol', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '3060-3154051-8', '2026-10-15 12:38:04',
     '2026-10-15 12:38:04', 'GreenTech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Antipangol, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
     13.4, 30.8, 174, '2026-10-15 12:23:21', '2026-10-15 12:38:04'
@@ -1107,7 +1107,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Michelle Cariño', 'michellecarino4@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 12:30:30', '09154553384', '38 Mabini Extension', 'Bega', 'San Carlos City',
+    '2026-10-15 12:30:30', '09154553384', 'Purok 1', 'Bega', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5569-4295C-50857', '2026-10-15 13:03:40',
     '2026-10-15 13:03:40', 'EcoRecover Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Bega, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 15,
     37.8, 86.9, 453, '2026-10-15 12:24:47', '2026-10-15 13:03:40'
@@ -1162,7 +1162,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'John Michael Santos', 'johnmichaelsantos@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 13:04:14', '09169683481', '14 Palaris Street', 'Dalandan', 'San Carlos City',
+    '2026-10-15 13:04:14', '09169683481', 'Purok 1', 'Dalandan', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-70597444', '2026-10-15 13:39:22',
     '2026-10-15 13:39:22', 'Agri-Tech Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Dalandan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     12.8, 29.4, 158, '2026-10-15 12:59:28', '2026-10-15 13:39:22'
@@ -1217,7 +1217,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Joshua Reyes', 'joshuareyes23@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 13:14:46', '09174860684', '88 Rizal Avenue', 'Gamata', 'San Carlos City',
+    '2026-10-15 13:14:46', '09174860684', 'Purok 1', 'Gamata', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P4694634A', '2026-10-15 13:23:56',
     '2026-10-15 13:23:56', 'Palaris Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Gamata, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     28.2, 64.9, 307, '2026-10-15 13:12:30', '2026-10-15 13:23:56'
@@ -1272,7 +1272,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Angelica Mendoza', 'angelicamendoza05@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:44:40', '09261527021', '25 Perez Boulevard', 'Balococ', 'San Carlos City',
+    '2026-10-15 14:44:40', '09261527021', 'Purok 1', 'Balococ', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '6413-2160-9423-4899', '2026-10-15 14:57:01',
     '2026-10-15 14:57:01', 'North Tech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Balococ, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
     26.9, 61.9, 324, '2026-10-15 14:42:25', '2026-10-15 14:57:01'
@@ -1327,7 +1327,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Christian Bautista', 'christianbautista@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:46:43', '09278930103', '42 Mabini Street', 'Palaris', 'San Carlos City',
+    '2026-10-15 14:46:43', '09278930103', '14 Palaris Street', 'Palaris', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'A70-62-299659', '2026-10-15 15:02:50',
     '2026-10-15 15:02:50', 'Solid Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Palaris, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     7.7, 17.7, 107, '2026-10-15 14:43:49', '2026-10-15 15:02:50'
@@ -1382,7 +1382,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mary Grace Dela Cruz', 'marygracedelacruz@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:48:54', '09357897151', '52 Bugallon-Posadas Street', 'Rizal', 'San Carlos City',
+    '2026-10-15 14:48:54', '09357897151', '45 Rizal Avenue', 'Rizal', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '8651-1908841-2', '2026-10-15 15:23:58',
     '2026-10-15 15:23:58', 'Apex Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Rizal, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
     18.0, 41.4, 200, '2026-10-15 14:45:04', '2026-10-15 15:23:58'
@@ -1437,7 +1437,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Kyle Ramos', 'kyleramos17@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:49:43', '09455171761', '19 Montemayor Street', 'Mabini', 'San Carlos City',
+    '2026-10-15 14:49:43', '09455171761', '65 Mabini Street', 'Mabini', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5524-4116C-68800', '2026-10-15 15:03:44',
     '2026-10-15 15:03:44', 'Prime Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Mabini, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
     18.6, 42.8, 221, '2026-10-15 14:46:17', '2026-10-15 15:03:44'
@@ -1492,7 +1492,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Nicole Villanueva', 'nicolevillanueva@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:50:42', '09552264748', '31 Gomez Street', 'Bugallon-Posadas', 'San Carlos City',
+    '2026-10-15 14:50:42', '09552264748', '52 Bugallon Street', 'Bugallon-Posadas', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-69476001', '2026-10-15 15:14:34',
     '2026-10-15 15:14:34', 'Pure E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Bugallon-Posadas, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     6.2, 14.3, 92, '2026-10-15 14:47:31', '2026-10-15 15:14:34'
@@ -1547,7 +1547,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Adrian Flores', 'adrianflores08@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:53:23', '09662564689', '76 Roxas Boulevard', 'Lucban', 'San Carlos City',
+    '2026-10-15 14:53:23', '09662564689', '31 Gomez Street', 'Lucban', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P4965789A', '2026-10-15 15:00:05',
     '2026-10-15 15:00:05', 'EcoSphere Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Lucban, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
     20.8, 47.8, 288, '2026-10-15 14:49:05', '2026-10-15 15:00:05'
@@ -1602,7 +1602,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Princess Mae Castillo', 'princessmaecastillo@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:53:08', '09771983738', 'Purok 1, San Carlos-Calasiao Road', 'Padilla', 'San Carlos City',
+    '2026-10-15 14:53:08', '09771983738', '8 Padilla Street', 'Padilla', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '3697-7209-1035-7396', '2026-10-15 15:27:36',
     '2026-10-15 15:27:36', 'BioScrap Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Padilla, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
     35.5, 81.6, 410, '2026-10-15 14:50:14', '2026-10-15 15:27:36'
@@ -1657,7 +1657,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mark Anthony Rivera', 'markanthonyrivera@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:56:42', '09958096887', '63 Bonifacio Street', 'Talang', 'San Carlos City',
+    '2026-10-15 14:56:42', '09958096887', 'Purok 2, San Carlos-Malasiqui Road', 'Talang', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'C29-34-411120', '2026-10-15 15:20:50',
     '2026-10-15 15:20:50', 'TechnoCycle Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Talang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
     37.0, 85.1, 415, '2026-10-15 14:51:22', '2026-10-15 15:20:50'
@@ -1712,7 +1712,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jericho Fernandez', 'jerichofernandez@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 14:58:11', '09186261415', '12 Burgos Street', 'Coliling', 'San Carlos City',
+    '2026-10-15 14:58:11', '09186261415', 'Purok 3', 'Coliling', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '1936-1841248-8', '2026-10-15 15:07:52',
     '2026-10-15 15:07:52', 'Urban E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Coliling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
     6.4, 14.7, 104, '2026-10-15 14:53:43', '2026-10-15 15:07:52'
@@ -1767,7 +1767,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Samantha Lopez', 'samanthalopez21@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:02:54', '09192149597', '45 Zamora Street', 'Turac', 'San Carlos City',
+    '2026-10-15 15:02:54', '09192149597', 'Purok 2', 'Turac', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5576-2113C-40828', '2026-10-15 15:21:25',
     '2026-10-15 15:21:25', 'San Juan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Turac, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 15,
     8.5, 19.5, 160, '2026-10-15 14:58:44', '2026-10-15 15:21:25'
@@ -1822,7 +1822,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Carlo Migel Aquino', 'carlomigelaquino@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:06:48', '09201666754', '8 Del Pilar Street', 'Agdao', 'San Carlos City',
+    '2026-10-15 15:06:48', '09201666754', 'Purok 3', 'Agdao', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-93131979', '2026-10-15 15:27:49',
     '2026-10-15 15:27:49', 'San Carlos Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Agdao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     18.5, 42.5, 210, '2026-10-15 15:01:01', '2026-10-15 15:27:49'
@@ -1877,7 +1877,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jasmine Torres', 'jasminetorres14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:07:45', '09285374922', '29 Tandang Sora Street', 'Bocboc', 'San Carlos City',
+    '2026-10-15 15:07:45', '09285374922', 'Purok 2', 'Bocboc', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P4426900B', '2026-10-15 15:34:51',
     '2026-10-15 15:34:51', 'Pangasinan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Bocboc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
     13.4, 30.8, 184, '2026-10-15 15:03:16', '2026-10-15 15:34:51'
@@ -1932,7 +1932,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Renzo Martinez', 'renzomartinez@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:07:23', '09398670955', '15 Aurora Boulevard', 'Mamarlao', 'San Carlos City',
+    '2026-10-15 15:07:23', '09398670955', 'Purok 3', 'Mamarlao', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '6180-2188-1152-8508', '2026-10-15 15:35:18',
     '2026-10-15 15:35:18', 'Central Luzon E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Mamarlao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     7.0, 16.1, 100, '2026-10-15 15:04:50', '2026-10-15 15:35:18'
@@ -1987,7 +1987,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Andrea Salazar', 'andreasalazar09@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:13:06', '09473222252', '90 MacArthur Highway', 'Tarece', 'San Carlos City',
+    '2026-10-15 15:13:06', '09473222252', 'Purok 3', 'Tarece', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'B18-41-487477', '2026-10-15 15:38:18',
     '2026-10-15 15:38:18', 'GreenTech Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Tarece, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
     9.8, 22.5, 158, '2026-10-15 15:10:12', '2026-10-15 15:38:18'
@@ -2042,7 +2042,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Vincent Gonzales', 'vincentgonzales@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:18:05', '09499874152', '33 Posadas Street', 'Magtaking', 'San Carlos City',
+    '2026-10-15 15:18:05', '09499874152', 'Purok 2', 'Magtaking', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '1128-6022741-2', '2026-10-15 15:43:11',
     '2026-10-15 15:43:11', 'EcoRecover Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Magtaking, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
     13.4, 30.8, 169, '2026-10-15 15:12:32', '2026-10-15 15:43:11'
@@ -2097,7 +2097,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Kimberly Navarro', 'kimberlynavarro@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:19:08', '09985569244', '21 Binalatongan Street', 'Baldog', 'San Carlos City',
+    '2026-10-15 15:19:08', '09985569244', 'Purok 2, Baldog', 'Baldog', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5536-4450C-54942', '2026-10-15 15:33:57',
     '2026-10-15 15:33:57', 'Agri-Tech Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Baldog, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
     27.5, 63.2, 320, '2026-10-15 15:13:21', '2026-10-15 15:33:57'
@@ -2152,7 +2152,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Trishia Fernandez', 'trishiafernandez12@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-15 15:23:10', '09919196204', '18 P. Gomez Street', 'Tamayo', 'San Carlos City',
+    '2026-10-15 15:23:10', '09919196204', 'Purok 2', 'Tamayo', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-43704923', '2026-10-15 16:02:02',
     '2026-10-15 16:02:02', 'Palaris E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Tamayo, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
     7.6, 17.5, 96, '2026-10-15 15:17:32', '2026-10-15 16:02:02'
@@ -2207,7 +2207,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Angela Garcia', 'angelagarcia08@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:45:36', '09921739653', '27 Malong Street', 'Tandoc', 'San Carlos City',
+    '2026-10-16 10:45:36', '09921739653', 'Purok 2, Tandoc', 'Tandoc', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P1059486B', '2026-10-16 11:10:41',
     '2026-10-16 11:10:41', 'North Tech Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Tandoc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 7,
     25.8, 59.3, 293, '2026-10-16 10:41:48', '2026-10-16 11:10:41'
@@ -2262,7 +2262,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Mark Mendoza', 'markmendoza17@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:46:02', '09158175395', '50 Quezon Boulevard', 'Caoayan Kiling', 'San Carlos City',
+    '2026-10-16 10:46:02', '09158175395', 'Purok 2', 'Caoayan Kiling', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '1158-2832-2232-3442', '2026-10-16 11:23:04',
     '2026-10-16 11:23:04', 'Solid Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Caoayan Kiling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
     32.5, 74.8, 345, '2026-10-16 10:42:55', '2026-10-16 11:23:04'
@@ -2317,7 +2317,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Camille Flores', 'camilleflores25@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:48:37', '09168210624', '38 Mabini Extension', 'Ilang', 'San Carlos City',
+    '2026-10-16 10:48:37', '09168210624', 'Purok 2', 'Ilang', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'A15-49-482364', '2026-10-16 11:04:14',
     '2026-10-16 11:04:14', 'Apex Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Ilang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
     34.6, 79.6, 366, '2026-10-16 10:44:08', '2026-10-16 11:04:14'
@@ -2372,7 +2372,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Miguel Ramos', 'miguelramos11@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:49:31', '09172724590', '14 Palaris Street', 'San Pedro-Taloy', 'San Carlos City',
+    '2026-10-16 10:49:31', '09172724590', 'Purok Centro, San Pedro-Taloy', 'San Pedro-Taloy', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '6794-7817881-3', '2026-10-16 11:13:40',
     '2026-10-16 11:13:40', 'Prime E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at San Pedro-Taloy, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
     33.5, 77.0, 385, '2026-10-16 10:46:38', '2026-10-16 11:13:40'
@@ -2427,7 +2427,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Andrea Bautista', 'andreabautista09@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:56:11', '09267917152', '88 Rizal Avenue', 'Antipangol', 'San Carlos City',
+    '2026-10-16 10:56:11', '09267917152', 'Purok 2', 'Antipangol', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5503-3938C-53540', '2026-10-16 11:12:52',
     '2026-10-16 11:12:52', 'Pure Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Antipangol, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
     31.4, 72.2, 394, '2026-10-16 10:50:47', '2026-10-16 11:12:52'
@@ -2482,7 +2482,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jasmine Dela Cruz', 'jasminedelacruz@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 11:01:22', '09275476257', '25 Perez Boulevard', 'Bega', 'San Carlos City',
+    '2026-10-16 11:01:22', '09275476257', 'Purok 2', 'Bega', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-31367172', '2026-10-16 11:22:37',
     '2026-10-16 11:22:37', 'EcoSphere Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Bega, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     17.3, 39.8, 203, '2026-10-16 10:55:41', '2026-10-16 11:22:37'
@@ -2537,7 +2537,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Sofia Castillo', 'sofiacastillo18@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 10:59:30', '09354731818', '42 Mabini Street', 'Dalandan', 'San Carlos City',
+    '2026-10-16 10:59:30', '09354731818', 'Purok 2', 'Dalandan', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P4348276B', '2026-10-16 11:39:28',
     '2026-10-16 11:39:28', 'BioScrap Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Dalandan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 14,
     14.7, 33.8, 217, '2026-10-16 10:57:21', '2026-10-16 11:39:28'
@@ -2592,7 +2592,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Carlo Fernandez', 'carlofernandez07@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 11:04:15', '09454740036', '52 Bugallon-Posadas Street', 'Gamata', 'San Carlos City',
+    '2026-10-16 11:04:15', '09454740036', 'Purok 2', 'Gamata', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '1387-4164-7528-6378', '2026-10-16 11:24:24',
     '2026-10-16 11:24:24', 'TechnoCycle E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Gamata, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 11,
     33.5, 77.0, 390, '2026-10-16 10:58:52', '2026-10-16 11:24:24'
@@ -2647,7 +2647,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Patricia Torres', 'patriciatorres21@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 11:10:56', '09559546409', '19 Montemayor Street', 'Balococ', 'San Carlos City',
+    '2026-10-16 11:10:56', '09559546409', 'Purok 2', 'Balococ', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'C96-78-447235', '2026-10-16 11:39:37',
     '2026-10-16 11:39:37', 'Urban Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Balococ, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
     8.4, 19.3, 99, '2026-10-16 11:05:39', '2026-10-16 11:39:37'
@@ -2702,7 +2702,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Daniel Villanueva', 'danielvillanueva13@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 11:18:04', '09661641849', '31 Gomez Street', 'Palaris', 'San Carlos City',
+    '2026-10-16 11:18:04', '09661641849', '28 Palaris Street', 'Palaris', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '2776-8290770-6', '2026-10-16 11:43:05',
     '2026-10-16 11:43:05', 'San Juan Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Palaris, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
     19.1, 43.9, 256, '2026-10-16 11:14:58', '2026-10-16 11:43:05'
@@ -2757,7 +2757,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Nicole Mendoza', 'nicolemendoza16@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 11:23:16', '09774188992', '76 Roxas Boulevard', 'Rizal', 'San Carlos City',
+    '2026-10-16 11:23:16', '09774188992', '112 Rizal Avenue', 'Rizal', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5532-1727C-67154', '2026-10-16 11:55:23',
     '2026-10-16 11:55:23', 'San Carlos Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Rizal, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
     21.9, 50.4, 234, '2026-10-16 11:19:06', '2026-10-16 11:55:23'
@@ -2812,7 +2812,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Christine Garcia', 'christinegarcia14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:04:44', '09957110622', 'Purok 1, San Carlos-Calasiao Road', 'Mabini', 'San Carlos City',
+    '2026-10-16 12:04:44', '09957110622', '28 Mabini Extension', 'Mabini', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-67887757', '2026-10-16 12:22:45',
     '2026-10-16 12:22:45', 'Pangasinan E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Mabini, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     36.3, 83.5, 388, '2026-10-16 11:59:18', '2026-10-16 12:22:45'
@@ -2867,7 +2867,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jasmine Cruz', 'jasminecruz12@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:24:02', '09183090865', '63 Bonifacio Street', 'Bugallon-Posadas', 'San Carlos City',
+    '2026-10-16 12:24:02', '09183090865', '18 Posadas Street', 'Bugallon-Posadas', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P6038571B', '2026-10-16 12:49:32',
     '2026-10-16 12:49:32', 'Central Luzon Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Bugallon-Posadas, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
     15.4, 35.4, 234, '2026-10-16 12:18:07', '2026-10-16 12:49:32'
@@ -2977,7 +2977,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Melissa Perez', 'melissaperez22@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:36:09', '09204526280', '45 Zamora Street', 'Padilla', 'San Carlos City',
+    '2026-10-16 12:36:09', '09204526280', '24 Montemayor Street', 'Padilla', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'C84-87-786508', '2026-10-16 13:03:44',
     '2026-10-16 13:03:44', 'EcoRecover Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Padilla, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
     20.1, 46.2, 266, '2026-10-16 12:34:09', '2026-10-16 13:03:44'
@@ -3032,7 +3032,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Joshua Lim', 'joshualim15@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:47:48', '09289576076', '8 Del Pilar Street', 'Talang', 'San Carlos City',
+    '2026-10-16 12:47:48', '09289576076', 'Purok 3', 'Talang', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '8752-3846949-2', '2026-10-16 13:08:30',
     '2026-10-16 13:08:30', 'Agri-Tech E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Talang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 12,
     21.8, 50.1, 278, '2026-10-16 12:43:55', '2026-10-16 13:08:30'
@@ -3087,7 +3087,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Emmanuel Santiago', 'emmanuelsantiago04@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:52:39', '09392566777', '29 Tandang Sora Street', 'Coliling', 'San Carlos City',
+    '2026-10-16 12:52:39', '09392566777', 'Purok 4', 'Coliling', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5596-4848C-50687', '2026-10-16 13:20:49',
     '2026-10-16 13:20:49', 'Palaris Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Coliling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
     31.5, 72.4, 365, '2026-10-16 12:47:57', '2026-10-16 13:20:49'
@@ -3142,7 +3142,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Benedict Flores', 'benedictflores23@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 12:54:01', '09475107776', '15 Aurora Boulevard', 'Turac', 'San Carlos City',
+    '2026-10-16 12:54:01', '09475107776', 'Purok 3', 'Turac', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-73771720', '2026-10-16 13:04:33',
     '2026-10-16 13:04:33', 'North Tech Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Turac, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     19.8, 45.5, 223, '2026-10-16 12:51:24', '2026-10-16 13:04:33'
@@ -3197,7 +3197,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Sheila May Rodriguez', 'sheilamayrodriguez09@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 13:02:11', '09497442089', '90 MacArthur Highway', 'Agdao', 'San Carlos City',
+    '2026-10-16 13:02:11', '09497442089', 'Purok 4', 'Agdao', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P9294272B', '2026-10-16 13:19:41',
     '2026-10-16 13:19:41', 'Solid Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Agdao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 10,
     9.4, 21.6, 144, '2026-10-16 12:56:25', '2026-10-16 13:19:41'
@@ -3252,7 +3252,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Leandro Mallari', 'leandromallari15@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-16 13:36:25', '09988132769', '33 Posadas Street', 'Bocboc', 'San Carlos City',
+    '2026-10-16 13:36:25', '09988132769', 'Purok 3, Bocboc Proper', 'Bocboc', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '4585-3881-9486-8611', '2026-10-16 13:48:45',
     '2026-10-16 13:48:45', 'Apex E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Bocboc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 4,
     23.2, 53.4, 252, '2026-10-16 13:31:29', '2026-10-16 13:48:45'
@@ -3307,7 +3307,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Princess Villarin', 'princessvillarin20@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:06:37', '09918658158', '21 Binalatongan Street', 'Mamarlao', 'San Carlos City',
+    '2026-10-17 11:06:37', '09918658158', 'Purok 4', 'Mamarlao', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'A69-95-656932', '2026-10-17 11:19:00',
     '2026-10-17 11:19:00', 'Prime Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Mamarlao, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
     36.3, 83.5, 428, '2026-10-17 11:00:43', '2026-10-17 11:19:00'
@@ -3362,7 +3362,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Roberto Campos', 'robertocampos06@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:07:34', '09928159521', '18 P. Gomez Street', 'Tarece', 'San Carlos City',
+    '2026-10-17 11:07:34', '09928159521', 'Purok 5, Tarece Road', 'Tarece', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '9976-8481188-3', '2026-10-17 11:46:13',
     '2026-10-17 11:46:13', 'Pure Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tarece, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
     19.6, 45.1, 286, '2026-10-17 11:01:46', '2026-10-17 11:46:13'
@@ -3417,7 +3417,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Danielle Coronel', 'daniellecoronel25@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:10:50', '09159745959', '27 Malong Street', 'Magtaking', 'San Carlos City',
+    '2026-10-17 11:10:50', '09159745959', 'Purok 3', 'Magtaking', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5562-4919B-67654', '2026-10-17 11:34:33',
     '2026-10-17 11:34:33', 'EcoSphere Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Magtaking, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     28.4, 65.3, 309, '2026-10-17 11:05:38', '2026-10-17 11:34:33'
@@ -3472,7 +3472,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Arvin Barrameda', 'arvinbarrameda11@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:10:48', '09166363836', '50 Quezon Boulevard', 'Baldog', 'San Carlos City',
+    '2026-10-17 11:10:48', '09166363836', 'Purok 3', 'Baldog', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-82498004', '2026-10-17 11:40:43',
     '2026-10-17 11:40:43', 'BioScrap E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Baldog, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 5,
     9.1, 20.9, 116, '2026-10-17 11:07:48', '2026-10-17 11:40:43'
@@ -3527,7 +3527,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Marielle De Santos', 'marielledesantos17@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:13:54', '09174589533', '38 Mabini Extension', 'Tamayo', 'San Carlos City',
+    '2026-10-17 11:13:54', '09174589533', 'Purok 6, Tamayo Road', 'Tamayo', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P2077581B', '2026-10-17 11:31:20',
     '2026-10-17 11:31:20', 'TechnoCycle Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Tamayo, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
     15.6, 35.9, 236, '2026-10-17 11:10:55', '2026-10-17 11:31:20'
@@ -3582,7 +3582,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Noel Balagtas', 'noelbalagtas08@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:20:44', '09264470105', '14 Palaris Street', 'Tandoc', 'San Carlos City',
+    '2026-10-17 11:20:44', '09264470105', 'Purok 3', 'Tandoc', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '7883-7381-1320-7232', '2026-10-17 11:31:00',
     '2026-10-17 11:31:00', 'Urban Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Tandoc, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 18,
     4.7, 10.8, 137, '2026-10-17 11:16:45', '2026-10-17 11:31:00'
@@ -3637,7 +3637,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Krystine Vergara', 'krystinevergara19@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:30:19', '09278030010', '88 Rizal Avenue', 'Caoayan Kiling', 'San Carlos City',
+    '2026-10-17 11:30:19', '09278030010', 'Purok 4, Caoayan Kiling', 'Caoayan Kiling', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'A72-38-386193', '2026-10-17 12:03:26',
     '2026-10-17 12:03:26', 'San Juan Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Caoayan Kiling, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 16,
     20.8, 47.8, 288, '2026-10-17 11:26:49', '2026-10-17 12:03:26'
@@ -3692,7 +3692,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Paolo Miranda', 'paolomiranda03@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:34:54', '09353768991', '25 Perez Boulevard', 'Ilang', 'San Carlos City',
+    '2026-10-17 11:34:54', '09353768991', 'Purok 3', 'Ilang', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '8657-3141239-9', '2026-10-17 12:08:51',
     '2026-10-17 12:08:51', 'San Carlos E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Ilang, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
     34.9, 80.3, 364, '2026-10-17 11:31:15', '2026-10-17 12:08:51'
@@ -3747,7 +3747,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Maureen Abello', 'maureenabello14@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:40:47', '09452408404', '42 Mabini Street', 'San Pedro-Taloy', 'San Carlos City',
+    '2026-10-17 11:40:47', '09452408404', 'Purok 3', 'San Pedro-Taloy', 'San Carlos City',
     'Pangasinan', '2420', 'Voter\'s ID', '5582-8022A-70515', '2026-10-17 11:48:07',
     '2026-10-17 11:48:07', 'Pangasinan Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at San Pedro-Taloy, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 8,
     6.2, 14.3, 102, '2026-10-17 11:36:16', '2026-10-17 11:48:07'
@@ -3802,7 +3802,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Ryan Panganiban', 'ryanpanganiban26@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:45:29', '09558628588', '52 Bugallon-Posadas Street', 'Antipangol', 'San Carlos City',
+    '2026-10-17 11:45:29', '09558628588', 'Purok 3', 'Antipangol', 'San Carlos City',
     'Pangasinan', '2420', 'Postal ID', 'PID-53868501', '2026-10-17 12:06:18',
     '2026-10-17 12:06:18', 'Central Luzon Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Antipangol, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 13,
     30.0, 69.0, 365, '2026-10-17 11:41:52', '2026-10-17 12:06:18'
@@ -3857,7 +3857,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Jennifer Delos Reyes', 'jenniferdelosreyes10@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 11:59:17', '09665232413', '19 Montemayor Street', 'Bega', 'San Carlos City',
+    '2026-10-17 11:59:17', '09665232413', 'Purok 3', 'Bega', 'San Carlos City',
     'Pangasinan', '2420', 'Passport', 'P2374158B', '2026-10-17 12:34:26',
     '2026-10-17 12:34:26', 'GreenTech Motherboard & Circuit Trade', 'Authorized community e-waste collection and trade depot located at Bega, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 3,
     29.6, 68.1, 311, '2026-10-17 11:55:40', '2026-10-17 12:34:26'
@@ -3912,7 +3912,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Aljon Macapagal', 'aljonmacapagal22@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 12:05:29', '09774761823', '31 Gomez Street', 'Dalandan', 'San Carlos City',
+    '2026-10-17 12:05:29', '09774761823', 'Purok 3', 'Dalandan', 'San Carlos City',
     'Pangasinan', '2420', 'Philippine National ID (PhilSys)', '2124-1659-1508-5051', '2026-10-17 12:37:09',
     '2026-10-17 12:37:09', 'EcoRecover E-Waste Solutions', 'Authorized community e-waste collection and trade depot located at Dalandan, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
     32.6, 75.0, 371, '2026-10-17 12:03:16', '2026-10-17 12:37:09'
@@ -3967,7 +3967,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Francis Caballero', 'franciscaballero05@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 12:14:42', '09953117636', '76 Roxas Boulevard', 'Gamata', 'San Carlos City',
+    '2026-10-17 12:14:42', '09953117636', 'Purok 3', 'Gamata', 'San Carlos City',
     'Pangasinan', '2420', 'Driver\'s License', 'C95-24-691364', '2026-10-17 12:36:20',
     '2026-10-17 12:36:20', 'Agri-Tech Hardware & Component Trading', 'Authorized community e-waste collection and trade depot located at Gamata, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 9,
     20.1, 46.2, 246, '2026-10-17 12:10:03', '2026-10-17 12:36:20'
@@ -4022,7 +4022,7 @@ INSERT INTO `users` (
     `total_weight_diverted`, `total_co2_saved`, `total_impact_score`, `created_at`, `updated_at`
 ) VALUES (
     'Charmaine Ocampo', 'charmaineocampo13@gmail.com', '$2y$10$E1jmhOgbazB6JMIfmyPQx.cGc5Xe7F545yS02oHo65gGgAQvBSZ7W', 'seller', 1, 'verified',
-    '2026-10-17 12:24:36', '09183815034', 'Purok 1, San Carlos-Calasiao Road', 'Balococ', 'San Carlos City',
+    '2026-10-17 12:24:36', '09183815034', 'Purok 3, Balococ', 'Balococ', 'San Carlos City',
     'Pangasinan', '2420', 'UMID / SSS ID', '2876-3747534-5', '2026-10-17 12:56:41',
     '2026-10-17 12:56:41', 'Palaris Electronics Exchange', 'Authorized community e-waste collection and trade depot located at Balococ, San Carlos City. Specializing in computer components, tested parts, and eco-scrap processing.', 6,
     23.9, 55.0, 269, '2026-10-17 12:21:31', '2026-10-17 12:56:41'
