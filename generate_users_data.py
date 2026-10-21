@@ -273,14 +273,14 @@ with zipfile.ZipFile(xlsx_path, 'r') as z:
         is_san_juan = email.lower() in [e.lower() for e in san_juan_emails]
         if is_san_juan:
             barangay = 'San Juan'
-            address_line_1 = san_juan_streets[idx % len(san_juan_streets)]
+            address_line_1 = None
         else:
             barangay = sc_barangays[idx % len(sc_barangays)]
             if barangay in poblacion_streets:
                 streets = poblacion_streets[barangay]
                 address_line_1 = streets[idx % len(streets)]
             else:
-                address_line_1 = f"Purok {(idx % 4) + 1}"
+                address_line_1 = None
             
         address_city = 'San Carlos City'
         address_province = 'Pangasinan'
