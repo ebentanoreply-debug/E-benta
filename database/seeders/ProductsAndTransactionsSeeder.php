@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\AuditLog;
+use App\Models\Commission;
 use App\Models\ImpactLog;
 use App\Models\Listing;
 use App\Models\ListingPhoto;
@@ -14,6 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ProductsAndTransactionsSeeder extends Seeder
@@ -25,7 +28,75 @@ class ProductsAndTransactionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Definition of 14 Products mapped to active sellers
+        // 0. Ensure Core Test Accounts exist (essential for deploy environments)
+        $testSeller = User::firstOrCreate(
+            ['email' => 'seller@test.com'],
+            [
+                'name' => 'Test Seller',
+                'password' => Hash::make('password123'),
+                'role' => 'seller',
+                'is_verified' => true,
+                'id_verification_status' => 'verified',
+                'email_verified_at' => '2026-10-14 08:20:00',
+                'location_verified_at' => '2026-10-14 08:35:00',
+                'address_line_1' => null,
+                'barangay' => 'Mabini',
+                'address_city' => 'San Carlos City',
+                'address_province' => 'Pangasinan',
+                'postal_code' => '2420',
+                'phone' => '09171234567',
+                'created_at' => '2026-10-14 08:14:00',
+                'updated_at' => '2026-10-14 08:45:00',
+            ]
+        );
+
+        // Ensure verified status, role, and password
+        DB::table('users')->where('id', $testSeller->id)->update([
+            'role' => 'seller',
+            'is_verified' => 1,
+            'id_verification_status' => 'verified',
+            'barangay' => 'Mabini',
+            'address_city' => 'San Carlos City',
+            'address_province' => 'Pangasinan',
+            'postal_code' => '2420',
+            'created_at' => '2026-10-14 08:14:00',
+        ]);
+
+        Address::firstOrCreate(
+            ['user_id' => $testSeller->id, 'label' => 'Business Location'],
+            [
+                'address_line_1' => 'Brgy. Mabini',
+                'city' => 'San Carlos City',
+                'state' => 'Pangasinan',
+                'postal_code' => '2420',
+                'country' => 'Philippines',
+                'is_primary' => true,
+                'type' => 'both',
+            ]
+        );
+
+        $testAdmin = User::firstOrCreate(
+            ['email' => 'admin@test.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'is_verified' => true,
+                'id_verification_status' => 'verified',
+                'email_verified_at' => '2026-10-14 08:05:00',
+                'location_verified_at' => '2026-10-14 08:15:00',
+                'address_line_1' => null,
+                'barangay' => 'Palaris',
+                'address_city' => 'San Carlos City',
+                'address_province' => 'Pangasinan',
+                'postal_code' => '2420',
+                'phone' => '09177654321',
+                'created_at' => '2026-10-14 08:00:00',
+                'updated_at' => '2026-10-14 08:30:00',
+            ]
+        );
+
+        // 1. Definition of 19 Products mapped to active sellers
         $productsData = [
             1 => [
                 'seller_email' => 'markyvangarcia@gmail.com', // Mark Yvan Garcia (Tarece)
@@ -668,6 +739,8 @@ class ProductsAndTransactionsSeeder extends Seeder
                 [
                     'bid_amount' => $t['bid_amount'],
                     'proposed_method' => $t['proposed_method'],
+                    'payment_method' => 'cash_pickup',
+                    'cash_received_at' => $t['status'] === 'completed' ? $pickupTime : null,
                     'notes' => $t['notes'],
                     'proposed_pickup_date' => $pickupTime,
                     'pickup_location' => $t['pickup_location'],
@@ -870,6 +943,33 @@ class ProductsAndTransactionsSeeder extends Seeder
                     'created_at' => $pickupTime,
                     'updated_at' => $pickupTime,
                 ]);
+
+                // Create Commission Record for completed transaction
+                $gross = (float) $t['bid_amount'];
+                $rate = 5.0; // Standard 5% platform fee
+                $fee = round($gross * ($rate / 100), 2);
+                $net = round($gross - $fee, 2);
+
+                Commission::updateOrCreate(
+                    [
+                        'offer_id' => $offer->id,
+                    ],
+                    [
+                        'payment_id' => null,
+                        'seller_id' => $seller->id,
+                        'buyer_id' => $buyer->id,
+                        'gross_amount' => $gross,
+                        'commission_rate' => $rate,
+                        'commission_amount' => $fee,
+                        'seller_net_amount' => $net,
+                        'payment_method' => 'cash_pickup',
+                        'status' => 'collected',
+                        'collected_at' => $pickupTime,
+                        'notes' => 'Platform commission for completed handover #' . $offer->id,
+                        'created_at' => $pickupTime,
+                        'updated_at' => $pickupTime,
+                    ]
+                );
             }
         }
 

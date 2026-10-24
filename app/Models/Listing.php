@@ -158,6 +158,21 @@ class Listing extends Model
     }
 
     /**
+     * Get a human-readable title for the listing.
+     */
+    public function getTitleAttribute(): string
+    {
+        if (!empty($this->device_details)) {
+            return $this->device_details;
+        }
+
+        $brand = $this->deviceBrand?->name ?? '';
+        $type = $this->deviceType?->name ?? 'Electronic Device';
+
+        return trim("{$brand} {$type}");
+    }
+
+    /**
      * Backward-compatible photos accessor sourced from listing_photos.
      *
      * @return array<int, string>
