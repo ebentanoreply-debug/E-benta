@@ -103,7 +103,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 7, // Lenovo
                 'device_model_id' => 5, // Lenovo ThinkPad X1
-                'device_details' => 'Lenovo ThinkPad X1',
+                'device_details' => 'Apple iPhone 11',
                 'condition' => 'working',
                 'description' => 'Tested working Lenovo ThinkPad X1 Carbon. Battery health at 82%. Light cosmetic scratches on top lid. Keyboard, trackpad, and screen in excellent condition. Comes with original 65W USB-C charger.',
                 'estimated_weight' => 1.45,
@@ -118,7 +118,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 1, // MacBook Pro 13"
-                'device_details' => 'MacBook Pro 13"',
+                'device_details' => 'Apple iPad Air',
                 'condition' => 'minor_damage',
                 'description' => 'MacBook Pro 13" for repair or parts recovery. Screen turns on with faint vertical line on the right edge. Logic board and ports tested working. Good for display replacement or component harvesting.',
                 'estimated_weight' => 1.58,
@@ -133,7 +133,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 8, // Dell OptiPlex
-                'device_details' => 'Dell OptiPlex PC',
+                'device_details' => 'Samsung Galaxy Tab A8',
                 'condition' => 'working',
                 'description' => 'Decommissioned office desktop unit from San Carlos City administration. Clean motherboard, working cooling fan, fully bootable to BIOS. Perfect for budget home office or student reuse.',
                 'estimated_weight' => 5.26,
@@ -163,7 +163,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
-                'device_details' => 'HP LaserJet Pro',
+                'device_details' => 'Xiaomi Redmi Note 10',
                 'condition' => 'non_functional',
                 'description' => 'Paper jam mechanism error and worn pickup roller. Electronics board, power supply, and stepper motors are intact. Ideal for scrap metal, copper coil harvesting, and spare electronic parts.',
                 'estimated_weight' => 7.80,
@@ -178,7 +178,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 10, // LG
                 'device_model_id' => 18, // LG UltraWide 34"
-                'device_details' => 'LG UltraWide 34"',
+                'device_details' => 'Samsung Galaxy Tab S7',
                 'condition' => 'minor_damage',
                 'description' => 'Intermittent backlight on left side, suspected bad LED strip. Display panel has zero cracks or dead pixels. Power adapter and desktop stand included.',
                 'estimated_weight' => 6.90,
@@ -193,7 +193,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 6, // ASUS VivoBook 15
-                'device_details' => 'ASUS VivoBook 15',
+                'device_details' => 'OPPO Reno 4',
                 'condition' => 'working',
                 'description' => 'Good working condition ASUS VivoBook. Minor hinge stiffness. Screen and keyboard functional. Suitable for online schooling or community computer literacy workshops.',
                 'estimated_weight' => 1.75,
@@ -223,7 +223,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 17, // Dell U2720Q 27"
-                'device_details' => 'Dell UltraSharp 27"',
+                'device_details' => 'Huawei MatePad T10',
                 'condition' => 'minor_damage',
                 'description' => 'High-end 4K IPS monitor with loose HDMI port 1. HDMI port 2 and DisplayPort work flawlessly with crisp colors. Great for photo editing, CAD, or secondary display setup.',
                 'estimated_weight' => 4.40,
@@ -238,7 +238,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 9, // HP Pavilion Desktop
-                'device_details' => 'HP Pavilion Desktop',
+                'device_details' => 'Realme C25',
                 'condition' => 'working',
                 'description' => 'Fully working HP desktop tower. Fresh thermal paste applied. Tested with Windows 10 and diagnostic memory pass. Ideal for home e-waste recovery and reuse.',
                 'estimated_weight' => 5.90,
@@ -268,7 +268,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 3, // Dell XPS 13
-                'device_details' => 'Dell XPS 13',
+                'device_details' => 'Vivo Y20',
                 'condition' => 'working',
                 'description' => 'Compact premium ultrabook. Aluminum chassis with carbon fiber palm rest. Lightweight 1.2kg. Perfect working battery and backlit keyboard.',
                 'estimated_weight' => 1.22,
@@ -315,7 +315,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 2, // MacBook Air M1
-                'device_details' => 'MacBook Air M1',
+                'device_details' => 'Apple iPhone 13 Pro',
                 'condition' => 'minor_damage',
                 'description' => 'Broken left hinge mechanism but Retina display panel and M1 logic board function 100%. Battery health at 88%. Good for student or home workstation.',
                 'estimated_weight' => 1.29,
@@ -330,7 +330,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 2, // Dell
                 'device_model_id' => 8, // Dell OptiPlex
-                'device_details' => 'Dell OptiPlex Micro',
+                'device_details' => 'Apple iPad 9th Gen',
                 'condition' => 'working',
                 'description' => 'Compact mini PC decommissioned from office. Clean internals, tested USB and DisplayPort video output. Fully bootable to Windows 11.',
                 'estimated_weight' => 1.18,
@@ -375,7 +375,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 7, // LG
                 'device_model_id' => 18, // LG UltraWide 34"
-                'device_details' => 'LG Curved Monitor 34"',
+                'device_details' => 'Samsung Galaxy Tab S6 Lite',
                 'condition' => 'minor_damage',
                 'description' => 'Missing desktop stand, includes VESA mounting bracket and power supply. Display panel is completely scratch-free with zero dead pixels.',
                 'estimated_weight' => 6.80,
@@ -392,7 +392,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 9, // Acer
                 'device_model_id' => null,
-                'device_details' => 'Acer Aspire 5',
+                'device_details' => 'Xiaomi Redmi 9A',
                 'condition' => 'working',
                 'description' => 'Working Acer Aspire 5 with Intel Core i3, 8GB RAM, and 256GB SSD. Minor wear on palm rest. Includes original charger.',
                 'estimated_weight' => 1.80,
@@ -407,7 +407,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 12, // Canon
                 'device_model_id' => 25, // Canon PIXMA
-                'device_details' => 'Canon PIXMA G3010',
+                'device_details' => 'Samsung Galaxy A12',
                 'condition' => 'minor_damage',
                 'description' => 'Eco-tank all-in-one printer. Scanner and feeder fully operational; printhead needs minor flushing.',
                 'estimated_weight' => 5.20,
@@ -422,7 +422,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 7, // Mouse
                 'device_brand_id' => 11, // Logitech
                 'device_model_id' => 22, // Logitech MX Master 3
-                'device_details' => 'Logitech MX Master 3',
+                'device_details' => 'Realme 5 Pro',
                 'condition' => 'working',
                 'description' => 'Ergonomic wireless productivity mouse. Electromagnetic scroll wheel and battery tested 100% working.',
                 'estimated_weight' => 0.14,
@@ -437,7 +437,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 9, // Router
                 'device_brand_id' => 13, // TP-Link
                 'device_model_id' => 26, // TP-Link WiFi 6 Router
-                'device_details' => 'TP-Link Archer AX50',
+                'device_details' => 'OPPO F11 Pro',
                 'condition' => 'working',
                 'description' => 'Dual-band Gigabit Wi-Fi 6 wireless router with 4 high-gain antennas. Reset to factory default.',
                 'estimated_weight' => 0.55,
@@ -452,7 +452,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 8, // Sony
                 'device_model_id' => null,
-                'device_details' => 'Sony PlayStation 4 Slim',
+                'device_details' => 'Apple iPad 8th Gen',
                 'condition' => 'working',
                 'description' => 'Clean 500GB PS4 console. Tested HDMI output, optical drive, and Wi-Fi connection. Includes power cord.',
                 'estimated_weight' => 2.10,
@@ -467,7 +467,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 6, // Keyboard
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 20, // Apple Magic Keyboard
-                'device_details' => 'Apple Magic Keyboard',
+                'device_details' => 'Huawei Nova 7i',
                 'condition' => 'working',
                 'description' => 'Slim wireless Bluetooth keyboard with rechargeable battery. Scissor mechanism keys fully responsive.',
                 'estimated_weight' => 0.24,
@@ -482,7 +482,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 3, // Dell XPS 13
-                'device_details' => 'Dell Inspiron 15',
+                'device_details' => 'Samsung Galaxy Tab A7 Lite',
                 'condition' => 'minor_damage',
                 'description' => 'Core i5 8th Gen laptop with 15.6" anti-glare screen. Weak battery (requires AC adapter plugged in).',
                 'estimated_weight' => 2.00,
@@ -512,7 +512,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
-                'device_details' => 'HP DeskJet 2330',
+                'device_details' => 'Infinix Hot 10',
                 'condition' => 'non_functional',
                 'description' => 'Ink cartridge carriage motor jammed. Clean casing, power module, and electronic board for parts harvest.',
                 'estimated_weight' => 3.42,
@@ -527,7 +527,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 9, // Router
                 'device_brand_id' => 14, // Netgear
                 'device_model_id' => 27, // Netgear Nighthawk
-                'device_details' => 'Netgear Nighthawk AC1900',
+                'device_details' => 'Vivo V20',
                 'condition' => 'working',
                 'description' => 'High performance smart Wi-Fi router. 1GHz dual-core processor, USB 3.0 port for external media sharing.',
                 'estimated_weight' => 0.75,
@@ -542,7 +542,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 19, // ASUS ProArt 32"
-                'device_details' => 'ASUS ProArt Display',
+                'device_details' => 'Apple iPad Mini 5',
                 'condition' => 'minor_damage',
                 'description' => 'Color-accurate creator monitor with slight stand swivel looseness. Screen panel 100% scratch-free.',
                 'estimated_weight' => 6.20,
@@ -557,7 +557,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 6, // Keyboard
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 21, // Mechanical RGB Keyboard
-                'device_details' => 'Mechanical Gaming Keyboard',
+                'device_details' => 'Xiaomi Poco X3 Pro',
                 'condition' => 'working',
                 'description' => 'Tactile blue switch mechanical keyboard with per-key RGB backlighting and braided detachable USB cable.',
                 'estimated_weight' => 0.95,
@@ -572,7 +572,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 7, // Mouse
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 23, // Apple Magic Mouse
-                'device_details' => 'Apple Magic Mouse 2',
+                'device_details' => 'Samsung Galaxy J7 Prime',
                 'condition' => 'working',
                 'description' => 'Multi-Touch surface mouse with built-in rechargeable lithium-ion battery. Seamless gesture navigation.',
                 'estimated_weight' => 0.10,
@@ -587,7 +587,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 7, // Lenovo
                 'device_model_id' => 5, // Lenovo ThinkPad X1
-                'device_details' => 'Lenovo IdeaPad 3',
+                'device_details' => 'Lenovo Tab M10',
                 'condition' => 'working',
                 'description' => 'Everyday computing laptop with AMD Ryzen 3, 8GB DDR4 RAM, and 512GB NVMe SSD. Clean webcam with privacy shutter.',
                 'estimated_weight' => 1.70,
@@ -602,7 +602,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 7, // iMac 27"
-                'device_details' => 'iMac 27" Core i5',
+                'device_details' => 'Apple iPad Pro 11"',
                 'condition' => 'minor_damage',
                 'description' => 'All-in-one desktop with 5K Retina display. Internal HDD replaced with fast 500GB SSD. Minor glass chip at corner.',
                 'estimated_weight' => 8.90,
@@ -767,7 +767,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 10, // Cable / Wire
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => null,
-                'device_details' => 'Copper Cable & Power Cord Bundle',
+                'device_details' => 'Apple iPad Mini 4',
                 'condition' => 'non_functional',
                 'description' => 'Heavy lot of assorted copper power cords, VGA/DVI cables, and electrical wiring suited for e-waste scrap recycling.',
                 'estimated_weight' => 4.50,
@@ -782,7 +782,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
-                'device_details' => 'HP LaserJet 1020 Plus',
+                'device_details' => 'Lenovo Yoga Smart Tab',
                 'condition' => 'non_functional',
                 'description' => 'Classic laser printer with bad fuser assembly. Power supply board and copper coils intact for component salvaging.',
                 'estimated_weight' => 5.70,
@@ -797,7 +797,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 11, // iPhone 12
-                'device_details' => 'Apple iPhone 11 64GB',
+                'device_details' => 'Apple iPhone 11',
                 'condition' => 'minor_damage',
                 'description' => 'Liquid Retina HD display with hairline crack in bottom corner. TrueDepth camera and Face ID working, battery health 79%.',
                 'estimated_weight' => 0.19,
@@ -812,7 +812,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 7, // Lenovo
                 'device_model_id' => 5, // Lenovo ThinkPad X1
-                'device_details' => 'Lenovo ThinkCentre Tiny PC',
+                'device_details' => 'Samsung Galaxy Tab S5e',
                 'condition' => 'working',
                 'description' => 'Ultra compact mini workstation PC with Core i5, 16GB DDR4, and 256GB NVMe SSD. Perfect for micro server or POS.',
                 'estimated_weight' => 1.30,
@@ -922,7 +922,7 @@ class ProductsAndTransactionsSeeder extends Seeder
 
         // 3. Transactions for Test Seller (seller@test.com) - Exactly 5 transactions from the 5 Buyers
         $transactions = [
-            // Transaction 8: Jimmy Beltran -> MacBook Air M1 (Product 15) - Oct 14, 2026
+            // Transaction 8: Jimmy Beltran -> Apple iPhone 13 Pro (Product 15) - Oct 14, 2026
             8 => [
                 'product_index' => 15,
                 'buyer_email' => 'jimmybeltran@gmail.com', // Jimmy Beltran
@@ -939,14 +939,14 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'hours_to_respond' => 0.5,
                 'hours_to_pickup' => 18.0,
                 'messages' => [
-                    ['buyer', 'Good morning po Test Seller! Interesado po ako sa MacBook Air M1. Original po ba ang charger nito?'],
-                    ['seller', 'Magandang umaga po Jimmy! Opo, original Apple 30W USB-C charger and cable ang kasama. Fully working ang logic board at keyboard.'],
+                    ['buyer', 'Good morning po Test Seller! Interesado po ako sa Apple iPhone 13 Pro. Original po ba ang charging cable nito?'],
+                    ['seller', 'Magandang umaga po Jimmy! Opo, original Apple USB-C lightning cable ang kasama. 100% working cameras, Face ID, at OLED screen.'],
                     ['buyer', 'Sige po, nag-offer po ako ng ₱11,800. Pwede po ba meetup sa Mabini Plaza mamayang 3 PM?'],
                     ['seller', 'Deal po sir! See you po sa Mabini Plaza. Salamat po!'],
                 ],
             ],
 
-            // Transaction 9: Jerwin Lomibao -> Dell OptiPlex Micro PC (Product 16) - Oct 15, 2026
+            // Transaction 9: Jerwin Lomibao -> Apple iPad 9th Gen (Product 16) - Oct 15, 2026
             9 => [
                 'product_index' => 16,
                 'buyer_email' => 'lomibaojerwin@gmail.com', // Jerwin Lomibao
@@ -963,8 +963,8 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'hours_to_respond' => 0.8,
                 'hours_to_pickup' => 22.0,
                 'messages' => [
-                    ['buyer', 'Hi seller, working po ba lahat ng USB ports at display output nitong Dell OptiPlex Micro?'],
-                    ['seller', 'Hello Jerwin! Yes po, tested and working both DisplayPort and HDMI, bootable sa Windows 11.'],
+                    ['buyer', 'Hi seller, working po ba ang touchscreen at stereo speakers nitong iPad 9th Gen?'],
+                    ['seller', 'Hello Jerwin! Yes po, tested and working ang Retina display, Touch ID, at battery health.'],
                     ['buyer', 'Ayos po! In-offeran ko po kayo ng ₱3,900. Pickup ko po bukas ng umaga.'],
                     ['seller', 'Accepted po sir Jerwin! Naka-pack na po with power adapter. Ingat po sa biyahe.'],
                 ],
@@ -1018,7 +1018,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 12: Abe Austria -> LG UltraWide 34" Monitor (Product 19) - Oct 18, 2026
+            // Transaction 12: Abe Austria -> Samsung Galaxy Tab S6 Lite (Product 19) - Oct 18, 2026
             12 => [
                 'product_index' => 19,
                 'buyer_email' => 'Abeaustria@gmail.com', // Abe Austria
@@ -1035,8 +1035,8 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'hours_to_respond' => 1.0,
                 'hours_to_pickup' => 28.0,
                 'messages' => [
-                    ['buyer', 'Sir available pa po itong LG UltraWide? Kasama po ba power supply at HDMI cable?'],
-                    ['seller', 'Opo Sir Abe! Complete with original power brick at high-speed HDMI cable.'],
+                    ['buyer', 'Sir available pa po itong Galaxy Tab S6 Lite? Kasama po ba ang charger at cable?'],
+                    ['seller', 'Opo Sir Abe! Complete with original fast charger and Type-C cable.'],
                     ['buyer', 'Nag-offer po ako ₱4,500 for testing and pickup.'],
                     ['seller', 'Accepted na po Sir Abe! Available po ako for meetup dito sa Mabini Crossing. Salamat!'],
                 ],

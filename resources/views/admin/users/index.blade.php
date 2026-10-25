@@ -627,22 +627,6 @@
                                                 </button>
                                             </li>
 
-                                            <li>
-                                                <button type="button" class="dropdown-item py-2 edit-user-btn"
-                                                    data-id="{{ $user->id }}"
-                                                    data-name="{{ $user->name }}"
-                                                    data-email="{{ $user->email }}"
-                                                    data-phone="{{ $user->phone ?? '' }}"
-                                                    data-role="{{ $user->role }}"
-                                                    data-barangay="{{ $user->barangay ?? '' }}"
-                                                    data-address-line1="{{ $user->address_line_1 ?? '' }}"
-                                                    data-city="{{ $user->address_city ?? 'San Carlos City' }}"
-                                                    data-province="{{ $user->address_province ?? 'Pangasinan' }}"
-                                                    data-postal-code="{{ $user->postal_code ?? '2420' }}"
-                                                    data-update-url="{{ route('admin.users.update', $user) }}">
-                                                    <i class="fas fa-pen-to-square text-success me-2"></i>Edit Barangay & Profile
-                                                </button>
-                                            </li>
 
                                             @if(!$user->is_verified && ($user->id_photo_url || $user->id_back_photo_url || $user->id_selfie_url || $user->proof_of_address_url || $user->id_type))
                                                 <li>
@@ -1286,112 +1270,7 @@
     </div>
 </div>
 
-<!-- Edit User & Barangay Modal -->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form method="POST" id="editUserForm" class="modal-content shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
-            @csrf
-            @method('PUT')
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #0d9488 0%, #059669 100%); padding: 1.25rem 1.5rem;">
-                <div>
-                    <h5 class="modal-title font-weight-bold mb-0" id="editUserModalLabel" style="font-weight: 800; font-size: 1.15rem;">
-                        <i class="fas fa-user-pen me-2"></i>Edit User Details & Barangay
-                    </h5>
-                    <small style="opacity: 0.9; font-size: 0.8rem;">Update user profile attributes, barangay residency, and contact information.</small>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4" style="background: #ffffff;">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Full Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="editUserName" class="form-control" required style="border-radius: 0.65rem;">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" name="email" id="editUserEmail" class="form-control" required style="border-radius: 0.65rem;">
-                    </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Phone Number</label>
-                        <input type="text" name="phone" id="editUserPhone" class="form-control" placeholder="09xxxxxxxxx" style="border-radius: 0.65rem;">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Role</label>
-                        <select name="role" id="editUserRole" class="form-select" style="border-radius: 0.65rem;">
-                            <option value="buyer">Buyer</option>
-                            <option value="seller">Seller</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12 mt-3 pt-2" style="border-top: 1px dashed #e2e8f0;">
-                        <h6 style="font-size: 0.88rem; font-weight: 800; color: #0f766e;" class="mb-2">
-                            <i class="fas fa-location-dot me-1"></i>Location & Barangay Information
-                        </h6>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">
-                            Barangay <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" name="barangay" id="editUserBarangay" class="form-control" list="sanCarlosBarangaysList" placeholder="e.g. Barangay matagdem" required style="border-radius: 0.65rem; font-weight: 600;">
-                        <datalist id="sanCarlosBarangaysList">
-                            <option value="Barangay matagdem"></option>
-                            <option value="Matagdem"></option>
-                            <option value="Palaris"></option>
-                            <option value="Rizal"></option>
-                            <option value="Mabini"></option>
-                            <option value="Bugallon-Posadas"></option>
-                            <option value="San Juan"></option>
-                            <option value="Bonifacio"></option>
-                            <option value="Doyong"></option>
-                            <option value="Coliling"></option>
-                            <option value="Turac"></option>
-                            <option value="Agdao"></option>
-                            <option value="Abanon"></option>
-                            <option value="Bocboc"></option>
-                            <option value="Mamarlao"></option>
-                            <option value="Tarece"></option>
-                            <option value="Magtaking"></option>
-                            <option value="Baldog"></option>
-                            <option value="Pagal"></option>
-                            <option value="Tamayo"></option>
-                            <option value="Tandoc"></option>
-                            <option value="Caoayan Kiling"></option>
-                            <option value="Ilang"></option>
-                        </datalist>
-                        <small class="text-muted" style="font-size: 0.75rem;">Type or pick from San Carlos City barangays (including <strong>Barangay matagdem</strong>).</small>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Street / Purok Address</label>
-                        <input type="text" name="address_line_1" id="editUserAddressLine1" class="form-control" placeholder="e.g. Purok 1, Matagdem Road" style="border-radius: 0.65rem;">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">City / Municipality</label>
-                        <input type="text" name="address_city" id="editUserCity" class="form-control" value="San Carlos City" style="border-radius: 0.65rem;">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Province</label>
-                        <input type="text" name="address_province" id="editUserProvince" class="form-control" value="Pangasinan" style="border-radius: 0.65rem;">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label font-weight-bold" style="font-size: 0.82rem; font-weight: 700; color: #334155;">Postal Code</label>
-                        <input type="text" name="postal_code" id="editUserPostalCode" class="form-control" value="2420" style="border-radius: 0.65rem;">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.9rem 1.5rem;">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 0.65rem; font-weight: 600;">Cancel</button>
-                <button type="submit" class="btn btn-success text-white" style="border-radius: 0.65rem; font-weight: 700; background: linear-gradient(135deg, #0d9488 0%, #059669 100%); border: none;">
-                    <i class="fas fa-check me-1"></i>Save Changes
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 
 @endsection
 
@@ -1601,28 +1480,6 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteEmailSpan.textContent = this.dataset.email;
             deleteForm.action = `/admin/users/${userId}`;
             deleteModal.show();
-        });
-    // 5. Edit User & Barangay Modal Trigger
-    const editButtons = document.querySelectorAll('.edit-user-btn');
-    const editModalEl = document.getElementById('editUserModal');
-    const editForm = document.getElementById('editUserForm');
-
-    editButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (!editModalEl || !editForm) return;
-
-            document.getElementById('editUserName').value = this.dataset.name || '';
-            document.getElementById('editUserEmail').value = this.dataset.email || '';
-            document.getElementById('editUserPhone').value = this.dataset.phone || '';
-            document.getElementById('editUserRole').value = this.dataset.role || 'buyer';
-            document.getElementById('editUserBarangay').value = this.dataset.barangay || '';
-            document.getElementById('editUserAddressLine1').value = this.dataset.addressLine1 || '';
-            document.getElementById('editUserCity').value = this.dataset.city || 'San Carlos City';
-            document.getElementById('editUserProvince').value = this.dataset.province || 'Pangasinan';
-            document.getElementById('editUserPostalCode').value = this.dataset.postalCode || '2420';
-
-            editForm.action = this.dataset.updateUrl;
-            bootstrap.Modal.getOrCreateInstance(editModalEl).show();
         });
     });
 });
