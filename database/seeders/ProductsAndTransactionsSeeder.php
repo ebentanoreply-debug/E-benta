@@ -96,14 +96,14 @@ class ProductsAndTransactionsSeeder extends Seeder
             ]
         );
 
-        // 1. Definition of 19 Products mapped to active sellers
+        // 1. Definition of 48 Products (1-19 existing with simple names, 20-48 new without images)
         $productsData = [
             1 => [
                 'seller_email' => 'markyvangarcia@gmail.com', // Mark Yvan Garcia (Tarece)
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 7, // Lenovo
                 'device_model_id' => 5, // Lenovo ThinkPad X1
-                'device_details' => 'Intel Core i7 10th Gen, 16GB RAM, 512GB SSD, 14" FHD IPS display',
+                'device_details' => 'Lenovo ThinkPad X1',
                 'condition' => 'working',
                 'description' => 'Tested working Lenovo ThinkPad X1 Carbon. Battery health at 82%. Light cosmetic scratches on top lid. Keyboard, trackpad, and screen in excellent condition. Comes with original 65W USB-C charger.',
                 'estimated_weight' => 1.45,
@@ -118,7 +118,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 1, // MacBook Pro 13"
-                'device_details' => 'Apple MacBook Pro 13-inch (Intel Core i5, 8GB RAM, 256GB SSD, Retina Display)',
+                'device_details' => 'MacBook Pro 13"',
                 'condition' => 'minor_damage',
                 'description' => 'MacBook Pro 13" for repair or parts recovery. Screen turns on with faint vertical line on the right edge. Logic board and ports tested working. Good for display replacement or component harvesting.',
                 'estimated_weight' => 1.58,
@@ -133,7 +133,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 8, // Dell OptiPlex
-                'device_details' => 'Dell OptiPlex Small Form Factor PC (Intel Core i5-8500, 8GB DDR4, 500GB HDD, 200W PSU)',
+                'device_details' => 'Dell OptiPlex PC',
                 'condition' => 'working',
                 'description' => 'Decommissioned office desktop unit from San Carlos City administration. Clean motherboard, working cooling fan, fully bootable to BIOS. Perfect for budget home office or student reuse.',
                 'estimated_weight' => 5.26,
@@ -148,7 +148,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 2, // Samsung
                 'device_model_id' => 12, // Samsung Galaxy S21
-                'device_details' => 'Samsung Galaxy S21 5G, 128GB Storage, Phantom Gray, Exynos 2100',
+                'device_details' => 'Samsung Galaxy S21',
                 'condition' => 'minor_damage',
                 'description' => 'Cracked front glass but AMOLED digitizer and touch function are 100% responsive. Cameras, speakers, wireless charging, and motherboard fully intact. Clean IMEI.',
                 'estimated_weight' => 0.17,
@@ -163,7 +163,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
-                'device_details' => 'HP LaserJet Pro Monochrome Laser Printer (Duplex Printing, USB/Ethernet)',
+                'device_details' => 'HP LaserJet Pro',
                 'condition' => 'non_functional',
                 'description' => 'Paper jam mechanism error and worn pickup roller. Electronics board, power supply, and stepper motors are intact. Ideal for scrap metal, copper coil harvesting, and spare electronic parts.',
                 'estimated_weight' => 7.80,
@@ -178,7 +178,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 10, // LG
                 'device_model_id' => 18, // LG UltraWide 34"
-                'device_details' => 'LG 34-inch UltraWide IPS LED Monitor (2560x1080, HDMI x 2, DisplayPort)',
+                'device_details' => 'LG UltraWide 34"',
                 'condition' => 'minor_damage',
                 'description' => 'Intermittent backlight on left side, suspected bad LED strip. Display panel has zero cracks or dead pixels. Power adapter and desktop stand included.',
                 'estimated_weight' => 6.90,
@@ -193,7 +193,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 6, // ASUS VivoBook 15
-                'device_details' => 'ASUS VivoBook 15 (AMD Ryzen 5, 8GB DDR4, 1TB HDD, 15.6" NanoEdge)',
+                'device_details' => 'ASUS VivoBook 15',
                 'condition' => 'working',
                 'description' => 'Good working condition ASUS VivoBook. Minor hinge stiffness. Screen and keyboard functional. Suitable for online schooling or community computer literacy workshops.',
                 'estimated_weight' => 1.75,
@@ -208,7 +208,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 11, // iPhone 12
-                'device_details' => 'Apple iPhone 12, 64GB, Black, Factory Unlocked',
+                'device_details' => 'Apple iPhone 12',
                 'condition' => 'working',
                 'description' => 'Functional iPhone 12 with 81% battery capacity. Minor scratches on back glass, front screen protected with tempered glass. FaceID, Truetone, and cameras 100% working.',
                 'estimated_weight' => 0.16,
@@ -223,7 +223,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 17, // Dell U2720Q 27"
-                'device_details' => 'Dell UltraSharp U2720Q 27-inch 4K UHD IPS Monitor',
+                'device_details' => 'Dell UltraSharp 27"',
                 'condition' => 'minor_damage',
                 'description' => 'High-end 4K IPS monitor with loose HDMI port 1. HDMI port 2 and DisplayPort work flawlessly with crisp colors. Great for photo editing, CAD, or secondary display setup.',
                 'estimated_weight' => 4.40,
@@ -238,7 +238,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 9, // HP Pavilion Desktop
-                'device_details' => 'HP Pavilion Tower PC (AMD Ryzen 3, 8GB RAM, 128GB SSD + 1TB HDD)',
+                'device_details' => 'HP Pavilion Desktop',
                 'condition' => 'working',
                 'description' => 'Fully working HP desktop tower. Fresh thermal paste applied. Tested with Windows 10 and diagnostic memory pass. Ideal for home e-waste recovery and reuse.',
                 'estimated_weight' => 5.90,
@@ -253,7 +253,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 15, // iPad Air
-                'device_details' => 'Apple iPad Air (3rd Gen), 64GB Wi-Fi, Space Gray, 10.5" Retina',
+                'device_details' => 'Apple iPad Air',
                 'condition' => 'working',
                 'description' => 'Tested iPad Air with good battery backup. Clean iCloud and reset to factory settings. TouchID working. Includes magnetic folio cover and charging cable.',
                 'estimated_weight' => 0.46,
@@ -268,7 +268,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 3, // Dell XPS 13
-                'device_details' => 'Dell XPS 13 9360 (Intel Core i5-7200U, 8GB LPDDR3, 256GB NVMe SSD, InfinityEdge Display)',
+                'device_details' => 'Dell XPS 13',
                 'condition' => 'working',
                 'description' => 'Compact premium ultrabook. Aluminum chassis with carbon fiber palm rest. Lightweight 1.2kg. Perfect working battery and backlit keyboard.',
                 'estimated_weight' => 1.22,
@@ -283,7 +283,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 10, // iPhone 13
-                'device_details' => 'Apple iPhone 13, 128GB, Midnight Blue, Super Retina XDR OLED',
+                'device_details' => 'Apple iPhone 13',
                 'condition' => 'working',
                 'description' => 'Original iPhone 13 in pristine condition. Battery health 87%. Zero scratches or dents. Fully unlocked to all Philippine telco networks.',
                 'estimated_weight' => 0.17,
@@ -298,7 +298,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => 2, // Samsung
                 'device_model_id' => 16, // Galaxy Tab S7
-                'device_details' => 'Samsung Galaxy Tab S7, 128GB, Mystic Black, 11-inch 120Hz Display with S-Pen',
+                'device_details' => 'Samsung Galaxy Tab S7',
                 'condition' => 'working',
                 'description' => 'Samsung flagship tablet with original magnetic S-Pen included. Snapdragon 865+, quad AKG speakers, expandable MicroSD slot. Flawless working unit.',
                 'estimated_weight' => 0.50,
@@ -315,7 +315,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 2, // MacBook Air M1
-                'device_details' => 'Apple MacBook Air 13" M1 (2020), 8GB Unified RAM, 256GB SSD, Space Gray',
+                'device_details' => 'MacBook Air M1',
                 'condition' => 'minor_damage',
                 'description' => 'Broken left hinge mechanism but Retina display panel and M1 logic board function 100%. Battery health at 88%. Good for student or home workstation.',
                 'estimated_weight' => 1.29,
@@ -330,7 +330,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 2, // Dell
                 'device_model_id' => 8, // Dell OptiPlex
-                'device_details' => 'Dell OptiPlex 7070 Micro PC (Intel Core i5-9500T, 16GB DDR4, 256GB NVMe SSD, Original 65W Power Brick)',
+                'device_details' => 'Dell OptiPlex Micro',
                 'condition' => 'working',
                 'description' => 'Compact mini PC decommissioned from office. Clean internals, tested USB and DisplayPort video output. Fully bootable to Windows 11.',
                 'estimated_weight' => 1.18,
@@ -345,7 +345,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 6, // Samsung
                 'device_model_id' => 13, // Samsung Galaxy S22
-                'device_details' => 'Samsung Galaxy S22 5G (Phantom Black, 128GB Storage, 8GB RAM, Dynamic AMOLED 2X)',
+                'device_details' => 'Samsung Galaxy S22',
                 'condition' => 'minor_damage',
                 'description' => 'Hairline crack on back glass cover. Dynamic AMOLED screen, camera modules, ultrasonic fingerprint scanner, and motherboard are completely flawless.',
                 'estimated_weight' => 0.17,
@@ -360,7 +360,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 14, // iPad Pro 12.9"
-                'device_details' => 'Apple iPad Pro 12.9" 3rd Gen (64GB Wi-Fi, Space Gray, A12X Bionic, ProMotion 120Hz)',
+                'device_details' => 'iPad Pro 12.9"',
                 'condition' => 'working',
                 'description' => 'Clean iCloud account, Face ID fully working, flawless 120Hz Liquid Retina display. Great for digital drawing, multimedia, and repair spare parts.',
                 'estimated_weight' => 0.63,
@@ -375,7 +375,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 7, // LG
                 'device_model_id' => 18, // LG UltraWide 34"
-                'device_details' => 'LG UltraWide 34-inch Curved IPS LED Monitor (3440x1440 UWQHD, HDMI x 2, DisplayPort)',
+                'device_details' => 'LG Curved Monitor 34"',
                 'condition' => 'minor_damage',
                 'description' => 'Missing desktop stand, includes VESA mounting bracket and power supply. Display panel is completely scratch-free with zero dead pixels.',
                 'estimated_weight' => 6.80,
@@ -384,6 +384,443 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'intended_action' => 'sell',
                 'image_filename' => 'product_19.jpg',
                 'minutes_after_user' => 140,
+            ],
+
+            // 29 NEW PRODUCTS (Indices 20 - 48) WITHOUT IMAGES (image_filename = null)
+            20 => [
+                'seller_email' => 'munozantonette5@gmail.com',
+                'device_type_id' => 1, // Laptop
+                'device_brand_id' => 9, // Acer
+                'device_model_id' => null,
+                'device_details' => 'Acer Aspire 5',
+                'condition' => 'working',
+                'description' => 'Working Acer Aspire 5 with Intel Core i3, 8GB RAM, and 256GB SSD. Minor wear on palm rest. Includes original charger.',
+                'estimated_weight' => 1.80,
+                'carbon_footprint' => 4.14,
+                'suggested_price' => 3500.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 45,
+            ],
+            21 => [
+                'seller_email' => 'dg3946922@gmail.com',
+                'device_type_id' => 8, // Printer
+                'device_brand_id' => 12, // Canon
+                'device_model_id' => 25, // Canon PIXMA
+                'device_details' => 'Canon PIXMA G3010',
+                'condition' => 'minor_damage',
+                'description' => 'Eco-tank all-in-one printer. Scanner and feeder fully operational; printhead needs minor flushing.',
+                'estimated_weight' => 5.20,
+                'carbon_footprint' => 11.96,
+                'suggested_price' => 1200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 30,
+            ],
+            22 => [
+                'seller_email' => 'jhomaribeltran423@gmail.com',
+                'device_type_id' => 7, // Mouse
+                'device_brand_id' => 11, // Logitech
+                'device_model_id' => 22, // Logitech MX Master 3
+                'device_details' => 'Logitech MX Master 3',
+                'condition' => 'working',
+                'description' => 'Ergonomic wireless productivity mouse. Electromagnetic scroll wheel and battery tested 100% working.',
+                'estimated_weight' => 0.14,
+                'carbon_footprint' => 0.32,
+                'suggested_price' => 1500.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 50,
+            ],
+            23 => [
+                'seller_email' => 'jensenvincejavier@gmail.com',
+                'device_type_id' => 9, // Router
+                'device_brand_id' => 13, // TP-Link
+                'device_model_id' => 26, // TP-Link WiFi 6 Router
+                'device_details' => 'TP-Link Archer AX50',
+                'condition' => 'working',
+                'description' => 'Dual-band Gigabit Wi-Fi 6 wireless router with 4 high-gain antennas. Reset to factory default.',
+                'estimated_weight' => 0.55,
+                'carbon_footprint' => 1.27,
+                'suggested_price' => 1400.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 35,
+            ],
+            24 => [
+                'seller_email' => 'markrejierosario12@gmail.com',
+                'device_type_id' => 2, // Desktop Computer
+                'device_brand_id' => 8, // Sony
+                'device_model_id' => null,
+                'device_details' => 'Sony PlayStation 4 Slim',
+                'condition' => 'working',
+                'description' => 'Clean 500GB PS4 console. Tested HDMI output, optical drive, and Wi-Fi connection. Includes power cord.',
+                'estimated_weight' => 2.10,
+                'carbon_footprint' => 4.83,
+                'suggested_price' => 4500.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 40,
+            ],
+            25 => [
+                'seller_email' => 'marklhemuel50@gmail.com',
+                'device_type_id' => 6, // Keyboard
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 20, // Apple Magic Keyboard
+                'device_details' => 'Apple Magic Keyboard',
+                'condition' => 'working',
+                'description' => 'Slim wireless Bluetooth keyboard with rechargeable battery. Scissor mechanism keys fully responsive.',
+                'estimated_weight' => 0.24,
+                'carbon_footprint' => 0.55,
+                'suggested_price' => 1800.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 55,
+            ],
+            26 => [
+                'seller_email' => 'vincentagbuya67@gmail.com',
+                'device_type_id' => 1, // Laptop
+                'device_brand_id' => 3, // Dell
+                'device_model_id' => 3, // Dell XPS 13
+                'device_details' => 'Dell Inspiron 15',
+                'condition' => 'minor_damage',
+                'description' => 'Core i5 8th Gen laptop with 15.6" anti-glare screen. Weak battery (requires AC adapter plugged in).',
+                'estimated_weight' => 2.00,
+                'carbon_footprint' => 4.60,
+                'suggested_price' => 2800.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 25,
+            ],
+            27 => [
+                'seller_email' => 'christianbautista@gmail.com',
+                'device_type_id' => 4, // Tablet
+                'device_brand_id' => 2, // Samsung
+                'device_model_id' => 16, // Galaxy Tab S7
+                'device_details' => 'Samsung Galaxy Tab A8',
+                'condition' => 'working',
+                'description' => '10.5-inch entertainment tablet with quad speakers and Dolby Atmos. Good battery health, clean firmware.',
+                'estimated_weight' => 0.51,
+                'carbon_footprint' => 1.17,
+                'suggested_price' => 2500.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 48,
+            ],
+            28 => [
+                'seller_email' => 'marygracedelacruz@gmail.com',
+                'device_type_id' => 8, // Printer
+                'device_brand_id' => 4, // HP
+                'device_model_id' => 24, // HP LaserJet Pro
+                'device_details' => 'HP DeskJet 2330',
+                'condition' => 'non_functional',
+                'description' => 'Ink cartridge carriage motor jammed. Clean casing, power module, and electronic board for parts harvest.',
+                'estimated_weight' => 3.42,
+                'carbon_footprint' => 7.87,
+                'suggested_price' => 450.00,
+                'intended_action' => 'recycle',
+                'image_filename' => null,
+                'minutes_after_user' => 32,
+            ],
+            29 => [
+                'seller_email' => 'kyleramos17@gmail.com',
+                'device_type_id' => 9, // Router
+                'device_brand_id' => 14, // Netgear
+                'device_model_id' => 27, // Netgear Nighthawk
+                'device_details' => 'Netgear Nighthawk AC1900',
+                'condition' => 'working',
+                'description' => 'High performance smart Wi-Fi router. 1GHz dual-core processor, USB 3.0 port for external media sharing.',
+                'estimated_weight' => 0.75,
+                'carbon_footprint' => 1.73,
+                'suggested_price' => 1100.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 60,
+            ],
+            30 => [
+                'seller_email' => 'miashielagraceuson@gmail.com',
+                'device_type_id' => 5, // Monitor
+                'device_brand_id' => 5, // ASUS
+                'device_model_id' => 19, // ASUS ProArt 32"
+                'device_details' => 'ASUS ProArt Display',
+                'condition' => 'minor_damage',
+                'description' => 'Color-accurate creator monitor with slight stand swivel looseness. Screen panel 100% scratch-free.',
+                'estimated_weight' => 6.20,
+                'carbon_footprint' => 14.26,
+                'suggested_price' => 3200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 42,
+            ],
+            31 => [
+                'seller_email' => 'darlyngarcia711@gmail.com',
+                'device_type_id' => 6, // Keyboard
+                'device_brand_id' => 5, // ASUS
+                'device_model_id' => 21, // Mechanical RGB Keyboard
+                'device_details' => 'Mechanical Gaming Keyboard',
+                'condition' => 'working',
+                'description' => 'Tactile blue switch mechanical keyboard with per-key RGB backlighting and braided detachable USB cable.',
+                'estimated_weight' => 0.95,
+                'carbon_footprint' => 2.19,
+                'suggested_price' => 900.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 38,
+            ],
+            32 => [
+                'seller_email' => 'daisygeegarcia21@gmail.com',
+                'device_type_id' => 7, // Mouse
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 23, // Apple Magic Mouse
+                'device_details' => 'Apple Magic Mouse 2',
+                'condition' => 'working',
+                'description' => 'Multi-Touch surface mouse with built-in rechargeable lithium-ion battery. Seamless gesture navigation.',
+                'estimated_weight' => 0.10,
+                'carbon_footprint' => 0.23,
+                'suggested_price' => 1200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 52,
+            ],
+            33 => [
+                'seller_email' => 'markyvangarcia@gmail.com',
+                'device_type_id' => 1, // Laptop
+                'device_brand_id' => 7, // Lenovo
+                'device_model_id' => 5, // Lenovo ThinkPad X1
+                'device_details' => 'Lenovo IdeaPad 3',
+                'condition' => 'working',
+                'description' => 'Everyday computing laptop with AMD Ryzen 3, 8GB DDR4 RAM, and 512GB NVMe SSD. Clean webcam with privacy shutter.',
+                'estimated_weight' => 1.70,
+                'carbon_footprint' => 3.91,
+                'suggested_price' => 3800.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 65,
+            ],
+            34 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 2, // Desktop Computer
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 7, // iMac 27"
+                'device_details' => 'iMac 27" Core i5',
+                'condition' => 'minor_damage',
+                'description' => 'All-in-one desktop with 5K Retina display. Internal HDD replaced with fast 500GB SSD. Minor glass chip at corner.',
+                'estimated_weight' => 8.90,
+                'carbon_footprint' => 20.47,
+                'suggested_price' => 6500.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 70,
+            ],
+            35 => [
+                'seller_email' => 'carriojoseph2489@gmail.com',
+                'device_type_id' => 3, // Smartphone
+                'device_brand_id' => 2, // Samsung
+                'device_model_id' => 12, // Samsung Galaxy S21
+                'device_details' => 'Samsung Galaxy S20 FE',
+                'condition' => 'working',
+                'description' => 'Tested 120Hz Super AMOLED display, 128GB internal storage, triple rear camera setup. Openline to all SIMs.',
+                'estimated_weight' => 0.19,
+                'carbon_footprint' => 0.44,
+                'suggested_price' => 3200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 45,
+            ],
+            36 => [
+                'seller_email' => 'jimboymalican12@gmail.com',
+                'device_type_id' => 8, // Printer
+                'device_brand_id' => 12, // Canon
+                'device_model_id' => 25, // Canon PIXMA
+                'device_details' => 'Canon imageCLASS LBP6030w',
+                'condition' => 'working',
+                'description' => 'Compact monochrome laser printer with built-in Wi-Fi. Fast 18 ppm output, sharp black text reproduction.',
+                'estimated_weight' => 5.00,
+                'carbon_footprint' => 11.50,
+                'suggested_price' => 1800.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 40,
+            ],
+            37 => [
+                'seller_email' => 'rhonamaebulatao@gmail.com',
+                'device_type_id' => 5, // Monitor
+                'device_brand_id' => 3, // Dell
+                'device_model_id' => 17, // Dell U2720Q 27"
+                'device_details' => 'Dell SE2422H 24" Monitor',
+                'condition' => 'working',
+                'description' => '24-inch Full HD 75Hz monitor with AMD FreeSync. Slim bezels, HDMI and VGA input ports. Includes power cord.',
+                'estimated_weight' => 3.80,
+                'carbon_footprint' => 8.74,
+                'suggested_price' => 2100.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 35,
+            ],
+            38 => [
+                'seller_email' => 'Abeaustria@gmail.com',
+                'device_type_id' => 1, // Laptop
+                'device_brand_id' => 4, // HP
+                'device_model_id' => 4, // HP Pavilion 15
+                'device_details' => 'HP Pavilion 15 Gaming',
+                'condition' => 'minor_damage',
+                'description' => 'Core i5 gaming laptop with GTX 1050 graphics. Minor keycap wear on W-A-S-D keys; cooling and motherboard excellent.',
+                'estimated_weight' => 2.20,
+                'carbon_footprint' => 5.06,
+                'suggested_price' => 4200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 50,
+            ],
+            39 => [
+                'seller_email' => 'munozantonette5@gmail.com',
+                'device_type_id' => 4, // Tablet
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 15, // iPad Air
+                'device_details' => 'Apple iPad Mini 5',
+                'condition' => 'working',
+                'description' => '7.9-inch Retina display with True Tone. A12 Bionic chip, 64GB storage, supports Apple Pencil 1st Gen.',
+                'estimated_weight' => 0.30,
+                'carbon_footprint' => 0.69,
+                'suggested_price' => 3600.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 60,
+            ],
+            40 => [
+                'seller_email' => 'dg3946922@gmail.com',
+                'device_type_id' => 7, // Mouse
+                'device_brand_id' => 11, // Logitech
+                'device_model_id' => 22, // Logitech MX Master 3
+                'device_details' => 'Logitech G502 Hero',
+                'condition' => 'working',
+                'description' => 'High performance gaming mouse with 25K DPI sensor, 11 programmable buttons, and adjustable weight tuning.',
+                'estimated_weight' => 0.12,
+                'carbon_footprint' => 0.28,
+                'suggested_price' => 850.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 45,
+            ],
+            41 => [
+                'seller_email' => 'jhomaribeltran423@gmail.com',
+                'device_type_id' => 9, // Router
+                'device_brand_id' => 13, // TP-Link
+                'device_model_id' => 26, // TP-Link WiFi 6 Router
+                'device_details' => 'TP-Link Deco Mesh WiFi',
+                'condition' => 'working',
+                'description' => 'Whole home mesh Wi-Fi system unit. Seamless roaming coverage up to 2,000 sq ft. Tested and updated to latest firmware.',
+                'estimated_weight' => 0.60,
+                'carbon_footprint' => 1.38,
+                'suggested_price' => 1600.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 55,
+            ],
+            42 => [
+                'seller_email' => 'jensenvincejavier@gmail.com',
+                'device_type_id' => 5, // Monitor
+                'device_brand_id' => 8, // Sony
+                'device_model_id' => null,
+                'device_details' => 'Sony Bravia LED Display 32"',
+                'condition' => 'minor_damage',
+                'description' => '32-inch commercial display panel for CCTV or secondary monitor setup. Missing remote, buttons on panel fully functional.',
+                'estimated_weight' => 5.50,
+                'carbon_footprint' => 12.65,
+                'suggested_price' => 2400.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 48,
+            ],
+            43 => [
+                'seller_email' => 'markrejierosario12@gmail.com',
+                'device_type_id' => 2, // Desktop Computer
+                'device_brand_id' => 3, // Dell
+                'device_model_id' => 8, // Dell OptiPlex
+                'device_details' => 'Dell OptiPlex 3050 Tower',
+                'condition' => 'working',
+                'description' => 'Core i5 7th Gen business desktop tower, 8GB DDR4 RAM, 1TB HDD. Clean power supply unit and working DVD-RW drive.',
+                'estimated_weight' => 7.20,
+                'carbon_footprint' => 16.56,
+                'suggested_price' => 2200.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 60,
+            ],
+            44 => [
+                'seller_email' => 'marklhemuel50@gmail.com',
+                'device_type_id' => 3, // Smartphone
+                'device_brand_id' => 2, // Samsung
+                'device_model_id' => 12, // Samsung Galaxy S21
+                'device_details' => 'Samsung Galaxy A52',
+                'condition' => 'minor_damage',
+                'description' => '6.5" Super AMOLED 90Hz phone. Minor glass back scuffs. Quad 64MP OIS camera, speakers, and fast charging tested.',
+                'estimated_weight' => 0.19,
+                'carbon_footprint' => 0.44,
+                'suggested_price' => 2100.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 40,
+            ],
+            45 => [
+                'seller_email' => 'vincentagbuya67@gmail.com',
+                'device_type_id' => 10, // Cable / Wire
+                'device_brand_id' => 3, // Dell
+                'device_model_id' => null,
+                'device_details' => 'Copper Cable & Power Cord Bundle',
+                'condition' => 'non_functional',
+                'description' => 'Heavy lot of assorted copper power cords, VGA/DVI cables, and electrical wiring suited for e-waste scrap recycling.',
+                'estimated_weight' => 4.50,
+                'carbon_footprint' => 10.35,
+                'suggested_price' => 350.00,
+                'intended_action' => 'recycle',
+                'image_filename' => null,
+                'minutes_after_user' => 30,
+            ],
+            46 => [
+                'seller_email' => 'christianbautista@gmail.com',
+                'device_type_id' => 8, // Printer
+                'device_brand_id' => 4, // HP
+                'device_model_id' => 24, // HP LaserJet Pro
+                'device_details' => 'HP LaserJet 1020 Plus',
+                'condition' => 'non_functional',
+                'description' => 'Classic laser printer with bad fuser assembly. Power supply board and copper coils intact for component salvaging.',
+                'estimated_weight' => 5.70,
+                'carbon_footprint' => 13.11,
+                'suggested_price' => 600.00,
+                'intended_action' => 'recycle',
+                'image_filename' => null,
+                'minutes_after_user' => 52,
+            ],
+            47 => [
+                'seller_email' => 'marygracedelacruz@gmail.com',
+                'device_type_id' => 3, // Smartphone
+                'device_brand_id' => 1, // Apple
+                'device_model_id' => 11, // iPhone 12
+                'device_details' => 'Apple iPhone 11 64GB',
+                'condition' => 'minor_damage',
+                'description' => 'Liquid Retina HD display with hairline crack in bottom corner. TrueDepth camera and Face ID working, battery health 79%.',
+                'estimated_weight' => 0.19,
+                'carbon_footprint' => 0.44,
+                'suggested_price' => 3900.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 36,
+            ],
+            48 => [
+                'seller_email' => 'seller@test.com',
+                'device_type_id' => 2, // Desktop Computer
+                'device_brand_id' => 7, // Lenovo
+                'device_model_id' => 5, // Lenovo ThinkPad X1
+                'device_details' => 'Lenovo ThinkCentre Tiny PC',
+                'condition' => 'working',
+                'description' => 'Ultra compact mini workstation PC with Core i5, 16GB DDR4, and 256GB NVMe SSD. Perfect for micro server or POS.',
+                'estimated_weight' => 1.30,
+                'carbon_footprint' => 2.99,
+                'suggested_price' => 2600.00,
+                'intended_action' => 'sell',
+                'image_filename' => null,
+                'minutes_after_user' => 85,
             ],
         ];
 
@@ -396,22 +833,29 @@ class ProductsAndTransactionsSeeder extends Seeder
                 continue;
             }
 
-            // Calculate timestamp strictly after seller's creation / verification
+            // Calculate timestamp strictly after seller's creation, bounded to Oct 14 - 18, 2026
             $sellerCreated = Carbon::parse($seller->created_at ?? '2026-10-14 19:26:32');
-            $listingCreated = (clone $sellerCreated)->addMinutes($p['minutes_after_user'])->toDateTimeString();
+            if ($sellerCreated->lt(Carbon::create(2026, 10, 14, 8, 0, 0))) {
+                $sellerCreated = Carbon::create(2026, 10, 14, 9, 30, 0);
+            } elseif ($sellerCreated->gt(Carbon::create(2026, 10, 18, 21, 0, 0))) {
+                $sellerCreated = Carbon::create(2026, 10, 18, 16, 45, 0);
+            }
 
-            // Image path
-            $photoUrl = '/storage/listings/' . $p['image_filename'];
+            $listingCreated = (clone $sellerCreated)->addMinutes($p['minutes_after_user']);
+            if ($listingCreated->hour >= 22) {
+                $listingCreated = (clone $sellerCreated)->subMinutes(10);
+            }
+            $createdStr = $listingCreated->toDateTimeString();
 
             $listing = Listing::updateOrCreate(
                 [
                     'user_id' => $seller->id,
-                    'device_model_id' => $p['device_model_id'],
+                    'device_details' => $p['device_details'],
                 ],
                 [
                     'device_type_id' => $p['device_type_id'],
                     'device_brand_id' => $p['device_brand_id'],
-                    'device_details' => $p['device_details'],
+                    'device_model_id' => $p['device_model_id'] ?? null,
                     'condition' => $p['condition'],
                     'description' => $p['description'],
                     'estimated_weight' => $p['estimated_weight'],
@@ -421,34 +865,38 @@ class ProductsAndTransactionsSeeder extends Seeder
                     'handover_preference' => 'pickup',
                     'pickup_address' => 'Brgy. ' . ($seller->barangay ?? 'San Carlos City') . ', San Carlos City, Pangasinan 2420',
                     'status' => 'available',
-                    'photos' => [$photoUrl],
                 ]
             );
 
             // Force timestamps in DB
             DB::table('listings')->where('id', $listing->id)->update([
-                'created_at' => $listingCreated,
-                'updated_at' => $listingCreated,
+                'created_at' => $createdStr,
+                'updated_at' => $createdStr,
             ]);
 
-            // Connect listing_photos row
-            $photo = ListingPhoto::updateOrCreate(
-                [
-                    'listing_id' => $listing->id,
-                    'photo_url' => $photoUrl,
-                ],
-                [
-                    'sort_order' => 0,
-                ]
-            );
+            // Connect listing_photos row ONLY if image_filename is provided
+            if (!empty($p['image_filename'])) {
+                $photoUrl = '/storage/listings/' . $p['image_filename'];
+                $photo = ListingPhoto::updateOrCreate(
+                    [
+                        'listing_id' => $listing->id,
+                        'photo_url' => $photoUrl,
+                    ],
+                    [
+                        'sort_order' => 0,
+                    ]
+                );
 
-            DB::table('listing_photos')->where('id', $photo->id)->update([
-                'created_at' => $listingCreated,
-                'updated_at' => $listingCreated,
-            ]);
+                DB::table('listing_photos')->where('id', $photo->id)->update([
+                    'created_at' => $createdStr,
+                    'updated_at' => $createdStr,
+                ]);
+            } else {
+                // Products without images should have no photos in listing_photos
+                DB::table('listing_photos')->where('listing_id', $listing->id)->delete();
+            }
 
-            // Log Product Creation in Audit Logs
-            $deviceModelName = DB::table('device_models')->where('id', $p['device_model_id'])->value('model_name') ?? 'Device';
+            // Log Product Creation in Audit Logs with simple name
             DB::table('audit_logs')->updateOrInsert(
                 [
                     'user_id' => $seller->id,
@@ -457,11 +905,11 @@ class ProductsAndTransactionsSeeder extends Seeder
                     'model_id' => $listing->id,
                 ],
                 [
-                    'description' => "User {$seller->name} posted new e-waste listing: {$deviceModelName} ({$p['condition']}) for {$p['intended_action']}",
+                    'description' => "User {$seller->name} posted new e-waste listing: {$p['device_details']} ({$p['condition']}) for {$p['intended_action']}",
                     'ip_address' => $seller->ip_address ?? '136.158.12.83',
                     'user_agent' => $seller->user_agent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0',
-                    'created_at' => $listingCreated,
-                    'updated_at' => $listingCreated,
+                    'created_at' => $createdStr,
+                    'updated_at' => $createdStr,
                 ]
             );
 
