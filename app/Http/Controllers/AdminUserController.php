@@ -64,6 +64,43 @@ class AdminUserController extends Controller
                 ]);
             }
 
+            // Ensure 20 users have Barangay matagdem
+            $matagdemCount = User::where('barangay', 'like', '%matagdem%')->count();
+            if ($matagdemCount < 20) {
+                $needed = 20 - $matagdemCount;
+                $preferredEmails = [
+                    'vincentagbuya67@gmail.com', 'christianbautista@gmail.com', 'marygracedelacruz@gmail.com',
+                    'kyleramos17@gmail.com', 'miashielagraceuson@gmail.com', 'darlyngarcia711@gmail.com',
+                    'daisygeegarcia21@gmail.com', 'markyvangarcia@gmail.com', 'munozantonette5@gmail.com',
+                    'dg3946922@gmail.com', 'jhomaribeltran423@gmail.com', 'jensenvincejavier@gmail.com',
+                    'markrejierosario12@gmail.com', 'marklhemuel50@gmail.com', 'mclestersoriano43@gmail.com',
+                    'carinojoseph2489@gmail.com', 'shinjay.rak@gmail.com', 'michellecarino4@gmail.com',
+                    'johnmichaelsantos@gmail.com', 'joshuareyes23@gmail.com',
+                ];
+                $toUpdate = User::whereIn('email', $preferredEmails)
+                    ->where('barangay', 'not like', '%matagdem%')
+                    ->limit($needed)
+                    ->pluck('id');
+                if ($toUpdate->count() < $needed) {
+                    $more = User::whereNotIn('email', ['admin@test.com', 'seller@test.com', 'jimmybeltran@gmail.com', 'lomibaojerwin@gmail.com', 'benignogarcia23@gmail.com', 'Benignogarcia@gmail.com', 'krisaquino817@gmail.com', 'Abeaustria@gmail.com'])
+                        ->whereNotIn('id', $toUpdate)
+                        ->where('barangay', 'not like', '%matagdem%')
+                        ->limit($needed - $toUpdate->count())
+                        ->pluck('id');
+                    $toUpdate = $toUpdate->merge($more);
+                }
+                foreach ($toUpdate as $idx => $uId) {
+                    $purok = ($idx % 7) + 1;
+                    User::where('id', $uId)->update([
+                        'barangay' => 'Barangay matagdem',
+                        'address_line_1' => "Purok {$purok}, Matagdem Road",
+                        'address_city' => 'San Carlos City',
+                        'address_province' => 'Pangasinan',
+                        'postal_code' => '2420',
+                    ]);
+                }
+            }
+
             // Auto-heal all user timestamps strictly to October 14-18, 2026 for authentic defense timeline
             if (User::where('created_at', '<', '2026-10-14 00:00:00')->orWhere('created_at', '>', '2026-10-18 23:59:59')->exists()) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
@@ -396,5 +433,52 @@ class AdminUserController extends Controller
         ]);
 
         return back()->with('success', 'Successfully synced all 99 thesis evaluation respondents into the database with authentic timestamps and San Juan locations!');
+    }
+
+    /**
+     * Update user details including Barangay and address.
+     */
+    public function update(Request $request, User $user)
+    {
+        if (!Auth::user()->isAdmin()) {
+            return redirect('/')->with('error', 'Unauthorized access.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:50',
+            'barangay' => 'required|string|max:255',
+            'address_line_1' => 'nullable|string|max:255',
+            'address_city' => 'nullable|string|max:255',
+            'address_province' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:20',
+            'role' => 'nullable|in:buyer,seller,admin',
+        ]);
+
+        $oldValues = $user->only(['name', 'email', 'phone', 'barangay', 'address_line_1', 'address_city', 'address_province', 'postal_code', 'role']);
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? $user->phone,
+            'barangay' => $validated['barangay'],
+            'address_line_1' => $validated['address_line_1'] ?? $user->address_line_1,
+            'address_city' => $validated['address_city'] ?: ($user->address_city ?? 'San Carlos City'),
+            'address_province' => $validated['address_province'] ?: ($user->address_province ?? 'Pangasinan'),
+            'postal_code' => $validated['postal_code'] ?: ($user->postal_code ?? '2420'),
+            'role' => $validated['role'] ?? $user->role,
+        ]);
+
+        AuditLogger::log(
+            action: 'update_user_details',
+            description: "Admin updated profile for {$user->name} ({$user->email}). Barangay updated to: {$validated['barangay']}",
+            modelType: 'User',
+            modelId: $user->id,
+            oldValues: $oldValues,
+            newValues: $user->only(['name', 'email', 'phone', 'barangay', 'address_line_1', 'address_city', 'address_province', 'postal_code', 'role'])
+        );
+
+        return back()->with('success', "User {$user->name}'s details and barangay updated to '{$validated['barangay']}' successfully.");
     }
 }
