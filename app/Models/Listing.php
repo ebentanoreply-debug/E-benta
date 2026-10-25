@@ -255,6 +255,14 @@ class Listing extends Model
     }
 
     /**
+     * Accessor for $listing->is_bulk_lot attribute.
+     */
+    public function getIsBulkLotAttribute(): bool
+    {
+        return $this->listing_type === 'bulk_lot';
+    }
+
+    /**
      * Check if listing is available for offers.
      */
     public function isAvailable(): bool

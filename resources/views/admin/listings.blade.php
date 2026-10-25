@@ -135,13 +135,20 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <div style="width: 36px; height: 36px; border-radius: 0.6rem; background: rgba(13, 148, 136, 0.1); color: #0d9488; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
-                                                <i class="fas {{ $listing->is_bulk_lot ? 'fa-boxes-stacked' : 'fa-laptop' }}"></i>
+                                            <div style="width: 38px; height: 38px; border-radius: 0.6rem; background: {{ $listing->is_bulk_lot ? 'rgba(234, 88, 12, 0.12)' : 'rgba(13, 148, 136, 0.1)' }}; color: {{ $listing->is_bulk_lot ? '#ea580c' : '#0d9488' }}; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0;">
+                                                <i class="fas {{ $listing->is_bulk_lot ? 'fa-boxes-stacked' : ($listing->deviceType?->name === 'Tablet' ? 'fa-tablet-alt' : 'fa-mobile-alt') }}"></i>
                                             </div>
                                             <div>
-                                                <strong style="color: #0f172a; font-size: 0.92rem; display: block;">
-                                                    {{ $listing->title ?: ($listing->category ?: ($listing->deviceType ? $listing->deviceType->name : 'Item')) }}
-                                                </strong>
+                                                <div class="d-flex align-items-center flex-wrap gap-1">
+                                                    <strong style="color: #0f172a; font-size: 0.92rem; display: block;">
+                                                        {{ $listing->title ?: ($listing->category ?: ($listing->deviceType ? $listing->deviceType->name : 'Item')) }}
+                                                    </strong>
+                                                    @if($listing->is_bulk_lot)
+                                                        <span class="badge" style="background: rgba(234, 88, 12, 0.15); color: #c2410c; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                                                            Bulk Lot ({{ $listing->lot_item_count ?? 'Scrap' }} pcs)
+                                                        </span>
+                                                    @endif
+                                                </div>
                                                 <small class="text-muted text-capitalize">{{ str_replace('_', ' ', $listing->condition) }}</small>
                                             </div>
                                         </div>

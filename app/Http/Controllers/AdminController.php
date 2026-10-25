@@ -330,13 +330,25 @@ class AdminController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        $query = Listing::with(['seller', 'offers']);
+        $query = Listing::with(['seller', 'offers', 'deviceType']);
 
-        if ($request->has('status') && $request->status) {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $listings = $query->paginate(15);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('device_details', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('seller', function ($sq) use ($search) {
+                      $sq->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $listings = $query->latest('id')->paginate(15)->withQueryString();
 
         return view('admin.listings', compact('listings'));
     }
