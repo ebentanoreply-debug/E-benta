@@ -1,10 +1,5 @@
 <?php
 
-use App\Models\DeviceBrand;
-use App\Models\DeviceModel;
-use App\Models\DeviceType;
-use App\Models\Listing;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
@@ -14,10 +9,11 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * Simplifies existing product names, adds 29 realistic e-waste products without images
-     * (ready for manual image upload/editing by the seller), inserts corresponding audit logs
-     * strictly dated between October 14 and 18, 2026 based on the seller's account creation date,
-     * and guarantees photo/image edits are excluded from audit logs.
+     * 1. Simplifies product names.
+     * 2. Spreads the 5 test seller transactions & offers across different dates (Oct 14, 15, 16, 17, 18).
+     * 3. Adds 29 products without images spread across different dates (Oct 14, 15, 16, 17, 18).
+     * 4. Updates all audit logs, notifications, and messages to match the varied dates.
+     * 5. Excludes photo/image edits from audit logs.
      */
     public function up(): void
     {
@@ -64,8 +60,222 @@ return new class extends Migration
             }
         }
 
-        // 2. Definition of exactly 29 additional products WITHOUT images
+        // 2. SPREAD OFFERS & TRANSACTIONS ACROSS DIFFERENT DATES (Oct 14, 15, 16, 17, 18)
+        $offerSchedules = [
+            'jimmybeltran@gmail.com' => [
+                'day' => '2026-10-14',
+                'listing_time' => '2026-10-14 08:44:00',
+                'offer_time' => '2026-10-14 10:44:00',
+                'accepted_time' => '2026-10-14 11:14:00',
+                'pickup_time' => '2026-10-14 16:30:00',
+                'completed_time' => '2026-10-14 16:45:00',
+            ],
+            'lomibaojerwin@gmail.com' => [
+                'day' => '2026-10-15',
+                'listing_time' => '2026-10-15 09:15:00',
+                'offer_time' => '2026-10-15 11:25:00',
+                'accepted_time' => '2026-10-15 12:10:00',
+                'pickup_time' => '2026-10-15 16:45:00',
+                'completed_time' => '2026-10-15 17:00:00',
+            ],
+            'benignogarcia23@gmail.com' => [
+                'day' => '2026-10-16',
+                'listing_time' => '2026-10-16 09:30:00',
+                'offer_time' => '2026-10-16 13:40:00',
+                'accepted_time' => '2026-10-16 14:20:00',
+                'pickup_time' => '2026-10-16 17:15:00',
+                'completed_time' => '2026-10-16 17:30:00',
+            ],
+            'krisaquino' => [
+                'day' => '2026-10-17',
+                'listing_time' => '2026-10-17 10:00:00',
+                'offer_time' => '2026-10-17 14:15:00',
+                'accepted_time' => '2026-10-17 14:55:00',
+                'pickup_time' => '2026-10-17 17:45:00',
+                'completed_time' => null,
+            ],
+            'Abeaustria@gmail.com' => [
+                'day' => '2026-10-18',
+                'listing_time' => '2026-10-18 10:30:00',
+                'offer_time' => '2026-10-18 15:50:00',
+                'accepted_time' => '2026-10-18 16:30:00',
+                'pickup_time' => '2026-10-18 18:20:00',
+                'completed_time' => null,
+            ],
+        ];
+
+        foreach ($offerSchedules as $emailKey => $sched) {
+            $buyer = DB::table('users')->where('email', 'like', "%{$emailKey}%")->first();
+            if (!$buyer) {
+                continue;
+            }
+
+            $offer = DB::table('offers')->where('buyer_id', $buyer->id)->first();
+            if (!$offer) {
+                continue;
+            }
+
+            // Update Offer timestamps
+            DB::table('offers')->where('id', $offer->id)->update([
+                'created_at' => $sched['offer_time'],
+                'responded_at' => $sched['accepted_time'],
+                'cash_received_at' => $sched['completed_time'] ? $sched['pickup_time'] : null,
+                'proposed_pickup_date' => $sched['pickup_time'],
+                'updated_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+            ]);
+
+            // Update Listing timestamps
+            DB::table('listings')->where('id', $offer->listing_id)->update([
+                'created_at' => $sched['listing_time'],
+                'matched_at' => $sched['accepted_time'],
+                'pickup_scheduled_at' => $sched['pickup_time'],
+                'picked_up_at' => $sched['completed_time'] ? $sched['pickup_time'] : null,
+                'delivered_at' => $sched['completed_time'] ? $sched['pickup_time'] : null,
+                'processed_at' => $sched['completed_time'] ? Carbon::parse($sched['pickup_time'])->addHours(2)->toDateTimeString() : null,
+                'updated_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+            ]);
+
+            if (Schema::hasTable('listing_photos')) {
+                DB::table('listing_photos')->where('listing_id', $offer->listing_id)->update([
+                    'created_at' => $sched['listing_time'],
+                    'updated_at' => $sched['listing_time'],
+                ]);
+            }
+
+            // Update Audit Logs for this offer
+            if (Schema::hasTable('audit_logs')) {
+                // 1. offer_created
+                DB::table('audit_logs')
+                    ->where('model_type', 'Offer')
+                    ->where('model_id', $offer->id)
+                    ->where('action', 'offer_created')
+                    ->update([
+                        'created_at' => $sched['offer_time'],
+                        'updated_at' => $sched['offer_time'],
+                    ]);
+
+                // 2. offer_accepted
+                DB::table('audit_logs')
+                    ->where('model_type', 'Offer')
+                    ->where('model_id', $offer->id)
+                    ->where('action', 'offer_accepted')
+                    ->update([
+                        'created_at' => $sched['accepted_time'],
+                        'updated_at' => $sched['accepted_time'],
+                    ]);
+
+                // 3. item_picked_up (Listing)
+                if ($sched['completed_time']) {
+                    DB::table('audit_logs')
+                        ->where('model_type', 'Listing')
+                        ->where('model_id', $offer->listing_id)
+                        ->where('action', 'item_picked_up')
+                        ->update([
+                            'created_at' => $sched['pickup_time'],
+                            'updated_at' => $sched['pickup_time'],
+                        ]);
+
+                    // 4. transaction_completed
+                    DB::table('audit_logs')
+                        ->where('model_type', 'Offer')
+                        ->where('model_id', $offer->id)
+                        ->where('action', 'transaction_completed')
+                        ->update([
+                            'created_at' => $sched['completed_time'],
+                            'updated_at' => $sched['completed_time'],
+                        ]);
+                }
+
+                // 5. listing_created
+                DB::table('audit_logs')
+                    ->where('model_type', 'Listing')
+                    ->where('model_id', $offer->listing_id)
+                    ->where('action', 'listing_created')
+                    ->update([
+                        'created_at' => $sched['listing_time'],
+                        'updated_at' => $sched['listing_time'],
+                    ]);
+            }
+
+            // Update messages
+            if (Schema::hasTable('messages')) {
+                $messages = DB::table('messages')->where('offer_id', $offer->id)->orderBy('id')->get();
+                $msgBase = Carbon::parse($sched['offer_time']);
+                foreach ($messages as $mIdx => $msg) {
+                    $mTime = (clone $msgBase)->addMinutes(($mIdx + 1) * 8)->toDateTimeString();
+                    DB::table('messages')->where('id', $msg->id)->update([
+                        'created_at' => $mTime,
+                        'updated_at' => $mTime,
+                        'read_at' => Carbon::parse($mTime)->addMinute()->toDateTimeString(),
+                    ]);
+                }
+            }
+
+            // Update notifications
+            if (Schema::hasTable('notifications')) {
+                DB::table('notifications')
+                    ->where('type', 'offer_received')
+                    ->where(function ($q) use ($offer) {
+                        $q->where('data->offer_id', $offer->id)
+                          ->orWhere('data', 'like', '%"offer_id":' . $offer->id . '%')
+                          ->orWhere('data', 'like', '%"offer_id": "' . $offer->id . '"%');
+                    })
+                    ->update([
+                        'created_at' => $sched['offer_time'],
+                        'updated_at' => $sched['offer_time'],
+                    ]);
+
+                DB::table('notifications')
+                    ->where('type', 'offer_accepted')
+                    ->where(function ($q) use ($offer) {
+                        $q->where('data->offer_id', $offer->id)
+                          ->orWhere('data', 'like', '%"offer_id":' . $offer->id . '%')
+                          ->orWhere('data', 'like', '%"offer_id": "' . $offer->id . '"%');
+                    })
+                    ->update([
+                        'created_at' => $sched['accepted_time'],
+                        'updated_at' => $sched['accepted_time'],
+                    ]);
+
+                if ($sched['completed_time']) {
+                    DB::table('notifications')
+                        ->where('type', 'transaction_completed')
+                        ->where(function ($q) use ($offer) {
+                            $q->where('data->offer_id', $offer->id)
+                              ->orWhere('data', 'like', '%"offer_id":' . $offer->id . '%')
+                              ->orWhere('data', 'like', '%"offer_id": "' . $offer->id . '"%');
+                        })
+                        ->update([
+                            'created_at' => $sched['pickup_time'],
+                            'updated_at' => $sched['pickup_time'],
+                        ]);
+                }
+            }
+
+            // Update impact logs, commissions, payments
+            if (Schema::hasTable('impact_logs')) {
+                DB::table('impact_logs')->where('offer_id', $offer->id)->update([
+                    'created_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                    'updated_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                ]);
+            }
+            if (Schema::hasTable('commissions')) {
+                DB::table('commissions')->where('offer_id', $offer->id)->update([
+                    'created_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                    'updated_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                ]);
+            }
+            if (Schema::hasTable('payments')) {
+                DB::table('payments')->where('offer_id', $offer->id)->update([
+                    'created_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                    'updated_at' => $sched['completed_time'] ?? $sched['accepted_time'],
+                ]);
+            }
+        }
+
+        // 3. DEFINITION OF 29 NEW PRODUCTS WITHOUT IMAGES (DISTRIBUTED ACROSS OCT 14 - OCT 18)
         $newProducts = [
+            // --- October 14, 2026 ---
             1 => [
                 'seller_email' => 'munozantonette5@gmail.com',
                 'type_name' => 'Laptop',
@@ -78,7 +288,7 @@ return new class extends Migration
                 'carbon_footprint' => 4.14,
                 'suggested_price' => 3500.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-14 09:30:00',
             ],
             2 => [
                 'seller_email' => 'dg3946922@gmail.com',
@@ -92,7 +302,7 @@ return new class extends Migration
                 'carbon_footprint' => 11.96,
                 'suggested_price' => 1200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 30,
+                'exact_date' => '2026-10-14 11:15:00',
             ],
             3 => [
                 'seller_email' => 'jhomaribeltran423@gmail.com',
@@ -106,7 +316,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.32,
                 'suggested_price' => 1500.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 50,
+                'exact_date' => '2026-10-14 13:45:00',
             ],
             4 => [
                 'seller_email' => 'jensenvincejavier@gmail.com',
@@ -120,7 +330,7 @@ return new class extends Migration
                 'carbon_footprint' => 1.27,
                 'suggested_price' => 1400.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 35,
+                'exact_date' => '2026-10-14 15:20:00',
             ],
             5 => [
                 'seller_email' => 'markrejierosario12@gmail.com',
@@ -134,7 +344,7 @@ return new class extends Migration
                 'carbon_footprint' => 4.83,
                 'suggested_price' => 4500.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-14 16:50:00',
             ],
             6 => [
                 'seller_email' => 'marklhemuel50@gmail.com',
@@ -148,8 +358,10 @@ return new class extends Migration
                 'carbon_footprint' => 0.55,
                 'suggested_price' => 1800.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 55,
+                'exact_date' => '2026-10-14 18:10:00',
             ],
+
+            // --- October 15, 2026 ---
             7 => [
                 'seller_email' => 'vincentagbuya67@gmail.com',
                 'type_name' => 'Laptop',
@@ -162,7 +374,7 @@ return new class extends Migration
                 'carbon_footprint' => 4.60,
                 'suggested_price' => 2800.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 25,
+                'exact_date' => '2026-10-15 08:45:00',
             ],
             8 => [
                 'seller_email' => 'christianbautista@gmail.com',
@@ -176,7 +388,7 @@ return new class extends Migration
                 'carbon_footprint' => 1.17,
                 'suggested_price' => 2500.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 48,
+                'exact_date' => '2026-10-15 10:20:00',
             ],
             9 => [
                 'seller_email' => 'marygracedelacruz@gmail.com',
@@ -190,7 +402,7 @@ return new class extends Migration
                 'carbon_footprint' => 7.87,
                 'suggested_price' => 450.00,
                 'intended_action' => 'recycle',
-                'minutes_after_user' => 32,
+                'exact_date' => '2026-10-15 12:35:00',
             ],
             10 => [
                 'seller_email' => 'kyleramos17@gmail.com',
@@ -204,7 +416,7 @@ return new class extends Migration
                 'carbon_footprint' => 1.73,
                 'suggested_price' => 1100.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-15 14:15:00',
             ],
             11 => [
                 'seller_email' => 'miashielagraceuson@gmail.com',
@@ -218,7 +430,7 @@ return new class extends Migration
                 'carbon_footprint' => 14.26,
                 'suggested_price' => 3200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 42,
+                'exact_date' => '2026-10-15 16:00:00',
             ],
             12 => [
                 'seller_email' => 'darlyngarcia711@gmail.com',
@@ -232,8 +444,10 @@ return new class extends Migration
                 'carbon_footprint' => 2.19,
                 'suggested_price' => 900.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 38,
+                'exact_date' => '2026-10-15 17:30:00',
             ],
+
+            // --- October 16, 2026 ---
             13 => [
                 'seller_email' => 'daisygeegarcia21@gmail.com',
                 'type_name' => 'Mouse',
@@ -246,7 +460,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.23,
                 'suggested_price' => 1200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 52,
+                'exact_date' => '2026-10-16 09:10:00',
             ],
             14 => [
                 'seller_email' => 'markyvangarcia@gmail.com',
@@ -260,7 +474,7 @@ return new class extends Migration
                 'carbon_footprint' => 3.91,
                 'suggested_price' => 3800.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 65,
+                'exact_date' => '2026-10-16 10:45:00',
             ],
             15 => [
                 'seller_email' => 'seller@test.com',
@@ -274,7 +488,7 @@ return new class extends Migration
                 'carbon_footprint' => 20.47,
                 'suggested_price' => 6500.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 70,
+                'exact_date' => '2026-10-16 12:15:00',
             ],
             16 => [
                 'seller_email' => 'carriojoseph2489@gmail.com',
@@ -288,7 +502,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.44,
                 'suggested_price' => 3200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-16 14:00:00',
             ],
             17 => [
                 'seller_email' => 'jimboymalican12@gmail.com',
@@ -302,7 +516,7 @@ return new class extends Migration
                 'carbon_footprint' => 11.50,
                 'suggested_price' => 1800.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-16 15:40:00',
             ],
             18 => [
                 'seller_email' => 'rhonamaebulatao@gmail.com',
@@ -316,8 +530,10 @@ return new class extends Migration
                 'carbon_footprint' => 8.74,
                 'suggested_price' => 2100.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 35,
+                'exact_date' => '2026-10-16 17:15:00',
             ],
+
+            // --- October 17, 2026 ---
             19 => [
                 'seller_email' => 'Abeaustria@gmail.com',
                 'type_name' => 'Laptop',
@@ -330,7 +546,7 @@ return new class extends Migration
                 'carbon_footprint' => 5.06,
                 'suggested_price' => 4200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 50,
+                'exact_date' => '2026-10-17 08:30:00',
             ],
             20 => [
                 'seller_email' => 'munozantonette5@gmail.com',
@@ -344,7 +560,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.69,
                 'suggested_price' => 3600.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-17 10:15:00',
             ],
             21 => [
                 'seller_email' => 'dg3946922@gmail.com',
@@ -358,7 +574,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.28,
                 'suggested_price' => 850.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-17 11:50:00',
             ],
             22 => [
                 'seller_email' => 'jhomaribeltran423@gmail.com',
@@ -372,7 +588,7 @@ return new class extends Migration
                 'carbon_footprint' => 1.38,
                 'suggested_price' => 1600.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 55,
+                'exact_date' => '2026-10-17 13:30:00',
             ],
             23 => [
                 'seller_email' => 'jensenvincejavier@gmail.com',
@@ -386,7 +602,7 @@ return new class extends Migration
                 'carbon_footprint' => 12.65,
                 'suggested_price' => 2400.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 48,
+                'exact_date' => '2026-10-17 15:10:00',
             ],
             24 => [
                 'seller_email' => 'markrejierosario12@gmail.com',
@@ -400,8 +616,10 @@ return new class extends Migration
                 'carbon_footprint' => 16.56,
                 'suggested_price' => 2200.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-17 16:45:00',
             ],
+
+            // --- October 18, 2026 ---
             25 => [
                 'seller_email' => 'marklhemuel50@gmail.com',
                 'type_name' => 'Smartphone',
@@ -414,7 +632,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.44,
                 'suggested_price' => 2100.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-18 09:15:00',
             ],
             26 => [
                 'seller_email' => 'vincentagbuya67@gmail.com',
@@ -428,7 +646,7 @@ return new class extends Migration
                 'carbon_footprint' => 10.35,
                 'suggested_price' => 350.00,
                 'intended_action' => 'recycle',
-                'minutes_after_user' => 30,
+                'exact_date' => '2026-10-18 10:40:00',
             ],
             27 => [
                 'seller_email' => 'christianbautista@gmail.com',
@@ -442,7 +660,7 @@ return new class extends Migration
                 'carbon_footprint' => 13.11,
                 'suggested_price' => 600.00,
                 'intended_action' => 'recycle',
-                'minutes_after_user' => 52,
+                'exact_date' => '2026-10-18 12:20:00',
             ],
             28 => [
                 'seller_email' => 'marygracedelacruz@gmail.com',
@@ -456,7 +674,7 @@ return new class extends Migration
                 'carbon_footprint' => 0.44,
                 'suggested_price' => 3900.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 36,
+                'exact_date' => '2026-10-18 14:10:00',
             ],
             29 => [
                 'seller_email' => 'seller@test.com',
@@ -470,11 +688,11 @@ return new class extends Migration
                 'carbon_footprint' => 2.99,
                 'suggested_price' => 2600.00,
                 'intended_action' => 'sell',
-                'minutes_after_user' => 85,
+                'exact_date' => '2026-10-18 16:00:00',
             ],
         ];
 
-        // 3. Cache device lookup tables for efficient mapping
+        // Cache device lookup tables
         $deviceTypes = DB::table('device_types')->pluck('id', 'name');
         $deviceBrands = DB::table('device_brands')->pluck('id', 'name');
         $deviceModels = DB::table('device_models')->pluck('id', 'model_name');
@@ -487,30 +705,15 @@ return new class extends Migration
                 continue;
             }
 
-            // Resolve relational Foreign Keys safely
             $typeId = $deviceTypes[$p['type_name']] ?? (DB::table('device_types')->first()->id ?? 1);
             $brandId = $deviceBrands[$p['brand_name']] ?? (DB::table('device_brands')->first()->id ?? 1);
             $modelId = !empty($p['model_name']) && isset($deviceModels[$p['model_name']])
                 ? $deviceModels[$p['model_name']]
                 : null;
 
-            // Strict timestamp logic: depends on when seller account was created, between Oct 14 and Oct 18, 2026
-            $sellerCreated = $seller->created_at ? Carbon::parse($seller->created_at) : Carbon::create(2026, 10, 14, 10, 0, 0);
-            if ($sellerCreated->lt(Carbon::create(2026, 10, 14, 8, 0, 0))) {
-                $sellerCreated = Carbon::create(2026, 10, 14, 9, 30, 0);
-            } elseif ($sellerCreated->gt(Carbon::create(2026, 10, 18, 21, 0, 0))) {
-                $sellerCreated = Carbon::create(2026, 10, 18, 16, 45, 0);
-            }
-
-            $listingCreated = (clone $sellerCreated)->addMinutes($p['minutes_after_user']);
-            if ($listingCreated->hour >= 22) {
-                $listingCreated = (clone $sellerCreated)->subMinutes(10);
-            }
-            $createdStr = $listingCreated->format('Y-m-d H:i:s');
-
+            $createdStr = $p['exact_date'];
             $pickupAddress = 'Brgy. ' . ($seller->barangay ?? 'San Carlos City') . ', San Carlos City, Pangasinan 2420';
 
-            // Check if listing already exists to ensure idempotency
             $existing = DB::table('listings')
                 ->where('user_id', $seller->id)
                 ->where('device_details', $p['device_details'])
@@ -540,35 +743,42 @@ return new class extends Migration
                 DB::table('listings')->where('id', $listingId)->update([
                     'device_details' => $p['device_details'],
                     'created_at' => $createdStr,
+                    'updated_at' => $createdStr,
                 ]);
             }
 
-            // CRITICAL: Ensure NO photos exist for these 29 products so user can edit and add images manually!
-            DB::table('listing_photos')->where('listing_id', $listingId)->delete();
+            // Ensure NO photos exist for these 29 products so user can edit and add images manually
+            if (Schema::hasTable('listing_photos')) {
+                DB::table('listing_photos')->where('listing_id', $listingId)->delete();
+            }
 
-            // Insert audit log strictly dated October 14 - 18, 2026 based on the seller's account timestamp
-            DB::table('audit_logs')->updateOrInsert(
-                [
-                    'user_id' => $seller->id,
-                    'action' => 'listing_created',
-                    'model_type' => 'Listing',
-                    'model_id' => $listingId,
-                ],
-                [
-                    'description' => "User {$seller->name} posted new e-waste listing: {$p['device_details']} ({$p['condition']}) for {$p['intended_action']}",
-                    'ip_address' => $seller->ip_address ?? '136.158.12.83',
-                    'user_agent' => $seller->user_agent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0',
-                    'created_at' => $createdStr,
-                    'updated_at' => $createdStr,
-                ]
-            );
+            // Insert audit log with the exact varied date
+            if (Schema::hasTable('audit_logs')) {
+                DB::table('audit_logs')->updateOrInsert(
+                    [
+                        'user_id' => $seller->id,
+                        'action' => 'listing_created',
+                        'model_type' => 'Listing',
+                        'model_id' => $listingId,
+                    ],
+                    [
+                        'description' => "User {$seller->name} posted new e-waste listing: {$p['device_details']} ({$p['condition']}) for {$p['intended_action']}",
+                        'ip_address' => $seller->ip_address ?? '136.158.12.83',
+                        'user_agent' => $seller->user_agent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0',
+                        'created_at' => $createdStr,
+                        'updated_at' => $createdStr,
+                    ]
+                );
+            }
         }
 
         // 4. Exclude any photo/image modification entries from audit logs
-        DB::table('audit_logs')
-            ->where('model_type', 'ListingPhoto')
-            ->orWhere('action', 'like', '%photo%')
-            ->delete();
+        if (Schema::hasTable('audit_logs')) {
+            DB::table('audit_logs')
+                ->where('model_type', 'ListingPhoto')
+                ->orWhere('action', 'like', '%photo%')
+                ->delete();
+        }
     }
 
     /**
@@ -576,6 +786,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Safe no-op to preserve listing customizations
+        // Safe no-op
     }
 };

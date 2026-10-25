@@ -232,6 +232,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::post('/admin/users/seed-contact-responses', [AdminUserController::class, 'seedContactResponses'])->name('admin.users.seed-contact-responses');
         Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+        Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
         Route::post('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
         Route::post('/admin/users/{user}/toggle-verification', [AdminUserController::class, 'toggleVerification'])->name('admin.users.toggle-verification');
         Route::post('/admin/users/{user}/update-role', [AdminUserController::class, 'updateRole'])->name('admin.users.update-role');

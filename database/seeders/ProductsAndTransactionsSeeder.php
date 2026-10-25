@@ -309,7 +309,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'minutes_after_user' => 52,
             ],
 
-            // 5 Products specifically for seller@test.com (Test Seller)
+            // 5 Products specifically for seller@test.com (Test Seller) - Spread across Oct 14 to Oct 18
             15 => [
                 'seller_email' => 'seller@test.com',
                 'device_type_id' => 1, // Laptop
@@ -323,7 +323,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 12500.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_15.jpg',
-                'minutes_after_user' => 30,
+                'exact_date' => '2026-10-14 08:44:00',
             ],
             16 => [
                 'seller_email' => 'seller@test.com',
@@ -338,7 +338,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4200.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_16.jpg',
-                'minutes_after_user' => 55,
+                'exact_date' => '2026-10-15 09:15:00',
             ],
             17 => [
                 'seller_email' => 'seller@test.com',
@@ -353,7 +353,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 6500.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_17.jpg',
-                'minutes_after_user' => 80,
+                'exact_date' => '2026-10-16 09:30:00',
             ],
             18 => [
                 'seller_email' => 'seller@test.com',
@@ -368,7 +368,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 9000.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_18.jpg',
-                'minutes_after_user' => 110,
+                'exact_date' => '2026-10-17 10:00:00',
             ],
             19 => [
                 'seller_email' => 'seller@test.com',
@@ -383,10 +383,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4800.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_19.jpg',
-                'minutes_after_user' => 140,
+                'exact_date' => '2026-10-18 10:30:00',
             ],
 
-            // 29 NEW PRODUCTS (Indices 20 - 48) WITHOUT IMAGES (image_filename = null)
+            // 29 NEW PRODUCTS (Indices 20 - 48) WITHOUT IMAGES - Spread across Oct 14 - Oct 18
             20 => [
                 'seller_email' => 'munozantonette5@gmail.com',
                 'device_type_id' => 1, // Laptop
@@ -400,7 +400,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3500.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-14 09:30:00',
             ],
             21 => [
                 'seller_email' => 'dg3946922@gmail.com',
@@ -415,7 +415,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 30,
+                'exact_date' => '2026-10-14 11:15:00',
             ],
             22 => [
                 'seller_email' => 'jhomaribeltran423@gmail.com',
@@ -430,7 +430,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1500.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 50,
+                'exact_date' => '2026-10-14 13:45:00',
             ],
             23 => [
                 'seller_email' => 'jensenvincejavier@gmail.com',
@@ -445,7 +445,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1400.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 35,
+                'exact_date' => '2026-10-14 15:20:00',
             ],
             24 => [
                 'seller_email' => 'markrejierosario12@gmail.com',
@@ -460,7 +460,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4500.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-14 16:50:00',
             ],
             25 => [
                 'seller_email' => 'marklhemuel50@gmail.com',
@@ -475,7 +475,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1800.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 55,
+                'exact_date' => '2026-10-14 18:10:00',
             ],
             26 => [
                 'seller_email' => 'vincentagbuya67@gmail.com',
@@ -490,7 +490,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2800.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 25,
+                'exact_date' => '2026-10-15 08:45:00',
             ],
             27 => [
                 'seller_email' => 'christianbautista@gmail.com',
@@ -505,7 +505,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2500.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 48,
+                'exact_date' => '2026-10-15 10:20:00',
             ],
             28 => [
                 'seller_email' => 'marygracedelacruz@gmail.com',
@@ -520,7 +520,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 450.00,
                 'intended_action' => 'recycle',
                 'image_filename' => null,
-                'minutes_after_user' => 32,
+                'exact_date' => '2026-10-15 12:35:00',
             ],
             29 => [
                 'seller_email' => 'kyleramos17@gmail.com',
@@ -535,7 +535,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1100.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-15 14:15:00',
             ],
             30 => [
                 'seller_email' => 'miashielagraceuson@gmail.com',
@@ -550,7 +550,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 42,
+                'exact_date' => '2026-10-15 16:00:00',
             ],
             31 => [
                 'seller_email' => 'darlyngarcia711@gmail.com',
@@ -565,7 +565,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 900.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 38,
+                'exact_date' => '2026-10-15 17:30:00',
             ],
             32 => [
                 'seller_email' => 'daisygeegarcia21@gmail.com',
@@ -580,7 +580,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 52,
+                'exact_date' => '2026-10-16 09:10:00',
             ],
             33 => [
                 'seller_email' => 'markyvangarcia@gmail.com',
@@ -595,7 +595,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3800.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 65,
+                'exact_date' => '2026-10-16 10:45:00',
             ],
             34 => [
                 'seller_email' => 'seller@test.com',
@@ -610,7 +610,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 6500.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 70,
+                'exact_date' => '2026-10-16 12:15:00',
             ],
             35 => [
                 'seller_email' => 'carriojoseph2489@gmail.com',
@@ -625,7 +625,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-16 14:00:00',
             ],
             36 => [
                 'seller_email' => 'jimboymalican12@gmail.com',
@@ -640,7 +640,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1800.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-16 15:40:00',
             ],
             37 => [
                 'seller_email' => 'rhonamaebulatao@gmail.com',
@@ -655,7 +655,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2100.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 35,
+                'exact_date' => '2026-10-16 17:15:00',
             ],
             38 => [
                 'seller_email' => 'Abeaustria@gmail.com',
@@ -670,7 +670,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 50,
+                'exact_date' => '2026-10-17 08:30:00',
             ],
             39 => [
                 'seller_email' => 'munozantonette5@gmail.com',
@@ -685,7 +685,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3600.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-17 10:15:00',
             ],
             40 => [
                 'seller_email' => 'dg3946922@gmail.com',
@@ -700,7 +700,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 850.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 45,
+                'exact_date' => '2026-10-17 11:50:00',
             ],
             41 => [
                 'seller_email' => 'jhomaribeltran423@gmail.com',
@@ -715,7 +715,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 1600.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 55,
+                'exact_date' => '2026-10-17 13:30:00',
             ],
             42 => [
                 'seller_email' => 'jensenvincejavier@gmail.com',
@@ -730,7 +730,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2400.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 48,
+                'exact_date' => '2026-10-17 15:10:00',
             ],
             43 => [
                 'seller_email' => 'markrejierosario12@gmail.com',
@@ -745,7 +745,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2200.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 60,
+                'exact_date' => '2026-10-17 16:45:00',
             ],
             44 => [
                 'seller_email' => 'marklhemuel50@gmail.com',
@@ -760,7 +760,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2100.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 40,
+                'exact_date' => '2026-10-18 09:15:00',
             ],
             45 => [
                 'seller_email' => 'vincentagbuya67@gmail.com',
@@ -775,7 +775,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 350.00,
                 'intended_action' => 'recycle',
                 'image_filename' => null,
-                'minutes_after_user' => 30,
+                'exact_date' => '2026-10-18 10:40:00',
             ],
             46 => [
                 'seller_email' => 'christianbautista@gmail.com',
@@ -790,7 +790,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 600.00,
                 'intended_action' => 'recycle',
                 'image_filename' => null,
-                'minutes_after_user' => 52,
+                'exact_date' => '2026-10-18 12:20:00',
             ],
             47 => [
                 'seller_email' => 'marygracedelacruz@gmail.com',
@@ -805,7 +805,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 3900.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 36,
+                'exact_date' => '2026-10-18 14:10:00',
             ],
             48 => [
                 'seller_email' => 'seller@test.com',
@@ -820,7 +820,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 2600.00,
                 'intended_action' => 'sell',
                 'image_filename' => null,
-                'minutes_after_user' => 85,
+                'exact_date' => '2026-10-18 16:00:00',
             ],
         ];
 
@@ -841,11 +841,15 @@ class ProductsAndTransactionsSeeder extends Seeder
                 $sellerCreated = Carbon::create(2026, 10, 18, 16, 45, 0);
             }
 
-            $listingCreated = (clone $sellerCreated)->addMinutes($p['minutes_after_user']);
-            if ($listingCreated->hour >= 22) {
-                $listingCreated = (clone $sellerCreated)->subMinutes(10);
+            if (!empty($p['exact_date'])) {
+                $createdStr = $p['exact_date'];
+            } else {
+                $listingCreated = (clone $sellerCreated)->addMinutes($p['minutes_after_user'] ?? 30);
+                if ($listingCreated->hour >= 22) {
+                    $listingCreated = (clone $sellerCreated)->subMinutes(10);
+                }
+                $createdStr = $listingCreated->toDateTimeString();
             }
-            $createdStr = $listingCreated->toDateTimeString();
 
             $listing = Listing::updateOrCreate(
                 [
@@ -918,7 +922,7 @@ class ProductsAndTransactionsSeeder extends Seeder
 
         // 3. Transactions for Test Seller (seller@test.com) - Exactly 5 transactions from the 5 Buyers
         $transactions = [
-            // Transaction 8: Jimmy Beltran -> MacBook Air M1 (Product 15)
+            // Transaction 8: Jimmy Beltran -> MacBook Air M1 (Product 15) - Oct 14, 2026
             8 => [
                 'product_index' => 15,
                 'buyer_email' => 'jimmybeltran@gmail.com', // Jimmy Beltran
@@ -927,6 +931,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Replacing hinge bracket assembly and deploying for student coding workstation.',
                 'pickup_location' => 'Brgy. Mabini Plaza, San Carlos City',
                 'status' => 'completed',
+                'offer_time' => '2026-10-14 10:44:00',
+                'accepted_time' => '2026-10-14 11:14:00',
+                'pickup_time' => '2026-10-14 16:30:00',
+                'completed_time' => '2026-10-14 16:45:00',
                 'hours_after_listing' => 2.0,
                 'hours_to_respond' => 0.5,
                 'hours_to_pickup' => 18.0,
@@ -938,7 +946,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 9: Jerwin Lomibao -> Dell OptiPlex Micro PC (Product 16)
+            // Transaction 9: Jerwin Lomibao -> Dell OptiPlex Micro PC (Product 16) - Oct 15, 2026
             9 => [
                 'product_index' => 16,
                 'buyer_email' => 'lomibaojerwin@gmail.com', // Jerwin Lomibao
@@ -947,6 +955,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Refurbishing small form factor PC for barangay community desk digitization.',
                 'pickup_location' => 'San Carlos City Public Market, San Carlos City',
                 'status' => 'completed',
+                'offer_time' => '2026-10-15 11:25:00',
+                'accepted_time' => '2026-10-15 12:10:00',
+                'pickup_time' => '2026-10-15 16:45:00',
+                'completed_time' => '2026-10-15 17:00:00',
                 'hours_after_listing' => 3.5,
                 'hours_to_respond' => 0.8,
                 'hours_to_pickup' => 22.0,
@@ -958,7 +970,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 10: Benigno Garcia -> Samsung Galaxy S22 (Product 17)
+            // Transaction 10: Benigno Garcia -> Samsung Galaxy S22 (Product 17) - Oct 16, 2026
             10 => [
                 'product_index' => 17,
                 'buyer_email' => 'benignogarcia23@gmail.com', // Benigno Garcia
@@ -967,6 +979,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Replacing back glass panel and battery calibration for personal daily driver.',
                 'pickup_location' => 'Brgy. Mabini Barangay Hall, San Carlos City',
                 'status' => 'completed',
+                'offer_time' => '2026-10-16 13:40:00',
+                'accepted_time' => '2026-10-16 14:20:00',
+                'pickup_time' => '2026-10-16 17:15:00',
+                'completed_time' => '2026-10-16 17:30:00',
                 'hours_after_listing' => 4.2,
                 'hours_to_respond' => 0.6,
                 'hours_to_pickup' => 16.0,
@@ -978,7 +994,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 11: Kris Aquino -> iPad Pro 12.9" (Product 18)
+            // Transaction 11: Kris Aquino -> iPad Pro 12.9" (Product 18) - Oct 17, 2026
             11 => [
                 'product_index' => 18,
                 'buyer_email' => 'krisaquino817@gmail.com', // Kris Aquino
@@ -987,6 +1003,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Testing Apple Pencil latency and graphic apps for art studio workstation.',
                 'pickup_location' => 'San Carlos Town Plaza, San Carlos City',
                 'status' => 'accepted',
+                'offer_time' => '2026-10-17 14:15:00',
+                'accepted_time' => '2026-10-17 14:55:00',
+                'pickup_time' => '2026-10-17 17:45:00',
+                'completed_time' => null,
                 'hours_after_listing' => 5.0,
                 'hours_to_respond' => 0.7,
                 'hours_to_pickup' => 30.0,
@@ -998,7 +1018,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 12: Abe Austria -> LG UltraWide 34" Monitor (Product 19)
+            // Transaction 12: Abe Austria -> LG UltraWide 34" Monitor (Product 19) - Oct 18, 2026
             12 => [
                 'product_index' => 19,
                 'buyer_email' => 'Abeaustria@gmail.com', // Abe Austria
@@ -1007,6 +1027,10 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Harvesting UWQHD controller board and panel testing in e-waste repair lab.',
                 'pickup_location' => 'Brgy. Mabini Crossing, San Carlos City',
                 'status' => 'accepted',
+                'offer_time' => '2026-10-18 15:50:00',
+                'accepted_time' => '2026-10-18 16:30:00',
+                'pickup_time' => '2026-10-18 18:20:00',
+                'completed_time' => null,
                 'hours_after_listing' => 6.0,
                 'hours_to_respond' => 1.0,
                 'hours_to_pickup' => 28.0,
@@ -1033,9 +1057,9 @@ class ProductsAndTransactionsSeeder extends Seeder
 
             $listingCreatedDb = DB::table('listings')->where('id', $listing->id)->value('created_at');
             $listingTime = Carbon::parse($listingCreatedDb ?? $listing->created_at);
-            $offerCreated = (clone $listingTime)->addHours($t['hours_after_listing'])->toDateTimeString();
-            $offerResponded = (clone $listingTime)->addHours($t['hours_after_listing'] + $t['hours_to_respond'])->toDateTimeString();
-            $pickupTime = (clone $listingTime)->addHours($t['hours_after_listing'] + $t['hours_to_respond'] + $t['hours_to_pickup'])->toDateTimeString();
+            $offerCreated = $t['offer_time'] ?? (clone $listingTime)->addHours($t['hours_after_listing'])->toDateTimeString();
+            $offerResponded = $t['accepted_time'] ?? (clone $listingTime)->addHours($t['hours_after_listing'] + $t['hours_to_respond'])->toDateTimeString();
+            $pickupTime = $t['pickup_time'] ?? (clone $listingTime)->addHours($t['hours_after_listing'] + $t['hours_to_respond'] + $t['hours_to_pickup'])->toDateTimeString();
 
             // Create Offer
             $offer = Offer::updateOrCreate(
@@ -1203,7 +1227,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                     ]
                 );
 
-                $completionTime = Carbon::parse($pickupTime)->addMinutes(15)->toDateTimeString();
+                $completionTime = $t['completed_time'] ?? Carbon::parse($pickupTime)->addMinutes(15)->toDateTimeString();
                 DB::table('audit_logs')->updateOrInsert(
                     [
                         'user_id' => $buyer->id,
