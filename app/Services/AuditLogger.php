@@ -23,6 +23,15 @@ class AuditLogger
         $request = request();
         $finalUserId = $userId ?? Auth::id();
         
+        // Never log product image edits or ListingPhoto events to audit logs
+        if (
+            $modelType === 'ListingPhoto' ||
+            in_array($action, ['photo_uploaded', 'photo_deleted', 'update_listing_photo', 'listing_photo_updated']) ||
+            (is_string($description) && (str_contains(strtolower($description), 'photo') || str_contains(strtolower($description), 'image')))
+        ) {
+            return new AuditLog();
+        }
+        
         // If unauthenticated but target model is User, associate with that user
         if (!$finalUserId && $modelType === 'User' && $modelId) {
             $finalUserId = $modelId;
