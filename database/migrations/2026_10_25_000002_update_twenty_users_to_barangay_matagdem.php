@@ -99,13 +99,21 @@ return new class extends Migration
 
             // Update addresses table if linked
             if (Schema::hasTable('addresses')) {
-                DB::table('addresses')->where('user_id', $userId)->update([
-                    'barangay' => 'Barangay matagdem',
+                $addrData = [
                     'address_line_1' => "Purok {$purokNumber}, Matagdem Road",
                     'city' => 'San Carlos City',
-                    'province' => 'Pangasinan',
                     'postal_code' => '2420',
-                ]);
+                ];
+                if (Schema::hasColumn('addresses', 'address_line_2')) {
+                    $addrData['address_line_2'] = 'Barangay matagdem';
+                }
+                if (Schema::hasColumn('addresses', 'state')) {
+                    $addrData['state'] = 'Pangasinan';
+                }
+                if (Schema::hasColumn('addresses', 'barangay')) {
+                    $addrData['barangay'] = 'Barangay matagdem';
+                }
+                DB::table('addresses')->where('user_id', $userId)->update($addrData);
             }
         }
     }
