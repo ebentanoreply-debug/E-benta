@@ -27,8 +27,12 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Allow .htaccess overrides in Apache
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+# Allow .htaccess overrides in Apache and increase max request body size to 64MB
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
+    && echo "LimitRequestBody 67108864" >> /etc/apache2/apache2.conf
+
+# Copy custom PHP upload & resource limit configuration (64MB max post/upload size)
+COPY docker/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 # Copy Composer from official image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

@@ -287,7 +287,7 @@
                                         <i class="fas fa-images"></i>
                                     </div>
                                     <h6 style="font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">Click to browse or drag and drop multiple photos</h6>
-                                    <p style="color: #64748b; font-size: 0.85rem; margin: 0;">Upload multiple angles, screen condition, and labels (PNG, JPG, WEBP up to 4MB each)</p>
+                                    <p style="color: #64748b; font-size: 0.85rem; margin: 0;">Upload multiple angles, screen condition, and labels (PNG, JPG, WEBP — automatically optimized)</p>
                                 </div>
 
                                 <!-- Thumbnails Grid -->
@@ -333,6 +333,7 @@
 </div>
 
 @section('scripts')
+<script src="{{ asset('js/image-compressor.js') }}"></script>
 <script>
     // --- Category Checkboxes & Limit Logic ---
     function getMaxCategoriesAllowed() {
@@ -603,14 +604,25 @@
         fileInput.files = fileBuffer.files;
     }
 
-    function addFiles(newFiles) {
+    async function addFiles(newFiles) {
         for (let i = 0; i < newFiles.length; i++) {
             if (fileBuffer.files.length >= 8) {
                 alert('You can upload a maximum of 8 photos.');
                 break;
             }
-            const file = newFiles[i];
-            if (file.type.startsWith('image/')) {
+            let file = newFiles[i];
+            if (file.type && file.type.startsWith('image/')) {
+                if (file.size > 1.2 * 1024 * 1024 && window.ImageCompressor) {
+                    try {
+                        file = await window.ImageCompressor.compress(file, {
+                            maxWidth: 2048,
+                            maxHeight: 2048,
+                            quality: 0.82
+                        });
+                    } catch (err) {
+                        console.warn('Compression fallback', err);
+                    }
+                }
                 fileBuffer.items.add(file);
             }
         }

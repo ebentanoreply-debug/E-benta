@@ -204,7 +204,7 @@ class AuthController extends Controller
             'phone' => ['nullable', 'string', 'max:20'],
             'business_name' => ['nullable', 'string', 'max:255'],
             'business_description' => ['nullable', 'string', 'max:1000'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:15360'],
         ]);
 
         if ($request->hasFile('avatar')) {
@@ -228,7 +228,7 @@ class AuthController extends Controller
     public function updateAvatar(Request $request): RedirectResponse
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:15360'],
         ]);
 
         $user = Auth::user();
