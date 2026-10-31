@@ -240,7 +240,11 @@
                     </div>
 
                     @if(!empty($photosList))
-                        <img id="mainListingImage" src="{{ $photosList[0] }}" alt="{{ $listing->category ?: 'Listing Image' }}">
+                        <img id="mainListingImage" src="{{ $photosList[0] }}" alt="{{ $listing->category ?: 'Listing Image' }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                        <div class="text-center py-5 text-white" style="display: none;">
+                            <i class="fas fa-microchip fa-4x mb-3 text-emerald" style="color: #10b981; opacity: 0.6;"></i>
+                            <p class="mb-0 fw-semibold text-muted">Visual preview unavailable</p>
+                        </div>
                     @else
                         <div class="text-center py-5 text-white">
                             <i class="fas fa-microchip fa-4x mb-3 text-emerald" style="color: #10b981; opacity: 0.6;"></i>

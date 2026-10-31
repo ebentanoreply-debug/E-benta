@@ -546,7 +546,8 @@
                                 <!-- Card Media -->
                                 <div class="m-card-media">
                                     @if($primaryPhoto)
-                                        <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'Listing' }}">
+                                        <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'Listing' }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                                        <div style="display: none; color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
                                     @else
                                         <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
                                     @endif

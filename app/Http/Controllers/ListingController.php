@@ -28,6 +28,9 @@ class ListingController extends Controller
         }
 
         $query = Listing::where('status', 'available')
+            ->whereHas('seller', function ($q) {
+                $q->where('role', 'seller');
+            })
             ->with(['seller', 'offers', 'deviceType', 'deviceTypes', 'deviceBrand', 'deviceModel', 'listingPhotos']);
 
         $savedListingIds = collect();
@@ -327,8 +330,14 @@ class ListingController extends Controller
     {
         $user = Auth::user();
 
+        // Enforce seller role: Admins and Buyers are not allowed to create listings
+        if (!$user || !$user->isSeller()) {
+            return redirect()->route($user?->isAdmin() ? 'admin.dashboard' : ($user?->isBuyer() ? 'buyer.dashboard' : 'login'))
+                ->with('error', 'Only registered sellers can create listings.');
+        }
+
         // Enforce seller verification (government ID and physical location)
-        if ($user && $user->isSeller() && !$user->isIdVerified()) {
+        if (!$user->isIdVerified()) {
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
         }
@@ -369,8 +378,14 @@ class ListingController extends Controller
     {
         $user = Auth::user();
 
+        // Enforce seller role: Admins and Buyers are not allowed to create listings
+        if (!$user || !$user->isSeller()) {
+            return redirect()->route($user?->isAdmin() ? 'admin.dashboard' : ($user?->isBuyer() ? 'buyer.dashboard' : 'login'))
+                ->with('error', 'Only registered sellers can create listings.');
+        }
+
         // Enforce seller verification (government ID and physical location)
-        if ($user && $user->isSeller() && !$user->isIdVerified()) {
+        if (!$user->isIdVerified()) {
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
         }
@@ -579,11 +594,7 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        // Can only edit if not matched yet
-        if ($listing->isMatched()) {
-            return redirect()->route('seller.dashboard')
-                ->with('error', 'Cannot edit a matched listing');
-        }
+        // Allow owner to update details/photos even if matched
 
         $listing->load(['deviceTypes', 'deviceBrand', 'deviceModel']);
         $deviceTypes = DeviceType::all();
@@ -609,11 +620,7 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        // Cannot update if matched
-        if ($listing->isMatched()) {
-            return redirect()->route('seller.dashboard')
-                ->with('error', 'Cannot edit a matched listing');
-        }
+        // Allow owner to update details/photos even if matched
 
         $isBulk = $request->input('listing_type', $listing->listing_type) === 'bulk_lot';
 

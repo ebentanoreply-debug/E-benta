@@ -643,7 +643,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 15:40:00',
             ],
             37 => [
-                'seller_email' => 'rhonamaebulatao@gmail.com',
+                'seller_email' => 'seller@test.com',
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 17, // Dell U2720Q 27"
@@ -658,7 +658,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 17:15:00',
             ],
             38 => [
-                'seller_email' => 'Abeaustria@gmail.com',
+                'seller_email' => 'markyvangarcia@gmail.com',
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 4, // HP Pavilion 15

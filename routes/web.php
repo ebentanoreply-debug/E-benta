@@ -45,15 +45,15 @@ Route::get('/', function () {
     $hasImpactLogs = Schema::hasTable('impact_logs');
 
     $featuredListings = $hasListings 
-        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(8)->get()
+        ? Listing::where('status', 'available')->whereHas('seller', fn($q) => $q->where('role', 'seller'))->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(8)->get()
         : collect();
 
     $flashDeals = $hasListings
-        ? Listing::where('status', 'available')->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->orderBy('suggested_price', 'asc')->take(4)->get()
+        ? Listing::where('status', 'available')->whereHas('seller', fn($q) => $q->where('role', 'seller'))->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->orderBy('suggested_price', 'asc')->take(4)->get()
         : collect();
 
     $salvageLots = $hasListings
-        ? Listing::where('status', 'available')->whereIn('condition', ['repairable', 'for_parts'])->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(4)->get()
+        ? Listing::where('status', 'available')->whereHas('seller', fn($q) => $q->where('role', 'seller'))->whereIn('condition', ['repairable', 'for_parts'])->with(['seller', 'deviceType', 'deviceBrand', 'listingPhotos'])->latest()->take(4)->get()
         : collect();
 
     $savedListingIds = collect();
