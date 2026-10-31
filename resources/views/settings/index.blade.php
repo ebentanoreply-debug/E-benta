@@ -660,7 +660,7 @@
                         </label>
                         <form action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data" id="sttAvatarFormQuick" style="display:none;">
                             @csrf
-                            <input type="file" id="sttAvatarFileQuick" name="avatar" accept="image/*" onchange="document.getElementById('sttAvatarFormQuick').submit()">
+                            <input type="file" id="sttAvatarFileQuick" name="avatar" accept="image/*" onchange="submitAvatarWithCompression(this, 'sttAvatarFormQuick')">
                         </form>
                     </div>
                     <div>
@@ -742,15 +742,15 @@
                             <div class="stt-card-icon teal"><i class="fas fa-camera"></i></div>
                             <div>
                                 <p class="stt-card-title">Profile Picture</p>
-                                <p class="stt-card-sub">Upload a high-resolution avatar. JPG, PNG or WEBP up to 2MB.</p>
+                                <p class="stt-card-sub">Upload an avatar. JPG, PNG or WEBP (automatically optimized).</p>
                             </div>
                             <div style="margin-left: auto; display: flex; gap: 0.6rem; align-items: center;">
                                 <form action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data" id="sttAvatarForm">
                                     @csrf
-                                    <label for="sttAvatarFile" class="stt-btn" style="cursor: pointer; margin: 0;">
+                                    <label for="sttAvatarFile" id="sttAvatarBtn" class="stt-btn" style="cursor: pointer; margin: 0;">
                                         <i class="fas fa-upload"></i>Upload Photo
                                     </label>
-                                    <input type="file" id="sttAvatarFile" name="avatar" accept="image/*" style="display: none" onchange="document.getElementById('sttAvatarForm').submit()">
+                                    <input type="file" id="sttAvatarFile" name="avatar" accept="image/*" style="display: none" onchange="submitAvatarWithCompression(this, 'sttAvatarForm')">
                                 </form>
                                 @if(auth()->user()->avatar)
                                 <form action="{{ route('profile.avatar.delete') }}" method="POST">
@@ -1074,8 +1074,8 @@
                     @endif
 
                     @if(!$isVerified)
-                    {{-- Submission form --}}
-                    <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data">
+                    {{-- Submission form with automatic mobile image compression --}}
+                    <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data" id="idVerificationForm" onsubmit="return handleIdVerificationSubmit(this, event)">
                         @csrf
 
                         <!-- STEP 1: IDENTITY DETAILS -->
@@ -1115,39 +1115,42 @@
 
                                     <div class="col-md-6">
                                         <label class="stt-label">Front ID Photo <span class="text-danger">*</span></label>
-                                        <input type="file" name="id_photo" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }}>
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of front side (JPG, PNG, WEBP max 4MB)</small>
+                                        <input type="file" name="id_photo" id="idPhotoInput" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }} onchange="previewAndCompressDoc(this, 'idPhotoPreview')">
+                                        <div id="idPhotoPreview" class="mt-1"></div>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of front side (JPG, PNG, WEBP — automatically optimized)</small>
                                         @if($user->id_photo_url)
-                                            <div class="mt-1 d-flex align-items-center gap-2">
-                                                <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
-                                                <a href="{{ $user->id_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Uploaded Photo</a>
-                                            </div>
+                                             <div class="mt-1 d-flex align-items-center gap-2">
+                                                 <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
+                                                 <a href="{{ $user->id_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Uploaded Photo</a>
+                                             </div>
                                         @endif
                                         @error('id_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="stt-label">Back ID Photo <span class="text-danger">* (Address Side)</span></label>
-                                        <input type="file" name="id_back_photo" class="stt-input @error('id_back_photo') is-invalid @enderror" accept="image/*">
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of back side showing address (JPG, PNG, WEBP max 4MB)</small>
+                                        <input type="file" name="id_back_photo" id="idBackPhotoInput" class="stt-input @error('id_back_photo') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idBackPhotoPreview')">
+                                        <div id="idBackPhotoPreview" class="mt-1"></div>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Clear photo of back side showing address (JPG, PNG, WEBP — automatically optimized)</small>
                                         @if($user->id_back_photo_url)
-                                            <div class="mt-1 d-flex align-items-center gap-2">
-                                                <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID Uploaded</span>
-                                                <a href="{{ $user->id_back_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Back ID</a>
-                                            </div>
+                                             <div class="mt-1 d-flex align-items-center gap-2">
+                                                 <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID Uploaded</span>
+                                                 <a href="{{ $user->id_back_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Back ID</a>
+                                             </div>
                                         @endif
                                         @error('id_back_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-12">
                                         <label class="stt-label">Selfie Holding ID <span style="color: #64748b;">(Optional for faster approval)</span></label>
-                                        <input type="file" name="id_selfie" class="stt-input @error('id_selfie') is-invalid @enderror" accept="image/*">
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face</small>
+                                        <input type="file" name="id_selfie" id="idSelfieInput" class="stt-input @error('id_selfie') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idSelfiePreview')">
+                                        <div id="idSelfiePreview" class="mt-1"></div>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face (automatically optimized)</small>
                                         @if($user->id_selfie_url)
-                                            <div class="mt-1 d-flex align-items-center gap-2">
-                                                <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
-                                                <a href="{{ $user->id_selfie_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Selfie</a>
-                                            </div>
+                                             <div class="mt-1 d-flex align-items-center gap-2">
+                                                 <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
+                                                 <a href="{{ $user->id_selfie_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Selfie</a>
+                                             </div>
                                         @endif
                                         @error('id_selfie')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
@@ -1251,8 +1254,9 @@
 
                                     <div class="col-md-6">
                                         <label class="stt-label">Supplemental Proof Document <span style="color: #64748b;">(Required if ID address is different)</span></label>
-                                        <input type="file" name="proof_of_address" class="stt-input @error('proof_of_address') is-invalid @enderror" accept="image/*,application/pdf">
-                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Barangay Cert, Meralco bill, or lease contract (max 4MB)</small>
+                                        <input type="file" name="proof_of_address" id="proofAddressInput" class="stt-input @error('proof_of_address') is-invalid @enderror" accept="image/*,application/pdf" onchange="previewAndCompressDoc(this, 'proofAddressPreview')">
+                                        <div id="proofAddressPreview" class="mt-1"></div>
+                                        <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Barangay Cert, Meralco bill, or lease contract (max 25MB)</small>
                                         @if($user->proof_of_address_url)
                                             <div class="mt-1 d-flex align-items-center gap-2">
                                                 <span class="badge bg-purple" style="font-size: 0.72rem; background: #9333ea; color: white;"><i class="fas fa-check me-1"></i>Document Attached</span>
@@ -1264,7 +1268,7 @@
                                 </div>
 
                                 <div class="stt-form-footer mt-4">
-                                    <button type="submit" class="stt-btn" style="padding: 0.8rem 1.75rem; font-size: 0.95rem;">
+                                    <button type="submit" id="idVerificationSubmitBtn" class="stt-btn" style="padding: 0.8rem 1.75rem; font-size: 0.95rem;">
                                         <i class="fas fa-paper-plane me-2"></i>{{ $isRejected ? 'Re-Submit ID & Location for Review' : ($isPending ? 'Update Submitted Documents' : 'Submit ID & Location for Verification') }}
                                     </button>
                                 </div>
@@ -1494,7 +1498,143 @@
         </div>
     </div>
 
+<script src="{{ asset('js/image-compressor.js') }}"></script>
 <script>
+// Document Compression State Tracker
+const pendingCompressions = new Set();
+
+async function previewAndCompressDoc(inputEl, previewId) {
+    const previewBox = document.getElementById(previewId);
+    if (!inputEl || !inputEl.files || inputEl.files.length === 0) {
+        if (previewBox) previewBox.innerHTML = '';
+        return;
+    }
+
+    const file = inputEl.files[0];
+    const isImage = file.type && file.type.startsWith('image/');
+
+    if (previewBox) {
+        previewBox.style.display = 'block';
+        previewBox.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.6rem; background: #f1f5f9; border-radius: 0.5rem; font-size: 0.78rem;">
+                <i class="fas fa-spinner fa-spin" style="color: #0d9488;"></i>
+                <span style="color: #475569;">Optimizing photo (${(file.size / 1024 / 1024).toFixed(1)} MB)...</span>
+            </div>
+        `;
+    }
+
+    if (!isImage) {
+        if (previewBox) {
+            previewBox.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.6rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.5rem; font-size: 0.78rem;">
+                    <i class="fas fa-file-pdf" style="color: #ef4444; font-size: 1rem;"></i>
+                    <span style="color: #166534; font-weight: 600;">${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
+                </div>
+            `;
+        }
+        return;
+    }
+
+    pendingCompressions.add(inputEl.name);
+
+    try {
+        const compressedFile = await window.ImageCompressor.compress(file, {
+            maxWidth: 2048,
+            maxHeight: 2048,
+            quality: 0.82
+        });
+
+        // Update the file input using DataTransfer
+        const dt = new DataTransfer();
+        dt.items.add(compressedFile);
+        inputEl.files = dt.files;
+
+        if (previewBox) {
+            const previewUrl = URL.createObjectURL(compressedFile);
+            previewBox.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.5rem;">
+                    <img src="${previewUrl}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid #86efac;">
+                    <div style="font-size: 0.78rem; line-height: 1.35;">
+                        <div style="font-weight: 700; color: #15803d;"><i class="fas fa-check-circle me-1"></i>Optimized & Ready</div>
+                        <span style="color: #64748b;">${(file.size / 1024 / 1024).toFixed(1)} MB ➔ <strong style="color: #0f172a;">${(compressedFile.size / 1024).toFixed(0)} KB</strong></span>
+                    </div>
+                </div>
+            `;
+        }
+    } catch (err) {
+        console.warn('Compression fallback', err);
+    } finally {
+        pendingCompressions.delete(inputEl.name);
+    }
+}
+
+async function submitAvatarWithCompression(inputEl, formId) {
+    if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+
+    const file = inputEl.files[0];
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    // Show indicator
+    const btn = document.getElementById('sttAvatarBtn');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Optimizing...';
+        btn.style.pointerEvents = 'none';
+    }
+
+    try {
+        const compressed = await window.ImageCompressor.compress(file, {
+            maxWidth: 800,
+            maxHeight: 800,
+            quality: 0.85
+        });
+
+        const dt = new DataTransfer();
+        dt.items.add(compressed);
+        inputEl.files = dt.files;
+    } catch (e) {
+        console.warn(e);
+    }
+
+    form.submit();
+}
+
+async function handleIdVerificationSubmit(form, event) {
+    const submitBtn = document.getElementById('idVerificationSubmitBtn');
+    
+    // Check if any compressions are currently working
+    if (pendingCompressions.size > 0) {
+        event.preventDefault();
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Optimizing Images, Please wait...';
+        }
+        const checkDone = setInterval(() => {
+            if (pendingCompressions.size === 0) {
+                clearInterval(checkDone);
+                form.submit();
+            }
+        }, 150);
+        return false;
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading Documents...';
+    }
+
+    const ready = await window.ImageCompressor.prepareFormForSubmit(form);
+    if (!ready) {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit ID & Location for Verification';
+        }
+        return false;
+    }
+
+    return true;
+}
+
 function sttSwitch(panel, btn) {
     // Hide all panels
     document.querySelectorAll('.stt-panel').forEach(p => {

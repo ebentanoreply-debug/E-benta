@@ -796,7 +796,7 @@
                                 <img id="avatarImagePreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
                             @endif
                         </div>
-                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Supported formats: JPG, PNG, WEBP, GIF (Max 2MB)</p>
+                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Supported formats: JPG, PNG, WEBP, GIF (Automatically optimized)</p>
                     </div>
 
                     <!-- File input -->
@@ -833,9 +833,28 @@
     </div>
 </div>
 
+<script src="{{ asset('js/image-compressor.js') }}"></script>
 <script>
-    function previewAvatar(input) {
+    async function previewAvatar(input) {
         if (input.files && input.files[0]) {
+            let file = input.files[0];
+            
+            // Auto compress if large image
+            if (file.type && file.type.startsWith('image/') && file.size > 800 * 1024 && window.ImageCompressor) {
+                try {
+                    file = await window.ImageCompressor.compress(file, {
+                        maxWidth: 800,
+                        maxHeight: 800,
+                        quality: 0.85
+                    });
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                } catch (e) {
+                    console.warn(e);
+                }
+            }
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.getElementById('avatarImagePreview');
@@ -848,7 +867,7 @@
                     initials.style.display = 'none';
                 }
             }
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(file);
         }
     }
 </script>

@@ -304,7 +304,7 @@
                             <div id="dropZoneWrapper" style="border: 2px dashed rgba(13, 148, 136, 0.4); border-radius: 1rem; padding: 1.5rem; background: rgba(13, 148, 136, 0.02); text-align: center; cursor: pointer;" onclick="document.getElementById('photosInput').click()">
                                 <input type="file" id="photosInput" name="photos[]" multiple accept="image/*" style="display: none;">
                                 <i class="fas fa-cloud-upload-alt" style="color: var(--light-green); font-size: 1.8rem; margin-bottom: 0.5rem; display: block;"></i>
-                                <span style="font-weight: 600; color: #1e293b; font-size: 0.9rem;">Click to upload additional photos</span>
+                                <span style="font-weight: 600; color: #1e293b; font-size: 0.9rem;">Click to upload additional photos (automatically optimized)</span>
                                 <div id="previewGrid" style="display: none; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.75rem; margin-top: 1rem;" onclick="event.stopPropagation()"></div>
                             </div>
                             @if($errors->has('photos.*'))
@@ -330,6 +330,7 @@
 </div>
 
 @section('scripts')
+<script src="{{ asset('js/image-compressor.js') }}"></script>
 <script>
     // --- Category Checkboxes & Limit Logic ---
     function getMaxCategoriesAllowed() {
@@ -529,18 +530,37 @@
     const previewGrid = document.getElementById('previewGrid');
 
     if (fileInput) {
-        fileInput.addEventListener('change', () => {
+        fileInput.addEventListener('change', async () => {
             previewGrid.innerHTML = '';
             if (fileInput.files.length > 0) {
                 previewGrid.style.display = 'grid';
-                Array.from(fileInput.files).forEach(file => {
-                    if (file.type.startsWith('image/')) {
+                const files = Array.from(fileInput.files);
+                const dt = new DataTransfer();
+
+                for (let file of files) {
+                    if (file.type && file.type.startsWith('image/')) {
+                        if (file.size > 1.2 * 1024 * 1024 && window.ImageCompressor) {
+                            try {
+                                file = await window.ImageCompressor.compress(file, {
+                                    maxWidth: 2048,
+                                    maxHeight: 2048,
+                                    quality: 0.82
+                                });
+                            } catch (e) {
+                                console.warn(e);
+                            }
+                        }
+                        dt.items.add(file);
+
                         const img = document.createElement('img');
                         img.src = URL.createObjectURL(file);
                         img.style.cssText = 'width: 100%; height: 100px; object-fit: cover; border-radius: 0.5rem; border: 1.5px solid var(--light-green);';
                         previewGrid.appendChild(img);
+                    } else {
+                        dt.items.add(file);
                     }
-                });
+                }
+                fileInput.files = dt.files;
             } else {
                 previewGrid.style.display = 'none';
             }

@@ -309,7 +309,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'minutes_after_user' => 52,
             ],
 
-            // 5 Products specifically for seller@test.com (Test Seller) - Spread across Oct 14 to Oct 18
+            // 5 Products specifically for seller@test.com (Test Seller) - Spread across Oct 13 to Oct 16
             15 => [
                 'seller_email' => 'seller@test.com',
                 'device_type_id' => 1, // Laptop
@@ -323,7 +323,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 12500.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_15.jpg',
-                'exact_date' => '2026-10-14 08:44:00',
+                'exact_date' => '2026-10-13 09:00:00',
             ],
             16 => [
                 'seller_email' => 'seller@test.com',
@@ -338,7 +338,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4200.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_16.jpg',
-                'exact_date' => '2026-10-15 09:15:00',
+                'exact_date' => '2026-10-14 09:30:00',
             ],
             17 => [
                 'seller_email' => 'seller@test.com',
@@ -353,7 +353,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 6500.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_17.jpg',
-                'exact_date' => '2026-10-16 09:30:00',
+                'exact_date' => '2026-10-15 09:30:00',
             ],
             18 => [
                 'seller_email' => 'seller@test.com',
@@ -368,7 +368,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 9000.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_18.jpg',
-                'exact_date' => '2026-10-17 10:00:00',
+                'exact_date' => '2026-10-16 10:00:00',
             ],
             19 => [
                 'seller_email' => 'seller@test.com',
@@ -383,7 +383,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'suggested_price' => 4800.00,
                 'intended_action' => 'sell',
                 'image_filename' => 'product_19.jpg',
-                'exact_date' => '2026-10-18 10:30:00',
+                'exact_date' => '2026-10-13 10:15:00',
             ],
 
             // 29 NEW PRODUCTS (Indices 20 - 48) WITHOUT IMAGES - Spread across Oct 14 - Oct 18
@@ -1050,7 +1050,7 @@ class ProductsAndTransactionsSeeder extends Seeder
 
         // 3. Transactions for Test Seller (seller@test.com) - Exactly 5 transactions from the 5 Buyers
         $transactions = [
-            // Transaction 8: Jimmy Beltran -> Apple iPhone 13 Pro (Product 15) - Oct 14, 2026
+            // Transaction 8: Jimmy Beltran -> Apple iPhone 13 Pro (Product 15) - Oct 13, 2026
             8 => [
                 'product_index' => 15,
                 'buyer_email' => 'jimmybeltran@gmail.com', // Jimmy Beltran
@@ -1059,13 +1059,13 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Replacing hinge bracket assembly and deploying for student coding workstation.',
                 'pickup_location' => 'Brgy. Mabini Plaza, San Carlos City',
                 'status' => 'completed',
-                'offer_time' => '2026-10-14 10:44:00',
-                'accepted_time' => '2026-10-14 11:14:00',
-                'pickup_time' => '2026-10-14 16:30:00',
-                'completed_time' => '2026-10-14 16:45:00',
-                'hours_after_listing' => 2.0,
+                'offer_time' => '2026-10-13 10:44:00',
+                'accepted_time' => '2026-10-13 11:14:00',
+                'pickup_time' => '2026-10-13 16:30:00',
+                'completed_time' => '2026-10-13 16:45:00',
+                'hours_after_listing' => 1.7,
                 'hours_to_respond' => 0.5,
-                'hours_to_pickup' => 18.0,
+                'hours_to_pickup' => 5.2,
                 'messages' => [
                     ['buyer', 'Good morning po Test Seller! Interesado po ako sa Apple iPhone 13 Pro. Original po ba ang charging cable nito?'],
                     ['seller', 'Magandang umaga po Jimmy! Opo, original Apple USB-C lightning cable ang kasama. 100% working cameras, Face ID, at OLED screen.'],
@@ -1074,7 +1074,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 9: Jerwin Lomibao -> Apple iPad 9th Gen (Product 16) - Oct 15, 2026
+            // Transaction 9: Jerwin Lomibao -> Apple iPad 9th Gen (Product 16) - Oct 14, 2026
             9 => [
                 'product_index' => 16,
                 'buyer_email' => 'lomibaojerwin@gmail.com', // Jerwin Lomibao
@@ -1083,22 +1083,22 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Refurbishing small form factor PC for barangay community desk digitization.',
                 'pickup_location' => 'San Carlos City Public Market, San Carlos City',
                 'status' => 'completed',
-                'offer_time' => '2026-10-15 11:25:00',
-                'accepted_time' => '2026-10-15 12:10:00',
-                'pickup_time' => '2026-10-15 16:45:00',
-                'completed_time' => '2026-10-15 17:00:00',
-                'hours_after_listing' => 3.5,
+                'offer_time' => '2026-10-14 11:25:00',
+                'accepted_time' => '2026-10-14 12:10:00',
+                'pickup_time' => '2026-10-14 16:45:00',
+                'completed_time' => '2026-10-14 17:00:00',
+                'hours_after_listing' => 1.9,
                 'hours_to_respond' => 0.8,
-                'hours_to_pickup' => 22.0,
+                'hours_to_pickup' => 4.5,
                 'messages' => [
                     ['buyer', 'Hi seller, working po ba ang touchscreen at stereo speakers nitong iPad 9th Gen?'],
                     ['seller', 'Hello Jerwin! Yes po, tested and working ang Retina display, Touch ID, at battery health.'],
-                    ['buyer', 'Ayos po! In-offeran ko po kayo ng ₱3,900. Pickup ko po bukas ng umaga.'],
+                    ['buyer', 'Ayos po! In-offeran ko po kayo ng ₱3,900. Pickup ko po mamaya.'],
                     ['seller', 'Accepted po sir Jerwin! Naka-pack na po with power adapter. Ingat po sa biyahe.'],
                 ],
             ],
 
-            // Transaction 10: Benigno Garcia -> Samsung Galaxy S22 (Product 17) - Oct 16, 2026
+            // Transaction 10: Benigno Garcia -> Samsung Galaxy S22 (Product 17) - Oct 15, 2026
             10 => [
                 'product_index' => 17,
                 'buyer_email' => 'benignogarcia23@gmail.com', // Benigno Garcia
@@ -1107,13 +1107,13 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'notes' => 'Replacing back glass panel and battery calibration for personal daily driver.',
                 'pickup_location' => 'Brgy. Mabini Barangay Hall, San Carlos City',
                 'status' => 'completed',
-                'offer_time' => '2026-10-16 13:40:00',
-                'accepted_time' => '2026-10-16 14:20:00',
-                'pickup_time' => '2026-10-16 17:15:00',
-                'completed_time' => '2026-10-16 17:30:00',
-                'hours_after_listing' => 4.2,
+                'offer_time' => '2026-10-15 13:40:00',
+                'accepted_time' => '2026-10-15 14:20:00',
+                'pickup_time' => '2026-10-15 17:15:00',
+                'completed_time' => '2026-10-15 17:30:00',
+                'hours_after_listing' => 4.1,
                 'hours_to_respond' => 0.6,
-                'hours_to_pickup' => 16.0,
+                'hours_to_pickup' => 2.9,
                 'messages' => [
                     ['buyer', 'Good day po! Working po ba 100% yung screen digitizer at cameras nitong S22?'],
                     ['seller', 'Good day Benigno! Opo, back glass lang may crack. Flawless ang AMOLED display and 120Hz refresh.'],
@@ -1122,7 +1122,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 11: Kris Aquino -> iPad Pro 12.9" (Product 18) - Oct 17, 2026
+            // Transaction 11: Kris Aquino -> iPad Pro 12.9" (Product 18) - Oct 16, 2026
             11 => [
                 'product_index' => 18,
                 'buyer_email' => 'krisaquino817@gmail.com', // Kris Aquino
@@ -1130,14 +1130,14 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'proposed_method' => 'repair',
                 'notes' => 'Testing Apple Pencil latency and graphic apps for art studio workstation.',
                 'pickup_location' => 'San Carlos Town Plaza, San Carlos City',
-                'status' => 'accepted',
-                'offer_time' => '2026-10-17 14:15:00',
-                'accepted_time' => '2026-10-17 14:55:00',
-                'pickup_time' => '2026-10-17 17:45:00',
-                'completed_time' => null,
-                'hours_after_listing' => 5.0,
+                'status' => 'completed',
+                'offer_time' => '2026-10-16 14:15:00',
+                'accepted_time' => '2026-10-16 14:55:00',
+                'pickup_time' => '2026-10-16 17:45:00',
+                'completed_time' => '2026-10-16 18:00:00',
+                'hours_after_listing' => 4.2,
                 'hours_to_respond' => 0.7,
-                'hours_to_pickup' => 30.0,
+                'hours_to_pickup' => 2.8,
                 'messages' => [
                     ['buyer', 'Hello po Test Seller! Clean iCloud and working po ba Apple Pencil compatibility nito?'],
                     ['seller', 'Yes Maam Kris! Signed out na po ang iCloud, factory reset, at tested sa Apple Pencil 2nd gen.'],
@@ -1146,7 +1146,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 ],
             ],
 
-            // Transaction 12: Abe Austria -> Samsung Galaxy Tab S6 Lite (Product 19) - Oct 18, 2026
+            // Transaction 12: Abe Austria -> Samsung Galaxy Tab S6 Lite (Product 19) - Oct 13, 2026
             12 => [
                 'product_index' => 19,
                 'buyer_email' => 'Abeaustria@gmail.com', // Abe Austria
@@ -1154,14 +1154,14 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'proposed_method' => 'harvest',
                 'notes' => 'Harvesting UWQHD controller board and panel testing in e-waste repair lab.',
                 'pickup_location' => 'Brgy. Mabini Crossing, San Carlos City',
-                'status' => 'accepted',
-                'offer_time' => '2026-10-18 15:50:00',
-                'accepted_time' => '2026-10-18 16:30:00',
-                'pickup_time' => '2026-10-18 18:20:00',
-                'completed_time' => null,
-                'hours_after_listing' => 6.0,
-                'hours_to_respond' => 1.0,
-                'hours_to_pickup' => 28.0,
+                'status' => 'completed',
+                'offer_time' => '2026-10-13 15:50:00',
+                'accepted_time' => '2026-10-13 16:30:00',
+                'pickup_time' => '2026-10-13 18:20:00',
+                'completed_time' => '2026-10-13 18:35:00',
+                'hours_after_listing' => 5.5,
+                'hours_to_respond' => 0.7,
+                'hours_to_pickup' => 1.8,
                 'messages' => [
                     ['buyer', 'Sir available pa po itong Galaxy Tab S6 Lite? Kasama po ba ang charger at cable?'],
                     ['seller', 'Opo Sir Abe! Complete with original fast charger and Type-C cable.'],
