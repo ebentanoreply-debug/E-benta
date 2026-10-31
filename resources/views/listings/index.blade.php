@@ -599,7 +599,7 @@
                                             @if($listing->device_details)
                                                 {{ $listing->device_details }}
                                             @elseif($listing->deviceModel)
-                                                {{ $listing->deviceModel->model_name }} {{ $listing->deviceBrand ? '('.$listing->deviceBrand->name.')' : '' }}
+                                                {{ $listing->deviceBrand ? $listing->deviceBrand->name . ' ' : '' }}{{ $listing->deviceModel->model_name }}
                                             @else
                                                 {{ $listing->description ? Str::limit($listing->description, 50) : 'Electronic Device' }}
                                             @endif

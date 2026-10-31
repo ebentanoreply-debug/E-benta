@@ -829,7 +829,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => null,
                 'device_model_id' => null,
-                'device_details' => 'Bulk Lot: 10x Assorted Android Phones (Repair & Scrap)',
+                'device_details' => 'Bulk Lot: 10x Assorted Android Phones',
                 'condition' => 'minor_damage',
                 'description' => 'Lot of 10 assorted Android smartphones (Samsung, Xiaomi, Vivo, and OPPO). 6 units power on with cracked screens or battery degradation; 4 units for parts and board-level harvesting.',
                 'estimated_weight' => 1.85,
@@ -847,7 +847,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => null,
                 'device_model_id' => null,
-                'device_details' => 'Bulk Lot: 5x Defective School Tablets (Parts & Salvage)',
+                'device_details' => 'Bulk Lot: 5x Defective School Tablets',
                 'condition' => 'non_functional',
                 'description' => 'Bundle of 5 defective educational and budget Android tablets (Lenovo Tab M10, Samsung Tab A, Huawei MatePad). Cracked touchscreens and depleted lithium cells.',
                 'estimated_weight' => 2.35,
@@ -865,7 +865,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => null,
                 'device_model_id' => null,
-                'device_details' => 'Bulk Lot: 8x Old Smartphones (Samsung & Xiaomi Lot)',
+                'device_details' => 'Bulk Lot: 8x Old Smartphones',
                 'condition' => 'minor_damage',
                 'description' => '8 units of older model Samsung Galaxy J-series and Xiaomi Redmi handsets. 5 units power on with cosmetic scratches and worn charging pins.',
                 'estimated_weight' => 1.48,
@@ -901,7 +901,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => null,
                 'device_model_id' => null,
-                'device_details' => 'Bulk Lot: 6x Mixed Tablets & Smartphones (E-Waste Recycler Lot)',
+                'device_details' => 'Bulk Lot: 6x Mixed Tablets & Smartphones',
                 'condition' => 'minor_damage',
                 'description' => 'Assorted lot containing 3 Android smartphones and 3 8-inch Android tablets. 4 devices boot to setup screen with touch latency; 2 units have broken digitizers.',
                 'estimated_weight' => 1.95,
@@ -937,7 +937,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => null,
                 'device_model_id' => null,
-                'device_details' => 'Bulk Lot: 12x Broken Touchscreen Phones (Salvage PCB Lot)',
+                'device_details' => 'Bulk Lot: 12x Broken Touchscreen Phones',
                 'condition' => 'non_functional',
                 'description' => '12 dead smartphones with damaged motherboards, water intrusion, or shattered displays. Sorted and pre-segregated for circuit board recycling and tantalum capacitor salvage.',
                 'estimated_weight' => 2.25,

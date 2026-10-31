@@ -658,7 +658,7 @@
                                 @if($listing->suggested_price > 0)
                                     ₱{{ number_format($listing->suggested_price, 2) }}
                                 @else
-                                    <span class="badge bg-success">FREE (Eco-Recycle)</span>
+                                    <span class="badge bg-success">FREE • Eco-Recycle</span>
                                 @endif
                             </div>
                         </div>

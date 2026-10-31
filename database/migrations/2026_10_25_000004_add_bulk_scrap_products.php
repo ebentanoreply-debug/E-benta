@@ -48,7 +48,7 @@ return new class extends Migration
                 'seller_email' => 'melicanjimboy12@gmail.com',
                 'device_type_id' => $smartphoneTypeId,
                 'secondary_type_ids' => [$smartphoneTypeId],
-                'device_details' => 'Bulk Lot: 10x Assorted Android Phones (Repair & Scrap)',
+                'device_details' => 'Bulk Lot: 10x Assorted Android Phones',
                 'lot_item_count' => 10,
                 'condition' => 'minor_damage',
                 'description' => 'Lot of 10 assorted Android smartphones (Samsung, Xiaomi, Vivo, and OPPO). 6 units power on with cracked screens or battery degradation; 4 units for parts and board-level harvesting. Ideal for tech recyclers and repair technicians.',
@@ -63,7 +63,7 @@ return new class extends Migration
                 'seller_email' => 'canosejoseph248@gmail.com',
                 'device_type_id' => $tabletTypeId,
                 'secondary_type_ids' => [$tabletTypeId],
-                'device_details' => 'Bulk Lot: 5x Defective School Tablets (Parts & Salvage)',
+                'device_details' => 'Bulk Lot: 5x Defective School Tablets',
                 'lot_item_count' => 5,
                 'condition' => 'non_functional',
                 'description' => 'Bundle of 5 defective educational and budget Android tablets (Lenovo Tab M10, Samsung Tab A, Huawei MatePad). Cracked touchscreens and depleted lithium cells. Motherboards, aluminum chassis, and copper shielding intact for scrap extraction.',
@@ -78,7 +78,7 @@ return new class extends Migration
                 'seller_email' => 'markyvangarcia@gmail.com',
                 'device_type_id' => $smartphoneTypeId,
                 'secondary_type_ids' => [$smartphoneTypeId],
-                'device_details' => 'Bulk Lot: 8x Old Smartphones (Samsung & Xiaomi Lot)',
+                'device_details' => 'Bulk Lot: 8x Old Smartphones',
                 'lot_item_count' => 8,
                 'condition' => 'minor_damage',
                 'description' => '8 units of older model Samsung Galaxy J-series and Xiaomi Redmi handsets. 5 units power on with cosmetic scratches and worn charging pins. Complete with lithium batteries for safe e-waste disposition.',
@@ -108,7 +108,7 @@ return new class extends Migration
                 'seller_email' => 'darlyngarcia71@gmail.com',
                 'device_type_id' => $smartphoneTypeId,
                 'secondary_type_ids' => [$smartphoneTypeId, $tabletTypeId],
-                'device_details' => 'Bulk Lot: 6x Mixed Tablets & Smartphones (E-Waste Recycler Lot)',
+                'device_details' => 'Bulk Lot: 6x Mixed Tablets & Smartphones',
                 'lot_item_count' => 6,
                 'condition' => 'minor_damage',
                 'description' => 'Assorted lot containing 3 Android smartphones and 3 8-inch Android tablets. 4 devices boot to setup screen with touch latency; 2 units have broken digitizers. Great bargain for electronics recyclers.',
@@ -138,7 +138,7 @@ return new class extends Migration
                 'seller_email' => 'jhomaribeltran423@gmail.com',
                 'device_type_id' => $smartphoneTypeId,
                 'secondary_type_ids' => [$smartphoneTypeId],
-                'device_details' => 'Bulk Lot: 12x Broken Touchscreen Phones (Salvage PCB Lot)',
+                'device_details' => 'Bulk Lot: 12x Broken Touchscreen Phones',
                 'lot_item_count' => 12,
                 'condition' => 'non_functional',
                 'description' => '12 dead smartphones with damaged motherboards, water intrusion, or shattered displays. Sorted and pre-segregated for circuit board recycling, tantalum capacitor salvage, and zero-landfill processing.',
@@ -255,13 +255,13 @@ return new class extends Migration
         }
 
         $bulkTitles = [
-            'Bulk Lot: 10x Assorted Android Phones (Repair & Scrap)',
-            'Bulk Lot: 5x Defective School Tablets (Parts & Salvage)',
-            'Bulk Lot: 8x Old Smartphones (Samsung & Xiaomi Lot)',
+            'Bulk Lot: 10x Assorted Android Phones',
+            'Bulk Lot: 5x Defective School Tablets',
+            'Bulk Lot: 8x Old Smartphones',
             'Bulk Lot: 15x Depleted & Broken Smartphones Scrap Bundle',
-            'Bulk Lot: 6x Mixed Tablets & Smartphones (E-Waste Recycler Lot)',
+            'Bulk Lot: 6x Mixed Tablets & Smartphones',
             'Bulk Lot: 4x Apple iPad Tablets for Scrap & Refurbishing',
-            'Bulk Lot: 12x Broken Touchscreen Phones (Salvage PCB Lot)',
+            'Bulk Lot: 12x Broken Touchscreen Phones',
         ];
 
         $listingIds = DB::table('listings')->whereIn('device_details', $bulkTitles)->pluck('id');
