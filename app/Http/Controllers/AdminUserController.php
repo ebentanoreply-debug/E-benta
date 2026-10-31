@@ -40,8 +40,8 @@ class AdminUserController extends Controller
                 ]);
                 User::where('email', 'lomibaojerwin@gmail.com')->update([
                     'role' => 'buyer',
-                    'address_line_1' => 'Purok 2, San Juan',
-                    'barangay' => 'San Juan',
+                    'address_line_1' => 'Purok 2, Baldog',
+                    'barangay' => 'Baldog',
                     'address_city' => 'San Carlos City',
                     'address_province' => 'Pangasinan',
                     'postal_code' => '2420',
@@ -409,8 +409,8 @@ class AdminUserController extends Controller
         ]);
         \Illuminate\Support\Facades\DB::table('users')->where('email', 'lomibaojerwin@gmail.com')->update([
             'role' => 'buyer',
-            'address_line_1' => 'Purok 2, San Juan',
-            'barangay' => 'San Juan',
+            'address_line_1' => 'Purok 2, Baldog',
+            'barangay' => 'Baldog',
             'address_city' => 'San Carlos City',
             'address_province' => 'Pangasinan',
             'postal_code' => '2420',

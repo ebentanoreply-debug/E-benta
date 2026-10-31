@@ -933,7 +933,8 @@
                                 <div class="eb-pcard bg-white text-dark h-100">
                                     <div class="eb-pcard-media" style="height: 160px;">
                                         @if($photo)
-                                            <img src="{{ $photo }}" alt="{{ $deal->category }}">
+                                            <img src="{{ $photo }}" alt="{{ $deal->category }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';">
+                                            <i class="fas fa-microchip text-teal-600" style="display: none; font-size: 2.5rem; color: #0d9488;"></i>
                                         @else
                                             <i class="fas fa-microchip text-teal-600" style="font-size: 2.5rem; color: #0d9488;"></i>
                                         @endif
@@ -1007,7 +1008,8 @@
                                     <div class="eb-pcard">
                                         <div class="eb-pcard-media">
                                             @if($primaryPhoto)
-                                                <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'Item' }}">
+                                                <img src="{{ $primaryPhoto }}" alt="{{ $listing->category ?: 'Item' }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                                                <div style="display: none; color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
                                             @else
                                                 <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-microchip"></i></div>
                                             @endif
@@ -1107,7 +1109,8 @@
                                     <div class="eb-pcard">
                                         <div class="eb-pcard-media">
                                             @if($primaryPhoto)
-                                                <img src="{{ $primaryPhoto }}" alt="{{ $lot->category ?: 'Salvage Lot' }}">
+                                                <img src="{{ $primaryPhoto }}" alt="{{ $lot->category ?: 'Salvage Lot' }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                                                <div style="display: none; color: #94a3b8; font-size: 3rem;"><i class="fas fa-boxes-stacked"></i></div>
                                             @else
                                                 <div style="color: #94a3b8; font-size: 3rem;"><i class="fas fa-boxes-stacked"></i></div>
                                             @endif

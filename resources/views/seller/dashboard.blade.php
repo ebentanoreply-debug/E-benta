@@ -376,9 +376,11 @@
                             </a>
                         </div>
 
+                        @if(auth()->user()->email === 'seller@test.com' || auth()->user()->listings()->count() === 0)
                         <a href="{{ route('listings.create') }}" class="btn-create-listing-cta">
                             <i class="fas fa-plus-circle"></i> List New Device
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -630,7 +632,8 @@
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="seller-item-thumb">
                                                     @if($primaryPhoto)
-                                                        <img src="{{ $primaryPhoto }}" alt="{{ $categoryName }}" loading="lazy">
+                                                        <img src="{{ $primaryPhoto }}" alt="{{ $categoryName }}" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';">
+                                                        <i class="fas fa-laptop" style="display: none; color: #94a3b8; font-size: 1.25rem;"></i>
                                                     @else
                                                         <i class="fas fa-laptop" style="color: #94a3b8; font-size: 1.25rem;"></i>
                                                     @endif
@@ -715,11 +718,9 @@
                                                 <a href="{{ route('listings.show', $listing) }}" class="seller-btn-action" title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                @if($listing->isAvailable())
-                                                    <a href="{{ route('listings.edit', $listing) }}" class="seller-btn-action" title="Edit Listing">
-                                                        <i class="fas fa-pen-to-square"></i>
-                                                    </a>
-                                                @endif
+                                                <a href="{{ route('listings.edit', $listing) }}" class="seller-btn-action" title="Edit Listing">
+                                                    <i class="fas fa-pen-to-square"></i>
+                                                </a>
                                                 @if($totalOffers > 0)
                                                     <a href="{{ route('listings.offers', $listing) }}" class="seller-btn-action" title="Review Offers">
                                                         <i class="fas fa-handshake"></i>

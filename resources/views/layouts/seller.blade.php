@@ -64,11 +64,13 @@
         {{-- Right: notifications + user --}}
         <div class="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
             {{-- Quick: Create Listing --}}
+            @if(auth()->user()->email === 'seller@test.com' || auth()->user()->listings()->count() === 0)
             <a href="{{ route('listings.create') }}" class="d-none d-lg-inline-flex align-items-center gap-1"
                style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); color: #ffffff; font-weight: 700;
                       font-size: 0.8rem; padding: 0.4rem 1rem; border-radius: 0.55rem; text-decoration: none; transition: all 0.2s ease;">
                 <i class="fas fa-plus"></i> <span>New Listing</span>
             </a>
+            @endif
 
             {{-- Messages --}}
             <a href="{{ route('messages.index') }}"
