@@ -388,7 +388,7 @@ class ProductsAndTransactionsSeeder extends Seeder
 
             // 29 NEW PRODUCTS (Indices 20 - 48) WITHOUT IMAGES - Spread across Oct 14 - Oct 18
             20 => [
-                'seller_email' => 'munozantonette5@gmail.com',
+                'seller_email' => 'ron02naadat@gmail.com',
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 9, // Acer
                 'device_model_id' => null,
@@ -403,7 +403,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 09:30:00',
             ],
             21 => [
-                'seller_email' => 'dg3946922@gmail.com',
+                'seller_email' => 'jimboymelican12@gmail.com',
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 12, // Canon
                 'device_model_id' => 25, // Canon PIXMA
@@ -418,7 +418,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 11:15:00',
             ],
             22 => [
-                'seller_email' => 'jhomaribeltran423@gmail.com',
+                'seller_email' => 'carinojoseph2489@gmail.com',
                 'device_type_id' => 7, // Mouse
                 'device_brand_id' => 11, // Logitech
                 'device_model_id' => 22, // Logitech MX Master 3
@@ -433,7 +433,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 13:45:00',
             ],
             23 => [
-                'seller_email' => 'jensenvincejavier@gmail.com',
+                'seller_email' => 'mclestersoriano43@gmail.com',
                 'device_type_id' => 9, // Router
                 'device_brand_id' => 13, // TP-Link
                 'device_model_id' => 26, // TP-Link WiFi 6 Router
@@ -448,7 +448,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 15:20:00',
             ],
             24 => [
-                'seller_email' => 'markrejierosario12@gmail.com',
+                'seller_email' => 'shinjay.rak@gmail.com',
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 8, // Sony
                 'device_model_id' => null,
@@ -463,7 +463,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 16:50:00',
             ],
             25 => [
-                'seller_email' => 'marklhemuel50@gmail.com',
+                'seller_email' => 'michellecarino4@gmail.com',
                 'device_type_id' => 6, // Keyboard
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 20, // Apple Magic Keyboard
@@ -478,7 +478,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 18:10:00',
             ],
             26 => [
-                'seller_email' => 'vincentagbuya67@gmail.com',
+                'seller_email' => 'johnmichaelsantos@gmail.com',
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 3, // Dell XPS 13
@@ -493,7 +493,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 08:45:00',
             ],
             27 => [
-                'seller_email' => 'christianbautista@gmail.com',
+                'seller_email' => 'joshuareyes23@gmail.com',
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => 2, // Samsung
                 'device_model_id' => 16, // Galaxy Tab S7
@@ -508,7 +508,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 10:20:00',
             ],
             28 => [
-                'seller_email' => 'marygracedelacruz@gmail.com',
+                'seller_email' => 'angelicamendoza05@gmail.com',
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
@@ -523,7 +523,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 12:35:00',
             ],
             29 => [
-                'seller_email' => 'kyleramos17@gmail.com',
+                'seller_email' => 'nicolevillanueva@gmail.com',
                 'device_type_id' => 9, // Router
                 'device_brand_id' => 14, // Netgear
                 'device_model_id' => 27, // Netgear Nighthawk
@@ -538,7 +538,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 14:15:00',
             ],
             30 => [
-                'seller_email' => 'miashielagraceuson@gmail.com',
+                'seller_email' => 'adrianflores08@gmail.com',
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 19, // ASUS ProArt 32"
@@ -553,7 +553,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 16:00:00',
             ],
             31 => [
-                'seller_email' => 'darlyngarcia711@gmail.com',
+                'seller_email' => 'princessmaecastillo@gmail.com',
                 'device_type_id' => 6, // Keyboard
                 'device_brand_id' => 5, // ASUS
                 'device_model_id' => 21, // Mechanical RGB Keyboard
@@ -568,7 +568,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 17:30:00',
             ],
             32 => [
-                'seller_email' => 'daisygeegarcia21@gmail.com',
+                'seller_email' => 'markanthonyrivera@gmail.com',
                 'device_type_id' => 7, // Mouse
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 23, // Apple Magic Mouse
@@ -583,7 +583,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 09:10:00',
             ],
             33 => [
-                'seller_email' => 'markyvangarcia@gmail.com',
+                'seller_email' => 'jerichofernandez@gmail.com',
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 7, // Lenovo
                 'device_model_id' => 5, // Lenovo ThinkPad X1
@@ -613,7 +613,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 12:15:00',
             ],
             35 => [
-                'seller_email' => 'carriojoseph2489@gmail.com',
+                'seller_email' => 'samanthalopez21@gmail.com',
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 2, // Samsung
                 'device_model_id' => 12, // Samsung Galaxy S21
@@ -628,7 +628,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 14:00:00',
             ],
             36 => [
-                'seller_email' => 'jimboymalican12@gmail.com',
+                'seller_email' => 'carlomigelaquino@gmail.com',
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 12, // Canon
                 'device_model_id' => 25, // Canon PIXMA
@@ -658,7 +658,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 17:15:00',
             ],
             38 => [
-                'seller_email' => 'markyvangarcia@gmail.com',
+                'seller_email' => 'jasminetorres14@gmail.com',
                 'device_type_id' => 1, // Laptop
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 4, // HP Pavilion 15
@@ -673,7 +673,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 08:30:00',
             ],
             39 => [
-                'seller_email' => 'munozantonette5@gmail.com',
+                'seller_email' => 'renzomartinez@gmail.com',
                 'device_type_id' => 4, // Tablet
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 15, // iPad Air
@@ -688,7 +688,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 10:15:00',
             ],
             40 => [
-                'seller_email' => 'dg3946922@gmail.com',
+                'seller_email' => 'andreasalazar09@gmail.com',
                 'device_type_id' => 7, // Mouse
                 'device_brand_id' => 11, // Logitech
                 'device_model_id' => 22, // Logitech MX Master 3
@@ -703,7 +703,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 11:50:00',
             ],
             41 => [
-                'seller_email' => 'jhomaribeltran423@gmail.com',
+                'seller_email' => 'vincentgonzales@gmail.com',
                 'device_type_id' => 9, // Router
                 'device_brand_id' => 13, // TP-Link
                 'device_model_id' => 26, // TP-Link WiFi 6 Router
@@ -718,7 +718,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 13:30:00',
             ],
             42 => [
-                'seller_email' => 'jensenvincejavier@gmail.com',
+                'seller_email' => 'kimberlynavarro@gmail.com',
                 'device_type_id' => 5, // Monitor
                 'device_brand_id' => 8, // Sony
                 'device_model_id' => null,
@@ -733,7 +733,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 15:10:00',
             ],
             43 => [
-                'seller_email' => 'markrejierosario12@gmail.com',
+                'seller_email' => 'trishiafernandez12@gmail.com',
                 'device_type_id' => 2, // Desktop Computer
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => 8, // Dell OptiPlex
@@ -748,7 +748,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 16:45:00',
             ],
             44 => [
-                'seller_email' => 'marklhemuel50@gmail.com',
+                'seller_email' => 'angelagarcia08@gmail.com',
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 2, // Samsung
                 'device_model_id' => 12, // Samsung Galaxy S21
@@ -763,7 +763,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-18 09:15:00',
             ],
             45 => [
-                'seller_email' => 'vincentagbuya67@gmail.com',
+                'seller_email' => 'markmendoza17@gmail.com',
                 'device_type_id' => 10, // Cable / Wire
                 'device_brand_id' => 3, // Dell
                 'device_model_id' => null,
@@ -778,7 +778,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-18 10:40:00',
             ],
             46 => [
-                'seller_email' => 'christianbautista@gmail.com',
+                'seller_email' => 'camilleflores25@gmail.com',
                 'device_type_id' => 8, // Printer
                 'device_brand_id' => 4, // HP
                 'device_model_id' => 24, // HP LaserJet Pro
@@ -793,7 +793,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-18 12:20:00',
             ],
             47 => [
-                'seller_email' => 'marygracedelacruz@gmail.com',
+                'seller_email' => 'miguelramos11@gmail.com',
                 'device_type_id' => 3, // Smartphone
                 'device_brand_id' => 1, // Apple
                 'device_model_id' => 11, // iPhone 12
@@ -823,7 +823,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-18 16:00:00',
             ],
             49 => [
-                'seller_email' => 'melicanjimboy12@gmail.com',
+                'seller_email' => 'andreabautista09@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 10,
                 'device_type_id' => 3, // Smartphone
@@ -841,7 +841,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-14 10:15:00',
             ],
             50 => [
-                'seller_email' => 'canosejoseph248@gmail.com',
+                'seller_email' => 'jasminedelacruz@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 5,
                 'device_type_id' => 4, // Tablet
@@ -859,7 +859,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-15 13:40:00',
             ],
             51 => [
-                'seller_email' => 'markyvangarcia@gmail.com',
+                'seller_email' => 'sofiacastillo18@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 8,
                 'device_type_id' => 3, // Smartphone
@@ -877,7 +877,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-16 09:20:00',
             ],
             52 => [
-                'seller_email' => 'miashielagraceuson@gmail.com',
+                'seller_email' => 'carlofernandez07@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 15,
                 'device_type_id' => 3, // Smartphone
@@ -895,7 +895,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 11:50:00',
             ],
             53 => [
-                'seller_email' => 'darlyngarcia71@gmail.com',
+                'seller_email' => 'patriciatorres21@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 6,
                 'device_type_id' => 3, // Smartphone
@@ -913,7 +913,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-17 15:30:00',
             ],
             54 => [
-                'seller_email' => 'marklhemuel50@gmail.com',
+                'seller_email' => 'danielvillanueva13@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 4,
                 'device_type_id' => 4, // Tablet
@@ -931,7 +931,7 @@ class ProductsAndTransactionsSeeder extends Seeder
                 'exact_date' => '2026-10-18 10:10:00',
             ],
             55 => [
-                'seller_email' => 'jhomaribeltran423@gmail.com',
+                'seller_email' => 'nicolemendoza16@gmail.com',
                 'listing_type' => 'bulk_lot',
                 'lot_item_count' => 12,
                 'device_type_id' => 3, // Smartphone

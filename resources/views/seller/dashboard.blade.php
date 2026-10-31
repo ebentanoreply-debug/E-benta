@@ -376,9 +376,11 @@
                             </a>
                         </div>
 
+                        @if(auth()->user()->email === 'seller@test.com' || auth()->user()->listings()->count() === 0)
                         <a href="{{ route('listings.create') }}" class="btn-create-listing-cta">
                             <i class="fas fa-plus-circle"></i> List New Device
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>

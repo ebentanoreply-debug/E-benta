@@ -342,6 +342,12 @@ class ListingController extends Controller
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
         }
 
+        // Limit: Exactly 1 product per seller (except Test Seller)
+        if ($user->email !== 'seller@test.com' && $user->listings()->count() >= 1) {
+            return redirect()->route('seller.listings')
+                ->with('error', 'Each seller is allowed only 1 product listing (except Test Seller).');
+        }
+
         $deviceTypes = DeviceType::all();
         $deviceBrands = DeviceBrand::all();
         $categories = [
@@ -388,6 +394,12 @@ class ListingController extends Controller
         if (!$user->isIdVerified()) {
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
+        }
+
+        // Limit: Exactly 1 product per seller (except Test Seller)
+        if ($user->email !== 'seller@test.com' && $user->listings()->count() >= 1) {
+            return redirect()->route('seller.listings')
+                ->with('error', 'Each seller is allowed only 1 product listing (except Test Seller).');
         }
 
         $isBulk = $request->input('listing_type') === 'bulk_lot';
