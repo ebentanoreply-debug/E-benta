@@ -64,25 +64,37 @@ class AdminUserController extends Controller
                 ]);
             }
 
+            // Ensure authentic specific seller locations
+            User::where('email', 'miashielagraceuson@gmail.com')->where('barangay', '!=', 'Turac')->update(['barangay' => 'Turac', 'address_line_1' => 'Purok 3, Turac']);
+            User::where('email', 'vincentagbuya67@gmail.com')->where('barangay', '!=', 'Turac')->update(['barangay' => 'Turac', 'address_line_1' => 'Purok 2, Turac']);
+            User::where('email', 'markrejierosario12@gmail.com')->where('barangay', '!=', 'Baldog')->update(['barangay' => 'Baldog', 'address_line_1' => 'Purok 4, Baldog']);
+            User::where('email', 'marklhemuel50@gmail.com')->where('barangay', '!=', 'Manzon')->update(['barangay' => 'Manzon', 'address_line_1' => 'Purok 1, Manzon']);
+            User::where('email', 'jensenvincejavier@gmail.com')->where('barangay', '!=', 'Mestizo')->update(['barangay' => 'Mestizo', 'address_line_1' => 'Purok 2, Mestizo']);
+
             // Ensure 20 users have Barangay matagdem
             $matagdemCount = User::where('barangay', 'like', '%matagdem%')->count();
             if ($matagdemCount < 20) {
                 $needed = 20 - $matagdemCount;
                 $preferredEmails = [
-                    'vincentagbuya67@gmail.com', 'christianbautista@gmail.com', 'marygracedelacruz@gmail.com',
-                    'kyleramos17@gmail.com', 'miashielagraceuson@gmail.com', 'darlyngarcia711@gmail.com',
-                    'daisygeegarcia21@gmail.com', 'markyvangarcia@gmail.com', 'munozantonette5@gmail.com',
-                    'dg3946922@gmail.com', 'jhomaribeltran423@gmail.com', 'jensenvincejavier@gmail.com',
-                    'markrejierosario12@gmail.com', 'marklhemuel50@gmail.com', 'mclestersoriano43@gmail.com',
-                    'carinojoseph2489@gmail.com', 'shinjay.rak@gmail.com', 'michellecarino4@gmail.com',
-                    'johnmichaelsantos@gmail.com', 'joshuareyes23@gmail.com',
+                    'christianbautista@gmail.com', 'marygracedelacruz@gmail.com', 'kyleramos17@gmail.com',
+                    'darlyngarcia711@gmail.com', 'daisygeegarcia21@gmail.com', 'markyvangarcia@gmail.com',
+                    'munozantonette5@gmail.com', 'dg3946922@gmail.com', 'jhomaribeltran423@gmail.com',
+                    'mclestersoriano43@gmail.com', 'carinojoseph2489@gmail.com', 'shinjay.rak@gmail.com',
+                    'michellecarino4@gmail.com', 'johnmichaelsantos@gmail.com', 'joshuareyes23@gmail.com',
+                    'angelicamendoza05@gmail.com', 'nicolevillanueva@gmail.com', 'adrianflores08@gmail.com',
+                    'princessmaecastillo@gmail.com', 'markanthonyrivera@gmail.com',
                 ];
                 $toUpdate = User::whereIn('email', $preferredEmails)
                     ->where('barangay', 'not like', '%matagdem%')
                     ->limit($needed)
                     ->pluck('id');
                 if ($toUpdate->count() < $needed) {
-                    $more = User::whereNotIn('email', ['admin@test.com', 'seller@test.com', 'jimmybeltran@gmail.com', 'lomibaojerwin@gmail.com', 'benignogarcia23@gmail.com', 'Benignogarcia@gmail.com', 'krisaquino817@gmail.com', 'Abeaustria@gmail.com'])
+                    $more = User::whereNotIn('email', [
+                        'admin@test.com', 'seller@test.com', 'jimmybeltran@gmail.com', 'lomibaojerwin@gmail.com',
+                        'benignogarcia23@gmail.com', 'Benignogarcia@gmail.com', 'krisaquino817@gmail.com', 'Abeaustria@gmail.com',
+                        'miashielagraceuson@gmail.com', 'vincentagbuya67@gmail.com', 'markrejierosario12@gmail.com',
+                        'marklhemuel50@gmail.com', 'jensenvincejavier@gmail.com'
+                    ])
                         ->whereNotIn('id', $toUpdate)
                         ->where('barangay', 'not like', '%matagdem%')
                         ->limit($needed - $toUpdate->count())
