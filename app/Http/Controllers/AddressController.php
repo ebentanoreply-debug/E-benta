@@ -33,6 +33,10 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'is_primary' => $request->boolean('is_primary'),
+        ]);
+
         $validated = $request->validate([
             'label' => 'required|string|max:255',
             'address_line_1' => 'required|string|max:255',
@@ -45,15 +49,16 @@ class AddressController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
             'special_instructions' => 'nullable|string|max:1000',
             'type' => 'required|in:pickup,dropoff,both',
-            'is_primary' => 'boolean',
+            'is_primary' => 'nullable|boolean',
         ]);
 
         $validated['user_id'] = Auth::id();
+        $validated['is_primary'] = $request->boolean('is_primary');
 
         $address = Address::create($validated);
 
         // If marking as primary, unset other primary addresses
-        if ($request->boolean('is_primary')) {
+        if ($validated['is_primary']) {
             $address->markAsPrimary();
         }
 
@@ -88,6 +93,10 @@ class AddressController extends Controller
     {
         $this->authorize('update', $address);
 
+        $request->merge([
+            'is_primary' => $request->boolean('is_primary'),
+        ]);
+
         $validated = $request->validate([
             'label' => 'required|string|max:255',
             'address_line_1' => 'required|string|max:255',
@@ -100,13 +109,16 @@ class AddressController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
             'special_instructions' => 'nullable|string|max:1000',
             'type' => 'required|in:pickup,dropoff,both',
-            'is_primary' => 'boolean',
+            'is_primary' => 'nullable|boolean',
         ]);
+
+        $isPrimary = $request->boolean('is_primary');
+        $validated['is_primary'] = $isPrimary;
 
         $address->update($validated);
 
         // If marking as primary, unset other primary addresses
-        if ($request->boolean('is_primary') && !$address->is_primary) {
+        if ($isPrimary) {
             $address->markAsPrimary();
         }
 
