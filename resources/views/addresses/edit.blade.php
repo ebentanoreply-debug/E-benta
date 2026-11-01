@@ -4,531 +4,679 @@
 
 @section('content')
 <style>
-    .ae-page {
-        padding: 1.5rem 0 2.5rem;
+    .address-edit-page {
+        background-color: #f8fafc;
+        min-height: calc(100vh - 60px);
+        padding-bottom: 4rem;
     }
 
-    .ae-back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        color: #60a5fa;
-        font-weight: 700;
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .ae-back-link:hover {
-        color: #93c5fd;
-    }
-
-    .ae-hero {
+    .address-edit-hero {
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        border: 1px solid rgba(13, 148, 136, 0.3);
+        border-radius: 1.25rem;
+        color: #ffffff;
+        padding: 2rem 2.25rem;
         position: relative;
         overflow: hidden;
-        background: linear-gradient(130deg, rgba(52, 152, 219, 0.18) 0%, rgba(14, 165, 233, 0.12) 48%, rgba(52, 152, 219, 0.05) 100%);
-        border: 1px solid rgba(52, 152, 219, 0.25);
-        border-left: 4px solid #3498db;
-        border-radius: 1rem;
-        padding: 1.8rem;
-        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(13, 148, 136, 0.15);
+        margin-bottom: 1.75rem;
     }
 
-    .ae-hero::after {
+    .address-edit-hero::after {
         content: '';
         position: absolute;
-        right: -35px;
-        top: -35px;
-        width: 160px;
-        height: 160px;
-        border-radius: 50%;
-        background: radial-gradient(circle at center, rgba(52, 152, 219, 0.25) 0%, rgba(52, 152, 219, 0) 70%);
+        top: 0;
+        right: 0;
+        width: 380px;
+        height: 100%;
+        background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 80%);
         pointer-events: none;
     }
 
-    .ae-hero-head {
-        display: flex;
+    .address-back-btn {
+        display: inline-flex;
         align-items: center;
-        gap: 1rem;
-    }
-
-    .ae-hero-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 0.85rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        color: #93c5fd;
-        background: rgba(52, 152, 219, 0.25);
-        border: 1px solid rgba(52, 152, 219, 0.35);
-    }
-
-    .ae-hero h1 {
-        margin: 0;
-        color: var(--text-light);
-        font-size: 1.95rem;
-        font-weight: 800;
-        letter-spacing: -0.4px;
-    }
-
-    .ae-hero p {
-        margin: 0.2rem 0 0;
-        color: #9cbcc8;
-        font-weight: 500;
-    }
-
-    .ae-side-card,
-    .ae-form-card,
-    .ae-danger-card {
-        background: linear-gradient(135deg, rgba(15, 40, 24, 0.88) 0%, rgba(15, 40, 24, 0.56) 100%);
-        border-radius: 1rem;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
-    }
-
-    .ae-side-card,
-    .ae-form-card {
-        border: 1px solid rgba(52, 152, 219, 0.22);
-    }
-
-    .ae-side-card {
-        padding: 1.3rem;
-        height: 100%;
-    }
-
-    .ae-side-card h5 {
-        color: var(--text-light);
-        font-weight: 800;
-        margin-bottom: 0.9rem;
-    }
-
-    .ae-tip {
-        background: rgba(52, 152, 219, 0.12);
-        border: 1px solid rgba(52, 152, 219, 0.24);
-        border-radius: 0.7rem;
-        padding: 0.8rem 0.9rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .ae-tip strong {
-        display: block;
-        color: #dceffd;
-        margin-bottom: 0.15rem;
-        font-size: 0.9rem;
-    }
-
-    .ae-tip span {
-        color: #a4c2ce;
-        font-size: 0.82rem;
-        line-height: 1.45;
-    }
-
-    .ae-form-card {
-        padding: 1.45rem;
-    }
-
-    .ae-section {
-        margin-bottom: 1.35rem;
-    }
-
-    .ae-section-head {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        margin-bottom: 0.8rem;
-    }
-
-    .ae-section-head i {
-        color: #60a5fa;
-    }
-
-    .ae-section-head h4 {
-        margin: 0;
-        color: var(--text-light);
-        font-size: 1rem;
-        font-weight: 800;
-    }
-
-    .ae-field-group {
-        margin-bottom: 1rem;
-    }
-
-    .ae-label {
-        display: block;
-        margin-bottom: 0.45rem;
-        color: #d9ebe8;
-        font-size: 0.82rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .ae-control {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(52, 152, 219, 0.26);
-        color: var(--text-light);
+        gap: 0.5rem;
+        color: #0d9488;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 1rem;
         border-radius: 0.65rem;
-        padding: 0.72rem 0.95rem;
-        font-size: 0.95rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none;
         transition: all 0.2s ease;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
 
-    .ae-control:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 0.14);
-        border-color: rgba(96, 165, 250, 0.45);
-        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.14);
-        color: var(--text-light);
+    .address-back-btn:hover {
+        background: #f0fdfa;
+        color: #0f766e;
+        border-color: #99f6e4;
+        transform: translateX(-2px);
     }
 
-    .ae-control::placeholder {
-        color: #7f9e9a;
+    .form-panel-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1.15rem;
+        padding: 2rem;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        margin-bottom: 1.5rem;
     }
 
-    .ae-control option {
-        color: #0f172a;
+    .side-info-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1.15rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        margin-bottom: 1.5rem;
     }
 
-    .ae-error {
-        display: block;
-        margin-top: 0.4rem;
-        color: #ef4444;
-        font-size: 0.82rem;
-        font-weight: 600;
-    }
-
-    .ae-primary-box {
-        background: rgba(52, 152, 219, 0.1);
-        border: 1px solid rgba(52, 152, 219, 0.25);
-        border-left: 3px solid #3498db;
-        border-radius: 0.7rem;
-        padding: 0.85rem 0.95rem;
-    }
-
-    .ae-primary-label {
+    .section-divider-title {
         display: flex;
         align-items: center;
         gap: 0.65rem;
-        color: var(--text-light);
-        font-weight: 700;
-        margin: 0;
-        cursor: pointer;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f5f9;
+        margin-bottom: 1.35rem;
     }
 
-    .ae-primary-label input[type='checkbox'] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        accent-color: #3498db;
-    }
-
-    .ae-primary-hint {
-        display: block;
-        color: #9cbcc8;
-        margin-top: 0.45rem;
-        font-size: 0.82rem;
-    }
-
-    .ae-note-primary {
-        margin-top: 0.8rem;
-        background: rgba(241, 196, 15, 0.14);
-        border: 1px solid rgba(241, 196, 15, 0.38);
-        border-radius: 0.65rem;
-        padding: 0.72rem 0.85rem;
-        color: #f4d03f;
-        font-size: 0.83rem;
-        font-weight: 600;
-    }
-
-    .ae-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.9rem;
-        margin-top: 1.5rem;
-    }
-
-    .ae-btn {
-        display: inline-flex;
+    .section-divider-title .icon-wrap {
+        width: 34px;
+        height: 34px;
+        border-radius: 0.6rem;
+        background: #f0fdfa;
+        color: #0d9488;
+        border: 1px solid #ccfbf1;
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        padding: 0.85rem 1.2rem;
-        border-radius: 0.65rem;
-        border: 1px solid transparent;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .section-divider-title h4 {
+        margin: 0;
+        font-size: 1.05rem;
         font-weight: 800;
-        text-decoration: none;
+        color: #0f172a;
+        letter-spacing: -0.2px;
+    }
+
+    .form-field-label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 0.45rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .form-field-label span.req {
+        color: #ef4444;
+        margin-left: 0.2rem;
+    }
+
+    .custom-input {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        color: #0f172a;
+        border-radius: 0.65rem;
+        padding: 0.7rem 0.95rem;
+        font-size: 0.92rem;
+        font-weight: 500;
         transition: all 0.2s ease;
     }
 
-    .ae-btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--text-light);
-        border-color: rgba(52, 152, 219, 0.3);
+    .custom-input:focus {
+        outline: none;
+        border-color: #0d9488;
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+        background-color: #ffffff;
+        color: #0f172a;
     }
 
-    .ae-btn-secondary:hover {
-        color: #ffffff;
-        background: rgba(52, 152, 219, 0.14);
-        border-color: rgba(52, 152, 219, 0.45);
+    .custom-input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
     }
 
-    .ae-btn-primary {
-        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    .input-error-msg {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: #ef4444;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-top: 0.4rem;
+    }
+
+    .primary-toggle-box {
+        background: #f0fdfa;
+        border: 1.5px solid #99f6e4;
+        border-left: 4px solid #0d9488;
+        border-radius: 0.85rem;
+        padding: 1.15rem 1.25rem;
+        margin-top: 1.5rem;
+    }
+
+    .primary-checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        cursor: pointer;
+        user-select: none;
+        margin: 0;
+    }
+
+    .primary-checkbox-label input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #0d9488;
+        border-radius: 4px;
+        margin-top: 0.15rem;
+        flex-shrink: 0;
+    }
+
+    .primary-title {
+        font-weight: 800;
+        color: #0f172a;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+
+    .primary-desc {
+        color: #64748b;
+        font-size: 0.83rem;
+        margin-top: 0.25rem;
+        line-height: 1.45;
+    }
+
+    .action-button-row {
+        display: flex;
+        gap: 0.85rem;
+        margin-top: 2rem;
+        align-items: center;
+    }
+
+    .btn-save-address {
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         color: #ffffff;
         border: none;
+        border-radius: 0.65rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 800;
+        font-size: 0.92rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
     }
 
-    .ae-btn-primary:hover {
+    .btn-save-address:hover {
+        background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(13, 148, 136, 0.35);
+        color: #ffffff;
+    }
+
+    .btn-cancel-action {
+        background: #f8fafc;
+        color: #475569;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 0.65rem;
+        padding: 0.75rem 1.35rem;
+        font-weight: 700;
+        font-size: 0.92rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cancel-action:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+
+    .tip-item {
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 0.75rem;
+        padding: 0.85rem 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .tip-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .tip-item-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: #0d9488;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .tip-item-body {
+        font-size: 0.81rem;
+        color: #64748b;
+        line-height: 1.45;
+        margin: 0;
+    }
+
+    .danger-zone-card {
+        background: #ffffff;
+        border: 1px solid #fecaca;
+        border-left: 4px solid #ef4444;
+        border-radius: 1.15rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.05);
+    }
+
+    .danger-zone-title {
+        color: #b91c1c;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .danger-zone-desc {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin-bottom: 1.15rem;
+        line-height: 1.45;
+    }
+
+    .btn-delete-address {
+        background: #ef4444;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.65rem;
+        padding: 0.65rem 1.25rem;
+        font-weight: 800;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-delete-address:hover {
+        background: #dc2626;
         color: #ffffff;
         transform: translateY(-1px);
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.28);
-    }
-
-    .ae-danger-card {
-        margin-top: 1rem;
-        border: 1px solid rgba(231, 76, 60, 0.35);
-        padding: 1.2rem;
-    }
-
-    .ae-danger-card h5 {
-        margin: 0 0 0.45rem;
-        color: #ef4444;
-        font-weight: 800;
-    }
-
-    .ae-danger-card p {
-        margin: 0 0 0.9rem;
-        color: #cbb5b5;
-        font-size: 0.9rem;
-    }
-
-    .ae-btn-danger {
-        background: #e74c3c;
-        color: #ffffff;
-        border: none;
-    }
-
-    .ae-btn-danger:hover {
-        color: #ffffff;
-        background: #dc2626;
-    }
-
-    @media (max-width: 991px) {
-        .ae-page {
-            padding-top: 1rem;
-        }
-
-        .ae-side-card {
-            margin-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .ae-hero {
-            padding: 1.35rem;
-        }
-
-        .ae-hero h1 {
-            font-size: 1.45rem;
-        }
-
-        .ae-hero-head {
-            align-items: flex-start;
-        }
-
-        .ae-actions {
-            grid-template-columns: 1fr;
-        }
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 </style>
 
-<div class="ae-page">
-    <div class="container">
-        <a href="{{ route('addresses.index') }}" class="ae-back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Addresses
-        </a>
+<div class="address-edit-page py-4">
+    <div class="container-fluid px-3 px-lg-4" style="max-width: 1200px;">
+        
+        <!-- Back Navigation -->
+        <div>
+            <a href="{{ route('addresses.index') }}" class="address-back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Saved Addresses</span>
+            </a>
+        </div>
 
-        <div class="ae-hero">
-            <div class="ae-hero-head">
-                <div class="ae-hero-icon">
-                    <i class="fas fa-edit"></i>
-                </div>
+        <!-- Hero Header -->
+        <div class="address-edit-hero">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
                 <div>
-                    <h1>Edit Address</h1>
-                    <p>Update this location details and keep your logistics accurate.</p>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.2); color: #ffffff; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                            <i class="fas fa-location-dot me-1"></i>Location Management
+                        </span>
+                        @if($address->is_primary)
+                            <span class="badge" style="background: #f59e0b; color: #ffffff; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-star me-1"></i>Primary Address
+                            </span>
+                        @endif
+                    </div>
+                    <h1 style="font-size: clamp(1.5rem, 2.2vw, 1.95rem); font-weight: 900; margin: 0; letter-spacing: -0.5px; color: #ffffff;">
+                        Edit Address: {{ $address->label }}
+                    </h1>
+                    <p style="color: #ccfbf1; font-size: 0.92rem; margin: 0.35rem 0 0;">
+                        Update your location details to keep pickups, shipments, and orders accurate.
+                    </p>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <span style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25); color: #ffffff; padding: 0.5rem 0.95rem; border-radius: 0.65rem; font-size: 0.82rem; font-weight: 700;">
+                        <i class="fas fa-map-pin me-1"></i> {{ $address->city }}, {{ $address->country }}
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="row g-4">
-            <div class="col-lg-4">
-                <aside class="ae-side-card">
-                    <h5><i class="fas fa-compass me-2" style="color: #60a5fa;"></i>Quick Notes</h5>
+            <!-- LEFT COLUMN: Helpful Quick Notes & Meta -->
+            <div class="col-lg-4 col-xl-4 order-lg-2">
+                <div class="side-info-card">
+                    <h5 style="color: #0f172a; font-weight: 800; font-size: 1rem; margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-circle-info" style="color: #0d9488;"></i>
+                        Address Tips
+                    </h5>
 
-                    <div class="ae-tip">
-                        <strong>Keep Labels Clear</strong>
-                        <span>Use names like Home Pickup, Warehouse Dropoff, or Office.</span>
-                    </div>
-
-                    <div class="ae-tip">
-                        <strong>Update Access Notes</strong>
-                        <span>Add gate codes, landmark details, or floor numbers.</span>
-                    </div>
-
-                    <div class="ae-tip">
-                        <strong>Primary Address</strong>
-                        <span>Primary location is used as default in forms and transactions.</span>
-                    </div>
-                </aside>
-            </div>
-
-            <div class="col-lg-8">
-                <div class="ae-form-card">
-                    <form method="POST" action="{{ route('addresses.update', $address) }}">
-                        @csrf
-                        @method('PUT')
-
-                        <section class="ae-section">
-                            <div class="ae-section-head">
-                                <i class="fas fa-id-card"></i>
-                                <h4>Address Identity</h4>
-                            </div>
-
-                            <div class="ae-field-group">
-                                <label class="ae-label" for="label">Address Label *</label>
-                                <input id="label" class="ae-control" type="text" name="label" value="{{ old('label', $address->label) }}" placeholder="Home, Office, Warehouse" required>
-                                @error('label')
-                                    <small class="ae-error">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="ae-field-group mb-0">
-                                <label class="ae-label" for="type">Address Type *</label>
-                                <select id="type" class="ae-control" name="type" required>
-                                    <option value="both" {{ old('type', $address->type) == 'both' ? 'selected' : '' }}>Both (Pickup and Dropoff)</option>
-                                    <option value="pickup" {{ old('type', $address->type) == 'pickup' ? 'selected' : '' }}>Pickup Only</option>
-                                    <option value="dropoff" {{ old('type', $address->type) == 'dropoff' ? 'selected' : '' }}>Dropoff Only</option>
-                                </select>
-                                @error('type')
-                                    <small class="ae-error">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </section>
-
-                        <section class="ae-section">
-                            <div class="ae-section-head">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <h4>Location Details</h4>
-                            </div>
-
-                            <div class="ae-field-group">
-                                <label class="ae-label" for="address_line_1">Street Address *</label>
-                                <input id="address_line_1" class="ae-control" type="text" name="address_line_1" value="{{ old('address_line_1', $address->address_line_1) }}" placeholder="123 Main Street" required>
-                                @error('address_line_1')
-                                    <small class="ae-error">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="ae-field-group">
-                                <label class="ae-label" for="address_line_2">Apartment or Suite</label>
-                                <input id="address_line_2" class="ae-control" type="text" name="address_line_2" value="{{ old('address_line_2', $address->address_line_2) }}" placeholder="Unit, floor, building, landmark">
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="ae-field-group mb-md-0">
-                                        <label class="ae-label" for="city">City *</label>
-                                        <input id="city" class="ae-control" type="text" name="city" value="{{ old('city', $address->city) }}" placeholder="Manila" required>
-                                        @error('city')
-                                            <small class="ae-error">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="ae-field-group mb-0">
-                                        <label class="ae-label" for="state">State or Province</label>
-                                        <input id="state" class="ae-control" type="text" name="state" value="{{ old('state', $address->state) }}" placeholder="NCR">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row g-3 mt-1">
-                                <div class="col-md-6">
-                                    <div class="ae-field-group mb-md-0">
-                                        <label class="ae-label" for="postal_code">Postal Code *</label>
-                                        <input id="postal_code" class="ae-control" type="text" name="postal_code" value="{{ old('postal_code', $address->postal_code) }}" placeholder="1000" required>
-                                        @error('postal_code')
-                                            <small class="ae-error">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="ae-field-group mb-0">
-                                        <label class="ae-label" for="country">Country *</label>
-                                        <input id="country" class="ae-control" type="text" name="country" value="{{ old('country', $address->country) }}" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="ae-section">
-                            <div class="ae-section-head">
-                                <i class="fas fa-sticky-note"></i>
-                                <h4>Delivery Notes</h4>
-                            </div>
-
-                            <div class="ae-field-group mb-0">
-                                <label class="ae-label" for="special_instructions">Special Instructions</label>
-                                <textarea id="special_instructions" class="ae-control" name="special_instructions" rows="4" placeholder="Gate code, nearest landmark, building entrance notes">{{ old('special_instructions', $address->special_instructions) }}</textarea>
-                                @error('special_instructions')
-                                    <small class="ae-error">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </section>
-
-                        <div class="ae-primary-box">
-                            <label class="ae-primary-label" for="is_primary">
-                                <input id="is_primary" type="checkbox" name="is_primary" {{ old('is_primary', $address->is_primary) ? 'checked' : '' }}>
-                                <i class="fas fa-star" style="color: #f1c40f;"></i>
-                                Set as my primary address
-                            </label>
-                            <small class="ae-primary-hint">Primary address will be prefilled when creating offers and transactions.</small>
-
-                            @if($address->is_primary)
-                                <div class="ae-note-primary">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    This address is currently primary. If you uncheck it, set another address as primary.
-                                </div>
-                            @endif
+                    <div class="tip-item">
+                        <div class="tip-item-title">
+                            <i class="fas fa-tag"></i> Clear Labels
                         </div>
+                        <p class="tip-item-body">
+                            Use recognizable labels like <strong>Main Warehouse</strong>, <strong>Home Pickup</strong>, or <strong>Branch Office</strong>.
+                        </p>
+                    </div>
 
-                        <div class="ae-actions">
-                            <a href="{{ route('addresses.index') }}" class="ae-btn ae-btn-secondary">Cancel</a>
-                            <button type="submit" class="ae-btn ae-btn-primary">
-                                <i class="fas fa-save"></i>
-                                Save Changes
-                            </button>
+                    <div class="tip-item">
+                        <div class="tip-item-title">
+                            <i class="fas fa-arrows-split-up-and-left"></i> Address Purpose
                         </div>
-                    </form>
+                        <p class="tip-item-body">
+                            Specify whether this address is used for seller item pickups, order dropoffs, or both.
+                        </p>
+                    </div>
+
+                    <div class="tip-item">
+                        <div class="tip-item-title">
+                            <i class="fas fa-star" style="color: #f59e0b;"></i> Primary Location
+                        </div>
+                        <p class="tip-item-body">
+                            Your primary address is automatically selected as the default location when you list tech or create offers.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="ae-danger-card">
-                    <h5><i class="fas fa-trash-alt me-2"></i>Delete Address</h5>
-                    <p>This action cannot be undone and may affect existing references using this location.</p>
-                    <form method="POST" action="{{ route('addresses.destroy', $address) }}" onsubmit="return confirm('Are you sure you want to delete this address?');">
+                <!-- Danger Zone Card: Delete Location -->
+                <div class="danger-zone-card">
+                    <div class="danger-zone-title">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <span>Delete Location</span>
+                    </div>
+                    <p class="danger-zone-desc">
+                        Permanently remove this location. Active orders already associated with this address will retain their shipping record.
+                    </p>
+                    <form method="POST" action="{{ route('addresses.destroy', $address) }}" onsubmit="return confirm('Are you sure you want to delete this address? This action cannot be undone.');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="ae-btn ae-btn-danger">
+                        <button type="submit" class="btn-delete-address">
                             <i class="fas fa-trash-alt"></i>
-                            Delete Address
+                            <span>Delete This Address</span>
                         </button>
                     </form>
                 </div>
             </div>
+
+            <!-- RIGHT COLUMN: Main Address Edit Form -->
+            <div class="col-lg-8 col-xl-8 order-lg-1">
+                <div class="form-panel-card">
+                    <form method="POST" action="{{ route('addresses.update', $address) }}" id="editAddressForm">
+                        @csrf
+                        @method('PUT')
+
+                        <!-- Section 1: Address Identity -->
+                        <div class="section-divider-title">
+                            <div class="icon-wrap">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <h4>Address Identity</h4>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-7">
+                                <label class="form-field-label" for="label">
+                                    Address Label <span class="req">*</span>
+                                </label>
+                                <input id="label"
+                                       class="custom-input @error('label') is-invalid @enderror"
+                                       type="text"
+                                       name="label"
+                                       value="{{ old('label', $address->label) }}"
+                                       placeholder="e.g. Home, Warehouse, Central Hub"
+                                       required>
+                                @error('label')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="form-field-label" for="type">
+                                    Address Purpose <span class="req">*</span>
+                                </label>
+                                <select id="type"
+                                        class="custom-input @error('type') is-invalid @enderror"
+                                        name="type"
+                                        required>
+                                    <option value="both" {{ old('type', $address->type) === 'both' ? 'selected' : '' }}>Both (Pickup & Dropoff)</option>
+                                    <option value="pickup" {{ old('type', $address->type) === 'pickup' ? 'selected' : '' }}>Pickup Only</option>
+                                    <option value="dropoff" {{ old('type', $address->type) === 'dropoff' ? 'selected' : '' }}>Dropoff Only</option>
+                                </select>
+                                @error('type')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Location Details -->
+                        <div class="section-divider-title">
+                            <div class="icon-wrap">
+                                <i class="fas fa-map-location-dot"></i>
+                            </div>
+                            <h4>Location Details</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-field-label" for="address_line_1">
+                                Street Address / Purok / Building <span class="req">*</span>
+                            </label>
+                            <input id="address_line_1"
+                                   class="custom-input @error('address_line_1') is-invalid @enderror"
+                                   type="text"
+                                   name="address_line_1"
+                                   value="{{ old('address_line_1', $address->address_line_1) }}"
+                                   placeholder="e.g. Purok 3, 124 Rizal Avenue"
+                                   required>
+                            @error('address_line_1')
+                                <div class="input-error-msg">
+                                    <i class="fas fa-circle-exclamation"></i>
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-field-label" for="address_line_2">
+                                Barangay / Suite / Floor / Landmark <small style="color: #94a3b8; text-transform: none; font-weight: 500;">(Optional)</small>
+                            </label>
+                            <input id="address_line_2"
+                                   class="custom-input @error('address_line_2') is-invalid @enderror"
+                                   type="text"
+                                   name="address_line_2"
+                                   value="{{ old('address_line_2', $address->address_line_2) }}"
+                                   placeholder="e.g. Brgy. Turac, Near Elementary School">
+                            @error('address_line_2')
+                                <div class="input-error-msg">
+                                    <i class="fas fa-circle-exclamation"></i>
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-field-label" for="city">
+                                    City / Municipality <span class="req">*</span>
+                                </label>
+                                <input id="city"
+                                       class="custom-input @error('city') is-invalid @enderror"
+                                       type="text"
+                                       name="city"
+                                       value="{{ old('city', $address->city) }}"
+                                       placeholder="e.g. San Carlos City"
+                                       required>
+                                @error('city')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-field-label" for="state">
+                                    State / Province
+                                </label>
+                                <input id="state"
+                                       class="custom-input @error('state') is-invalid @enderror"
+                                       type="text"
+                                       name="state"
+                                       value="{{ old('state', $address->state) }}"
+                                       placeholder="e.g. Pangasinan">
+                                @error('state')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-field-label" for="postal_code">
+                                    Postal / ZIP Code <span class="req">*</span>
+                                </label>
+                                <input id="postal_code"
+                                       class="custom-input @error('postal_code') is-invalid @enderror"
+                                       type="text"
+                                       name="postal_code"
+                                       value="{{ old('postal_code', $address->postal_code) }}"
+                                       placeholder="e.g. 2420"
+                                       required>
+                                @error('postal_code')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-field-label" for="country">
+                                    Country <span class="req">*</span>
+                                </label>
+                                <input id="country"
+                                       class="custom-input @error('country') is-invalid @enderror"
+                                       type="text"
+                                       name="country"
+                                       value="{{ old('country', $address->country ?? 'Philippines') }}"
+                                       required>
+                                @error('country')
+                                    <div class="input-error-msg">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Delivery / Access Notes -->
+                        <div class="section-divider-title">
+                            <div class="icon-wrap">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <h4>Delivery & Pickup Instructions</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-field-label" for="special_instructions">
+                                Special Notes / Courier Guidelines <small style="color: #94a3b8; text-transform: none; font-weight: 500;">(Optional)</small>
+                            </label>
+                            <textarea id="special_instructions"
+                                      class="custom-input @error('special_instructions') is-invalid @enderror"
+                                      name="special_instructions"
+                                      rows="3"
+                                      placeholder="e.g. Gate code, call upon arrival, landmark details, office hours...">{{ old('special_instructions', $address->special_instructions) }}</textarea>
+                            @error('special_instructions')
+                                <div class="input-error-msg">
+                                    <i class="fas fa-circle-exclamation"></i>
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                        <!-- Section 4: Primary Address Checkbox -->
+                        <div class="primary-toggle-box">
+                            <label class="primary-checkbox-label" for="is_primary">
+                                <input id="is_primary"
+                                       type="checkbox"
+                                       name="is_primary"
+                                       value="1"
+                                       {{ old('is_primary', $address->is_primary) ? 'checked' : '' }}>
+                                <div>
+                                    <div class="primary-title">
+                                        <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                        Set as Primary Address
+                                    </div>
+                                    <div class="primary-desc">
+                                        Primary address is preselected automatically for new listings, incoming offers, and transactions.
+                                        @if($address->is_primary)
+                                            <span class="d-block mt-1 text-teal fw-bold" style="color: #0d9488;">
+                                                <i class="fas fa-check-circle me-1"></i>This location is currently set as your primary address.
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </label>
+                            @error('is_primary')
+                                <div class="input-error-msg mt-2">
+                                    <i class="fas fa-circle-exclamation"></i>
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-button-row">
+                            <a href="{{ route('addresses.index') }}" class="btn-cancel-action">
+                                <i class="fas fa-xmark"></i>
+                                <span>Cancel</span>
+                            </a>
+                            <button type="submit" class="btn-save-address">
+                                <i class="fas fa-floppy-disk"></i>
+                                <span>Save Changes</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 @endsection
