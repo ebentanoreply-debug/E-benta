@@ -29,3 +29,4 @@ return new class extends Migration
         // Login audit logs are ephemeral session traces; irreversible once purged.
     }
 };
+
