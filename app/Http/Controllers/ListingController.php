@@ -610,6 +610,11 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
+        if ($listing->isCompleted()) {
+            return redirect()->route('listings.show', $listing)
+                ->with('error', 'Completed listings cannot be edited.');
+        }
+
         // Allow owner to update details/photos even if matched
 
         $listing->load(['deviceTypes', 'deviceBrand', 'deviceModel']);
@@ -634,6 +639,11 @@ class ListingController extends Controller
         // Only owner can update
         if (Auth::id() !== $listing->user_id) {
             return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        if ($listing->isCompleted()) {
+            return redirect()->route('listings.show', $listing)
+                ->with('error', 'Completed listings cannot be edited.');
         }
 
         // Allow owner to update details/photos even if matched

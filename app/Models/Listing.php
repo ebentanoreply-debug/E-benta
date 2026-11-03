@@ -285,4 +285,13 @@ class Listing extends Model
     {
         return $this->status === 'processed';
     }
+
+    /**
+     * Check if listing is completed / delivered / processed.
+     */
+    public function isCompleted(): bool
+    {
+        return in_array($this->status, ['completed', 'delivered', 'processed'])
+            || $this->offers()->where('status', 'completed')->exists();
+    }
 }
