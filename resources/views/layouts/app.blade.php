@@ -1249,7 +1249,7 @@
                                 <li class="nav-item dropdown notif-nav-item">
                                     <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-bell" style="font-size: 1.25rem; color: #2dd4bf;"></i>
-                                        <span id="notification-badge" style="position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 50%; min-width: 18px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); animation: pulse 2s infinite;">0</span>
+                                        <span id="notification-badge" class="notification-badge-el" style="position: absolute; top: -6px; right: -6px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 50%; min-width: 18px; text-align: center; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); animation: pulse 2s infinite;">0</span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="max-width: 380px; height: auto; max-height: 450px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 0.8rem; display: none; flex-direction: column; padding: 0; margin: 0; min-width: 320px;">
                                         <li style="padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(13, 148, 136, 0.08); flex-shrink: 0; list-style: none; margin: 0;">
@@ -2031,147 +2031,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    @auth
-    <script>
-        // Load notifications on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadRecentNotifications();
-            // Refresh notifications every 15 seconds (faster updates)
-            setInterval(loadRecentNotifications, 15000);
-        });
-
-        function loadRecentNotifications() {
-            console.log('📡 Fetching /notifications/recent endpoint...');
-            fetch('{{ route("notifications.recent") }}')
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('📬 Raw notifications data received:', data);
-                    console.table(data);
-                    
-                    // Count unread notifications (ensure is_read is properly evaluated as boolean)
-                    const unreadCount = data.filter(n => {
-                        const isRead = Boolean(n.is_read);
-                        console.log(`  Notification ${n.id}: is_read=${n.is_read} (type: ${typeof n.is_read}) → Boolean=${isRead} → !Boolean=${!isRead}`);
-                        return !isRead;
-                    }).length;
-                    
-                    console.log('📊 Filtered unread count:', unreadCount);
-                    console.log('🎯 Calling updateNotificationBell with data length:', data.length);
-                    updateNotificationBell(data);
-                })
-                .catch(error => {
-                    console.error('❌ Error loading notifications:', error);
-                });
-        }
-
-        function updateNotificationBell(data) {
-            const badge = document.getElementById('notification-badge');
-            const container = document.getElementById('notifications-menu-container');
-            
-            console.log('🔧 updateNotificationBell called with', data.length, 'notifications');
-            console.log('Badge element found:', badge !== null);
-            console.log('Container element found:', container !== null);
-            
-            // Count unread notifications (ensure is_read is properly evaluated as boolean)
-            const unreadCount = data.filter(n => {
-                // Convert to boolean explicitly: !0, !1, !null, !'0', !'1' should work correctly
-                const isRead = Boolean(n.is_read);
-                return !isRead;
-            }).length;
-            
-            console.log('🔔 Badge unreadCount:', unreadCount);
-            
-            // Update badge - explicitly clear and hide
-            console.log('  Setting badge.textContent to:', unreadCount);
-            badge.textContent = unreadCount;
-            
-            if (unreadCount > 0) {
-                console.log('  ➜ unreadCount > 0, showing badge');
-                badge.style.display = 'inline-flex';
-                badge.textContent = unreadCount;
-            } else {
-                console.log('  ➜ unreadCount = 0, HIDING badge');
-                badge.style.display = 'none';
-                badge.textContent = '0';
-            }
-            
-            console.log('  Final badge state - display:', badge.style.display, 'textContent:', badge.textContent);
-
-            // Display recent notifications
-            if (data.length > 0) {
-                const notificationIcons = {
-                    'new_buyer_registration': 'fa-user-plus',
-                    'new_seller_registration': 'fa-store',
-                    'account_approved': 'fa-check-circle',
-                    'account_rejected': 'fa-times-circle',
-                    'offer_received': 'fa-handshake',
-                    'offer_accepted': 'fa-smile',
-                    'offer_rejected': 'fa-frown',
-                    'listing_created': 'fa-clipboard-list',
-                    'seller_registration_success': 'fa-star',
-                };
-
-                const notificationColors = {
-                    'new_buyer_registration': { icon: '#3498db', bg: 'rgba(52, 152, 219, 0.1)' },
-                    'new_seller_registration': { icon: '#27ae60', bg: 'rgba(39, 174, 96, 0.1)' },
-                    'account_approved': { icon: '#2ecc71', bg: 'rgba(46, 204, 113, 0.1)' },
-                    'account_rejected': { icon: '#e74c3c', bg: 'rgba(231, 76, 60, 0.1)' },
-                    'offer_received': { icon: '#f39c12', bg: 'rgba(243, 156, 18, 0.1)' },
-                    'offer_accepted': { icon: '#2ecc71', bg: 'rgba(46, 204, 113, 0.1)' },
-                    'offer_rejected': { icon: '#e74c3c', bg: 'rgba(231, 76, 60, 0.1)' },
-                    'listing_created': { icon: '#9b59b6', bg: 'rgba(155, 89, 182, 0.1)' },
-                    'seller_registration_success': { icon: '#f39c12', bg: 'rgba(243, 156, 18, 0.1)' },
-                };
-
-                let html = '<li><div style="padding: 0.5rem 0;">';
-                data.forEach(notification => {
-                    const icon = notificationIcons[notification.type] || 'fa-bell';
-                    const colors = notificationColors[notification.type] || { icon: '#3498db', bg: 'rgba(52, 152, 219, 0.1)' };
-                    const readClass = notification.is_read ? 'text-muted' : 'fw-bold';
-                    const readBgStyle = notification.is_read 
-                        ? '' 
-                        : `style="background-color: ${colors.bg}; border-left: 3px solid ${colors.icon};"`;
-                    const titleColor = !notification.is_read ? `color: ${colors.icon}; font-weight: 700;` : '';
-                    const timeAgo = new Date(notification.created_at).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    
-                    const targetUrl = notification.target_url || `/notifications/${notification.id}/open`;
-                    
-                    html += `
-                        <a class="dropdown-item ${readClass}" href="${targetUrl}" ${readBgStyle} style="padding: 0.75rem 1rem; margin: 0.25rem 0.5rem; border-radius: 0.5rem; transition: all 0.2s ease; display: flex; gap: 0.75rem; align-items: flex-start;">
-                            <div style="background: ${colors.bg}; padding: 0.5rem; border-radius: 0.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
-                                <i class="fas ${icon}" style="color: ${colors.icon}; font-size: 0.9rem;"></i>
-                            </div>
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="font-size: 0.85rem; ${titleColor}">${notification.title}</div>
-                                <small style="color: #a4b8b5; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${notification.message.substring(0, 50)}...</small>
-                                <small style="color: #7f9e9a; display: block; margin-top: 0.25rem; font-size: 0.75rem;">
-                                    <i class="fas fa-clock" style="margin-right: 0.25rem;"></i>${timeAgo}
-                                </small>
-                            </div>
-                        </a>
-                    `;
-                });
-                html += '</div></li>';
-                container.innerHTML = html;
-            } else {
-                container.innerHTML = '<li><a class="dropdown-item text-muted" href="{{ route('notifications.index') }}" style="text-align: center; padding: 1rem;"><i class="fas fa-inbox me-2"></i>No notifications</a></li>';
-            }
-        }
-
-        // Function to refresh notification bell from other pages
-        window.refreshNotificationBell = function() {
-            loadRecentNotifications();
-        }
-    </script>
-    @endauth
+    @include('layouts.partials.notification-script')
 
     @yield('scripts')
 </body>

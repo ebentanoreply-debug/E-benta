@@ -64,13 +64,11 @@
         {{-- Right: notifications + user --}}
         <div class="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
             {{-- Quick: Create Listing --}}
-            @if(auth()->user()->email === 'seller@test.com' || auth()->user()->listings()->count() === 0)
             <a href="{{ route('listings.create') }}" class="d-none d-lg-inline-flex align-items-center gap-1"
                style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); color: #ffffff; font-weight: 700;
                       font-size: 0.8rem; padding: 0.4rem 1rem; border-radius: 0.55rem; text-decoration: none; transition: all 0.2s ease;">
                 <i class="fas fa-plus"></i> <span>New Listing</span>
             </a>
-            @endif
 
             {{-- Messages --}}
             <a href="{{ route('messages.index') }}"
@@ -88,6 +86,9 @@
             </a>
 
             {{-- Notifications --}}
+            @php
+                $sellerUnreadNotifCount = auth()->user()->notifications()->where('is_read', false)->count();
+            @endphp
             <div class="dropdown">
                 <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
                     style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b;
@@ -97,8 +98,10 @@
                     onmouseover="this.style.background='#f0fdfa'; this.style.color='#0d9488'; this.style.borderColor='#99f6e4';"
                     onmouseout="this.style.background='#f8fafc'; this.style.color='#64748b'; this.style.borderColor='#e2e8f0';">
                     <i class="fas fa-bell" id="notification-badge-bell"></i>
-                    <span id="notification-badge" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 0.6rem;
-                                                          font-weight: 800; padding: 0.1rem 0.35rem; border-radius: 50%; min-width: 16px; text-align: center; display: none;">0</span>
+                    <span id="notification-badge" class="notification-badge-el"
+                          style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 0.6rem;
+                                 font-weight: 800; padding: 0.1rem 0.35rem; border-radius: 50%; min-width: 16px; text-align: center;
+                                 display: {{ $sellerUnreadNotifCount > 0 ? 'inline-flex' : 'none' }}; align-items: center; justify-content: center;">{{ $sellerUnreadNotifCount }}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.8rem; min-width: 300px; max-height: 400px; overflow-y: auto; padding: 0; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;">
                     <li style="padding: 0.85rem 1.1rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">

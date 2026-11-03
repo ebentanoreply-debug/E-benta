@@ -278,9 +278,7 @@
                         <button class="commerce-action-item border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
                             <i class="fas fa-bell" style="font-size: 1.05rem; color: #fbbf24 !important;"></i>
                             @php $userUnreadNotifCount = auth()->user()->notifications()->where('is_read', false)->count(); @endphp
-                            @if($userUnreadNotifCount > 0)
-                                <span class="commerce-badge bg-warning text-dark">{{ $userUnreadNotifCount }}</span>
-                            @endif
+                            <span id="notification-badge" class="commerce-badge bg-warning text-dark notification-badge-el" style="{{ $userUnreadNotifCount > 0 ? 'display: inline-flex;' : 'display: none;' }}">{{ $userUnreadNotifCount }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg py-2" style="width: 320px; max-height: 400px; overflow-y: auto; background: #0f172a; border: 1px solid rgba(13,148,136,0.3); border-radius: 0.8rem;">
                             <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center" style="border-color: rgba(255,255,255,0.1) !important;">

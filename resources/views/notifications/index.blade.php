@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         <small class="notif-stat-label">Unread</small>
-                        <strong class="notif-stat-val text-blue">{{ $notifications->where('is_read', false)->count() }}</strong>
+                        <strong id="unread-stat-count" class="notif-stat-val text-blue">{{ $notifications->where('is_read', false)->count() }}</strong>
                     </div>
                 </div>
             @endif
@@ -79,7 +79,7 @@
                         $bgColor = $colors['bg'];
                         $iconColor = $colors['icon'];
                     @endphp
-                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif" onclick="window.location.href='{{ route('notifications.open', $notification) }}'" style="cursor: pointer;">
+                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif" onclick="handleNotificationCardClick(event, '{{ route('notifications.open', $notification) }}', {{ $notification->is_read ? 'false' : 'true' }})" style="cursor: pointer;">
                         <!-- Icon -->
                         <div class="notif-icon-box" style="background: {{ $bgColor }}; border-color: rgba(52, 152, 219, 0.2);">
                             <i class="fas {{ $icon }}" style="color: {{ $iconColor }};"></i>
@@ -502,20 +502,53 @@
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
+
+    function decrementUnreadStat() {
+        const unreadStat = document.getElementById('unread-stat-count');
+        if (unreadStat) {
+            const current = parseInt(unreadStat.textContent.trim(), 10) || 0;
+            const updated = Math.max(0, current - 1);
+            unreadStat.textContent = updated;
+        }
+    }
+
+    function handleNotificationCardClick(event, openUrl, isUnread) {
+        if (event.target.closest('.notif-actions-box') || event.target.closest('button') || event.target.closest('a')) {
+            return;
+        }
+        if (isUnread) {
+            decrementUnreadStat();
+            if (typeof decrementNotificationBadges === 'function') {
+                decrementNotificationBadges();
+            }
+        }
+        window.location.href = openUrl;
+    }
     
     // Mark as read handler
     document.querySelectorAll('.notification-mark-read').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const notificationId = this.dataset.notificationId;
             const card = this.closest('.notification-card');
-            const badge = card.querySelector('span:has(i.fas-check-circle)');
+            const badge = card ? card.querySelector('.notif-badge-new') : null;
             
             // Remove UI elements immediately (optimistic update)
-            if (badge && badge.textContent.includes('New')) {
+            if (badge) {
                 badge.remove();
             }
             this.remove();
+            if (card) {
+                card.classList.remove('notif-unread');
+                card.classList.add('notif-read');
+            }
+
+            // Immediately decrement counts on screen
+            decrementUnreadStat();
+            if (typeof decrementNotificationBadges === 'function') {
+                decrementNotificationBadges();
+            }
             
             // Show loading state briefly
             showToast('Marking as read...', 'success');
@@ -603,17 +636,18 @@
             console.log('🚀 Mark all as read clicked!');
             
             // Remove UI elements immediately (optimistic update)
-            document.querySelectorAll('span:has(i.fas-check-circle)').forEach(badge => {
-                if (badge.textContent.includes('New')) {
-                    badge.remove();
-                }
+            document.querySelectorAll('.notif-badge-new').forEach(badge => badge.remove());
+            document.querySelectorAll('.notification-card').forEach(card => {
+                card.classList.remove('notif-unread');
+                card.classList.add('notif-read');
             });
-            
-            document.querySelectorAll('.notification-mark-read').forEach(btn => {
-                btn.remove();
-            });
-            
+            document.querySelectorAll('.notification-mark-read').forEach(btn => btn.remove());
             btn.remove();
+
+            const unreadStat = document.getElementById('unread-stat-count');
+            if (unreadStat) unreadStat.textContent = '0';
+            const badges = document.querySelectorAll('#notification-badge, .notification-badge-el, .commerce-badge');
+            badges.forEach(b => { b.textContent = '0'; b.style.display = 'none'; });
             
             // Show toast
             showToast('Marking all as read...', 'success');
