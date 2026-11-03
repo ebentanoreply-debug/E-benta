@@ -369,13 +369,54 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user's registered barangay is in the Poblacion (urban town center).
+     */
+    public function isPoblacionBarangay(): bool
+    {
+        $cleanBrgy = trim(str_ireplace(['Brgy.', 'Barangay'], '', $this->barangay ?? ''));
+        $poblacion = ['Rizal', 'Mabini', 'Palaris', 'Bugallon-Posadas', 'Bugallon', 'Posadas', 'Lucban', 'Padilla', 'Bonifacio'];
+        return in_array($cleanBrgy, $poblacion, true);
+    }
+
+    /**
+     * Get clean, accurate registered address for admin, modal, and KYC displays.
+     * Preserves authentic street names for Poblacion barangays and standardizes
+     * rural barangays to official 'Brgy. [Name], San Carlos City, Pangasinan 2420'.
+     */
+    public function getFullRegisteredAddress(): string
+    {
+        $rawBrgy = trim($this->barangay ?? '');
+        $brgy = $rawBrgy ? (\Illuminate\Support\Str::startsWith($rawBrgy, ['Brgy.', 'Barangay']) ? $rawBrgy : 'Brgy. ' . $rawBrgy) : null;
+
+        $street = ($this->isPoblacionBarangay() && $this->address_line_1 && !preg_match('/\b(purok|sitio|proper)\b/i', $this->address_line_1))
+            ? $this->address_line_1
+            : null;
+
+        $addressPieces = array_filter([
+            $street,
+            $brgy,
+            $this->address_city ?? 'San Carlos City',
+            trim(($this->address_province ?? 'Pangasinan') . ($this->postal_code ? ' ' . $this->postal_code : '')),
+        ]);
+
+        return !empty($addressPieces) ? implode(', ', $addressPieces) : 'No address specified';
+    }
+
+    /**
      * Get formatted registered physical location.
      */
     public function getFormattedLocation(): string
     {
+        $rawBrgy = trim($this->barangay ?? '');
+        $brgy = $rawBrgy ? (\Illuminate\Support\Str::startsWith($rawBrgy, ['Brgy.', 'Barangay']) ? $rawBrgy : 'Brgy. ' . $rawBrgy) : null;
+
+        $street = ($this->isPoblacionBarangay() || preg_match('/\b(purok|sitio|zone)\b/i', $this->address_line_1 ?? ''))
+            ? $this->address_line_1
+            : null;
+
         $parts = array_filter([
-            $this->address_line_1,
-            $this->barangay ? 'Brgy. ' . $this->barangay : null,
+            $street,
+            $brgy,
             $this->address_city,
             $this->address_province,
             $this->postal_code,

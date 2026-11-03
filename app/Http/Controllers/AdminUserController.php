@@ -113,6 +113,18 @@ class AdminUserController extends Controller
                 }
             }
 
+            // Auto-heal rural user addresses: Ensure fake streets/boulevards are cleared for non-Poblacion barangays
+            $poblacionBarangays = ['Rizal', 'Brgy. Rizal', 'Mabini', 'Brgy. Mabini', 'Palaris', 'Brgy. Palaris', 'Bugallon-Posadas', 'Brgy. Bugallon-Posadas', 'Bugallon', 'Posadas', 'Lucban', 'Brgy. Lucban', 'Padilla', 'Brgy. Padilla', 'Bonifacio', 'Brgy. Bonifacio'];
+            User::whereNotIn('barangay', $poblacionBarangays)
+                ->whereNotNull('address_line_1')
+                ->where(function ($q) {
+                    $q->where('address_line_1', 'like', '%Boulevard%')
+                      ->orWhere('address_line_1', 'like', '%Street%')
+                      ->orWhere('address_line_1', 'like', '%Avenue%')
+                      ->orWhere('address_line_1', 'like', '%Extension%');
+                })
+                ->update(['address_line_1' => null]);
+
             // Auto-heal all user timestamps strictly to October 14-18, 2026 for authentic defense timeline
             if (User::where('created_at', '<', '2026-10-14 00:00:00')->orWhere('created_at', '>', '2026-10-18 23:59:59')->exists()) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
