@@ -48,15 +48,32 @@ class Notification extends Model
     public function getDataAttribute(): array
     {
         if ($this->relationLoaded('dataItems')) {
-            return $this->dataItems
+            $items = $this->dataItems
                 ->mapWithKeys(fn (NotificationData $item) => [$item->key => $item->value])
                 ->all();
+            if (!empty($items)) {
+                return $items;
+            }
         }
 
-        return $this->dataItems()
+        $items = $this->dataItems()
             ->get()
             ->mapWithKeys(fn (NotificationData $item) => [$item->key => $item->value])
             ->all();
+
+        if (!empty($items)) {
+            return $items;
+        }
+
+        $raw = $this->attributes['data'] ?? null;
+        if (is_string($raw)) {
+            return json_decode($raw, true) ?: [];
+        }
+        if (is_array($raw)) {
+            return $raw;
+        }
+
+        return [];
     }
 
     public function markAsRead()
@@ -85,6 +102,13 @@ class Notification extends Model
             case 'offer_accepted':
             case 'offer_rejected':
             case 'offer_cancelled':
+            case 'payment_received':
+            case 'payment_confirmed':
+            case 'cash_payment_confirmed':
+            case 'payment_method_selected':
+            case 'item_picked_up':
+            case 'delivery_confirmed':
+            case 'processing_completed':
                 if (!empty($data['offer_id'])) {
                     return route('offers.show', $data['offer_id'], false);
                 }

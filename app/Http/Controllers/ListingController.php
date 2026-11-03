@@ -889,6 +889,28 @@ class ListingController extends Controller
             'delivered_at' => now(),
         ]);
 
+        $listingTitle = $listing->title ?: 'your item';
+
+        if ($matchedOffer) {
+            // Notify Seller
+            Notification::notify(
+                $listing->seller,
+                'delivery_confirmed',
+                'Delivery Confirmed! 🚚',
+                "{$matchedOffer->buyer->name} confirmed delivery of '{$listingTitle}'. Handover is complete!",
+                ['offer_id' => $matchedOffer->id, 'listing_id' => $listing->id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $matchedOffer->buyer,
+                'delivery_confirmed',
+                'Delivery Confirmed! 🚚',
+                "You confirmed delivery of '{$listingTitle}'. You can now proceed to eco-processing or leave a review.",
+                ['offer_id' => $matchedOffer->id, 'listing_id' => $listing->id]
+            );
+        }
+
         return redirect()->route('listings.show', $listing)
             ->with('success', 'Item marked as delivered');
     }

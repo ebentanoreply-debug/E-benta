@@ -62,6 +62,13 @@
                             'offer_rejected' => 'fa-frown',
                             'listing_created' => 'fa-clipboard-list',
                             'seller_registration_success' => 'fa-star',
+                            'payment_method_selected' => 'fa-wallet',
+                            'payment_received' => 'fa-money-check-dollar',
+                            'payment_confirmed' => 'fa-circle-check',
+                            'cash_payment_confirmed' => 'fa-money-bill-wave',
+                            'item_picked_up' => 'fa-truck-loading',
+                            'delivery_confirmed' => 'fa-truck-fast',
+                            'processing_completed' => 'fa-leaf',
                         ];
                         $notificationColors = [
                             'new_buyer_registration' => ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'],
@@ -73,6 +80,13 @@
                             'offer_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
                             'listing_created' => ['icon' => '#9b59b6', 'bg' => 'rgba(155, 89, 182, 0.2)'],
                             'seller_registration_success' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
+                            'payment_method_selected' => ['icon' => '#0d9488', 'bg' => 'rgba(13, 148, 136, 0.2)'],
+                            'payment_received' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'payment_confirmed' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'cash_payment_confirmed' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'item_picked_up' => ['icon' => '#3b82f6', 'bg' => 'rgba(59, 130, 246, 0.2)'],
+                            'delivery_confirmed' => ['icon' => '#059669', 'bg' => 'rgba(5, 150, 105, 0.2)'],
+                            'processing_completed' => ['icon' => '#16a34a', 'bg' => 'rgba(22, 163, 74, 0.2)'],
                         ];
                         $icon = $notificationIcons[$notification->type] ?? 'fa-bell';
                         $colors = $notificationColors[$notification->type] ?? ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'];

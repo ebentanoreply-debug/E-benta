@@ -227,25 +227,32 @@
             <!-- Buyer Payment Method -->
             @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->status === 'accepted')
                 <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                    <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-credit-card" style="color: #0d9488;"></i>
-                        Payment Method
-                    </h4>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <h4 style="color: #0f172a; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-credit-card" style="color: #0d9488;"></i>
+                            Payment Method
+                        </h4>
+                        @if(!$paymentConfirmed && $offer->payment_method)
+                            <span class="badge" style="background: rgba(13, 148, 136, 0.1); color: #0f766e; font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 2rem;">
+                                <i class="fas fa-arrows-rotate me-1"></i>Switch Method Available
+                            </span>
+                        @endif
+                    </div>
                     @if(!$offer->payment_method)
                         <p style="color: #64748b; margin-bottom: 1rem;">Choose how you will pay for this accepted offer.</p>
                         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
                             <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
                                 @csrf
                                 <input type="hidden" name="payment_method" value="paymongo">
-                                <button type="submit" style="background: #0d9488; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem;">
-                                    <i class="fas fa-credit-card me-2"></i>Pay Online
+                                <button type="submit" style="background: #0d9488; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem; cursor: pointer;">
+                                    <i class="fas fa-credit-card me-2"></i>Pay Online (PayMongo)
                                 </button>
                             </form>
                             <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
                                 @csrf
                                 <input type="hidden" name="payment_method" value="cash_pickup">
-                                <button type="submit" style="background: #f59e0b; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem;">
-                                    <i class="fas fa-money-bill-wave me-2"></i>Cash on Pickup
+                                <button type="submit" style="background: #f59e0b; color: white; font-weight: 800; padding: 0.85rem 1.25rem; border: none; border-radius: 0.6rem; cursor: pointer;">
+                                    <i class="fas fa-money-bill-wave me-2"></i>{{ $offer->handover_method === 'meetup' ? 'Cash on Meetup' : 'Cash on Pickup' }}
                                 </button>
                             </form>
                         </div>
@@ -272,13 +279,34 @@
                                     </button>
                                 </form>
                             @endif
+
+                            {{-- Option to switch to Cash on Pickup / Meetup --}}
+                            <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="cash_pickup">
+                                <button type="submit" style="background: #fffbeb; border: 1.5px solid #f59e0b; color: #b45309; font-weight: 700; padding: 0.85rem 1.25rem; border-radius: 0.6rem; cursor: pointer; transition: all 0.2s ease;" title="Switch payment method">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Switch to {{ $offer->handover_method === 'meetup' ? 'Cash on Meetup' : 'Cash on Pickup' }}
+                                </button>
+                            </form>
                         </div>
                     @elseif($paymentConfirmed)
                         <p style="color: #0d9488; margin: 0; font-weight: 700;">
                             <i class="fas fa-check-circle me-2"></i>Seller confirmed the cash payment on {{ $offer->cash_received_at?->format('M d, Y g:i A') }}.
                         </p>
                     @else
-                        <p style="color: #92400e; margin: 0;">Cash on Pickup selected. Pay the seller during handover; the seller will confirm receipt after pickup.</p>
+                        <p style="color: #92400e; margin-bottom: 1rem; font-weight: 600;">
+                            <i class="fas fa-money-bill-wave me-2 text-warning"></i>{{ $offer->handover_method === 'meetup' ? 'Cash on Meetup' : 'Cash on Pickup' }} selected. Pay the seller during handover; the seller will confirm receipt after pickup.
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                            {{-- Option to switch to Online Payment --}}
+                            <form method="POST" action="{{ route('offers.payment-method', $offer) }}">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="paymongo">
+                                <button type="submit" style="background: #f0fdfa; border: 1.5px solid #0d9488; color: #0d9488; font-weight: 700; padding: 0.75rem 1.25rem; border-radius: 0.6rem; cursor: pointer; transition: all 0.2s ease;" title="Switch payment method">
+                                    <i class="fas fa-credit-card me-2"></i>Switch to Pay Online (PayMongo)
+                                </button>
+                            </form>
+                        </div>
                     @endif
                 </div>
             @endif

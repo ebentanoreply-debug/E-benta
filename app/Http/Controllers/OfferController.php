@@ -454,8 +454,9 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        if ($offer->payment_method || $offer->paymentConfirmed()) {
-            return redirect()->back()->with('error', 'The payment method has already been selected.');
+        // Only block changing payment method if payment is already confirmed
+        if ($offer->paymentConfirmed()) {
+            return redirect()->back()->with('error', 'Payment has already been confirmed and cannot be changed.');
         }
 
         $validated = $request->validate([
@@ -464,7 +465,19 @@ class OfferController extends Controller
 
         $offer->update(['payment_method' => $validated['payment_method']]);
 
-        return redirect()->route('offers.show', $offer)->with('success', 'Payment method selected.');
+        $methodLabel = $validated['payment_method'] === 'paymongo' ? 'Pay Online (PayMongo)' : ($offer->handover_method === 'meetup' ? 'Cash on Meetup' : 'Cash on Pickup');
+        $listingTitle = $offer->listing?->title ?: 'your item';
+
+        // Notify seller about payment method selection / change
+        Notification::notify(
+            $offer->listing->seller,
+            'payment_method_selected',
+            'Payment Method Selected 💳',
+            "{$offer->buyer->name} selected {$methodLabel} for '{$listingTitle}'.",
+            ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+        );
+
+        return redirect()->route('offers.show', $offer)->with('success', 'Payment method updated to ' . $methodLabel . '.');
     }
 
     public function confirmCashReceived(Offer $offer)
@@ -487,11 +500,21 @@ class OfferController extends Controller
         // Process platform commission for Cash on Pickup if enabled
         $commission = app(\App\Services\CommissionService::class)->processCashCommission($offer);
 
+        $listingTitle = $offer->listing?->title ?: 'the item';
+
         Notification::notify(
             $offer->buyer,
             'cash_payment_confirmed',
-            'Cash Payment Confirmed',
-            'The seller confirmed receipt of your cash payment. You can now confirm delivery.',
+            'Cash Payment Confirmed ✅',
+            "The seller confirmed receipt of your cash payment for {$listingTitle}. You can now confirm delivery.",
+            ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
+        );
+
+        Notification::notify(
+            $offer->listing->seller,
+            'cash_payment_confirmed',
+            'Cash Payment Recorded 💵',
+            "You confirmed receipt of ₱" . number_format((float) $offer->bid_amount, 2) . " cash from {$offer->buyer->name} for {$listingTitle}.",
             ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
         );
 
@@ -523,6 +546,26 @@ class OfferController extends Controller
                 'status' => 'in_transit',
                 'picked_up_at' => now(),
             ]);
+
+            $listingTitle = $offer->listing?->title ?: 'your item';
+
+            // Notify Seller that buyer has picked up the item
+            Notification::notify(
+                $offer->listing->seller,
+                'item_picked_up',
+                'Item Picked Up! 📦',
+                "{$offer->buyer->name} marked '{$listingTitle}' as picked up. The item is now in transit.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $offer->buyer,
+                'item_picked_up',
+                'Pickup Confirmed! 📦',
+                "You marked '{$listingTitle}' as picked up. Please confirm delivery once received.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
 
             return redirect()->route('offers.show', $offer)
                 ->with('success', 'Item marked as picked up');
@@ -589,6 +632,26 @@ class OfferController extends Controller
 
             // Mark offer as completed
             $offer->complete();
+
+            $listingTitle = $offer->listing?->title ?: 'your item';
+
+            // Notify Seller about completion and impact
+            Notification::notify(
+                $offer->listing->seller,
+                'processing_completed',
+                'E-Waste Processing Complete! 🌱',
+                "{$offer->buyer->name} completed eco-processing for '{$listingTitle}'. Your environmental impact score has been updated!",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $offer->buyer,
+                'processing_completed',
+                'Eco-Processing Complete! 🌱',
+                "Eco-processing completed for '{$listingTitle}'. Your sustainability certificate is ready.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
         });
 
         return redirect()->route('offers.show', $offer)
