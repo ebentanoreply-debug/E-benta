@@ -151,9 +151,13 @@
                 {{ auth()->user()->name ?? 'Buyer Account' }}
             </strong>
             <div style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.2rem;">
-                @if(auth()->user()->is_verified ?? false)
+                @if(auth()->user()->isIdVerified())
                     <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; font-weight: 800; font-size: 0.68rem; padding: 0.2rem 0.5rem; border-radius: 1rem;">
                         <i class="fas fa-check-circle me-1"></i>Verified Buyer
+                    </span>
+                @elseif(auth()->user()->id_verification_status === 'rejected')
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #dc2626; font-weight: 800; font-size: 0.68rem; padding: 0.2rem 0.5rem; border-radius: 1rem;">
+                        <i class="fas fa-circle-xmark me-1"></i>ID Rejected
                     </span>
                 @else
                     <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; font-weight: 800; font-size: 0.68rem; padding: 0.2rem 0.5rem; border-radius: 1rem;">

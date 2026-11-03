@@ -28,9 +28,22 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Only buyers can access this');
         }
 
-        // Check if buyer is verified
-        if (!$user->is_verified) {
-            // Get buyer's offers even if not verified
+        // Enforce buyer verification rejection:
+        // A rejected buyer cannot access the buyer dashboard and is redirected to Settings to re-verify
+        if ($user->id_verification_status === 'rejected') {
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+        }
+
+        // Must be verified before accessing the full Buyer Dashboard
+        if (!$user->isIdVerified()) {
+            // If not submitted yet, prompt to submit in Settings
+            if (empty($user->id_verification_status) || in_array($user->id_verification_status, ['unsubmitted', 'unverified'])) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Please submit your valid ID and location verification in Settings to activate your Buyer account and access the dashboard.');
+            }
+
+            // If pending review, show pending verification view
             $offers = Offer::where('buyer_id', $user->id)
                 ->with(['listing', 'listing.seller'])
                 ->orderBy('created_at', 'desc')
@@ -67,6 +80,25 @@ class OfferController extends Controller
      */
     public function create(Listing $listing)
     {
+        $user = Auth::user();
+
+        if (!$user || !$user->isBuyer()) {
+            return redirect('/')->with('error', 'Only registered buyers can make offers.');
+        }
+
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('buyer.dashboard')
+                    ->with('warning', 'Your ID verification is currently under admin review. You can make offers once approved.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('warning', 'Please submit your valid ID and location verification in Settings before making offers.');
+        }
+
         // Check if listing is available
         if (!$listing->isAvailable()) {
             return redirect('/')->with('error', 'This listing is no longer available');
@@ -88,8 +120,13 @@ class OfferController extends Controller
         }
 
         // Buyer must be verified
-        if (!$user->is_verified) {
-            return redirect('/')->with('error', 'Your account must be verified before submitting offers');
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'Your account must be verified before submitting offers.');
         }
 
         // Check listing is available
@@ -613,6 +650,19 @@ class OfferController extends Controller
 
         if (!$user->isBuyer()) {
             return redirect('/')->with('error', 'Only buyers can access this');
+        }
+
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('buyer.dashboard')
+                    ->with('warning', 'Your ID verification is currently pending admin review.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('warning', 'Please submit your valid ID and location verification in Settings to access your activity and order history.');
         }
 
         $query = Offer::where('buyer_id', $user->id)

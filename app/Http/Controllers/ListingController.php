@@ -338,6 +338,14 @@ class ListingController extends Controller
 
         // Enforce seller verification (government ID and physical location)
         if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your seller verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents or location details.') . '. Please re-verify your ID and physical pickup location in Settings before creating listings.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Your seller ID and location verification is currently pending admin review. You will be able to list items once approved.');
+            }
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
         }
@@ -386,6 +394,14 @@ class ListingController extends Controller
 
         // Enforce seller verification (government ID and physical location)
         if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your seller verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents or location details.') . '. Please re-verify your ID and physical pickup location in Settings before creating listings.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Your seller ID and location verification is currently pending admin review. You will be able to list items once approved.');
+            }
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
         }

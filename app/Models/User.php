@@ -292,6 +292,12 @@ class User extends Authenticatable
      */
     public function isVerified(): bool
     {
+        if ($this->id_verification_status === 'verified') {
+            return true;
+        }
+        if (in_array($this->id_verification_status, ['rejected', 'pending', 'unsubmitted', 'unverified'])) {
+            return false;
+        }
         return (bool) $this->is_verified;
     }
 
@@ -344,12 +350,23 @@ class User extends Authenticatable
 
     public function isIdVerified(): bool
     {
-        return $this->id_verification_status === 'verified' || $this->is_verified;
+        if ($this->id_verification_status === 'verified') {
+            return true;
+        }
+        if (in_array($this->id_verification_status, ['rejected', 'pending', 'unsubmitted', 'unverified'])) {
+            return false;
+        }
+        return (bool) $this->is_verified;
     }
 
     public function isIdPending(): bool
     {
         return $this->id_verification_status === 'pending';
+    }
+
+    public function isIdRejected(): bool
+    {
+        return $this->id_verification_status === 'rejected';
     }
 
     /**

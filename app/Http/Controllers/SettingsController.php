@@ -130,6 +130,7 @@ class SettingsController extends Controller
             'id_verification_status' => 'pending',
             'id_submitted_at' => now(),
             'id_rejection_reason' => null,
+            'is_verified' => false,
         ];
 
         if ($request->hasFile('id_photo')) {
@@ -222,7 +223,7 @@ class SettingsController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Your Valid ID and Location details have been submitted for review. Our team will verify your account shortly.');
+        return redirect()->route('settings', ['tab' => 'id-verification'])->with('success', 'Your Valid ID and location details have been submitted for review. Our team will verify your account shortly.');
     }
 
     /**

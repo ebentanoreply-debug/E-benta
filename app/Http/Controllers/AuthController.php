@@ -145,6 +145,14 @@ class AuthController extends Controller
             } elseif ($user->isSeller()) {
                 return redirect()->route('seller.dashboard');
             } else {
+                if ($user->id_verification_status === 'rejected') {
+                    return redirect()->route('settings', ['tab' => 'id-verification'])
+                        ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+                }
+                if (!$user->isIdVerified() && (empty($user->id_verification_status) || in_array($user->id_verification_status, ['unsubmitted', 'unverified']))) {
+                    return redirect()->route('settings', ['tab' => 'id-verification'])
+                        ->with('warning', 'Welcome to E-Benta! Please submit your valid ID and location verification in Settings to activate your Buyer account and access the dashboard.');
+                }
                 return redirect()->route('buyer.dashboard');
             }
         }

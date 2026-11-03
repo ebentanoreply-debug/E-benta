@@ -473,8 +473,70 @@
                     <div class="pv-glow-1"></div>
                     <div class="pv-glow-2"></div>
 
+                    @php
+                        $user = auth()->user();
+                        $isRejected = $user && $user->id_verification_status === 'rejected';
+                    @endphp
+
                     <div class="container" style="max-width: 760px; position: relative; z-index: 1;">
-            <!-- Status Badge -->
+            @if($isRejected)
+            <!-- Status Badge (Rejected) -->
+            <div class="text-center">
+                <div class="pv-status-pill" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.45); color: #f87171; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);">
+                    <i class="fas fa-triangle-exclamation me-1"></i>
+                    <span>Verification Declined</span>
+                </div>
+            </div>
+
+            <!-- Main Content Card (Rejected) -->
+            <div class="pv-main-card text-center" style="border-color: rgba(239, 68, 68, 0.35);">
+                <!-- Glowing Animated Header Icon (Red) -->
+                <div class="pv-icon-header" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);">
+                    <i class="fas fa-circle-xmark"></i>
+                </div>
+
+                <h1 class="pv-title">Verification Declined</h1>
+                <p class="pv-desc">
+                    Your verification application could not be approved by our compliance team. You must resolve the feedback below to unlock your Buyer Dashboard.
+                </p>
+
+                <!-- Admin Rejection Reason Callout -->
+                <div class="p-4 mb-4 rounded-4 text-start" style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.35); border-left: 5px solid #ef4444;">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="fas fa-circle-exclamation text-danger" style="font-size: 1.15rem;"></i>
+                        <strong style="color: #f87171; font-size: 1rem;">Reason from Administrator:</strong>
+                    </div>
+                    <div style="color: #ffffff; font-size: 1.05rem; line-height: 1.6; font-weight: 600; background: rgba(15, 23, 42, 0.5); padding: 1rem 1.25rem; border-radius: 0.75rem;">
+                        {{ $user->id_rejection_reason ?: 'Uploaded ID is unreadable, expired, or location details do not match documentation.' }}
+                    </div>
+                    <div class="mt-3 text-muted" style="color: #cbd5e1 !important; font-size: 0.88rem;">
+                        <i class="fas fa-lightbulb text-warning me-1"></i>
+                        Please prepare a valid government ID (PhilSys, Driver's License, Passport, UMID) with a clear, readable photo and correct location details.
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pv-btn-grid">
+                    <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="pv-btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);">
+                        <i class="fas fa-redo"></i>
+                        <span>Re-Verify ID & Location</span>
+                    </a>
+                    <a href="{{ route('profile') }}" class="pv-btn-secondary">
+                        <i class="fas fa-user-circle"></i>
+                        <span>View My Profile</span>
+                    </a>
+                </div>
+
+                <!-- Support Footer -->
+                <div class="pv-card-footer">
+                    <span>Questions about rejection? </span>
+                    <a href="{{ url('/#faq') }}">Visit FAQs</a>
+                    <span class="mx-1">•</span>
+                    <a href="mailto:support@e-benta.com">Contact Compliance Team</a>
+                </div>
+            </div>
+            @else
+            <!-- Status Badge (Pending) -->
             <div class="text-center">
                 <div class="pv-status-pill">
                     <span class="pv-pulse-dot"></span>
@@ -482,7 +544,7 @@
                 </div>
             </div>
 
-            <!-- Main Content Card -->
+            <!-- Main Content Card (Pending) -->
             <div class="pv-main-card text-center">
                 <!-- Glowing Animated Header Icon -->
                 <div class="pv-icon-header">
@@ -571,6 +633,7 @@
                     <a href="mailto:support@e-benta.com">Contact Support</a>
                 </div>
             </div>
+            @endif
 
             <!-- Trust & Security Benefits -->
             <div class="pv-benefits-grid">
