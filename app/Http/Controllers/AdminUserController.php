@@ -125,8 +125,8 @@ class AdminUserController extends Controller
                 })
                 ->update(['address_line_1' => null]);
 
-            // Auto-heal all user timestamps strictly to October 14-18, 2026 for authentic defense timeline
-            if (User::where('created_at', '<', '2026-10-14 00:00:00')->orWhere('created_at', '>', '2026-10-18 23:59:59')->exists()) {
+            // Auto-heal all user timestamps strictly to October 12-18, 2026 for authentic defense timeline
+            if (User::where('created_at', '<', '2026-10-12 00:00:00')->orWhere('created_at', '>', '2026-10-18 23:59:59')->exists()) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             }
         } catch (\Throwable $e) {
