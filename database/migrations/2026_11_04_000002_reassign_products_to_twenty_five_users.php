@@ -71,3 +71,4 @@ return new class extends Migration
         // Reversal not required for historical inventory assignment
     }
 };
+
