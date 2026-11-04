@@ -311,7 +311,7 @@
                                                 <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Government ID' }}
                                             </span>
                                             @if($user->id_number)
-                                                <span style="color: #475569; font-weight: 700; font-size: 0.85rem;" class="dark:text-slate-300"># {{ $user->is_verified ? ($user->masked_id_number ?? $user->id_number) : $user->id_number }}</span>
+                                                <span style="color: #475569; font-weight: 700; font-size: 0.85rem;" class="dark:text-slate-300"># {{ $user->id_number }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -325,16 +325,22 @@
                                     <!-- Document Attachments Grid -->
                                     <div class="mb-3">
                                         <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">ATTACHED VERIFICATION DOCUMENTS</small>
-                                        @if($user->is_verified)
-                                            <div class="p-3 rounded-3 mt-2 text-center" style="background: rgba(16, 185, 129, 0.08); border: 1.5px dashed rgba(16, 185, 129, 0.4);">
-                                                <div class="d-flex align-items-center justify-content-center gap-2 mb-1" style="color: #059669; font-weight: 800; font-size: 0.85rem;">
-                                                    <i class="fas fa-user-shield fa-lg"></i>
-                                                    <span>Identity Verified & Encrypted</span>
+                                        @if(!$user->id_photo_url && !$user->id_back_photo_url && !$user->id_selfie_url && !$user->proof_of_address_url)
+                                            @if($user->is_verified)
+                                                <div class="p-3 rounded-3 mt-2 text-center" style="background: rgba(16, 185, 129, 0.08); border: 1.5px dashed rgba(16, 185, 129, 0.4);">
+                                                    <div class="d-flex align-items-center justify-content-center gap-2 mb-1" style="color: #059669; font-weight: 800; font-size: 0.85rem;">
+                                                        <i class="fas fa-user-shield fa-lg"></i>
+                                                        <span>Identity Verified & Encrypted</span>
+                                                    </div>
+                                                    <p class="mb-0 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
+                                                        This user has passed KYC government verification. Under <strong>Republic Act No. 10173 (Philippine Data Privacy Act of 2012)</strong>, unredacted physical identification copies and biometric selfies are protected from public exposure.
+                                                    </p>
                                                 </div>
-                                                <p class="mb-0 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
-                                                    This user has passed KYC government verification. Under <strong>Republic Act No. 10173 (Philippine Data Privacy Act of 2012)</strong>, unredacted physical identification copies and biometric selfies are protected from public exposure.
-                                                </p>
-                                            </div>
+                                            @else
+                                                <div class="col-12 text-muted mt-2" style="font-size: 0.85rem; font-style: italic;">
+                                                    No direct photo uploaded (Manual verification required).
+                                                </div>
+                                            @endif
                                         @else
                                             <div class="row g-2 mt-1">
                                                 <!-- Front ID -->
@@ -381,12 +387,6 @@
                                                             @endif
                                                             <span class="doc-badge-overlay" style="background: rgba(147, 51, 234, 0.85);"><i class="fas fa-file-invoice me-1"></i>Proof of Location</span>
                                                         </div>
-                                                    </div>
-                                                @endif
-
-                                                @if(!$user->id_photo_url && !$user->id_back_photo_url && !$user->id_selfie_url && !$user->proof_of_address_url)
-                                                    <div class="col-12 text-muted" style="font-size: 0.85rem; font-style: italic;">
-                                                        No direct photo uploaded (Manual verification required).
                                                     </div>
                                                 @endif
                                             </div>
@@ -446,7 +446,6 @@
                             </div>
                         </div>
 
-                        @if(!$user->is_verified)
                             <!-- 1. Front ID Zoom Modal -->
                             @if($user->id_photo_url)
                                 <div class="modal fade" id="docModal{{ $user->id }}id" tabindex="-1" aria-hidden="true">
@@ -523,7 +522,6 @@
                                     </div>
                                 </div>
                             @endif
-                        @endif
 
                         <!-- Reject Modal with Reason & Quick Chips -->
                         <div class="modal fade" id="rejectModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
