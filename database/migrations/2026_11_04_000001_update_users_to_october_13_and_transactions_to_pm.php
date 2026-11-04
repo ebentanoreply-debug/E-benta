@@ -226,3 +226,4 @@ return new class extends Migration
         // Historical data normalization
     }
 };
+
