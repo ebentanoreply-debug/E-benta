@@ -338,14 +338,16 @@ class ListingController extends Controller
 
         // Enforce seller verification (government ID and physical location)
         if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your seller verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents or location details.') . '. Please re-verify your ID and physical pickup location in Settings before creating listings.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Your seller ID and location verification is currently pending admin review. You will be able to list items once approved.');
+            }
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
-        }
-
-        // Limit: Exactly 1 product per seller (except Test Seller)
-        if ($user->email !== 'seller@test.com' && $user->listings()->count() >= 1) {
-            return redirect()->route('seller.listings')
-                ->with('error', 'Each seller is allowed only 1 product listing (except Test Seller).');
         }
 
         $deviceTypes = DeviceType::all();
@@ -392,14 +394,16 @@ class ListingController extends Controller
 
         // Enforce seller verification (government ID and physical location)
         if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your seller verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents or location details.') . '. Please re-verify your ID and physical pickup location in Settings before creating listings.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Your seller ID and location verification is currently pending admin review. You will be able to list items once approved.');
+            }
             return redirect()->route('settings', ['tab' => 'id-verification'])
                 ->with('error', 'You must verify your identity and physical location before creating active listings on E-benta.');
-        }
-
-        // Limit: Exactly 1 product per seller (except Test Seller)
-        if ($user->email !== 'seller@test.com' && $user->listings()->count() >= 1) {
-            return redirect()->route('seller.listings')
-                ->with('error', 'Each seller is allowed only 1 product listing (except Test Seller).');
         }
 
         $isBulk = $request->input('listing_type') === 'bulk_lot';
@@ -608,6 +612,11 @@ class ListingController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
+        if ($listing->isCompleted()) {
+            return redirect()->route('listings.show', $listing)
+                ->with('error', 'Completed listings cannot be edited.');
+        }
+
         // Allow owner to update details/photos even if matched
 
         $listing->load(['deviceTypes', 'deviceBrand', 'deviceModel']);
@@ -632,6 +641,11 @@ class ListingController extends Controller
         // Only owner can update
         if (Auth::id() !== $listing->user_id) {
             return redirect('/')->with('error', 'Unauthorized');
+        }
+
+        if ($listing->isCompleted()) {
+            return redirect()->route('listings.show', $listing)
+                ->with('error', 'Completed listings cannot be edited.');
         }
 
         // Allow owner to update details/photos even if matched
@@ -878,6 +892,28 @@ class ListingController extends Controller
             'status' => 'delivered',
             'delivered_at' => now(),
         ]);
+
+        $listingTitle = $listing->title ?: 'your item';
+
+        if ($matchedOffer) {
+            // Notify Seller
+            Notification::notify(
+                $listing->seller,
+                'delivery_confirmed',
+                'Delivery Confirmed! 🚚',
+                "{$matchedOffer->buyer->name} confirmed delivery of '{$listingTitle}'. Handover is complete!",
+                ['offer_id' => $matchedOffer->id, 'listing_id' => $listing->id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $matchedOffer->buyer,
+                'delivery_confirmed',
+                'Delivery Confirmed! 🚚',
+                "You confirmed delivery of '{$listingTitle}'. You can now proceed to eco-processing or leave a review.",
+                ['offer_id' => $matchedOffer->id, 'listing_id' => $listing->id]
+            );
+        }
 
         return redirect()->route('listings.show', $listing)
             ->with('success', 'Item marked as delivered');

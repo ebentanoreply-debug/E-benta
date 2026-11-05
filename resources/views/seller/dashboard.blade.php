@@ -376,11 +376,9 @@
                             </a>
                         </div>
 
-                        @if(auth()->user()->email === 'seller@test.com' || auth()->user()->listings()->count() === 0)
                         <a href="{{ route('listings.create') }}" class="btn-create-listing-cta">
                             <i class="fas fa-plus-circle"></i> List New Device
                         </a>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -718,9 +716,11 @@
                                                 <a href="{{ route('listings.show', $listing) }}" class="seller-btn-action" title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('listings.edit', $listing) }}" class="seller-btn-action" title="Edit Listing">
-                                                    <i class="fas fa-pen-to-square"></i>
-                                                </a>
+                                                @if(!$listing->isCompleted())
+                                                    <a href="{{ route('listings.edit', $listing) }}" class="seller-btn-action" title="Edit Listing">
+                                                        <i class="fas fa-pen-to-square"></i>
+                                                    </a>
+                                                @endif
                                                 @if($totalOffers > 0)
                                                     <a href="{{ route('listings.offers', $listing) }}" class="seller-btn-action" title="Review Offers">
                                                         <i class="fas fa-handshake"></i>

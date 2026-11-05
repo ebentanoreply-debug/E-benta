@@ -1319,6 +1319,30 @@
                     @endif
 
                     @if(!$isVerified)
+                    @if($isRejected)
+                    <div class="mb-4 p-3 p-md-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(185, 28, 28, 0.08) 100%); border: 1.5px solid rgba(239, 68, 68, 0.35);">
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+                                <i class="fas fa-triangle-exclamation"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 style="font-weight: 800; color: #dc2626; margin: 0 0 0.25rem 0; font-size: 1.05rem;">
+                                    Verification Needs Attention / Declined by Admin
+                                </h5>
+                                <div class="p-3 my-2 rounded-3" style="background: #ffffff; border-left: 4px solid #dc2626; color: #0f172a; font-size: 0.92rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                    <strong style="color: #dc2626;"><i class="fas fa-circle-exclamation me-1"></i>Admin Reason:</strong>
+                                    <div class="mt-1" style="color: #334155; font-weight: 600;">
+                                        {{ $user->id_rejection_reason ?: 'Document unreadable, address mismatch, or expired ID.' }}
+                                    </div>
+                                </div>
+                                <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #64748b;">
+                                    Please review the admin's feedback, update your information or upload replacement photos below, and submit to re-verify your account.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- STEPPER INDICATOR BAR -->
                     <div class="verif-wizard-stepper mb-4">
                         <div class="verif-step-item active" id="stepIndicator1" onclick="goToVerifStep(1)">

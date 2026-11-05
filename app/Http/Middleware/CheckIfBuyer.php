@@ -25,6 +25,15 @@ class CheckIfBuyer
             return redirect('/')->with('error', 'Only buyers can access this section');
         }
 
+        $user = auth()->user();
+
+        // Enforce buyer verification rejection:
+        // A rejected buyer cannot access the buyer dashboard or portal features until they re-verify in Settings
+        if ($user->id_verification_status === 'rejected') {
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+        }
+
         return $next($request);
     }
 }

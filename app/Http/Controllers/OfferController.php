@@ -28,9 +28,22 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Only buyers can access this');
         }
 
-        // Check if buyer is verified
-        if (!$user->is_verified) {
-            // Get buyer's offers even if not verified
+        // Enforce buyer verification rejection:
+        // A rejected buyer cannot access the buyer dashboard and is redirected to Settings to re-verify
+        if ($user->id_verification_status === 'rejected') {
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+        }
+
+        // Must be verified before accessing the full Buyer Dashboard
+        if (!$user->isIdVerified()) {
+            // If not submitted yet, prompt to submit in Settings
+            if (empty($user->id_verification_status) || in_array($user->id_verification_status, ['unsubmitted', 'unverified'])) {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('warning', 'Please submit your valid ID and location verification in Settings to activate your Buyer account and access the dashboard.');
+            }
+
+            // If pending review, show pending verification view
             $offers = Offer::where('buyer_id', $user->id)
                 ->with(['listing', 'listing.seller'])
                 ->orderBy('created_at', 'desc')
@@ -67,6 +80,25 @@ class OfferController extends Controller
      */
     public function create(Listing $listing)
     {
+        $user = Auth::user();
+
+        if (!$user || !$user->isBuyer()) {
+            return redirect('/')->with('error', 'Only registered buyers can make offers.');
+        }
+
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('buyer.dashboard')
+                    ->with('warning', 'Your ID verification is currently under admin review. You can make offers once approved.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('warning', 'Please submit your valid ID and location verification in Settings before making offers.');
+        }
+
         // Check if listing is available
         if (!$listing->isAvailable()) {
             return redirect('/')->with('error', 'This listing is no longer available');
@@ -88,8 +120,13 @@ class OfferController extends Controller
         }
 
         // Buyer must be verified
-        if (!$user->is_verified) {
-            return redirect('/')->with('error', 'Your account must be verified before submitting offers');
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Invalid documents.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('error', 'Your account must be verified before submitting offers.');
         }
 
         // Check listing is available
@@ -421,8 +458,9 @@ class OfferController extends Controller
             return redirect('/')->with('error', 'Unauthorized');
         }
 
-        if ($offer->payment_method || $offer->paymentConfirmed()) {
-            return redirect()->back()->with('error', 'The payment method has already been selected.');
+        // Only block changing payment method if payment is already confirmed
+        if ($offer->paymentConfirmed()) {
+            return redirect()->back()->with('error', 'Payment has already been confirmed and cannot be changed.');
         }
 
         $validated = $request->validate([
@@ -431,7 +469,19 @@ class OfferController extends Controller
 
         $offer->update(['payment_method' => $validated['payment_method']]);
 
-        return redirect()->route('offers.show', $offer)->with('success', 'Payment method selected.');
+        $methodLabel = $validated['payment_method'] === 'paymongo' ? 'Pay Online (PayMongo)' : ($offer->handover_method === 'meetup' ? 'Cash on Meetup' : 'Cash on Pickup');
+        $listingTitle = $offer->listing?->title ?: 'your item';
+
+        // Notify seller about payment method selection / change
+        Notification::notify(
+            $offer->listing->seller,
+            'payment_method_selected',
+            'Payment Method Selected 💳',
+            "{$offer->buyer->name} selected {$methodLabel} for '{$listingTitle}'.",
+            ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+        );
+
+        return redirect()->route('offers.show', $offer)->with('success', 'Payment method updated to ' . $methodLabel . '.');
     }
 
     public function confirmCashReceived(Offer $offer)
@@ -454,11 +504,21 @@ class OfferController extends Controller
         // Process platform commission for Cash on Pickup if enabled
         $commission = app(\App\Services\CommissionService::class)->processCashCommission($offer);
 
+        $listingTitle = $offer->listing?->title ?: 'the item';
+
         Notification::notify(
             $offer->buyer,
             'cash_payment_confirmed',
-            'Cash Payment Confirmed',
-            'The seller confirmed receipt of your cash payment. You can now confirm delivery.',
+            'Cash Payment Confirmed ✅',
+            "The seller confirmed receipt of your cash payment for {$listingTitle}. You can now confirm delivery.",
+            ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
+        );
+
+        Notification::notify(
+            $offer->listing->seller,
+            'cash_payment_confirmed',
+            'Cash Payment Recorded 💵',
+            "You confirmed receipt of ₱" . number_format((float) $offer->bid_amount, 2) . " cash from {$offer->buyer->name} for {$listingTitle}.",
             ['listing_id' => $offer->listing_id, 'offer_id' => $offer->id]
         );
 
@@ -490,6 +550,26 @@ class OfferController extends Controller
                 'status' => 'in_transit',
                 'picked_up_at' => now(),
             ]);
+
+            $listingTitle = $offer->listing?->title ?: 'your item';
+
+            // Notify Seller that buyer has picked up the item
+            Notification::notify(
+                $offer->listing->seller,
+                'item_picked_up',
+                'Item Picked Up! 📦',
+                "{$offer->buyer->name} marked '{$listingTitle}' as picked up. The item is now in transit.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $offer->buyer,
+                'item_picked_up',
+                'Pickup Confirmed! 📦',
+                "You marked '{$listingTitle}' as picked up. Please confirm delivery once received.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
 
             return redirect()->route('offers.show', $offer)
                 ->with('success', 'Item marked as picked up');
@@ -556,6 +636,26 @@ class OfferController extends Controller
 
             // Mark offer as completed
             $offer->complete();
+
+            $listingTitle = $offer->listing?->title ?: 'your item';
+
+            // Notify Seller about completion and impact
+            Notification::notify(
+                $offer->listing->seller,
+                'processing_completed',
+                'E-Waste Processing Complete! 🌱',
+                "{$offer->buyer->name} completed eco-processing for '{$listingTitle}'. Your environmental impact score has been updated!",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
+
+            // Notify Buyer
+            Notification::notify(
+                $offer->buyer,
+                'processing_completed',
+                'Eco-Processing Complete! 🌱',
+                "Eco-processing completed for '{$listingTitle}'. Your sustainability certificate is ready.",
+                ['offer_id' => $offer->id, 'listing_id' => $offer->listing_id]
+            );
         });
 
         return redirect()->route('offers.show', $offer)
@@ -617,6 +717,19 @@ class OfferController extends Controller
 
         if (!$user->isBuyer()) {
             return redirect('/')->with('error', 'Only buyers can access this');
+        }
+
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('buyer.dashboard')
+                    ->with('warning', 'Your ID verification is currently pending admin review.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('warning', 'Please submit your valid ID and location verification in Settings to access your activity and order history.');
         }
 
         $query = Offer::where('buyer_id', $user->id)

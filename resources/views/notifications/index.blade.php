@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         <small class="notif-stat-label">Unread</small>
-                        <strong class="notif-stat-val text-blue">{{ $notifications->where('is_read', false)->count() }}</strong>
+                        <strong id="unread-stat-count" class="notif-stat-val text-blue">{{ $notifications->where('is_read', false)->count() }}</strong>
                     </div>
                 </div>
             @endif
@@ -62,6 +62,13 @@
                             'offer_rejected' => 'fa-frown',
                             'listing_created' => 'fa-clipboard-list',
                             'seller_registration_success' => 'fa-star',
+                            'payment_method_selected' => 'fa-wallet',
+                            'payment_received' => 'fa-money-check-dollar',
+                            'payment_confirmed' => 'fa-circle-check',
+                            'cash_payment_confirmed' => 'fa-money-bill-wave',
+                            'item_picked_up' => 'fa-truck-loading',
+                            'delivery_confirmed' => 'fa-truck-fast',
+                            'processing_completed' => 'fa-leaf',
                         ];
                         $notificationColors = [
                             'new_buyer_registration' => ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'],
@@ -73,13 +80,20 @@
                             'offer_rejected' => ['icon' => '#e74c3c', 'bg' => 'rgba(231, 76, 60, 0.2)'],
                             'listing_created' => ['icon' => '#9b59b6', 'bg' => 'rgba(155, 89, 182, 0.2)'],
                             'seller_registration_success' => ['icon' => '#f39c12', 'bg' => 'rgba(243, 156, 18, 0.2)'],
+                            'payment_method_selected' => ['icon' => '#0d9488', 'bg' => 'rgba(13, 148, 136, 0.2)'],
+                            'payment_received' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'payment_confirmed' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'cash_payment_confirmed' => ['icon' => '#10b981', 'bg' => 'rgba(16, 185, 129, 0.2)'],
+                            'item_picked_up' => ['icon' => '#3b82f6', 'bg' => 'rgba(59, 130, 246, 0.2)'],
+                            'delivery_confirmed' => ['icon' => '#059669', 'bg' => 'rgba(5, 150, 105, 0.2)'],
+                            'processing_completed' => ['icon' => '#16a34a', 'bg' => 'rgba(22, 163, 74, 0.2)'],
                         ];
                         $icon = $notificationIcons[$notification->type] ?? 'fa-bell';
                         $colors = $notificationColors[$notification->type] ?? ['icon' => '#3498db', 'bg' => 'rgba(52, 152, 219, 0.2)'];
                         $bgColor = $colors['bg'];
                         $iconColor = $colors['icon'];
                     @endphp
-                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif" onclick="window.location.href='{{ route('notifications.open', $notification) }}'" style="cursor: pointer;">
+                    <div class="notification-card @if($notification->is_read) notif-read @else notif-unread @endif" onclick="handleNotificationCardClick(event, '{{ route('notifications.open', $notification) }}', {{ $notification->is_read ? 'false' : 'true' }})" style="cursor: pointer;">
                         <!-- Icon -->
                         <div class="notif-icon-box" style="background: {{ $bgColor }}; border-color: rgba(52, 152, 219, 0.2);">
                             <i class="fas {{ $icon }}" style="color: {{ $iconColor }};"></i>
@@ -502,20 +516,53 @@
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
+
+    function decrementUnreadStat() {
+        const unreadStat = document.getElementById('unread-stat-count');
+        if (unreadStat) {
+            const current = parseInt(unreadStat.textContent.trim(), 10) || 0;
+            const updated = Math.max(0, current - 1);
+            unreadStat.textContent = updated;
+        }
+    }
+
+    function handleNotificationCardClick(event, openUrl, isUnread) {
+        if (event.target.closest('.notif-actions-box') || event.target.closest('button') || event.target.closest('a')) {
+            return;
+        }
+        if (isUnread) {
+            decrementUnreadStat();
+            if (typeof decrementNotificationBadges === 'function') {
+                decrementNotificationBadges();
+            }
+        }
+        window.location.href = openUrl;
+    }
     
     // Mark as read handler
     document.querySelectorAll('.notification-mark-read').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const notificationId = this.dataset.notificationId;
             const card = this.closest('.notification-card');
-            const badge = card.querySelector('span:has(i.fas-check-circle)');
+            const badge = card ? card.querySelector('.notif-badge-new') : null;
             
             // Remove UI elements immediately (optimistic update)
-            if (badge && badge.textContent.includes('New')) {
+            if (badge) {
                 badge.remove();
             }
             this.remove();
+            if (card) {
+                card.classList.remove('notif-unread');
+                card.classList.add('notif-read');
+            }
+
+            // Immediately decrement counts on screen
+            decrementUnreadStat();
+            if (typeof decrementNotificationBadges === 'function') {
+                decrementNotificationBadges();
+            }
             
             // Show loading state briefly
             showToast('Marking as read...', 'success');
@@ -603,17 +650,18 @@
             console.log('🚀 Mark all as read clicked!');
             
             // Remove UI elements immediately (optimistic update)
-            document.querySelectorAll('span:has(i.fas-check-circle)').forEach(badge => {
-                if (badge.textContent.includes('New')) {
-                    badge.remove();
-                }
+            document.querySelectorAll('.notif-badge-new').forEach(badge => badge.remove());
+            document.querySelectorAll('.notification-card').forEach(card => {
+                card.classList.remove('notif-unread');
+                card.classList.add('notif-read');
             });
-            
-            document.querySelectorAll('.notification-mark-read').forEach(btn => {
-                btn.remove();
-            });
-            
+            document.querySelectorAll('.notification-mark-read').forEach(btn => btn.remove());
             btn.remove();
+
+            const unreadStat = document.getElementById('unread-stat-count');
+            if (unreadStat) unreadStat.textContent = '0';
+            const badges = document.querySelectorAll('#notification-badge, .notification-badge-el, .commerce-badge');
+            badges.forEach(b => { b.textContent = '0'; b.style.display = 'none'; });
             
             // Show toast
             showToast('Marking all as read...', 'success');

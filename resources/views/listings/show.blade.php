@@ -789,16 +789,22 @@
                             </div>
                         @elseif(auth()->user()->isSeller() && auth()->id() === $listing->user_id)
                             <div class="d-grid gap-2 mb-3">
-                                <div class="alert alert-info py-2 px-3 mb-2 rounded-3 small">
-                                    <i class="fas fa-info-circle me-1"></i>You are managing this active marketplace listing.
-                                </div>
-                                <a href="{{ route('listings.edit', $listing) }}" class="btn btn-warning rounded-3 py-2 fw-bold text-white shadow-sm">
-                                    <i class="fas fa-edit me-1"></i>Edit Listing Details
-                                </a>
-                                @if($listing->status !== 'withdrawn')
-                                    <button type="button" class="btn btn-outline-danger rounded-3 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#withdrawModal">
-                                        <i class="fas fa-ban me-1"></i>Cancel / Withdraw Listing
-                                    </button>
+                                @if($listing->isCompleted())
+                                    <div class="alert alert-success py-2 px-3 mb-2 rounded-3 small">
+                                        <i class="fas fa-check-circle me-1"></i>This listing transaction is completed.
+                                    </div>
+                                @else
+                                    <div class="alert alert-info py-2 px-3 mb-2 rounded-3 small">
+                                        <i class="fas fa-info-circle me-1"></i>You are managing this active marketplace listing.
+                                    </div>
+                                    <a href="{{ route('listings.edit', $listing) }}" class="btn btn-warning rounded-3 py-2 fw-bold text-white shadow-sm">
+                                        <i class="fas fa-edit me-1"></i>Edit Listing Details
+                                    </a>
+                                    @if($listing->status !== 'withdrawn')
+                                        <button type="button" class="btn btn-outline-danger rounded-3 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                                            <i class="fas fa-ban me-1"></i>Cancel / Withdraw Listing
+                                        </button>
+                                    @endif
                                 @endif
                             </div>
                         @elseif(auth()->user()->isSeller())

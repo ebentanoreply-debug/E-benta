@@ -141,6 +141,7 @@ class SettingsController extends Controller
             'id_verification_status' => 'pending',
             'id_submitted_at' => now(),
             'id_rejection_reason' => null,
+            'is_verified' => false,
         ];
 
         foreach (['birth_date', 'birth_place', 'gender', 'marital_status', 'blood_type', 'id_card_serial', 'id_raw_qr_data'] as $demoField) {

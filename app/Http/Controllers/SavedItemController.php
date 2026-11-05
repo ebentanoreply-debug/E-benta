@@ -13,7 +13,22 @@ class SavedItemController extends Controller
      */
     public function index(Request $request)
     {
-        $savedListings = Auth::user()
+        $user = Auth::user();
+
+        if (!$user->isIdVerified()) {
+            if ($user->id_verification_status === 'rejected') {
+                return redirect()->route('settings', ['tab' => 'id-verification'])
+                    ->with('error', 'Your buyer verification was rejected: ' . ($user->id_rejection_reason ?: 'Document or details unreadable.') . '. Please update your ID and location details in Settings to re-verify.');
+            }
+            if ($user->isIdPending()) {
+                return redirect()->route('buyer.dashboard')
+                    ->with('warning', 'Your ID verification is currently pending admin review.');
+            }
+            return redirect()->route('settings', ['tab' => 'id-verification'])
+                ->with('warning', 'Please submit your valid ID and location verification in Settings to access your saved items.');
+        }
+
+        $savedListings = $user
             ->savedListings()
             ->with(['seller', 'deviceType'])
             ->where('listings.status', 'available')

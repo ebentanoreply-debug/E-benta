@@ -655,6 +655,14 @@
                                                 </form>
                                             </li>
 
+                                            @if($user->id !== Auth::id() && $user->role !== 'admin')
+                                                <li>
+                                                    <button type="button" class="dropdown-item py-2 text-danger" onclick="openRejectVerificationModal('{{ $user->id }}', '{{ addslashes($user->name) }}', '{{ route('admin.reject-user', $user) }}')">
+                                                        <i class="fas fa-circle-xmark text-danger me-2"></i>Reject Verification
+                                                    </button>
+                                                </li>
+                                            @endif
+
                                             @if($user->id !== Auth::id())
                                                 <!-- Switch Role between Buyer and Seller -->
                                                 <li>
@@ -941,6 +949,14 @@
                                             </button>
                                         </form>
                                     </li>
+
+                                    @if($user->id !== Auth::id() && $user->role !== 'admin')
+                                        <li>
+                                            <button type="button" class="dropdown-item py-2 text-danger" onclick="openRejectVerificationModal('{{ $user->id }}', '{{ addslashes($user->name) }}', '{{ route('admin.reject-user', $user) }}')">
+                                                <i class="fas fa-circle-xmark text-danger me-2"></i>Reject Verification
+                                            </button>
+                                        </li>
+                                    @endif
 
                                     @if($user->id !== Auth::id())
                                         <li>
@@ -1271,10 +1287,49 @@
 
 
 
+<!-- 5. REJECT VERIFICATION MODAL -->
+<div class="modal fade" id="rejectVerificationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" id="rejectVerificationForm" class="modal-content" style="border-radius: 1.25rem; border: none; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);">
+            @csrf
+            <div class="modal-header bg-danger text-white" style="border-top-left-radius: 1.25rem; border-top-right-radius: 1.25rem; padding: 1.25rem 1.5rem;">
+                <h5 class="modal-title font-weight-bold" style="font-weight: 800;">
+                    <i class="fas fa-triangle-exclamation me-2"></i>Reject Verification Application
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p style="color: #334155; font-size: 0.95rem;">
+                    State the specific reason why <strong id="rejectUserName">-</strong>'s ID or location verification is rejected. The user will receive this exact reason in a notification and can update details in Settings to re-verify.
+                </p>
+                
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold" style="font-size: 0.8rem; text-transform: uppercase; color: #64748b;">Rejection Reason <span class="text-danger">*</span></label>
+                    <textarea name="reason" id="rejectUserReasonInput" class="form-control" rows="4" required placeholder="State why ID or location was rejected (e.g. Blurry ID, Expired ID, Address mismatch)..." style="border-radius: 0.65rem; font-size: 0.88rem;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.9rem 1.5rem; border-bottom-left-radius: 1.25rem; border-bottom-right-radius: 1.25rem;">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 0.65rem; font-weight: 600;">Cancel</button>
+                <button type="submit" class="btn btn-danger font-weight-bold" style="border-radius: 0.65rem; font-weight: 700;">Confirm Rejection</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
+function openRejectVerificationModal(userId, userName, actionUrl) {
+    const nameEl = document.getElementById('rejectUserName');
+    if (nameEl) nameEl.textContent = userName;
+    const formEl = document.getElementById('rejectVerificationForm');
+    if (formEl) formEl.action = actionUrl;
+    const reasonEl = document.getElementById('rejectUserReasonInput');
+    if (reasonEl) reasonEl.value = '';
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectVerificationModal'));
+    modal.show();
+}
 document.addEventListener('DOMContentLoaded', function () {
     // 1. Details Modal Trigger
     const viewButtons = document.querySelectorAll('.view-user-btn');

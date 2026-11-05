@@ -308,17 +308,23 @@ class AdminController extends Controller
             "Admin " . Auth::user()->name . " rejected ID/location verification for {$user->name}. Reason: " . $request->reason
         );
 
-        // Send rejection notification to user with reason
+        // Send tailored rejection notification to user with reason
+        $roleLabel = $user->isSeller() ? 'Seller' : 'Buyer';
+        $title = "{$roleLabel} Verification Rejected ⚠️";
+        $body = $user->isSeller()
+            ? "Your seller ID & location verification could not be approved. Reason: {$request->reason}. You must update your ID and physical pickup location in Settings before you can list items."
+            : "Your buyer verification could not be approved. Reason: {$request->reason}. You can update your ID and location details in Settings to re-verify and unlock your Buyer Dashboard.";
+
         Notification::notify(
             $user,
             'account_rejected',
-            'Verification Update ⚠️',
-            'Your verification could not be approved. Reason: ' . $request->reason . '. You can update your ID and location details in Settings.',
+            $title,
+            $body,
             ['rejection_reason' => $request->reason]
         );
 
-        return redirect()->route('admin.pending-verifications')
-            ->with('success', 'ID/location verification rejected and user notified.');
+        return back()
+            ->with('success', "{$roleLabel} verification rejected and user notified with reason.");
     }
 
     /**

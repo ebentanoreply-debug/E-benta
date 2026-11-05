@@ -48,15 +48,32 @@ class Notification extends Model
     public function getDataAttribute(): array
     {
         if ($this->relationLoaded('dataItems')) {
-            return $this->dataItems
+            $items = $this->dataItems
                 ->mapWithKeys(fn (NotificationData $item) => [$item->key => $item->value])
                 ->all();
+            if (!empty($items)) {
+                return $items;
+            }
         }
 
-        return $this->dataItems()
+        $items = $this->dataItems()
             ->get()
             ->mapWithKeys(fn (NotificationData $item) => [$item->key => $item->value])
             ->all();
+
+        if (!empty($items)) {
+            return $items;
+        }
+
+        $raw = $this->attributes['data'] ?? null;
+        if (is_string($raw)) {
+            return json_decode($raw, true) ?: [];
+        }
+        if (is_array($raw)) {
+            return $raw;
+        }
+
+        return [];
     }
 
     public function markAsRead()
@@ -77,48 +94,55 @@ class Notification extends Model
         switch ($this->type) {
             case 'new_message':
                 if (!empty($data['offer_id'])) {
-                    return route('messages.index', ['offer_id' => $data['offer_id']]);
+                    return route('messages.index', ['offer_id' => $data['offer_id']], false);
                 }
-                return route('messages.index');
+                return route('messages.index', [], false);
 
             case 'offer_received':
             case 'offer_accepted':
             case 'offer_rejected':
             case 'offer_cancelled':
+            case 'payment_received':
+            case 'payment_confirmed':
+            case 'cash_payment_confirmed':
+            case 'payment_method_selected':
+            case 'item_picked_up':
+            case 'delivery_confirmed':
+            case 'processing_completed':
                 if (!empty($data['offer_id'])) {
-                    return route('offers.show', $data['offer_id']);
+                    return route('offers.show', $data['offer_id'], false);
                 }
                 if (!empty($data['listing_id'])) {
-                    return route('listings.show', $data['listing_id']);
+                    return route('listings.show', $data['listing_id'], false);
                 }
-                return $this->user?->isSeller() ? route('seller.transaction-history') : route('buyer.transaction-history');
+                return $this->user?->isSeller() ? route('seller.transaction-history', [], false) : route('buyer.transaction-history', [], false);
 
             case 'listing_created':
                 if (!empty($data['listing_id'])) {
-                    return route('listings.show', $data['listing_id']);
+                    return route('listings.show', $data['listing_id'], false);
                 }
-                return route('seller.dashboard');
+                return route('seller.dashboard', [], false);
 
             case 'new_buyer_registration':
             case 'new_seller_registration':
             case 'pending_verification':
-                return route('admin.pending-verifications');
+                return route('admin.pending-verifications', [], false);
 
             case 'account_approved':
             case 'seller_registration_success':
-                return $this->user?->isSeller() ? route('seller.dashboard') : route('buyer.dashboard');
+                return $this->user?->isSeller() ? route('seller.dashboard', [], false) : route('buyer.dashboard', [], false);
 
             case 'account_rejected':
-                return route('settings', ['tab' => 'id-verification']);
+                return route('settings', ['tab' => 'id-verification'], false);
 
             default:
                 if (!empty($data['offer_id'])) {
-                    return route('offers.show', $data['offer_id']);
+                    return route('offers.show', $data['offer_id'], false);
                 }
                 if (!empty($data['listing_id'])) {
-                    return route('listings.show', $data['listing_id']);
+                    return route('listings.show', $data['listing_id'], false);
                 }
-                return route('notifications.index');
+                return route('notifications.index', [], false);
         }
     }
 

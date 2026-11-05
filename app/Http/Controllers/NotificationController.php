@@ -43,7 +43,8 @@ class NotificationController extends Controller
 
         $notification->markAsRead();
 
-        return redirect($notification->target_url);
+        $destination = $notification->target_url ?: route('notifications.index', [], false);
+        return redirect($destination);
     }
 
     /**

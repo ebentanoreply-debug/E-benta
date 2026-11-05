@@ -45,6 +45,30 @@ class SellerWalletService
             ]);
 
             app(CommissionService::class)->recordOnlineCommission($payment);
+
+            // Notify Seller about online payment received
+            $offer = $payment->offer;
+            $listingTitle = $offer?->listing?->title ?: 'your item';
+            if ($payment->seller) {
+                \App\Models\Notification::notify(
+                    $payment->seller,
+                    'payment_received',
+                    'Payment Received! 💳',
+                    "Payment of ₱" . number_format((float) $payment->amount, 2) . " for offer #{$payment->offer_id} ({$listingTitle}) has been confirmed and credited to your wallet.",
+                    ['offer_id' => $payment->offer_id, 'listing_id' => $offer?->listing_id]
+                );
+            }
+
+            // Notify Buyer about successful payment
+            if ($payment->buyer) {
+                \App\Models\Notification::notify(
+                    $payment->buyer,
+                    'payment_confirmed',
+                    'Payment Confirmed! ✅',
+                    "Your payment of ₱" . number_format((float) $payment->amount, 2) . " for offer #{$payment->offer_id} ({$listingTitle}) was successful.",
+                    ['offer_id' => $payment->offer_id, 'listing_id' => $offer?->listing_id]
+                );
+            }
         });
     }
 
