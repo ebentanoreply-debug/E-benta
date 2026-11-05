@@ -267,13 +267,17 @@
                 <div class="pdp-gallery-main" id="pdpGalleryMain">
                     <!-- Overlay Badges -->
                     <div class="pdp-badge-overlay">
-                        @if($listing->condition === 'functional')
+                        @if($listing->condition === 'functional' || $listing->condition === 'working')
                             <span class="pdp-badge-pill" style="background: rgba(16, 185, 129, 0.92); color: #fff;">
                                 <i class="fas fa-check-circle me-1"></i>GRADE A • CERTIFIED WORKING
                             </span>
-                        @elseif($listing->condition === 'repairable')
+                        @elseif($listing->condition === 'repairable' || $listing->condition === 'minor_damage')
                             <span class="pdp-badge-pill" style="background: rgba(245, 158, 11, 0.92); color: #fff;">
-                                <i class="fas fa-tools me-1"></i>GRADE B • REPAIRABLE / DEFECT
+                                <i class="fas fa-tools me-1"></i>GRADE B • REPAIRABLE / MINOR DEFECT
+                            </span>
+                        @elseif($listing->condition === 'others')
+                            <span class="pdp-badge-pill" style="background: rgba(14, 165, 233, 0.92); color: #fff;">
+                                <i class="fas fa-boxes me-1"></i>MIXED / CUSTOM CONDITIONS
                             </span>
                         @else
                             <span class="pdp-badge-pill" style="background: rgba(100, 116, 139, 0.92); color: #fff;">
@@ -383,7 +387,13 @@
                             </div>
                             <div class="pdp-spec-row">
                                 <span class="pdp-spec-label"><i class="fas fa-shield-alt me-2"></i>Grading Condition</span>
-                                <span class="pdp-spec-value text-capitalize">{{ str_replace('_', ' ', $listing->condition) }}</span>
+                                <span class="pdp-spec-value text-capitalize">
+                                    @if($listing->condition === 'others')
+                                        Mixed / Custom Conditions
+                                    @else
+                                        {{ str_replace('_', ' ', $listing->condition) }}
+                                    @endif
+                                </span>
                             </div>
                             <div class="pdp-spec-row">
                                 <span class="pdp-spec-label"><i class="fas fa-weight-hanging me-2"></i>Gross Hardware Weight</span>
@@ -487,6 +497,14 @@
                         <h6 class="fw-bold mb-3" style="color: #0f172a;">
                             <i class="fas fa-comment-dots me-2 text-emerald" style="color: #10b981;"></i>Seller's Item Narrative
                         </h6>
+                        @if($listing->condition_notes)
+                            <div class="p-3 mb-3 rounded-3" style="background: rgba(14, 165, 233, 0.08); border: 1.5px solid rgba(14, 165, 233, 0.25);">
+                                <strong style="color: #0369a1; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">
+                                    <i class="fas fa-clipboard-list me-1"></i>Item & Lot Condition Breakdown:
+                                </strong>
+                                <p class="mb-0" style="color: #1e293b; font-size: 0.92rem; white-space: pre-line;">{{ $listing->condition_notes }}</p>
+                            </div>
+                        @endif
                         <div class="p-3 rounded-3" style="background: rgba(241, 245, 249, 0.6); border: 1px solid #e2e8f0; font-size: 0.96rem; line-height: 1.7; color: #334155; white-space: pre-line;">
                             {{ $listing->description ?: 'No detailed written description provided by the seller. Please consult the specifications matrix and photos or message the merchant directly.' }}
                         </div>
@@ -652,10 +670,12 @@
                     <div class="d-flex align-items-baseline justify-content-between">
                         <div>
                             <small class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                                {{ $listing->isBulkLot() ? 'Bulk Lot Value' : 'Listing Asking Price' }}
+                                {{ $listing->isForRecycle() ? 'Recycle / Disposal Status' : ($listing->isBulkLot() ? 'Bulk Lot Value' : 'Listing Asking Price') }}
                             </small>
                             <div class="fs-1 fw-bolder" style="color: #059669; letter-spacing: -0.5px;">
-                                @if($listing->suggested_price > 0)
+                                @if($listing->isForRecycle())
+                                    <span class="badge bg-success" style="font-size: 1.15rem; padding: 0.45rem 1rem;"><i class="fas fa-recycle me-1"></i>FREE • Eco-Recycle</span>
+                                @elseif($listing->suggested_price > 0)
                                     ₱{{ number_format($listing->suggested_price, 2) }}
                                 @else
                                     <span class="badge bg-success">FREE • Eco-Recycle</span>
@@ -664,7 +684,11 @@
                         </div>
                         <div class="text-end">
                             <span class="badge bg-white text-dark border shadow-2xs px-2.5 py-1.5" style="font-size: 0.78rem;">
-                                <i class="fas fa-handshake text-emerald me-1" style="color: #10b981;"></i>Offers Welcome
+                                @if($listing->isForRecycle())
+                                    <i class="fas fa-truck-pickup text-emerald me-1" style="color: #10b981;"></i>Free Collection
+                                @else
+                                    <i class="fas fa-handshake text-emerald me-1" style="color: #10b981;"></i>Offers Welcome
+                                @endif
                             </span>
                         </div>
                     </div>
@@ -745,7 +769,11 @@
                         @if(auth()->user()->isBuyer() && auth()->id() !== $listing->user_id)
                             <div class="d-grid gap-2 mb-3">
                                 <a href="{{ route('offers.create', $listing) }}" class="btn btn-lg py-3 rounded-3 fw-bold text-white shadow-md d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); border: none; font-size: 1.05rem;">
-                                    <i class="fas fa-shopping-bag"></i> Make an Offer / Buy Now
+                                    @if($listing->isForRecycle())
+                                        <i class="fas fa-truck-pickup"></i> Request Free Collection / Disposal
+                                    @else
+                                        <i class="fas fa-shopping-bag"></i> Make an Offer / Buy Now
+                                    @endif
                                 </a>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('messages.index') }}" class="btn btn-outline-secondary rounded-3 py-2 flex-grow-1 fw-bold">

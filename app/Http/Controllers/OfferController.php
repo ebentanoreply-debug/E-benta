@@ -139,8 +139,10 @@ class OfferController extends Controller
             $handoverMethod = $listing->handover_preference === 'meetup_only' ? 'meetup' : 'pickup';
         }
 
+        $isDisposal = $listing->isForRecycle() || (float)$request->input('bid_amount', 0) <= 0;
+
         $rules = [
-            'bid_amount' => 'required|numeric|min:0.01',
+            'bid_amount' => $isDisposal ? 'nullable|numeric|min:0' : 'required|numeric|min:0.01',
             'proposed_method' => 'required|in:repair,harvest,refine,dispose',
             'handover_method' => 'nullable|in:pickup,meetup',
             'proposed_pickup_date' => 'required|date|after:today',
@@ -174,10 +176,12 @@ class OfferController extends Controller
             ? ($listing->pickup_address ?: $sellerAddress)
             : ($request->input('pickup_location') ?: 'Agreed Meetup Location');
 
+        $bidAmount = $isDisposal ? 0.00 : (float)$request->input('bid_amount', 0);
+
         $offer = Offer::create([
             'listing_id' => $listing->id,
             'buyer_id' => $user->id,
-            'bid_amount' => $request->bid_amount,
+            'bid_amount' => $bidAmount,
             'proposed_method' => $request->proposed_method,
             'handover_method' => $handoverMethod,
             'proposed_pickup_date' => $request->proposed_pickup_date,

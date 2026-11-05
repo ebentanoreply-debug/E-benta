@@ -146,8 +146,21 @@ class Offer extends Model
         return $this->status === 'accepted';
     }
 
+    /**
+     * Check if offer is for a zero-cost / free collection disposal item.
+     */
+    public function isFreeCollection(): bool
+    {
+        return (float)$this->bid_amount <= 0 || ($this->listing && $this->listing->isForRecycle());
+    }
+
     public function paymentConfirmed(): bool
     {
+        // Free e-waste disposal collections do not require payment
+        if ($this->isFreeCollection()) {
+            return true;
+        }
+
         if ($this->payment_method === 'cash_pickup') {
             return $this->cash_received_at !== null;
         }

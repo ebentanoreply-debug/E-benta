@@ -176,18 +176,20 @@
                                     </label>
                                     <select class="form-select @error('condition') is-invalid @enderror" 
                                            id="condition" name="condition" required
-                                           style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">
+                                           style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;" onchange="handleConditionChange()">
                                         <option value="">Select condition</option>
                                         <option value="working" {{ old('condition', $listing->condition) == 'working' ? 'selected' : '' }}>Working</option>
                                         <option value="minor_damage" {{ old('condition', $listing->condition) == 'minor_damage' ? 'selected' : '' }}>Minor Damage</option>
                                         <option value="major_damage" {{ old('condition', $listing->condition) == 'major_damage' ? 'selected' : '' }}>Major Damage</option>
                                         <option value="non_functional" {{ old('condition', $listing->condition) == 'non_functional' ? 'selected' : '' }}>Non-functional</option>
+                                        <option value="others" {{ old('condition', $listing->condition) == 'others' ? 'selected' : '' }}>Others / Mixed Conditions (e.g. 1 working, 1 repairable, 1 scrap)</option>
                                     </select>
                                     @error('condition')
                                         <span class="invalid-feedback d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
 
+                                <div class="col-md-6">
                                     <label for="handover_preference" class="form-label" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
                                         <i class="fas fa-truck-loading me-1" style="color: var(--light-green);"></i>Handover Option <span style="color: #e74c3c;">*</span>
                                     </label>
@@ -204,15 +206,50 @@
                                     @enderror
                                 </div>
 
+                                <!-- Custom / Mixed Condition Description Box (when condition is 'others') -->
+                                <div class="col-12" id="custom_condition_description_group" style="display: {{ old('condition', $listing->condition) === 'others' ? 'block' : 'none' }};">
+                                    <div style="background: rgba(13, 148, 136, 0.06); border: 1.5px dashed rgba(13, 148, 136, 0.4); border-radius: 0.8rem; padding: 1.15rem;">
+                                        <label for="condition_notes" class="form-label d-flex align-items-center justify-content-between mb-1" style="color: var(--text-light); font-weight: 700; font-size: 0.95rem;">
+                                            <span><i class="fas fa-clipboard-list me-1" style="color: var(--light-green);"></i>Item-by-Item Condition Details <span style="color: #e74c3c;">*</span></span>
+                                            <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #0d9488;">For Bulk & Mixed Lots</span>
+                                        </label>
+                                        <textarea class="form-control @error('condition_notes') is-invalid @enderror" 
+                                                 id="condition_notes" name="condition_notes" rows="3"
+                                                 placeholder="State the condition of each item here (e.g. 1 unit fully functional, 1 unit with cracked glass, 1 unit non-powering for scrap)..."
+                                                 style="background-color: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.6rem; font-size: 0.95rem;">{{ old('condition_notes', $listing->condition_notes) }}</textarea>
+                                        <small style="color: #64748b; font-size: 0.82rem; margin-top: 0.35rem; display: block;">
+                                            Describe the exact condition of each device clearly so buyers and recyclers know what each piece consists of.
+                                        </small>
+                                        @error('condition_notes')
+                                            <span class="invalid-feedback d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div class="col-12" id="pickup_address_group">
-                                    <label for="pickup_address" class="form-label" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
-                                        <i class="fas fa-map-marker-alt me-1" style="color: var(--light-green);"></i>Seller Pickup / Collection Address <span style="color: #e74c3c;" id="pickup_address_required_star">*</span>
-                                    </label>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <label for="pickup_address" class="form-label mb-0" style="color: var(--text-light); font-weight: 600; font-size: 0.95rem;">
+                                            <i class="fas fa-map-marker-alt me-1" style="color: var(--light-green);"></i>Seller Pickup / Collection Address <span style="color: #e74c3c;" id="pickup_address_required_star">*</span>
+                                        </label>
+                                        <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(13, 148, 136, 0.25);">
+                                            <i class="fas fa-edit me-1"></i>Editable
+                                        </span>
+                                    </div>
+                                    @php
+                                        $defaultProfileAddress = auth()->user()->addresses()->first()?->getFullAddress() ?? (auth()->user()->address_city ? auth()->user()->address_city . (auth()->user()->address_province ? ', ' . auth()->user()->address_province : '') : '');
+                                    @endphp
                                     <textarea class="form-control @error('pickup_address') is-invalid @enderror" 
                                              id="pickup_address" name="pickup_address" rows="2"
                                              placeholder="e.g. Unit / Street, Barangay, City, Province (where the recycler or buyer will collect the item)"
-                                             style="background-color: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">{{ old('pickup_address', $listing->pickup_address ?? auth()->user()->addresses()->first()?->getFullAddress() ?? (auth()->user()->address_city ? auth()->user()->address_city . (auth()->user()->address_province ? ', ' . auth()->user()->address_province : '') : '')) }}</textarea>
-                                    <small style="color: #64748b; font-size: 0.82rem; margin-top: 0.35rem; display: block;">Required for doorstep pickup so buyers/recyclers know the collection location.</small>
+                                             style="background-color: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.3); padding: 0.85rem 1rem; border-radius: 0.8rem; font-size: 0.95rem;">{{ old('pickup_address', $listing->pickup_address ?? $defaultProfileAddress) }}</textarea>
+                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                        <small style="color: #64748b; font-size: 0.82rem;">
+                                            <i class="fas fa-info-circle me-1" style="color: #0d9488;"></i>Pre-filled from your profile or listing address. You can edit this if you want the item picked up at a different location.
+                                        </small>
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" style="font-size: 0.78rem; color: #0d9488; font-weight: 600;" onclick="document.getElementById('pickup_address').value = {{ json_encode($defaultProfileAddress) }};">
+                                            <i class="fas fa-undo-alt me-1"></i>Reset to Profile
+                                        </button>
+                                    </div>
                                     @error('pickup_address')
                                         <span class="invalid-feedback d-block">{{ $message }}</span>
                                     @enderror
@@ -461,6 +498,25 @@
         }
     }
 
+    function toggleConditionNotesField() {
+        const condition = document.getElementById('condition');
+        const notesGroup = document.getElementById('custom_condition_description_group');
+        const notesInput = document.getElementById('condition_notes');
+        if (!condition || !notesGroup) return;
+
+        if (condition.value === 'others') {
+            notesGroup.style.display = 'block';
+            if (notesInput) notesInput.setAttribute('required', 'required');
+        } else {
+            notesGroup.style.display = 'none';
+            if (notesInput) notesInput.removeAttribute('required');
+        }
+    }
+
+    function handleConditionChange() {
+        toggleConditionNotesField();
+    }
+
     function togglePickupAddressField() {
         const handover = document.getElementById('handover_preference');
         const group = document.getElementById('pickup_address_group');
@@ -483,6 +539,7 @@
         updateListingTypeView();
         toggleSellerPriceField();
         togglePickupAddressField();
+        toggleConditionNotesField();
 
         const intendedAction = document.getElementById('intended_action');
         if (intendedAction) {

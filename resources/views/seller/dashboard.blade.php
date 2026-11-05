@@ -402,7 +402,7 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-danger d-inline-flex align-items-center gap-2"
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}#id-verification" class="btn btn-danger d-inline-flex align-items-center gap-2"
                            style="border-radius: 0.75rem; font-weight: 800; padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             <i class="fas fa-redo me-1"></i>Re-Submit ID & Location
                         </a>
@@ -421,7 +421,7 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}#id-verification" class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
                            style="border-radius: 0.75rem; font-weight: 700; padding: 0.6rem 1.25rem; font-size: 0.9rem;">
                             <i class="fas fa-eye me-1"></i>View Submission
                         </a>
@@ -440,7 +440,7 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}" class="btn btn-warning d-inline-flex align-items-center gap-2"
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}#id-verification" class="btn btn-warning d-inline-flex align-items-center gap-2"
                            style="border-radius: 0.75rem; font-weight: 800; padding: 0.6rem 1.25rem; font-size: 0.9rem; background: #f59e0b; border-color: #d97706; color: #78350f;">
                             <i class="fas fa-id-card me-1"></i>Verify ID & Location Now
                         </a>
@@ -645,7 +645,7 @@
                                                     </a>
                                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                                         <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.7rem; font-weight: 700; text-transform: capitalize;">
-                                                            {{ str_replace('_', ' ', $listing->condition) }}
+                                                            {{ $listing->condition === 'others' ? 'Mixed Conditions' : str_replace('_', ' ', $listing->condition) }}
                                                         </span>
                                                         @if($listing->estimated_weight)
                                                             <span style="font-size: 0.75rem; color: #94a3b8;">
