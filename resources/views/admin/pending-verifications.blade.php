@@ -305,15 +305,34 @@
                                 <div class="p-3 p-md-4 flex-grow-1">
                                     <!-- ID Document Info -->
                                     <div class="mb-3">
-                                        <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">SUBMITTED ID DETAILS</small>
+                                        <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">SUBMITTED ID & QR DETAILS</small>
                                         <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
                                             <span class="badge bg-dark" style="font-size: 0.8rem; font-weight: 700; padding: 0.35rem 0.75rem;">
                                                 <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Government ID' }}
                                             </span>
                                             @if($user->id_number)
-                                                <span style="color: #475569; font-weight: 700; font-size: 0.85rem;" class="dark:text-slate-300"># {{ $user->id_number }}</span>
+                                                <span style="color: #0d9488; font-weight: 800; font-size: 0.88rem;"># {{ $user->id_number }}</span>
                                             @endif
                                         </div>
+                                        @if($user->birth_date || $user->birth_place || $user->gender || $user->blood_type)
+                                            <div class="d-flex flex-wrap gap-1 mt-2" style="font-size: 0.75rem;">
+                                                @if($user->birth_date)
+                                                    <span class="badge bg-light text-dark border"><i class="fas fa-cake-candles text-danger me-1"></i>DOB: {{ $user->birth_date }}</span>
+                                                @endif
+                                                @if($user->birth_place)
+                                                    <span class="badge bg-light text-dark border"><i class="fas fa-location-dot text-teal me-1"></i>POB: {{ $user->birth_place }}</span>
+                                                @endif
+                                                @if($user->gender)
+                                                    <span class="badge bg-light text-dark border"><i class="fas fa-venus-mars text-primary me-1"></i>{{ $user->gender }}</span>
+                                                @endif
+                                                @if($user->blood_type)
+                                                    <span class="badge bg-light text-dark border"><i class="fas fa-droplet text-danger me-1"></i>Blood: {{ $user->blood_type }}</span>
+                                                @endif
+                                                @if($user->id_card_serial)
+                                                    <span class="badge bg-light text-dark border"><i class="fas fa-barcode text-cyan me-1"></i>SN: {{ $user->id_card_serial }}</span>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
 
                                     @if($user->phone)

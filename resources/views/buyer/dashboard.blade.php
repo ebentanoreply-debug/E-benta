@@ -214,7 +214,7 @@
                                 <span style="color: #64748b; font-size: 0.85rem;">You can browse listings freely. To submit purchase offers and finalize transactions, submit your ID for instant verification.</span>
                             </div>
                         </div>
-                        <a href="{{ route('settings') }}#verification" class="btn btn-sm btn-warning" style="border-radius: 0.6rem; font-weight: 800; padding: 0.45rem 1rem;">
+                        <a href="{{ route('settings', ['tab' => 'id-verification']) }}#id-verification" class="btn btn-sm btn-warning" style="border-radius: 0.6rem; font-weight: 800; padding: 0.45rem 1rem;">
                             Verify Identity <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -390,7 +390,7 @@
                         <div>
                             <div class="d-flex align-items-center gap-2">
                                 <h5 style="font-weight: 800; margin: 0; font-size: 1.15rem; color: #0f172a;" class="text-heading">
-                                    <i class="fas fa-store me-2" style="color: #0d9488;"></i>Available E-Waste Listings
+                                    <i class="fas fa-store me-2" style="color: #0d9488;"></i>Available E-Waste for Sale
                                 </h5>
                                 <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #0d9488; font-weight: 800; font-size: 0.75rem; border-radius: 1rem;">
                                     {{ $availableListings->total() }} Available

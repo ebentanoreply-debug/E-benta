@@ -456,17 +456,16 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-field-label" for="city">
-                                    City / Municipality <span class="req">*</span>
+                                <label class="form-field-label" for="state">
+                                    Province / Region <span class="req">*</span>
                                 </label>
-                                <input id="city"
-                                       class="custom-input @error('city') is-invalid @enderror"
-                                       type="text"
-                                       name="city"
-                                       value="{{ old('city') }}"
-                                       placeholder="e.g. San Carlos City"
-                                       required>
-                                @error('city')
+                                <select id="state"
+                                        class="custom-input @error('state') is-invalid @enderror"
+                                        name="state"
+                                        required>
+                                    <option value="">Select Province...</option>
+                                </select>
+                                @error('state')
                                     <div class="input-error-msg">
                                         <i class="fas fa-circle-exclamation"></i>
                                         <span>{{ $message }}</span>
@@ -475,16 +474,16 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-field-label" for="state">
-                                    State / Province
+                                <label class="form-field-label" for="city">
+                                    City / Municipality <span class="req">*</span>
                                 </label>
-                                <input id="state"
-                                       class="custom-input @error('state') is-invalid @enderror"
-                                       type="text"
-                                       name="state"
-                                       value="{{ old('state') }}"
-                                       placeholder="e.g. Pangasinan">
-                                @error('state')
+                                <select id="city"
+                                        class="custom-input @error('city') is-invalid @enderror"
+                                        name="city"
+                                        required>
+                                    <option value="">Select Municipality...</option>
+                                </select>
+                                @error('city')
                                     <div class="input-error-msg">
                                         <i class="fas fa-circle-exclamation"></i>
                                         <span>{{ $message }}</span>
@@ -601,4 +600,19 @@
 
     </div>
 </div>
+
+<script src="{{ asset('js/philippine-locations.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof window.initProvinceAndCityDropdowns === 'function') {
+        window.initProvinceAndCityDropdowns(
+            'state',
+            'city',
+            "{{ old('state', 'Pangasinan') }}",
+            "{{ old('city', 'San Carlos City') }}",
+            'postal_code'
+        );
+    }
+});
+</script>
 @endsection

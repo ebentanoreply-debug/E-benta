@@ -24,6 +24,7 @@ class Listing extends Model
         'device_model_id',
         'device_details',
         'condition',
+        'condition_notes',
         'description',
         'estimated_weight',
         'intended_action',
@@ -276,6 +277,22 @@ class Listing extends Model
     public function isMatched(): bool
     {
         return $this->status === 'matched';
+    }
+
+    /**
+     * Check if listing is for certified recycling / scrap disposal (Free Collection).
+     */
+    public function isForRecycle(): bool
+    {
+        return $this->intended_action === 'recycle' || (float)$this->suggested_price <= 0;
+    }
+
+    /**
+     * Check if listing is free to collect.
+     */
+    public function isFreeCollection(): bool
+    {
+        return $this->isForRecycle();
     }
 
     /**

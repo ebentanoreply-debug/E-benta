@@ -1,25 +1,29 @@
 @extends('layouts.buyer')
 
-@section('title', 'Make an Offer - E-Benta')
+@section('title', ($listing->isForRecycle() || (float)$listing->suggested_price <= 0 ? 'Request Free Collection' : 'Make an Offer') . ' - E-Benta')
+
+@php
+    $isDisposal = $listing->isForRecycle() || (float)$listing->suggested_price <= 0;
+@endphp
 
 @section('content')
 <div class="container-fluid">
     <!-- Header -->
     <div class="row mb-5">
         <div class="col-12">
-            <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.15) 0%, rgba(243, 156, 18, 0.05) 100%); border-left: 4px solid #f39c12; padding: 2rem; border-radius: 1rem;">
+            <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.15) 0%, rgba(243, 156, 18, 0.05) 100%); border-left: 4px solid {{ $isDisposal ? '#10b981' : '#f39c12' }}; padding: 2rem; border-radius: 1rem;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                    <div style="background: rgba(243, 156, 18, 0.2); padding: 0.75rem 1rem; border-radius: 0.8rem;">
-                        <i class="fas fa-handshake" style="color: #f39c12; font-size: 1.8rem;"></i>
+                    <div style="background: {{ $isDisposal ? 'rgba(16, 185, 129, 0.2)' : 'rgba(243, 156, 18, 0.2)' }}; padding: 0.75rem 1rem; border-radius: 0.8rem;">
+                        <i class="fas {{ $isDisposal ? 'fa-truck-pickup' : 'fa-handshake' }}" style="color: {{ $isDisposal ? '#10b981' : '#f39c12' }}; font-size: 1.8rem;"></i>
                     </div>
                     <div>
                         <h1 style="color: var(--text-light); font-weight: 800; margin: 0; font-size: 2.5rem; letter-spacing: -0.5px;">
-                            Submit an Offer
+                            {{ $isDisposal ? 'Request Free E-Waste Collection' : 'Submit an Offer' }}
                         </h1>
                     </div>
                 </div>
                 <p style="color: #64748b; margin: 0; font-size: 1rem; font-weight: 500;">
-                    Review the item details and submit your bid for this e-waste device
+                    {{ $isDisposal ? 'Review item details and submit your schedule to collect this scrap e-waste item for certified recycling (No payment required).' : 'Review the item details and submit your bid for this e-waste device' }}
                 </p>
             </div>
         </div>
@@ -61,12 +65,23 @@
                         {{ $listing->description }}
                     </p>
                 </div>
+                @if($isDisposal)
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(13, 148, 136, 0.08)); border-left: 4px solid var(--light-green); padding: 1.25rem; border-radius: 0.6rem; margin-top: 1.5rem;">
+                    <small style="color: #0f766e; display: block; font-weight: 700; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fas fa-recycle me-1"></i>Free E-Waste Scrap Collection
+                    </small>
+                    <h4 style="color: var(--light-green); margin: 0; font-weight: 800; font-size: 1.6rem;">
+                        FREE • Zero-Cost Collection
+                    </h4>
+                </div>
+                @else
                 <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(13, 148, 136, 0.05)); border-left: 3px solid var(--light-green); padding: 1rem; border-radius: 0.5rem; margin-top: 1.5rem;">
                     <small style="color: #64748b; display: block; font-weight: 600; margin-bottom: 0.25rem;">SELLER'S ASKING PRICE</small>
                     <h4 style="color: var(--light-green); margin: 0; font-weight: 800; font-size: 1.75rem;">
                         ₱{{ number_format($listing->suggested_price, 2) }}
                     </h4>
                 </div>
+                @endif
             </div>
 
             <!-- Offer Form Card -->
@@ -74,31 +89,49 @@
                 <form method="POST" action="{{ route('offers.store', $listing) }}">
                     @csrf
 
-                    <!-- Bid Amount -->
-                    <div style="margin-bottom: 1.75rem;">
-                        <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-coins me-2" style="color: #f39c12;"></i>Your Offer Amount *
-                        </label>
-                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: start;">
-                            <div>
-                                <input type="number" 
-                                       class="form-control @error('bid_amount') is-invalid @enderror" 
-                                       id="bid_amount" 
-                                       name="bid_amount" 
-                                       step="0.01" 
-                                       placeholder="Enter your bid amount"
-                                       value="{{ old('bid_amount') }}" 
-                                       required
-                                       style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(13, 148, 136, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;">
-                                <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
-                                    Seller's asking price: <strong style="color: var(--light-green);">₱{{ number_format($listing->suggested_price, 2) }}</strong>
-                                </small>
-                                @error('bid_amount')
-                                    <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>
-                                @enderror
+                    @if($isDisposal)
+                        <!-- Free Disposal: No offer amount required -->
+                        <input type="hidden" name="bid_amount" value="0">
+                        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(13, 148, 136, 0.06) 100%); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 0.85rem; padding: 1.25rem; margin-bottom: 1.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.85rem;">
+                                <div style="width: 42px; height: 42px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #065f46; font-size: 1rem; display: block;">No Payment Required (Free E-Waste Collection)</strong>
+                                    <span style="color: #475569; font-size: 0.85rem; line-height: 1.4; display: block; margin-top: 0.15rem;">
+                                        This item is listed for certified recycling / scrap disposal. Collection is completely free — no bid amount or payment field is needed.
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <!-- Bid Amount -->
+                        <div style="margin-bottom: 1.75rem;">
+                            <label style="color: var(--text-light); font-weight: 700; display: block; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-coins me-2" style="color: #f39c12;"></i>Your Offer Amount *
+                            </label>
+                            <div style="display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: start;">
+                                <div>
+                                    <input type="number" 
+                                           class="form-control @error('bid_amount') is-invalid @enderror" 
+                                           id="bid_amount" 
+                                           name="bid_amount" 
+                                           step="0.01" 
+                                           placeholder="Enter your bid amount"
+                                           value="{{ old('bid_amount') }}" 
+                                           required
+                                           style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(13, 148, 136, 0.2); color: var(--text-light); padding: 0.75rem 1rem; border-radius: 0.6rem; font-size: 1rem;">
+                                    <small style="color: #64748b; display: block; margin-top: 0.5rem; font-weight: 500;">
+                                        Seller's asking price: <strong style="color: var(--light-green);">₱{{ number_format($listing->suggested_price, 2) }}</strong>
+                                    </small>
+                                    @error('bid_amount')
+                                        <small style="color: #e74c3c; display: block; margin-top: 0.5rem; font-weight: 600;">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Processing Method -->
                     <div style="margin-bottom: 1.75rem;">
@@ -267,8 +300,8 @@
                         <a href="{{ route('listings.index') }}" class="btn" style="background: rgba(255, 255, 255, 0.08); color: var(--text-light); font-weight: 700; padding: 0.75rem 2rem; border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(13, 148, 136, 0.4)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(100, 116, 139, 0.3)';">
                             <i class="fas fa-times me-2"></i>Cancel
                         </a>
-                        <button type="submit" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; font-weight: 700; padding: 0.75rem 2.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25); cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px rgba(243, 156, 18, 0.35)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px rgba(243, 156, 18, 0.25)'; this.style.transform='translateY(0)';">
-                            <i class="fas fa-paper-plane me-2"></i>Submit Offer
+                        <button type="submit" style="background: {{ $isDisposal ? 'linear-gradient(135deg, #10b981 0%, #0d9488 100%)' : 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)' }}; color: white; font-weight: 700; padding: 0.75rem 2.5rem; border: none; border-radius: 0.6rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 12px {{ $isDisposal ? 'rgba(16, 185, 129, 0.25)' : 'rgba(243, 156, 18, 0.25)' }}; cursor: pointer;" onmouseover="this.style.boxShadow='0 8px 20px {{ $isDisposal ? 'rgba(16, 185, 129, 0.35)' : 'rgba(243, 156, 18, 0.35)' }}'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 12px {{ $isDisposal ? 'rgba(16, 185, 129, 0.25)' : 'rgba(243, 156, 18, 0.25)' }}'; this.style.transform='translateY(0)';">
+                            <i class="fas {{ $isDisposal ? 'fa-truck-pickup' : 'fa-paper-plane' }} me-2"></i>{{ $isDisposal ? 'Submit Free Collection Request' : 'Submit Offer' }}
                         </button>
                     </div>
                 </form>

@@ -109,7 +109,14 @@ class SettingsController extends Controller
 
         $validated = $request->validate([
             'id_type' => ['required', 'string', 'max:100'],
-            'id_number' => ['required', 'string', 'max:100'],
+            'id_number' => ['nullable', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'string', 'max:50'],
+            'birth_place' => ['nullable', 'string', 'max:150'],
+            'gender' => ['nullable', 'string', 'max:20'],
+            'marital_status' => ['nullable', 'string', 'max:30'],
+            'blood_type' => ['nullable', 'string', 'max:10'],
+            'id_card_serial' => ['nullable', 'string', 'max:100'],
+            'id_raw_qr_data' => ['nullable', 'string', 'max:5000'],
             'id_photo' => $photoRule,
             'id_back_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'],
             'id_selfie' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'],
@@ -124,13 +131,23 @@ class SettingsController extends Controller
             'location_notes' => ['nullable', 'string', 'max:500'],
         ]);
 
+        $idNumber = !empty($validated['id_number'])
+            ? trim($validated['id_number'])
+            : ($user->id_number ?: 'AUTO-' . rand(1000, 9999) . '-' . rand(1000, 9999) . '-' . rand(1000, 9999));
+
         $updateData = [
             'id_type' => $validated['id_type'],
-            'id_number' => $validated['id_number'],
+            'id_number' => $idNumber,
             'id_verification_status' => 'pending',
             'id_submitted_at' => now(),
             'id_rejection_reason' => null,
         ];
+
+        foreach (['birth_date', 'birth_place', 'gender', 'marital_status', 'blood_type', 'id_card_serial', 'id_raw_qr_data'] as $demoField) {
+            if ($request->filled($demoField)) {
+                $updateData[$demoField] = $request->input($demoField);
+            }
+        }
 
         if ($request->hasFile('id_photo')) {
             $uploaded = \App\Services\CloudinaryStorageService::upload($request->file('id_photo'), 'verifications');
@@ -222,7 +239,7 @@ class SettingsController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Your Valid ID and Location details have been submitted for review. Our team will verify your account shortly.');
+        return redirect()->route('settings', ['tab' => 'id-verification'])->with('success', 'Your Valid ID and Location details have been submitted for review. Our team will verify your account shortly.');
     }
 
     /**

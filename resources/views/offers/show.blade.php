@@ -119,42 +119,56 @@
                 @endphp
 
                 <!-- Transparent Commission & Payout Breakdown -->
-                <div style="margin-top: 1.5rem; padding: 1.25rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 0.85rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-                        <span style="font-weight: 700; color: #0f172a; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-calculator" style="color: #0d9488;"></i> Transaction Breakdown
-                        </span>
-                        <span style="font-size: 0.75rem; font-weight: 800; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; padding: 0.2rem 0.6rem; border-radius: 99px;">
-                            {{ number_format($commBreakdown['rate'], 1) }}% Platform Fee
-                        </span>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
-                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <small style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Gross Bid Price</small>
-                            <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
-                                ₱{{ number_format($commBreakdown['gross_amount'], 2) }}
+                <div style="margin-top: 1.5rem; padding: 1.25rem; background: {{ $offer->isFreeCollection() ? '#f0fdf4' : '#f8fafc' }}; border: {{ $offer->isFreeCollection() ? '1.5px solid #bbf7d0' : '1px dashed #cbd5e1' }}; border-radius: 0.85rem;">
+                    @if($offer->isFreeCollection())
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                            <span style="font-weight: 800; color: #166534; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-recycle" style="color: #10b981;"></i> Free E-Waste Collection Breakdown
+                            </span>
+                            <span class="badge bg-success" style="font-size: 0.75rem; font-weight: 800; padding: 0.35rem 0.65rem; border-radius: 99px;">
+                                100% Free Collection • ₱0.00
+                            </span>
+                        </div>
+                        <p class="mb-0 mt-2" style="font-size: 0.85rem; color: #166534;">
+                            <i class="fas fa-check-circle me-1"></i> No platform fee or seller charge applies for certified scrap recycling / disposal collection.
+                        </p>
+                    @else
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <span style="font-weight: 700; color: #0f172a; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-calculator" style="color: #0d9488;"></i> Transaction Breakdown
+                            </span>
+                            <span style="font-size: 0.75rem; font-weight: 800; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; padding: 0.2rem 0.6rem; border-radius: 99px;">
+                                {{ number_format($commBreakdown['rate'], 1) }}% Platform Fee
                             </span>
                         </div>
 
-                        <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <small style="color: #dc2626; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Platform Commission</small>
-                            <span style="font-size: 1.15rem; font-weight: 800; color: #dc2626;">
-                                -₱{{ number_format($commBreakdown['commission_amount'], 2) }}
-                            </span>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                                <small style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Gross Bid Price</small>
+                                <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+                                    ₱{{ number_format($commBreakdown['gross_amount'], 2) }}
+                                </span>
+                            </div>
+
+                            <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                                <small style="color: #dc2626; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Platform Commission</small>
+                                <span style="font-size: 1.15rem; font-weight: 800; color: #dc2626;">
+                                    -₱{{ number_format($commBreakdown['commission_amount'], 2) }}
+                                </span>
+                            </div>
+
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
+                                <small style="color: #16a34a; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; display: block;">Seller Take-Home</small>
+                                <span style="font-size: 1.25rem; font-weight: 900; color: #16a34a;">
+                                    ₱{{ number_format($commBreakdown['net_amount'], 2) }}
+                                </span>
+                            </div>
                         </div>
 
-                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 0.6rem;">
-                            <small style="color: #16a34a; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; display: block;">Seller Take-Home</small>
-                            <span style="font-size: 1.25rem; font-weight: 900; color: #16a34a;">
-                                ₱{{ number_format($commBreakdown['net_amount'], 2) }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <small style="display: block; margin-top: 0.75rem; color: #64748b; font-size: 0.8rem;">
-                        <i class="fas fa-shield-halved me-1" style="color: #0d9488;"></i> Platform fee covers secure processing, recycler ID verification, and environmental impact reporting.
-                    </small>
+                        <small style="display: block; margin-top: 0.75rem; color: #64748b; font-size: 0.8rem;">
+                            <i class="fas fa-shield-halved me-1" style="color: #0d9488;"></i> Platform fee covers secure processing, recycler ID verification, and environmental impact reporting.
+                        </small>
+                    @endif
                 </div>
 
                 @if($offer->notes)
@@ -225,7 +239,17 @@
             @endphp
 
             <!-- Buyer Payment Method -->
-            @if((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->status === 'accepted')
+            @if($offer->isFreeCollection() && $offer->status === 'accepted')
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(13, 148, 136, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid #10b981; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h4 style="color: #065f46; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-hand-holding-heart" style="color: #10b981;"></i>
+                        Free E-Waste Collection (No Payment Required)
+                    </h4>
+                    <p style="color: #047857; margin: 0; font-size: 0.95rem;">
+                        This listing is for eco-friendly collection / disposal. <strong>₱0.00 payment required</strong>. No payment gateway or cash handover needed — proceed directly to collection & pickup!
+                    </p>
+                </div>
+            @elseif((auth()->user()->isBuyer() && auth()->id() === $offer->buyer_id) && $offer->status === 'accepted')
                 <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0d9488; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                     <h4 style="color: #0f172a; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
                         <i class="fas fa-credit-card" style="color: #0d9488;"></i>

@@ -71,7 +71,7 @@
                             Environmental Impact Logs
                         </h1>
                         <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
-                            Audited ledger of CO₂ emissions prevented, e-waste diverted, and material recovery breakdown.
+                            Audited ledger of diverted e-waste, responsible disposal actions, and zero-landfill certifications.
                         </p>
                     </div>
 
@@ -122,9 +122,8 @@
                                 <th>Device Category</th>
                                 <th>Seller</th>
                                 <th>Certified Buyer</th>
-                                <th>CO₂ Offset</th>
                                 <th>Diverted Weight</th>
-                                <th>Materials Recovered</th>
+                                <th>Recycling / Disposal Action</th>
                                 <th>Status</th>
                                 <th>Certified Date</th>
                             </tr>
@@ -154,34 +153,28 @@
                                         <small class="text-muted">{{ $log->buyer?->email }}</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-success font-weight-bold" style="font-size: 0.82rem;">
-                                            <i class="fas fa-leaf me-1"></i>{{ number_format($log->co2_saved, 2) }} kg
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <strong style="color: #0f172a;">{{ number_format($log->landfill_diverted_weight, 2) }} kg</strong>
+                                        <strong style="color: #0f172a; font-size: 0.95rem;">{{ number_format($log->landfill_diverted_weight, 2) }} kg</strong>
                                     </td>
                                     <td>
                                         @php
-                                            $hasRecovered = ($log->gold_recovered > 0) || ($log->copper_recovered > 0) || ($log->plastic_recovered > 0) || ($log->aluminum_recovered > 0);
+                                            $method = strtolower($log->processing_method ?? '');
                                         @endphp
-                                        @if($hasRecovered)
-                                            <div class="d-flex flex-wrap gap-1" style="font-size: 0.72rem;">
-                                                @if($log->gold_recovered > 0)
-                                                    <span class="badge bg-warning text-dark">Au: {{ $log->gold_recovered }}g</span>
-                                                @endif
-                                                @if($log->copper_recovered > 0)
-                                                    <span class="badge bg-danger text-white">Cu: {{ $log->copper_recovered }}g</span>
-                                                @endif
-                                                @if($log->plastic_recovered > 0)
-                                                    <span class="badge bg-info text-dark">Plastic: {{ $log->plastic_recovered }}g</span>
-                                                @endif
-                                                @if($log->aluminum_recovered > 0)
-                                                    <span class="badge bg-secondary text-white">Al: {{ $log->aluminum_recovered }}g</span>
-                                                @endif
-                                            </div>
+                                        @if($method === 'repair')
+                                            <span class="badge" style="background: rgba(2, 132, 199, 0.12); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                                                <i class="fas fa-tools me-1"></i>Refurbish & Reuse
+                                            </span>
+                                        @elseif($method === 'harvest')
+                                            <span class="badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.25); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                                                <i class="fas fa-microchip me-1"></i>Parts Harvesting
+                                            </span>
+                                        @elseif($method === 'refine')
+                                            <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; border: 1px solid rgba(13, 148, 136, 0.25); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                                                <i class="fas fa-recycle me-1"></i>Safe Material Recycling
+                                            </span>
                                         @else
-                                            <span class="text-muted" style="font-size: 0.8rem; font-style: italic;">Standard Processing</span>
+                                            <span class="badge" style="background: rgba(71, 85, 105, 0.12); color: #475569; border: 1px solid rgba(71, 85, 105, 0.25); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem;">
+                                                <i class="fas fa-trash-alt me-1"></i>Certified Scrap Disposal
+                                            </span>
                                         @endif
                                     </td>
                                     <td>
@@ -201,7 +194,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-5 text-muted">
+                                    <td colspan="7" class="text-center py-5 text-muted">
                                         <i class="fas fa-leaf fa-2x mb-2 d-block text-success"></i>
                                         <strong>No environmental impact logs found.</strong>
                                     </td>
