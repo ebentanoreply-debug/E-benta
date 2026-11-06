@@ -605,10 +605,6 @@
                 <small class="th-stat-label"><i class="fas fa-weight me-2" style="color: #9b59b6;"></i>Weight Processed</small>
                 <h3 class="th-stat-value">{{ number_format(auth()->user()->total_weight_diverted ?? 0) }} <span style="font-size: 0.6em;">kg</span></h3>
             </div>
-            <div class="th-stat-card stat-co2">
-                <small class="th-stat-label"><i class="fas fa-leaf me-2" style="color: #06b6d4;"></i>CO₂ Diverted</small>
-                <h3 class="th-stat-value">{{ number_format(auth()->user()->total_co2_saved ?? 0) }} <span style="font-size: 0.6em;">kg</span></h3>
-            </div>
         </div>
 
         <!-- Transactions List -->
@@ -678,10 +674,6 @@
                                     <i class="fas fa-trophy" style="color: #0d9488;"></i>Your Impact
                                 </h5>
                                 <div class="th-impact-grid">
-                                    <div class="th-impact-item">
-                                        <small>CO₂ Diverted</small>
-                                        <h4 style="color: #0d9488;">{{ $impact->co2_saved }} kg</h4>
-                                    </div>
                                     <div class="th-impact-item">
                                         <small>Weight Diverted</small>
                                         <h4 style="color: #3498db;">{{ $impact->weight_diverted }} kg</h4>

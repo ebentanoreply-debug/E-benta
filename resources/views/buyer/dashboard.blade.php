@@ -220,10 +220,10 @@
                     </div>
                 @endif
 
-                <!-- 4 METRICS MATRIX -->
+                <!-- 3 KEY METRICS MATRIX -->
                 <div class="row g-3 mb-4">
                     <!-- Account Status -->
-                    <div class="col-sm-6 col-xl-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="buyer-metric-card">
                             <div>
                                 <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Account Tier</span>
@@ -243,7 +243,7 @@
                     </div>
 
                     <!-- Items Processed -->
-                    <div class="col-sm-6 col-xl-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="buyer-metric-card">
                             <div>
                                 <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Items Acquired</span>
@@ -259,7 +259,7 @@
                     </div>
 
                     <!-- E-Waste Diverted -->
-                    <div class="col-sm-6 col-xl-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="buyer-metric-card">
                             <div>
                                 <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">E-Waste Diverted</span>
@@ -270,22 +270,6 @@
                             </div>
                             <div class="buyer-metric-icon" style="background: rgba(6, 182, 212, 0.12); color: #06b6d4;">
                                 <i class="fas fa-recycle"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CO2 Saved -->
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="buyer-metric-card">
-                            <div>
-                                <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">CO₂ Avoided</span>
-                                <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0.25rem 0 0; color: #0f172a;" class="text-heading">
-                                    {{ number_format((float)(auth()->user()->total_co2_saved ?? 0), 2) }} <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">kg</span>
-                                </h3>
-                                <small style="color: #94a3b8; font-size: 0.75rem;">Carbon footprint offset</small>
-                            </div>
-                            <div class="buyer-metric-icon" style="background: rgba(168, 85, 247, 0.12); color: #a855f7;">
-                                <i class="fas fa-leaf"></i>
                             </div>
                         </div>
                     </div>
