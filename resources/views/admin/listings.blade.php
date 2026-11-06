@@ -126,7 +126,7 @@
                                 <th>Handover Mode</th>
                                 <th>Price</th>
                                 <th>Active Offers</th>
-                                <th>CO₂ Saved</th>
+                                <th>Est. Weight</th>
                                 <th class="text-end">Action</th>
                             </tr>
                         </thead>
@@ -194,8 +194,8 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-success border font-weight-bold">
-                                            <i class="fas fa-leaf me-1"></i>{{ $listing->carbon_footprint ?? 0 }} kg
+                                        <span class="badge bg-light text-dark border font-weight-bold">
+                                            <i class="fas fa-weight-hanging me-1" style="color: #0d9488;"></i>{{ number_format((float)($listing->estimated_weight ?: 0.50), 2) }} kg
                                         </span>
                                     </td>
                                     <td class="text-end">
