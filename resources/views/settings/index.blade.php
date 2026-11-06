@@ -799,6 +799,143 @@
     display: block;
 }
 
+/* ─── LIVE CAMERA VIEWFINDER MODAL ─── */
+.id-camera-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    background: #090d16;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.id-camera-modal.active {
+    display: flex;
+}
+.id-camera-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+    z-index: 10;
+}
+.id-camera-title {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0;
+}
+.id-camera-viewfinder {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #000000;
+}
+.id-camera-video, .id-camera-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.id-camera-guide-box {
+    position: absolute;
+    width: 86%;
+    max-width: 440px;
+    aspect-ratio: 1.58 / 1;
+    border: 2px dashed rgba(45, 212, 191, 0.8);
+    border-radius: 1rem;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.id-camera-guide-box.selfie-mode {
+    aspect-ratio: 1 / 1.25;
+    max-width: 300px;
+    border-radius: 48% 48% 40% 40%;
+}
+.id-camera-guide-box .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3.5px solid #2dd4bf;
+}
+.id-camera-guide-box .corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 0.8rem; }
+.id-camera-guide-box .corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 0.8rem; }
+.id-camera-guide-box .corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 0.8rem; }
+.id-camera-guide-box .corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 0.8rem; }
+
+.id-camera-tip-pill {
+    position: absolute;
+    bottom: 1.25rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    color: #e2e8f0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.45rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+    max-width: 90%;
+    z-index: 5;
+}
+.id-camera-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1.25rem 2.25rem;
+    background: linear-gradient(0deg, rgba(0,0,0,0.92) 0%, transparent 100%);
+    z-index: 10;
+}
+.id-camera-shutter-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: transparent;
+    border: 4px solid #ffffff;
+    padding: 4px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.id-camera-shutter-btn:active {
+    transform: scale(0.92);
+}
+.id-camera-shutter-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.6);
+}
+.id-camera-btn-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.id-camera-btn-circle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
 /* ─── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 991.98px) {
     .verif-wizard-stepper {
@@ -1414,46 +1551,106 @@
                                     </div>
 
                                     <div class="row g-3">
+                                        <!-- FRONT ID PHOTO -->
                                         <div class="col-md-6">
-                                            <label class="stt-label">Front ID Photo <span class="text-danger">*</span></label>
-                                            <input type="file" name="id_photo" id="idPhotoInput" class="stt-input @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }} onchange="previewAndCompressDoc(this, 'idPhotoPreview')">
-                                            <div id="idPhotoPreview" class="mt-1"></div>
-                                            <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Front side showing photo and name (JPG, PNG, WEBP)</small>
-                                            @if($user->id_photo_url)
-                                                 <div class="mt-1 d-flex align-items-center gap-2">
-                                                     <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
-                                                     <a href="{{ $user->id_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Uploaded Photo</a>
-                                                 </div>
-                                            @endif
-                                            @error('id_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            <div class="p-3 rounded-3" style="background: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.25); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
+                                                        Front ID Photo <span class="text-danger">*</span>
+                                                    </label>
+                                                    <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.7rem; font-weight: 700;">Face & Details</span>
+                                                </div>
+                                                
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idPhotoInput', { mode: 'id-card', title: 'Capture Front ID', tip: 'Align front side of your ID inside the rectangle' })">
+                                                        <i class="fas fa-camera"></i>
+                                                        <span>Take Photo</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="document.getElementById('idPhotoInput').click()">
+                                                        <i class="fas fa-folder-open"></i>
+                                                        <span>Upload</span>
+                                                    </button>
+                                                </div>
+
+                                                <input type="file" name="id_photo" id="idPhotoInput" class="stt-input d-none @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }} onchange="previewAndCompressDoc(this, 'idPhotoPreview')">
+                                                <div id="idPhotoPreview" class="mt-1"></div>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Front side showing photo and name (JPG, PNG, WEBP)</small>
+                                                @if($user->id_photo_url)
+                                                     <div class="mt-2 d-flex align-items-center gap-2">
+                                                         <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
+                                                         <a href="{{ $user->id_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Photo</a>
+                                                     </div>
+                                                @endif
+                                                @error('id_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            </div>
                                         </div>
 
+                                        <!-- BACK ID PHOTO -->
                                         <div class="col-md-6">
-                                            <label class="stt-label">Back ID Photo <span class="text-danger">* (Address Side)</span></label>
-                                            <input type="file" name="id_back_photo" id="idBackPhotoInput" class="stt-input @error('id_back_photo') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idBackPhotoPreview')">
-                                            <div id="idBackPhotoPreview" class="mt-1"></div>
-                                            <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Back side showing address and QR code (JPG, PNG, WEBP)</small>
-                                            @if($user->id_back_photo_url)
-                                                 <div class="mt-1 d-flex align-items-center gap-2">
-                                                     <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID Uploaded</span>
-                                                     <a href="{{ $user->id_back_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Back ID</a>
-                                                 </div>
-                                            @endif
-                                            @error('id_back_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            <div class="p-3 rounded-3" style="background: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.25); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
+                                                        Back ID Photo <span class="text-danger">* (Address Side)</span>
+                                                    </label>
+                                                    <span class="badge" style="background: rgba(6, 182, 212, 0.12); color: #0891b2; font-size: 0.7rem; font-weight: 700;">Address & QR</span>
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idBackPhotoInput', { mode: 'id-card', title: 'Capture Back ID', tip: 'Align back side showing address and QR code inside the frame' })">
+                                                        <i class="fas fa-camera"></i>
+                                                        <span>Take Photo</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="document.getElementById('idBackPhotoInput').click()">
+                                                        <i class="fas fa-folder-open"></i>
+                                                        <span>Upload</span>
+                                                    </button>
+                                                </div>
+
+                                                <input type="file" name="id_back_photo" id="idBackPhotoInput" class="stt-input d-none @error('id_back_photo') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idBackPhotoPreview')">
+                                                <div id="idBackPhotoPreview" class="mt-1"></div>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Back side showing address and QR code (JPG, PNG, WEBP)</small>
+                                                @if($user->id_back_photo_url)
+                                                     <div class="mt-2 d-flex align-items-center gap-2">
+                                                         <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID</span>
+                                                         <a href="{{ $user->id_back_photo_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Back ID</a>
+                                                     </div>
+                                                @endif
+                                                @error('id_back_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            </div>
                                         </div>
 
+                                        <!-- SELFIE HOLDING ID -->
                                         <div class="col-md-12">
-                                            <label class="stt-label">Selfie Holding ID <span style="color: #64748b;">(Optional for faster approval)</span></label>
-                                            <input type="file" name="id_selfie" id="idSelfieInput" class="stt-input @error('id_selfie') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idSelfiePreview')">
-                                            <div id="idSelfiePreview" class="mt-1"></div>
-                                            <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face</small>
-                                            @if($user->id_selfie_url)
-                                                 <div class="mt-1 d-flex align-items-center gap-2">
-                                                     <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
-                                                     <a href="{{ $user->id_selfie_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Selfie</a>
-                                                 </div>
-                                            @endif
-                                            @error('id_selfie')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            <div class="p-3 rounded-3" style="background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
+                                                        Selfie Holding ID <span style="color: #64748b; font-weight: 500;">(Optional for faster approval)</span>
+                                                    </label>
+                                                    <span class="badge bg-light text-muted" style="font-size: 0.7rem;">Face + ID Card</span>
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <button type="button" class="btn btn-sm btn-outline-dark flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="IdCamera.open('idSelfieInput', { mode: 'selfie', facingMode: 'user', title: 'Take Selfie Holding ID', tip: 'Hold your ID beside your face clearly inside the frame' })">
+                                                        <i class="fas fa-camera-rotate text-teal"></i>
+                                                        <span>Take Selfie (Front Camera)</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="document.getElementById('idSelfieInput').click()">
+                                                        <i class="fas fa-folder-open"></i>
+                                                        <span>Upload</span>
+                                                    </button>
+                                                </div>
+
+                                                <input type="file" name="id_selfie" id="idSelfieInput" class="stt-input d-none @error('id_selfie') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idSelfiePreview')">
+                                                <div id="idSelfiePreview" class="mt-1"></div>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face</small>
+                                                @if($user->id_selfie_url)
+                                                     <div class="mt-2 d-flex align-items-center gap-2">
+                                                         <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
+                                                         <a href="{{ $user->id_selfie_url }}" target="_blank" style="font-size: 0.78rem; color: #0d9488; font-weight: 700;">View Selfie</a>
+                                                     </div>
+                                                @endif
+                                                @error('id_selfie')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1966,12 +2163,70 @@
         </div>
     </div>
 
+{{-- ─── LIVE CAMERA VIEWFINDER MODAL ─── --}}
+<div id="idCameraModal" class="id-camera-modal" role="dialog" aria-modal="true" aria-labelledby="idCameraTitle">
+    {{-- Header --}}
+    <div class="id-camera-header">
+        <button type="button" class="id-camera-btn-circle" id="idCameraCloseBtn" aria-label="Close Camera">
+            <i class="fas fa-times"></i>
+        </button>
+        <h6 class="id-camera-title" id="idCameraTitle">Capture Government ID</h6>
+        <button type="button" class="id-camera-btn-circle" id="idCameraFlipBtn" aria-label="Switch Camera">
+            <i class="fas fa-camera-rotate"></i>
+        </button>
+    </div>
+
+    {{-- Viewfinder Canvas & Video --}}
+    <div class="id-camera-viewfinder">
+        <video id="idCameraVideo" class="id-camera-video" autoplay playsinline muted></video>
+        <img id="idCameraPreviewImg" class="id-camera-preview" alt="Captured ID Preview" style="display:none;">
+        <canvas id="idCameraCanvas" style="display:none;"></canvas>
+
+        {{-- Framing Guide Overlay --}}
+        <div id="idCameraGuideBox" class="id-camera-guide-box">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+        </div>
+
+        {{-- Guidance Tip Pill --}}
+        <div id="idCameraTip" class="id-camera-tip-pill">
+            <i class="fas fa-circle-info me-1 text-teal"></i> Align your Philippine ID inside the frame
+        </div>
+
+        {{-- Error / Fallback Box --}}
+        <div id="idCameraErrorBox" style="position: absolute; z-index: 20; display: none;"></div>
+    </div>
+
+    {{-- Footer & Shutter Controls --}}
+    <div class="id-camera-footer">
+        {{-- Shutter view --}}
+        <div id="idCameraShutterControls" class="d-flex align-items-center justify-content-center w-100 position-relative">
+            <button type="button" id="idCameraShutterBtn" class="id-camera-shutter-btn" aria-label="Take Photo">
+                <div class="id-camera-shutter-inner"></div>
+            </button>
+        </div>
+
+        {{-- Review view (Retake vs Use Photo) --}}
+        <div id="idCameraReviewControls" class="d-flex align-items-center justify-content-center gap-3 w-100" style="display:none !important;">
+            <button type="button" id="idCameraRetakeBtn" class="btn btn-outline-light px-4 py-2" style="border-radius: 2rem; font-weight: 700; font-size: 0.9rem;">
+                <i class="fas fa-rotate-left me-1"></i> Retake
+            </button>
+            <button type="button" id="idCameraConfirmBtn" class="btn text-white px-4 py-2" style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); border-radius: 2rem; font-weight: 800; font-size: 0.9rem; border: none; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);">
+                <i class="fas fa-check-circle me-1"></i> Use Photo
+            </button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="{{ asset('js/jsqr.min.js') }}"></script>
 <script src="{{ asset('js/zxing.min.js') }}"></script>
 <script src="{{ asset('js/image-compressor.js') }}"></script>
 <script src="{{ asset('js/philippine-locations.js') }}?v={{ file_exists(public_path('js/philippine-locations.js')) ? filemtime(public_path('js/philippine-locations.js')) : time() }}"></script>
 <script src="{{ asset('js/id-scanner.js') }}?v={{ file_exists(public_path('js/id-scanner.js')) ? filemtime(public_path('js/id-scanner.js')) : time() }}"></script>
+<script src="{{ asset('js/id-camera-capture.js') }}?v={{ file_exists(public_path('js/id-camera-capture.js')) ? filemtime(public_path('js/id-camera-capture.js')) : time() }}"></script>
 <script>
 // Document Compression State Tracker
 const pendingCompressions = new Set();
