@@ -187,28 +187,22 @@
 
                 <!-- METRIC CARDS -->
                 <div class="row g-3 mb-4">
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="th-metric-card">
                             <span style="color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Total Bids</span>
                             <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0.2rem 0 0; color: #0f172a;" class="text-heading">{{ $offers->total() }}</h3>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="th-metric-card">
                             <span style="color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Completed Deals</span>
                             <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0.2rem 0 0; color: #10b981;">{{ $offers->where('status', 'completed')->count() }}</h3>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-lg-4">
                         <div class="th-metric-card">
                             <span style="color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">E-Waste Diverted</span>
                             <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0.2rem 0 0; color: #0d9488;">{{ number_format((float)(auth()->user()->total_weight_diverted ?? 0), 2) }} kg</h3>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="th-metric-card">
-                            <span style="color: #64748b; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">CO₂ Avoided</span>
-                            <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0.2rem 0 0; color: #a855f7;">{{ number_format((float)(auth()->user()->total_co2_saved ?? 0), 2) }} kg</h3>
                         </div>
                     </div>
                 </div>

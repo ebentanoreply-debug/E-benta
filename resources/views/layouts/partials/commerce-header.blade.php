@@ -194,15 +194,8 @@
                         <span class="commerce-topbar-pill">
                             <i class="fas fa-location-dot"></i> Deliver to: <strong>{{ $userDeliverCity }}</strong>
                         </span>
-                        <span class="d-none d-md-inline" style="color: rgba(255,255,255,0.2);">|</span>
                     @endif
                 @endauth
-                @php $totalCo2Header = \App\Models\ImpactLog::sum('co2_saved') + \App\Models\Listing::sum('carbon_footprint'); @endphp
-                @if($totalCo2Header > 0)
-                    <span class="d-none d-md-inline" style="font-size: 0.75rem; color: #94a3b8;">
-                        <i class="fas fa-leaf me-1" style="color: #10b981;"></i> <strong>{{ number_format($totalCo2Header, 1) }} kg</strong> CO₂ Diverted
-                    </span>
-                @endif
             </div>
             <div class="d-flex align-items-center gap-3">
                 <a href="{{ route('home') }}#process" class="d-none d-md-inline">How It Works</a>
