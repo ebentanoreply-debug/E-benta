@@ -353,25 +353,21 @@
                     </div>
                 </div>
 
-                <!-- KPI 2: CO2 Emissions Prevented -->
+                <!-- KPI 2: Registered E-Waste Inventory -->
                 <div class="col-sm-6 col-lg-3">
                     <div class="admin-kpi-card">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
-                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">CARBON REDUCED</small>
-                                @php
-                                    $co2Raw = (float)($analytics['total_co2_saved'] ?? 0);
-                                    $displayCo2 = $co2Raw >= 1000 ? number_format($co2Raw / 1000, 2) . ' t CO₂' : number_format($co2Raw, 0) . ' kg CO₂';
-                                @endphp
-                                <div class="admin-kpi-val">{{ $displayCo2 }}</div>
+                                <small style="color: #64748b; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">TECH INVENTORY</small>
+                                <div class="admin-kpi-val">{{ number_format($totalListings ?? 0) }}</div>
                             </div>
-                            <div class="admin-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
-                                <i class="fas fa-leaf"></i>
+                            <div class="admin-kpi-icon" style="background: rgba(13, 148, 136, 0.12); color: #0d9488;">
+                                <i class="fas fa-boxes-stacked"></i>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem; font-weight: 700; color: #10b981;">
+                        <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem; font-weight: 700; color: #0d9488;">
                             <i class="fas fa-check-circle"></i>
-                            <span>Tracked via Impact Logs</span>
+                            <span>{{ $activeListingsCount ?? 0 }} Active in Marketplace</span>
                         </div>
                     </div>
                 </div>
@@ -415,16 +411,16 @@
 
             <!-- 3. ANALYTICS CHARTS ROW -->
             <div class="row g-4 mb-4">
-                <!-- E-Waste & Carbon Trends Chart -->
+                <!-- E-Waste Trends Chart -->
                 <div class="col-lg-8">
                     <div class="admin-card">
                         <div class="admin-card-header">
                             <div>
                                 <h5 class="admin-card-title">
                                     <i class="fas fa-chart-line" style="color: #0d9488;"></i>
-                                    E-Waste & Carbon Trend Analytics
+                                    E-Waste Collection Trend Analytics
                                 </h5>
-                                <small style="color: #64748b; font-size: 0.8rem;">Monthly collection and environmental carbon offset tracking</small>
+                                <small style="color: #64748b; font-size: 0.8rem;">Monthly diverted e-waste volume and landfill prevention tracking</small>
                             </div>
                             <select id="wasteChartFilter" class="form-select form-select-sm" style="width: auto; font-weight: 700; border-radius: 0.6rem; border-color: rgba(13, 148, 136, 0.3);">
                                 <option value="6">Last 6 Months</option>
@@ -438,24 +434,29 @@
                     </div>
                 </div>
 
-                <!-- Material Recovery Doughnut Chart -->
+                <!-- E-Waste Category Distribution Doughnut Chart -->
                 <div class="col-lg-4">
                     <div class="admin-card">
                         <div class="admin-card-header">
                             <h5 class="admin-card-title">
                                 <i class="fas fa-chart-pie" style="color: #06b6d4;"></i>
-                                Material Recovery
+                                E-Waste Categories
                             </h5>
-                            <span class="badge bg-light text-dark border" style="font-size: 0.75rem;">Recovered Elements</span>
+                            <span class="badge bg-light text-dark border" style="font-size: 0.75rem;">Device Breakdown</span>
                         </div>
                         <div class="p-3 p-md-4 d-flex flex-column align-items-center justify-content-center flex-grow-1" style="min-height: 280px; position: relative;">
-                            <canvas id="materialsDistributionChart" style="max-height: 200px; width: 100%;"></canvas>
+                            <canvas id="categoryDistributionChart" style="max-height: 200px; width: 100%;"></canvas>
                             <div class="d-flex justify-content-center flex-wrap gap-2 mt-3" style="font-size: 0.78rem;">
-                                <span class="badge bg-warning text-dark"><i class="fas fa-circle me-1" style="color: #eab308;"></i>Gold</span>
-                                <span class="badge bg-danger text-white"><i class="fas fa-circle me-1" style="color: #f97316;"></i>Copper</span>
-                                <span class="badge bg-secondary text-white"><i class="fas fa-circle me-1" style="color: #94a3b8;"></i>Aluminum</span>
-                                <span class="badge bg-info text-dark"><i class="fas fa-circle me-1" style="color: #06b6d4;"></i>Plastics</span>
-                                <span class="badge bg-primary text-white"><i class="fas fa-circle me-1" style="color: #a855f7;"></i>Rare Earth</span>
+                                @php
+                                    $catPalette = ['#0d9488', '#06b6d4', '#3b82f6', '#f59e0b', '#8b5cf6'];
+                                    $ci = 0;
+                                @endphp
+                                @foreach($categoryStats as $cName => $cCount)
+                                    <span class="badge" style="background: {{ $catPalette[$ci % count($catPalette)] }}; color: #ffffff;">
+                                        {{ $cName }}: {{ $cCount }}
+                                    </span>
+                                    @php $ci++; @endphp
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -599,7 +600,7 @@
                                         <th>Device / Item</th>
                                         <th>Seller</th>
                                         <th>Verified Buyer / Recycler</th>
-                                        <th>CO₂ Prevented</th>
+                                        <th>Processing Action</th>
                                         <th>Diverted Weight</th>
                                         <th>Status</th>
                                         <th>Date</th>
@@ -619,8 +620,8 @@
                                             <td>{{ $transaction->seller?->name ?? 'N/A' }}</td>
                                             <td>{{ $transaction->buyer?->name ?? 'N/A' }}</td>
                                             <td>
-                                                <span class="badge bg-success" style="font-size: 0.8rem; font-weight: 800;">
-                                                    <i class="fas fa-leaf me-1"></i>{{ $transaction->co2_saved ?? 0 }} kg
+                                                <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.78rem; font-weight: 700; border-radius: 1rem; padding: 0.35rem 0.75rem;">
+                                                    <i class="fas fa-recycle me-1"></i>{{ ucfirst($transaction->processing_method ?? 'Safe Recycling') }}
                                                 </span>
                                             </td>
                                             <td>{{ $transaction->landfill_diverted_weight ?? 0 }} kg</td>
@@ -658,7 +659,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         initWasteTrendChart();
-        initMaterialDoughnutChart();
+        initCategoryDoughnutChart();
     });
 
     let wasteChart = null;
@@ -670,13 +671,8 @@
     const trend24Labels = @json($trend24Months ?? []);
     const trend24Data = @json($trend24Waste ?? []);
 
-    const materialValues = [
-        {{ (float)($materials['gold'] ?? 0) }},
-        {{ (float)($materials['copper'] ?? 0) }},
-        {{ (float)($materials['aluminum'] ?? 0) }},
-        {{ (float)($materials['plastic'] ?? 0) }},
-        {{ (float)($materials['rare_earth'] ?? 0) }}
-    ];
+    const categoryLabels = @json(array_keys($categoryStats ?? []));
+    const categoryValues = @json(array_values($categoryStats ?? []));
 
     function initWasteTrendChart() {
         const ctx = document.getElementById('wasteCollectionChart');
@@ -753,21 +749,21 @@
         });
     }
 
-    function initMaterialDoughnutChart() {
-        const ctx = document.getElementById('materialsDistributionChart');
+    function initCategoryDoughnutChart() {
+        const ctx = document.getElementById('categoryDistributionChart');
         if (!ctx) return;
 
-        // Check if all material values are 0
-        const totalMaterials = materialValues.reduce((a, b) => a + b, 0);
-        const chartData = totalMaterials > 0 ? materialValues : [0.01, 0.01, 0.01, 0.01, 0.01];
+        const totalItems = categoryValues.reduce((a, b) => a + b, 0);
+        const chartData = totalItems > 0 ? categoryValues : [1];
+        const chartLabels = totalItems > 0 ? categoryLabels : ['No Items'];
 
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Gold (g)', 'Copper (kg)', 'Aluminum (kg)', 'Plastics (kg)', 'Rare Earth (g)'],
+                labels: chartLabels,
                 datasets: [{
                     data: chartData,
-                    backgroundColor: ['#eab308', '#f97316', '#94a3b8', '#06b6d4', '#a855f7'],
+                    backgroundColor: ['#0d9488', '#06b6d4', '#3b82f6', '#f59e0b', '#8b5cf6'],
                     borderWidth: 2,
                     borderColor: '#ffffff'
                 }]
@@ -783,8 +779,7 @@
                         padding: 10,
                         callbacks: {
                             label: function(context) {
-                                const val = materialValues[context.dataIndex];
-                                return context.label + ': ' + val;
+                                return context.label + ': ' + context.parsed + ' items';
                             }
                         }
                     }

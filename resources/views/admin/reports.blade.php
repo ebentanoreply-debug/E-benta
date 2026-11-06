@@ -48,7 +48,7 @@
                             Generate System & ESG Reports
                         </h1>
                         <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
-                            Generate periodic compliance summaries, carbon accounting data, and platform growth metrics.
+                            Generate periodic compliance summaries, resource recovery data, and platform growth metrics.
                         </p>
                     </div>
 
@@ -115,11 +115,11 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="p-4 bg-white border rounded-4 d-flex align-items-center justify-content-between shadow-sm" style="border-color: rgba(13,148,136,0.15) !important;">
                         <div>
-                            <small class="text-muted font-weight-bold text-uppercase" style="font-size: 0.7rem;">NET CO₂ PREVENTED</small>
-                            <h3 class="m-0 font-weight-bold text-success" style="font-family: 'Outfit', sans-serif;">{{ number_format($data['total_co2_saved'], 0) }} kg</h3>
+                            <small class="text-muted font-weight-bold text-uppercase" style="font-size: 0.7rem;">ITEMS PROCESSED</small>
+                            <h3 class="m-0 font-weight-bold text-success" style="font-family: 'Outfit', sans-serif;">{{ number_format($data['total_items'] ?? $data['total_transactions'], 0) }}</h3>
                         </div>
                         <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                            <i class="fas fa-leaf"></i>
+                            <i class="fas fa-boxes-stacked"></i>
                         </div>
                     </div>
                 </div>
@@ -185,9 +185,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="p-3 rounded-3" style="background: #f8fafc; border-left: 4px solid #10b981;">
-                            <strong style="color: #0f172a; display: block; font-size: 0.9rem;">Carbon & Landfill Divergence</strong>
+                            <strong style="color: #0f172a; display: block; font-size: 0.9rem;">Landfill Diversion Impact</strong>
                             <p style="font-size: 0.88rem; color: #475569; margin: 0.25rem 0 0;">
-                                Net carbon avoidance reached <strong>{{ number_format($data['total_co2_saved'], 0) }} kg CO₂</strong>, with <strong>{{ number_format($data['total_waste_diverted'], 0) }} kg</strong> successfully diverted from disposal.
+                                Total e-waste diversion reached <strong>{{ number_format($data['total_waste_diverted'], 0) }} kg</strong>, successfully diverted from landfill disposal.
                             </p>
                         </div>
                     </div>

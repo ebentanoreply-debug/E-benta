@@ -585,7 +585,7 @@
                                         <i class="fas fa-recycle me-1"></i>{{ number_format((float) $user->total_weight_diverted, 1) }} kg diverted
                                     </div>
                                     <div style="font-size: 0.75rem; color: #64748b;">
-                                        <i class="fas fa-leaf me-1 text-success"></i>{{ number_format((float) $user->total_co2_saved, 1) }} kg CO2 • {{ $user->total_impact_score ?? 0 }} pts
+                                        <i class="fas fa-award me-1 text-success"></i>{{ $user->total_impact_score ?? 0 }} impact pts • {{ $user->items_processed ?? 0 }} items
                                     </div>
                                 </td>
 
@@ -615,7 +615,7 @@
                                                     data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
                                                     data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
                                                     data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
-                                                    data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
+                                                    data-co2="{{ $user->items_processed ?? 0 }} items"
                                                     data-score="{{ $user->total_impact_score ?? 0 }}"
                                                     data-status="{{ $user->is_banned ? 'Banned' : ($user->is_suspended ? 'Suspended' : 'Active') }}"
                                                     data-joined="{{ $user->created_at ? $user->created_at->format('M d, Y h:i A') : 'Unknown' }}"
@@ -874,7 +874,7 @@
                                 data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
                                 data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
                                 data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
-                                data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
+                                data-co2="{{ $user->items_processed ?? 0 }} items"
                                 data-score="{{ $user->total_impact_score ?? 0 }}"
                                 data-status="{{ $user->is_banned ? 'Banned' : ($user->is_suspended ? 'Suspended' : 'Active') }}"
                                 data-joined="{{ $user->created_at ? $user->created_at->format('M d, Y h:i A') : 'Unknown' }}"
@@ -912,7 +912,7 @@
                                             data-rejection-reason="{{ $user->id_rejection_reason ?? '' }}"
                                             data-queue-url="{{ route('admin.pending-verifications', ['status' => $user->is_verified ? 'verified' : ($user->id_verification_status === 'rejected' ? 'rejected' : 'pending'), 'search' => $user->email]) }}"
                                             data-weight="{{ number_format((float) $user->total_weight_diverted, 2) }} kg"
-                                            data-co2="{{ number_format((float) $user->total_co2_saved, 2) }} kg"
+                                            data-co2="{{ $user->items_processed ?? 0 }} items"
                                             data-score="{{ $user->total_impact_score ?? 0 }}"
                                             data-status="{{ $user->is_banned ? 'Banned' : ($user->is_suspended ? 'Suspended' : 'Active') }}"
                                             data-joined="{{ $user->created_at ? $user->created_at->format('M d, Y h:i A') : 'Unknown' }}"
@@ -1153,8 +1153,8 @@
                     </div>
                     <div class="col-4">
                         <div class="p-2 rounded-3" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
-                            <div class="text-success font-weight-bold" style="font-size: 1.1rem;" id="modalCo2Saved">0 kg</div>
-                            <span style="font-size: 0.72rem; color: #16a34a; text-transform: uppercase; font-weight: 700;">CO2 Mitigated</span>
+                            <div class="text-success font-weight-bold" style="font-size: 1.1rem;" id="modalCo2Saved">0</div>
+                            <span style="font-size: 0.72rem; color: #16a34a; text-transform: uppercase; font-weight: 700;">Items Handled</span>
                         </div>
                     </div>
                     <div class="col-4">

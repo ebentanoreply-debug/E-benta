@@ -9,6 +9,7 @@ use App\Models\ImpactLog;
 use App\Models\Notification;
 use App\Models\Report;
 use App\Models\AuditLog;
+use App\Models\DeviceType;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -102,6 +103,17 @@ class AdminController extends Controller
             'rare_earth' => round((float) ($analytics['materials_recovered']['rare_earth'] ?? 0), 2),
         ];
 
+        $categoryStats = DeviceType::withCount('listings')
+            ->having('listings_count', '>', 0)
+            ->orderByDesc('listings_count')
+            ->take(5)
+            ->pluck('listings_count', 'name')
+            ->toArray();
+
+        if (empty($categoryStats)) {
+            $categoryStats = ['Electronics' => 1];
+        }
+
         return view('admin.dashboard', compact(
             'analytics',
             'recentTransactions',
@@ -118,11 +130,11 @@ class AdminController extends Controller
             'totalTransactions',
             'trend6Months',
             'trend6Waste',
-            'trend6Co2',
             'trend12Months',
             'trend12Waste',
             'trend24Months',
             'trend24Waste',
+            'categoryStats',
             'materials',
             'revenueStats',
             'totalPlatformRevenue'
