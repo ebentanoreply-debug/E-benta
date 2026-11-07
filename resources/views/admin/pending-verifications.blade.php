@@ -163,7 +163,7 @@
                             <span style="color: #94a3b8; font-size: 0.85rem;">• {{ $totalCount ?? $pendingUsers->total() }} Records in Filter</span>
                         </div>
                         <h1 style="font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 900; margin: 0; letter-spacing: -0.5px;">
-                            Seller Location & Government ID Verifications
+                            Seller Location & Philippine National ID Verifications
                         </h1>
                         <p style="color: #94a3b8; font-size: 0.95rem; margin: 0.35rem 0 0;">
                             Inspect government IDs, back address cards, and registered physical pickup locations for legitimate sellers & buyers anytime.
@@ -308,7 +308,7 @@
                                         <small style="color: #64748b; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">SUBMITTED ID & QR DETAILS</small>
                                         <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
                                             <span class="badge bg-dark" style="font-size: 0.8rem; font-weight: 700; padding: 0.35rem 0.75rem;">
-                                                <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Government ID' }}
+                                                <i class="fas fa-address-card text-emerald me-1"></i>{{ $user->id_type ?? 'Philippine National ID (PhilSys)' }}
                                             </span>
                                             @if($user->id_number)
                                                 <span style="color: #0d9488; font-weight: 800; font-size: 0.88rem;"># {{ $user->id_number }}</span>

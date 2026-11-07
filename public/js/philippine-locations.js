@@ -442,11 +442,11 @@
     function initProvinceAndCityDropdowns(
         provinceSelectId, 
         citySelectId, 
-        initialProvince = 'Pangasinan', 
-        initialCity = 'San Carlos City', 
+        initialProvince = '', 
+        initialCity = '', 
         postalInputId = null,
         barangaySelectId = null,
-        initialBarangay = 'San Juan'
+        initialBarangay = ''
     ) {
         const provinceEl = typeof provinceSelectId === 'string' ? document.getElementById(provinceSelectId) : provinceSelectId;
         const cityEl = typeof citySelectId === 'string' ? document.getElementById(citySelectId) : citySelectId;
@@ -661,8 +661,8 @@
             const selectedCity = cityEl.value || city;
             const cleanCity = selectedCity.trim().replace(/\s+City$/i, '');
             const brgyList = PANGASINAN_BARANGAYS[selectedCity] || PANGASINAN_BARANGAYS[cleanCity] || [];
-            barangay = barangay || 'Asinan';
-            const normTargetBrgy = barangay.trim().toLowerCase().replace(/^(brgy\.?|barangay)\s+/i, '');
+            barangay = (barangay || '').trim();
+            const normTargetBrgy = barangay ? barangay.toLowerCase().replace(/^(brgy\.?|barangay)\s+/i, '') : '';
             let brgySelected = false;
 
             brgyList.forEach(b => {
@@ -670,7 +670,7 @@
                 opt.value = b;
                 opt.textContent = b;
                 const normB = b.trim().toLowerCase();
-                if (normB === normTargetBrgy || normB.includes(normTargetBrgy) || normTargetBrgy.includes(normB)) {
+                if (normTargetBrgy && (normB === normTargetBrgy || normB.includes(normTargetBrgy) || normTargetBrgy.includes(normB))) {
                     opt.selected = true;
                     brgySelected = true;
                 }

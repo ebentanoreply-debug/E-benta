@@ -108,13 +108,14 @@ class SettingsController extends Controller
         $photoRule = $user->id_photo_url ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'] : ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600'];
 
         $validated = $request->validate([
-            'id_type' => ['required', 'string', 'max:100'],
+            'id_type' => ['nullable', 'string', 'max:100'],
+            'full_name' => ['nullable', 'string', 'max:255'],
             'id_number' => ['nullable', 'string', 'max:100'],
             'birth_date' => ['nullable', 'string', 'max:50'],
             'birth_place' => ['nullable', 'string', 'max:150'],
             'gender' => ['nullable', 'string', 'max:20'],
             'marital_status' => ['nullable', 'string', 'max:30'],
-            'blood_type' => ['nullable', 'string', 'max:10'],
+            'blood_type' => ['nullable', 'string', 'max:20'],
             'id_card_serial' => ['nullable', 'string', 'max:100'],
             'id_raw_qr_data' => ['nullable', 'string', 'max:5000'],
             'id_photo' => $photoRule,
@@ -133,10 +134,10 @@ class SettingsController extends Controller
 
         $idNumber = !empty($validated['id_number'])
             ? trim($validated['id_number'])
-            : ($user->id_number ?: 'AUTO-' . rand(1000, 9999) . '-' . rand(1000, 9999) . '-' . rand(1000, 9999));
+            : ($user->id_number ?: null);
 
         $updateData = [
-            'id_type' => $validated['id_type'],
+            'id_type' => 'Philippine National ID (PhilSys)',
             'id_number' => $idNumber,
             'id_verification_status' => 'pending',
             'id_submitted_at' => now(),
@@ -144,9 +145,13 @@ class SettingsController extends Controller
             'is_verified' => false,
         ];
 
+        if ($request->filled('full_name')) {
+            $updateData['name'] = trim($request->input('full_name'));
+        }
+
         foreach (['birth_date', 'birth_place', 'gender', 'marital_status', 'blood_type', 'id_card_serial', 'id_raw_qr_data'] as $demoField) {
             if ($request->filled($demoField)) {
-                $updateData[$demoField] = $request->input($demoField);
+                $updateData[$demoField] = trim($request->input($demoField));
             }
         }
 
@@ -223,7 +228,7 @@ class SettingsController extends Controller
 
         \App\Services\AuditLogger::log(
             action: 'id_verification_submitted',
-            description: "User {$user->name} ({$user->role}) submitted ID & Location verification documents ({$validated['id_type']})",
+            description: "User {$user->name} ({$user->role}) submitted Philippine National ID & Location verification documents",
             modelType: 'User',
             modelId: $user->id
         );

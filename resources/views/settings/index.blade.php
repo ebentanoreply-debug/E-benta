@@ -1511,26 +1511,20 @@
                     <form method="POST" action="{{ route('settings.id-verification.submit') }}" enctype="multipart/form-data" id="idVerificationForm" onsubmit="return handleIdVerificationSubmit(this, event)">
                         @csrf
 
-                        {{-- Hidden ID & Demographic Fields: Auto-fetched from scanned document & QR Code --}}
-                        <input type="hidden" name="id_type" id="idTypeInput" value="{{ old('id_type', $user->id_type ?? 'Philippine National ID (PhilSys)') }}">
-                        <input type="hidden" name="birth_date" id="idVerifBirthDate" value="{{ old('birth_date', $user->birth_date) }}">
-                        <input type="hidden" name="birth_place" id="idVerifBirthPlace" value="{{ old('birth_place', $user->birth_place) }}">
-                        <input type="hidden" name="gender" id="idVerifGender" value="{{ old('gender', $user->gender) }}">
-                        <input type="hidden" name="marital_status" id="idVerifMaritalStatus" value="{{ old('marital_status', $user->marital_status) }}">
-                        <input type="hidden" name="blood_type" id="idVerifBloodType" value="{{ old('blood_type', $user->blood_type) }}">
-                        <input type="hidden" name="id_card_serial" id="idVerifCardSerial" value="{{ old('id_card_serial', $user->id_card_serial) }}">
+                        {{-- Hidden ID Fields --}}
+                        <input type="hidden" name="id_type" id="idTypeInput" value="Philippine National ID (PhilSys)">
                         <input type="hidden" name="id_raw_qr_data" id="idVerifRawQrData" value="{{ old('id_raw_qr_data', $user->id_raw_qr_data) }}">
 
                         <!-- ========================================================
-                             STEP 1: UPLOAD GOVERNMENT ID DOCUMENTS ONLY
+                             STEP 1: UPLOAD PHILIPPINE NATIONAL ID DOCUMENTS
                              ======================================================== -->
                         <div class="verif-step-content active" id="verifStep1">
                             <div class="stt-card">
                                 <div class="stt-card-header">
                                     <div class="stt-card-icon teal"><i class="fas fa-id-card"></i></div>
                                     <div>
-                                        <p class="stt-card-title">Step 1 of 3: Upload Government ID</p>
-                                        <p class="stt-card-sub">Upload your valid Philippine ID. ID details, number, and location will be automatically fetched.</p>
+                                        <p class="stt-card-title">Step 1 of 3: Upload Philippine National ID</p>
+                                        <p class="stt-card-sub">Upload your valid Philippine National ID (PhilSys). Your details, PCN number, and location will be automatically detected.</p>
                                     </div>
                                 </div>
                                 <div class="stt-card-body">
@@ -1543,10 +1537,10 @@
                                     <div class="p-3 mb-3 rounded-3" style="background: rgba(13, 148, 136, 0.05); border: 1px solid rgba(13, 148, 136, 0.2);">
                                         <div class="d-flex align-items-center gap-2 mb-1">
                                             <i class="fas fa-shield-halved text-teal"></i>
-                                            <strong style="color: #0f766e; font-size: 0.88rem;">Philippine Government ID Verification</strong>
+                                            <strong style="color: #0f766e; font-size: 0.88rem;">Philippine National ID Verification Only</strong>
                                         </div>
                                         <p class="mb-0 text-muted" style="font-size: 0.82rem;">
-                                            Accepted IDs: Philippine National ID (PhilSys), Driver's License, UMID / SSS, Passport, PRC ID, or Postal ID. Please upload clear photos so your details can be verified accurately.
+                                            <strong>Required ID:</strong> Official Philippine National ID (PhilSys Card, printed ePhilID, or Digital National ID). Please upload clear photos of your front and back ID so your details can be verified accurately.
                                         </p>
                                     </div>
 
@@ -1556,13 +1550,13 @@
                                             <div class="p-3 rounded-3" style="background: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.25); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
-                                                        Front ID Photo <span class="text-danger">*</span>
+                                                        Front National ID Photo <span class="text-danger">*</span>
                                                     </label>
-                                                    <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.7rem; font-weight: 700;">Face & Details</span>
+                                                    <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.7rem; font-weight: 700;">Face & PCN Number</span>
                                                 </div>
                                                 
                                                 <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idPhotoInput', { mode: 'id-card', title: 'Capture Front ID', tip: 'Align front side of your ID inside the rectangle' })">
+                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idPhotoInput', { mode: 'id-card', title: 'Capture Front National ID', tip: 'Align front side showing your photo and PCN number inside the frame' })">
                                                         <i class="fas fa-camera"></i>
                                                         <span>Take Photo</span>
                                                     </button>
@@ -1574,7 +1568,7 @@
 
                                                 <input type="file" name="id_photo" id="idPhotoInput" class="stt-input d-none @error('id_photo') is-invalid @enderror" accept="image/*" {{ $user->id_photo_url ? '' : 'required' }} onchange="previewAndCompressDoc(this, 'idPhotoPreview')">
                                                 <div id="idPhotoPreview" class="mt-1"></div>
-                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Front side showing photo and name (JPG, PNG, WEBP)</small>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Front side showing photo, PCN card number, and name (JPG, PNG, WEBP)</small>
                                                 @if($user->id_photo_url)
                                                      <div class="mt-2 d-flex align-items-center gap-2">
                                                          <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current File Uploaded</span>
@@ -1590,13 +1584,13 @@
                                             <div class="p-3 rounded-3" style="background: #ffffff; border: 1.5px solid rgba(13, 148, 136, 0.25); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
-                                                        Back ID Photo <span class="text-danger">* (Address Side)</span>
+                                                        Back National ID Photo <span class="text-danger">* (Address & QR Side)</span>
                                                     </label>
                                                     <span class="badge" style="background: rgba(6, 182, 212, 0.12); color: #0891b2; font-size: 0.7rem; font-weight: 700;">Address & QR</span>
                                                 </div>
 
                                                 <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idBackPhotoInput', { mode: 'id-card', title: 'Capture Back ID', tip: 'Align back side showing address and QR code inside the frame' })">
+                                                    <button type="button" class="btn btn-sm text-white flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 800; font-size: 0.82rem; border: none; box-shadow: 0 2px 8px rgba(13,148,136,0.3);" onclick="IdCamera.open('idBackPhotoInput', { mode: 'id-card', title: 'Capture Back National ID', tip: 'Align back side showing address and QR code inside the frame' })">
                                                         <i class="fas fa-camera"></i>
                                                         <span>Take Photo</span>
                                                     </button>
@@ -1608,7 +1602,7 @@
 
                                                 <input type="file" name="id_back_photo" id="idBackPhotoInput" class="stt-input d-none @error('id_back_photo') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idBackPhotoPreview')">
                                                 <div id="idBackPhotoPreview" class="mt-1"></div>
-                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Back side showing address and QR code (JPG, PNG, WEBP)</small>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Back side showing address and 2D QR code (JPG, PNG, WEBP)</small>
                                                 @if($user->id_back_photo_url)
                                                      <div class="mt-2 d-flex align-items-center gap-2">
                                                          <span class="badge bg-success" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Current Back ID</span>
@@ -1624,13 +1618,13 @@
                                             <div class="p-3 rounded-3" style="background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <label class="stt-label mb-0" style="font-weight: 800; color: #0f172a;">
-                                                        Selfie Holding ID <span style="color: #64748b; font-weight: 500;">(Optional for faster approval)</span>
+                                                        Selfie Holding National ID <span style="color: #64748b; font-weight: 500;">(Optional for faster approval)</span>
                                                     </label>
-                                                    <span class="badge bg-light text-muted" style="font-size: 0.7rem;">Face + ID Card</span>
+                                                    <span class="badge bg-light text-muted" style="font-size: 0.7rem;">Face + National ID</span>
                                                 </div>
 
                                                 <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-dark flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="IdCamera.open('idSelfieInput', { mode: 'selfie', facingMode: 'user', title: 'Take Selfie Holding ID', tip: 'Hold your ID beside your face clearly inside the frame' })">
+                                                    <button type="button" class="btn btn-sm btn-outline-dark flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="border-radius: 0.65rem; padding: 0.55rem 0.85rem; font-weight: 700; font-size: 0.82rem;" onclick="IdCamera.open('idSelfieInput', { mode: 'selfie', facingMode: 'user', title: 'Take Selfie Holding National ID', tip: 'Hold your National ID beside your face clearly inside the frame' })">
                                                         <i class="fas fa-camera-rotate text-teal"></i>
                                                         <span>Take Selfie (Front Camera)</span>
                                                     </button>
@@ -1642,7 +1636,7 @@
 
                                                 <input type="file" name="id_selfie" id="idSelfieInput" class="stt-input d-none @error('id_selfie') is-invalid @enderror" accept="image/*" onchange="previewAndCompressDoc(this, 'idSelfiePreview')">
                                                 <div id="idSelfiePreview" class="mt-1"></div>
-                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Hold your government ID beside your face</small>
+                                                <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">Hold your Philippine National ID beside your face</small>
                                                 @if($user->id_selfie_url)
                                                      <div class="mt-2 d-flex align-items-center gap-2">
                                                          <span class="badge bg-secondary" style="font-size: 0.72rem;"><i class="fas fa-check me-1"></i>Selfie Uploaded</span>
@@ -1656,7 +1650,7 @@
 
                                     <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                                         <button type="button" id="btnScanAndContinue" class="stt-btn" onclick="validateAndScanIdStep1()" style="padding: 0.8rem 1.8rem; font-size: 0.95rem;">
-                                            <span>Next: Scan & Verify ID Details</span>
+                                            <span>Next: Scan & Verify National ID Details</span>
                                             <i class="fas fa-arrow-right ms-2"></i>
                                         </button>
                                     </div>
@@ -1672,8 +1666,8 @@
                                 <div class="stt-card-header">
                                     <div class="stt-card-icon blue"><i class="fas fa-map-location-dot"></i></div>
                                     <div>
-                                        <p class="stt-card-title">Step 2 of 3: Extracted Details & Location</p>
-                                        <p class="stt-card-sub">All details below were automatically retrieved from your ID. Review your registered pickup address.</p>
+                                        <p class="stt-card-title">Step 2 of 3: Extracted National ID Details & Location</p>
+                                        <p class="stt-card-sub">All details below were automatically retrieved from your National ID. You can review and adjust any field.</p>
                                     </div>
                                 </div>
                                 <div class="stt-card-body">
@@ -1682,7 +1676,7 @@
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 <i class="fas fa-shield-halved text-teal fa-lg"></i>
-                                                <strong style="color: #0f172a; font-size: 0.92rem;">Verified Document Information (Fetched from ID)</strong>
+                                                <strong style="color: #0f172a; font-size: 0.92rem;">Verified Document Information</strong>
                                             </div>
                                             <span class="badge bg-success" style="font-size: 0.74rem; font-weight: 700;"><i class="fas fa-check-circle me-1"></i>Auto-Fetched from ID</span>
                                         </div>
@@ -1691,24 +1685,24 @@
                                                 <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">Verified Government ID</label>
                                                 <div class="d-flex align-items-center gap-2 p-2 rounded-2" style="background: #ffffff; border: 1.5px solid #ccfbf1; min-height: 42px;">
                                                     <i class="fas fa-id-card text-teal"></i>
-                                                    <strong id="displayExtractedIdType" style="color: #0f766e; font-size: 0.9rem;">{{ $user->id_type ?? 'Philippine National ID (PhilSys)' }}</strong>
+                                                    <strong id="displayExtractedIdType" style="color: #0f766e; font-size: 0.9rem;">Philippine National ID (PhilSys)</strong>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                                    <label class="stt-label mb-0" style="color: #475569; font-size: 0.78rem;">Extracted ID Number</label>
+                                                    <label class="stt-label mb-0" style="color: #475569; font-size: 0.78rem;">PhilSys Card Number (PCN) <span class="text-danger">*</span></label>
                                                     <span class="badge bg-teal-subtle text-teal" style="font-size: 0.68rem; font-weight: 700;"><i class="fas fa-wand-magic-sparkles me-1"></i>Auto-Retrieved</span>
                                                 </div>
                                                 <div class="d-flex align-items-center gap-2 p-2 rounded-2" style="background: #ffffff; border: 1.5px solid #0d9488; min-height: 42px;">
                                                     <i class="fas fa-fingerprint text-teal"></i>
                                                     <input type="text" name="id_number" id="idNumberInput" class="form-control border-0 p-0 shadow-none" 
                                                         value="{{ old('id_number', $user->id_number) }}" 
-                                                        placeholder="Auto-fetched from ID photo" 
+                                                        placeholder="e.g. 1234-5678-9012-3456" 
                                                         required 
                                                         style="font-weight: 800; color: #0d9488; font-size: 0.95rem; background: transparent; letter-spacing: 0.5px;">
                                                 </div>
                                                 <small style="font-size: 0.72rem; color: #64748b; margin-top: 0.25rem; display: block;">
-                                                    <i class="fas fa-check-double text-teal me-1"></i>Automatically retrieved from your uploaded card. No manual typing needed.
+                                                    <i class="fas fa-check-double text-teal me-1"></i>16-digit PhilSys Card Number (PCN). Auto-retrieved or editable.
                                                 </small>
                                             </div>
                                         </div>
@@ -1716,58 +1710,100 @@
 
                                     <!-- QR CODE & DEMOGRAPHIC DETAILS BOX (Scanned from ID) -->
                                     <div id="qrDecodedDetailsBox" class="p-3 mb-4 rounded-3" style="background: #ffffff; border: 1.5px solid #06b6d4; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.08);">
-                                        <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-wrap gap-2">
+                                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom flex-wrap gap-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(6, 182, 212, 0.12); color: #0891b2; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
                                                     <i class="fas fa-qrcode"></i>
                                                 </div>
                                                 <div>
-                                                    <strong style="color: #0f172a; font-size: 0.9rem;">QR Code & Document Details Verified</strong>
-                                                    <span class="d-block text-muted" style="font-size: 0.74rem;">Decoded demographic identity, birthday, and official security features from your ID</span>
+                                                    <strong style="color: #0f172a; font-size: 0.9rem;">National ID Demographic & Identity Details</strong>
+                                                    <span class="d-block text-muted" style="font-size: 0.74rem;">Extracted from your ID. Review each field and adjust if necessary.</span>
                                                 </div>
                                             </div>
                                             <span class="badge" id="qrStatusBadge" style="background: rgba(6, 182, 212, 0.15); color: #0891b2; font-weight: 700; font-size: 0.72rem; padding: 0.35rem 0.65rem;">
-                                                <i class="fas fa-shield-check me-1"></i>QR Code Verified
+                                                <i class="fas fa-shield-check me-1"></i>National ID Verified
                                             </span>
                                         </div>
-                                        <div class="row g-2 pt-1" style="font-size: 0.82rem;">
-                                            <div class="col-sm-6 col-md-4">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-user text-teal me-1"></i>Full Legal Name</span>
-                                                <strong id="displayQrName" style="color: #0f172a;">{{ $user->name }}</strong>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-user text-teal me-1"></i>Full Legal Name <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" name="full_name" id="idVerifFullName" class="stt-input @error('full_name') is-invalid @enderror"
+                                                    value="{{ old('full_name', $user->name) }}" placeholder="Full legal name from ID" required>
+                                                @error('full_name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-4">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-cake-candles text-danger me-1"></i>Birthday (Date of Birth)</span>
-                                                <strong id="displayQrBirthDate" style="color: #0f172a;">{{ $user->birth_date ?? 'October 24, 2002' }}</strong>
+
+                                            <div class="col-md-6">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-cake-candles text-danger me-1"></i>Birthday (Date of Birth)
+                                                </label>
+                                                <input type="text" name="birth_date" id="idVerifBirthDate" class="stt-input @error('birth_date') is-invalid @enderror"
+                                                    value="{{ old('birth_date', $user->birth_date) }}" placeholder="e.g. October 24, 2002 or YYYY-MM-DD">
+                                                @error('birth_date')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-4">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-location-dot text-teal me-1"></i>Place of Birth</span>
-                                                <strong id="displayQrPlaceOfBirth" style="color: #0f172a;">{{ $user->birth_place ?? 'Bayambang, Pangasinan' }}</strong>
+
+                                            <div class="col-md-6">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-location-dot text-teal me-1"></i>Place of Birth (Lugar ng Kapanganakan)
+                                                </label>
+                                                <input type="text" name="birth_place" id="idVerifBirthPlace" class="stt-input @error('birth_place') is-invalid @enderror"
+                                                    value="{{ old('birth_place', $user->birth_place) }}" placeholder="e.g. City/Municipality, Province">
+                                                @error('birth_place')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-3 mt-2">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-venus-mars text-primary me-1"></i>Sex / Kasarian</span>
-                                                <strong id="displayQrGender" style="color: #0f172a;">{{ $user->gender ?? 'Male' }}</strong>
+
+                                            <div class="col-md-6">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-venus-mars text-primary me-1"></i>Sex / Kasarian
+                                                </label>
+                                                <select name="gender" id="idVerifGender" class="stt-input @error('gender') is-invalid @enderror">
+                                                    <option value="">Select Sex...</option>
+                                                    <option value="Male" {{ old('gender', $user->gender) === 'Male' ? 'selected' : '' }}>Male / Lalaki</option>
+                                                    <option value="Female" {{ old('gender', $user->gender) === 'Female' ? 'selected' : '' }}>Female / Babae</option>
+                                                </select>
+                                                @error('gender')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-3 mt-2">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-droplet text-danger me-1"></i>Blood Type</span>
-                                                <strong id="displayQrBloodType" style="color: #0f172a;">{{ $user->blood_type ?? 'O+' }}</strong>
+
+                                            <div class="col-md-4">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-droplet text-danger me-1"></i>Blood Type (Uri ng Dugo)
+                                                </label>
+                                                <select name="blood_type" id="idVerifBloodType" class="stt-input @error('blood_type') is-invalid @enderror">
+                                                    <option value="">Select Blood Type...</option>
+                                                    @foreach(['O+', 'A+', 'B+', 'AB+', 'O-', 'A-', 'B-', 'AB-', 'Unknown'] as $bt)
+                                                        <option value="{{ $bt }}" {{ old('blood_type', $user->blood_type) === $bt ? 'selected' : '' }}>{{ $bt }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('blood_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-3 mt-2">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-ring text-warning me-1"></i>Civil Status</span>
-                                                <strong id="displayQrCivilStatus" style="color: #0f172a;">{{ $user->marital_status ?? 'Single' }}</strong>
+
+                                            <div class="col-md-4">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-ring text-warning me-1"></i>Civil Status (Kalagayang Sibil)
+                                                </label>
+                                                <select name="marital_status" id="idVerifMaritalStatus" class="stt-input @error('marital_status') is-invalid @enderror">
+                                                    <option value="">Select Status...</option>
+                                                    @foreach(['Single', 'Married', 'Widowed', 'Separated'] as $ms)
+                                                        <option value="{{ $ms }}" {{ old('marital_status', $user->marital_status) === $ms ? 'selected' : '' }}>{{ $ms }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('marital_status')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
-                                            <div class="col-sm-6 col-md-3 mt-2">
-                                                <span class="text-muted d-block" style="font-size: 0.72rem;"><i class="fas fa-barcode text-cyan me-1"></i>Card Serial</span>
-                                                <code id="displayQrBarcode" style="font-size: 0.8rem; font-weight: 700; color: #0891b2; background: #ecfeff; padding: 0.15rem 0.45rem; border-radius: 0.3rem; border: 1px solid #cffafe;">{{ $user->id_card_serial ?? '23F0969175' }}</code>
+
+                                            <div class="col-md-4">
+                                                <label class="stt-label mb-1" style="color: #475569; font-size: 0.78rem;">
+                                                    <i class="fas fa-barcode text-cyan me-1"></i>Card Serial / Barcode No.
+                                                </label>
+                                                <input type="text" name="id_card_serial" id="idVerifCardSerial" class="stt-input @error('id_card_serial') is-invalid @enderror"
+                                                    value="{{ old('id_card_serial', $user->id_card_serial) }}" placeholder="e.g. 23F...">
+                                                @error('id_card_serial')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                             </div>
+
                                             <div class="col-12 mt-2 pt-2 border-top">
-                                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                                                    <div style="flex: 1; min-width: 250px;">
-                                                        <span class="text-muted d-block" style="font-size: 0.7rem;"><i class="fas fa-qrcode text-teal me-1"></i>Decoded QR Data / Security Stream</span>
-                                                        <code id="displayQrPayload" style="font-size: 0.75rem; color: #0f766e; background: #f0fdfa; padding: 0.2rem 0.5rem; border-radius: 0.35rem; display: inline-block; word-break: break-all;">PhilSys QR Digital Signature: PCN {{ $user->id_number ?? '5908-9120-1780-9349' }} | Authenticated by PSA Security</code>
-                                                    </div>
-                                                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; font-size: 0.72rem; font-weight: 700;">
-                                                        <i class="fas fa-check-double me-1"></i>All ID & QR Details Fetched
-                                                    </span>
+                                                <div>
+                                                    <span class="text-muted d-block" style="font-size: 0.7rem;"><i class="fas fa-qrcode text-teal me-1"></i>Decoded QR Data / Security Stream</span>
+                                                    <code id="displayQrPayload" style="font-size: 0.75rem; color: #0f766e; background: #f0fdfa; padding: 0.35rem 0.6rem; border-radius: 0.35rem; display: block; word-break: break-all; margin-top: 0.25rem;">{{ $user->id_raw_qr_data ?: 'PhilSys 2D QR Code: Awaiting scan from back ID photo...' }}</code>
                                                 </div>
                                             </div>
                                         </div>
@@ -1801,7 +1837,7 @@
                                                 <option value="">-- Select Barangay --</option>
                                             </select>
                                             <input type="text" name="barangay" id="idVerifBarangay" class="stt-input mt-1 @error('barangay') is-invalid @enderror"
-                                                value="{{ old('barangay', $user->barangay ?? 'San Juan') }}" placeholder="Enter Barangay name" required style="display:none;">
+                                                value="{{ old('barangay', $user->barangay) }}" placeholder="Enter Barangay name" required style="display:none;">
                                             @error('barangay')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                         </div>
 
@@ -1816,7 +1852,7 @@
                                         <div class="col-md-3">
                                             <label class="stt-label">Postal / ZIP Code <span class="text-danger">*</span></label>
                                             <input type="text" name="postal_code" id="idVerifPostal" class="stt-input @error('postal_code') is-invalid @enderror"
-                                                value="{{ old('postal_code', $user->postal_code ?? $user->addresses()->first()?->postal_code ?? '2420') }}"
+                                                value="{{ old('postal_code', $user->postal_code ?? $user->addresses()->first()?->postal_code) }}"
                                                 placeholder="e.g. 2420" required>
                                             @error('postal_code')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                         </div>
@@ -1907,20 +1943,20 @@
                                                 <strong id="summaryFullName" style="color: #0f172a; margin-left: 0.25rem;">{{ $user->name }}</strong>
                                             </div>
                                             <div class="col-md-6">
-                                                <span style="color: #64748b;">Extracted ID No:</span>
-                                                <code id="summaryIdNumber" style="font-size: 0.88rem; font-weight: 700; color: #0d9488; background: #ffffff; padding: 0.15rem 0.45rem; border-radius: 0.35rem; border: 1px solid #ccfbf1; margin-left: 0.25rem;">{{ $user->id_number ?? 'Auto-verified' }}</code>
+                                                <span style="color: #64748b;">PhilSys Card No:</span>
+                                                <code id="summaryIdNumber" style="font-size: 0.88rem; font-weight: 700; color: #0d9488; background: #ffffff; padding: 0.15rem 0.45rem; border-radius: 0.35rem; border: 1px solid #ccfbf1; margin-left: 0.25rem;">{{ $user->id_number ?: 'Awaiting scan' }}</code>
                                             </div>
                                             <div class="col-md-6 mt-1">
-                                                <span style="color: #64748b;">Government ID:</span>
-                                                <strong id="summaryDocType" style="color: #0f172a; margin-left: 0.25rem;">{{ $user->id_type ?? 'Philippine National ID (PhilSys)' }}</strong>
+                                                <span style="color: #64748b;">Verified ID:</span>
+                                                <strong id="summaryDocType" style="color: #0f172a; margin-left: 0.25rem;">Philippine National ID (PhilSys)</strong>
                                             </div>
                                             <div class="col-md-6 mt-1">
                                                 <span style="color: #64748b;">Birthday & Birthplace:</span>
-                                                <strong id="summaryBirthDetails" style="color: #0f172a; margin-left: 0.25rem;">{{ $user->birth_date ?? 'October 24, 2002' }} ({{ $user->birth_place ?? 'Bayambang, Pangasinan' }})</strong>
+                                                <strong id="summaryBirthDetails" style="color: #0f172a; margin-left: 0.25rem;">{{ $user->birth_date ? ($user->birth_date . ($user->birth_place ? ' (' . $user->birth_place . ')' : '')) : 'Not specified' }}</strong>
                                             </div>
                                             <div class="col-12 mt-1">
                                                 <span style="color: #64748b;">Pickup & Registered Location:</span>
-                                                <strong id="summaryLocation" style="color: #0d9488; margin-left: 0.25rem;">{{ $user->barangay ? 'Brgy. ' . $user->barangay . ', ' : '' }}{{ $user->address_city ?? 'San Carlos City' }}, {{ $user->address_province ?? 'Pangasinan' }}</strong>
+                                                <strong id="summaryLocation" style="color: #0d9488; margin-left: 0.25rem;">{{ $user->getFullRegisteredAddress() ?: 'Not specified' }}</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -2170,7 +2206,7 @@
         <button type="button" class="id-camera-btn-circle" id="idCameraCloseBtn" aria-label="Close Camera">
             <i class="fas fa-times"></i>
         </button>
-        <h6 class="id-camera-title" id="idCameraTitle">Capture Government ID</h6>
+        <h6 class="id-camera-title" id="idCameraTitle">Capture Philippine National ID</h6>
         <button type="button" class="id-camera-btn-circle" id="idCameraFlipBtn" aria-label="Switch Camera">
             <i class="fas fa-camera-rotate"></i>
         </button>
@@ -2417,7 +2453,7 @@ function goToVerifStep(targetStep) {
                 return;
             } else {
                 if (typeof window.showStep1Error === 'function') {
-                    window.showStep1Error('Please upload your Philippine Government ID before proceeding.');
+                    window.showStep1Error('Please upload your Philippine National ID before proceeding.');
                 }
                 if (frontInput) frontInput.focus();
                 return;
@@ -2507,11 +2543,11 @@ function goToVerifStep(targetStep) {
 }
 
 function updateStep3ReviewSummary() {
-    const docType = document.getElementById('idTypeInput')?.value || document.getElementById('displayExtractedIdType')?.textContent || 'Philippine National ID (PhilSys)';
-    const idNum = document.getElementById('idNumberInput')?.value || '5908-9120-1780-9349';
-    const fullName = document.getElementById('displayQrName')?.textContent || window.USER_NAME || 'Nico Mark Agbuya';
-    const birthDate = document.getElementById('idVerifBirthDate')?.value || document.getElementById('displayQrBirthDate')?.textContent || 'October 24, 2002';
-    const birthPlace = document.getElementById('idVerifBirthPlace')?.value || document.getElementById('displayQrPlaceOfBirth')?.textContent || 'Bayambang, Pangasinan';
+    const docType = 'Philippine National ID (PhilSys)';
+    const idNum = document.getElementById('idNumberInput')?.value || 'Not provided';
+    const fullName = document.getElementById('idVerifFullName')?.value || window.USER_NAME || 'Not provided';
+    const birthDate = document.getElementById('idVerifBirthDate')?.value || '';
+    const birthPlace = document.getElementById('idVerifBirthPlace')?.value || '';
     const prov = document.getElementById('idVerifProvince')?.value || '';
     const city = document.getElementById('idVerifCity')?.value || '';
     const brgy = document.getElementById('idVerifBarangay')?.value || '';
@@ -2525,7 +2561,12 @@ function updateStep3ReviewSummary() {
     if (summaryName) summaryName.textContent = fullName;
     if (summaryDoc) summaryDoc.textContent = docType;
     if (summaryNum) summaryNum.textContent = idNum;
-    if (summaryBirth) summaryBirth.textContent = `${birthDate} (${birthPlace})`;
+    if (summaryBirth) {
+        let bParts = [];
+        if (birthDate) bParts.push(birthDate);
+        if (birthPlace) bParts.push(`(${birthPlace})`);
+        summaryBirth.textContent = bParts.join(' ') || 'Not specified';
+    }
     if (summaryLoc) {
         let parts = [];
         if (brgy) parts.push('Brgy. ' + brgy);
@@ -2578,11 +2619,11 @@ document.addEventListener('DOMContentLoaded', function () {
         window.initProvinceAndCityDropdowns(
             'idVerifProvince',
             'idVerifCity',
-            "{{ old('address_province', $user->address_province ?? $user->addresses()->first()?->state ?? 'Pangasinan') }}",
-            "{{ old('address_city', $user->address_city ?? $user->addresses()->first()?->city ?? 'San Carlos City') }}",
+            "{{ old('address_province', $user->address_province ?? $user->addresses()->first()?->state ?? '') }}",
+            "{{ old('address_city', $user->address_city ?? $user->addresses()->first()?->city ?? '') }}",
             'idVerifPostal',
             'idVerifBarangaySelect',
-            "{{ old('barangay', $user->barangay ?? 'San Juan') }}"
+            "{{ old('barangay', $user->barangay ?? '') }}"
         );
 
         // 2. Account profile tab
@@ -2592,8 +2633,8 @@ document.addEventListener('DOMContentLoaded', function () {
             window.initProvinceAndCityDropdowns(
                 accProv,
                 accCity,
-                "{{ old('address_province', auth()->user()->address_province ?? 'Pangasinan') }}",
-                "{{ old('address_city', auth()->user()->address_city ?? 'San Carlos City') }}"
+                "{{ old('address_province', auth()->user()->address_province ?? '') }}",
+                "{{ old('address_city', auth()->user()->address_city ?? '') }}"
             );
         }
 
@@ -2604,8 +2645,8 @@ document.addEventListener('DOMContentLoaded', function () {
             window.initProvinceAndCityDropdowns(
                 sellProv,
                 sellCity,
-                "{{ old('address_province', auth()->user()->address_province ?? 'Pangasinan') }}",
-                "{{ old('address_city', auth()->user()->address_city ?? 'San Carlos City') }}"
+                "{{ old('address_province', auth()->user()->address_province ?? '') }}",
+                "{{ old('address_city', auth()->user()->address_city ?? '') }}"
             );
         }
     }

@@ -498,7 +498,7 @@
                                             <small style="color: #64748b; font-size: 0.8rem;">{{ $user->email }}</small>
                                             <div class="mt-1">
                                                 <span class="badge" style="background: rgba(13, 148, 136, 0.12); color: #0d9488; font-size: 0.72rem; font-weight: 700;">
-                                                    {{ $user->id_type ?? 'Government ID' }}
+                                                    {{ $user->id_type ?? 'Philippine National ID (PhilSys)' }}
                                                 </span>
                                             </div>
                                         </div>

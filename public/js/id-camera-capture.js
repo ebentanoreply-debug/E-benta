@@ -81,10 +81,10 @@
 
             // Update UI titles and hints
             if (this.elements.titleEl) {
-                this.elements.titleEl.textContent = options.title || (this.currentMode === 'selfie' ? 'Take Selfie Holding ID' : 'Capture Government ID');
+                this.elements.titleEl.textContent = options.title || (this.currentMode === 'selfie' ? 'Take Selfie Holding National ID' : 'Capture Philippine National ID');
             }
             if (this.elements.tipEl) {
-                this.elements.tipEl.textContent = options.tip || (this.currentMode === 'selfie' ? 'Hold your government ID clearly beside your face' : 'Align your Philippine ID inside the frame');
+                this.elements.tipEl.textContent = options.tip || (this.currentMode === 'selfie' ? 'Hold your National ID clearly beside your face' : 'Align your Philippine National ID inside the frame');
             }
 
             // Adjust guide box styling for selfie vs card

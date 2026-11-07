@@ -1395,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <i class="fas fa-shield-halved"></i>
                                 </div>
                                 <div>
-                                    <strong style="color: #0f172a; font-size: 0.88rem; display: block;">Government ID & Physical Location Verified</strong>
+                                    <strong style="color: #0f172a; font-size: 0.88rem; display: block;">Philippine National ID & Location Verified</strong>
                                     <span style="font-size: 0.78rem; color: #64748b; line-height: 1.35; display: block;">
                                         In compliance with RA 10173 (Data Privacy Act of 2012), physical government ID photos and credentials are automatically protected and concealed once identity verification is approved.
                                     </span>

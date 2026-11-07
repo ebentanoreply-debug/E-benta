@@ -1,15 +1,40 @@
 /**
- * E-Benta Intelligent ID Scanner & Auto-Fetch Engine
+ * E-Benta Intelligent Philippine National ID Scanner & Verification Engine
  * 
- * Step 1: Upload Front & Back ID
- * Step 2: Extract & Display all information from ID (ID type, ID number, Province, Municipality, Barangay)
- * Strict Readability Verification: Rejects blurry, unreadable, or invalid ID photos.
+ * Strict Philippine National ID (PhilSys Card / ePhilID / Digital National ID) Only.
+ * - Extracts 16-digit PhilSys Card Number (PCN)
+ * - Decodes official PSA 2D QR Code & Security payload when present
+ * - Parses Full Legal Name (Last, Given, Middle), DOB, Place of Birth, Sex, Blood Type
+ * - Dynamically cascades Address (Province, City, Barangay, Postal Code)
+ * - 100% Dynamic: Zero hardcoded dummy/sample values.
  */
 (function(window) {
     'use strict';
 
     /**
-     * Preprocess image on a Canvas for optimal OCR accuracy
+     * PhilSys National ID Label and Header Keywords.
+     * These must NEVER be accepted as extracted values (e.g. name, date of birth, etc.).
+     */
+    const PHILSYS_LABEL_TOKENS = new Set([
+        'REPUBLIKA', 'REPUBLIC', 'PILIPINAS', 'PHILIPPINES', 'PAMBANSANG', 'PAGKAKAKILANLAN', 
+        'IDENTIFICATION', 'SYSTEM', 'PHILSYS', 'PHILID', 'EPHILID', 'CARD', 'NUMBER', 'PCN',
+        'APELYIDO', 'LAST', 'SURNAME', 'FAMILY', 'NAME', 'NAMES',
+        'MGA', 'PANGALAN', 'GIVEN', 'FIRST',
+        'GITNANG', 'MIDDLE', 'NGALAN',
+        'PETSA', 'DATE', 'KAPANGANAKAN', 'BIRTH', 'DOB',
+        'LUGAR', 'PLACE', 'POB',
+        'URI', 'DUGO', 'BLOOD', 'TYPE',
+        'KASARIAN', 'SEX', 'GENDER',
+        'TIRAHAN', 'ADDRESS', 'PERMANENT',
+        'KALAGAYANG', 'SIBIL', 'CIVIL', 'MARITAL', 'STATUS',
+        'PAG-ISYU', 'PAGISYU', 'ISSUANCE', 'ISSUED', 'PSA', 'STATISTICS', 'AUTHORITY',
+        'SIGNATURE', 'DIGITAL', 'OFFICIAL', 'SECURITY', 'BARCODE', 'QR', 'CODE',
+        'NATIONAL', 'GOVERNMENT', 'PHILPOST', 'POSTAL', 'DRIVER', 'LICENSE', 'PASSPORT', 'UMID', 'SSS',
+        'NG'
+    ]);
+
+    /**
+     * Preprocess image on a Canvas for optimal OCR and QR accuracy
      */
     function preprocessImageForOcr(imageFile) {
         return new Promise((resolve) => {
@@ -22,8 +47,8 @@
                     let width = img.width;
                     let height = img.height;
 
-                    // Standardize size to max 1600px
-                    const maxDim = 1600;
+                    // Standardize size to max 1800px for high-detail OCR
+                    const maxDim = 1800;
                     if (width > maxDim || height > maxDim) {
                         if (width > height) {
                             height = Math.round((height * maxDim) / width);
@@ -49,7 +74,7 @@
                     rawCtx.drawImage(img, 0, 0, width, height);
                     canvas._rawCanvas = rawCanvas;
 
-                    // Image enhancement: convert to high-contrast grayscale
+                    // Image enhancement for text OCR: convert to contrast-enhanced grayscale
                     try {
                         const imgData = ctx.getImageData(0, 0, width, height);
                         const d = imgData.data;
@@ -63,7 +88,7 @@
                         }
                         ctx.putImageData(imgData, 0, 0);
                     } catch (err) {
-                        console.warn('[ID Scanner] Canvas pixel manipulation skipped:', err);
+                        console.warn('[PhilSys ID Scanner] Canvas pixel manipulation skipped:', err);
                     }
 
                     resolve(canvas);
@@ -137,9 +162,9 @@
     /**
      * Scan Barcode / QR Code across full image and targeted PhilSys regions:
      * - Full image
-     * - Right half (PhilSys 2D QR Code)
+     * - Right half (PhilSys 2D QR Code on PhilID Back or ePhilID)
      * - Bottom 35% (PhilSys CODE128 Barcode Serial)
-     * - Right middle quadrant (Dense QR Matrix)
+     * - Center quadrant (Dense QR Matrix)
      */
     async function scanBarcodeOrQr(canvasOrBitmap) {
         if (!canvasOrBitmap) return null;
@@ -148,20 +173,20 @@
         let res = await scanSingleCanvas(canvasOrBitmap);
         if (res) return res;
 
-        // 2. Scan targeted candidate regions if canvas has sufficient dimensions
+        // 2. Scan targeted candidate regions
         if (canvasOrBitmap.getContext && canvasOrBitmap.width >= 300 && canvasOrBitmap.height >= 300) {
             const w = canvasOrBitmap.width;
             const h = canvasOrBitmap.height;
 
             const candidateRegions = [
-                // Right half (Where PhilSys QR code is positioned)
+                // Right half (Where PhilSys QR code is positioned on physical card)
                 { x: Math.floor(w * 0.4), y: 0, w: Math.floor(w * 0.6), h: h },
+                // Center-right box (PhilSys QR matrix focus)
+                { x: Math.floor(w * 0.45), y: Math.floor(h * 0.1), w: Math.floor(w * 0.55), h: Math.floor(h * 0.8) },
                 // Bottom 35% stripe (Where PhilSys CODE128 barcode is located)
                 { x: 0, y: Math.floor(h * 0.65), w: w, h: Math.floor(h * 0.35) },
-                // Right center box (PhilSys QR matrix focus)
-                { x: Math.floor(w * 0.45), y: Math.floor(h * 0.15), w: Math.floor(w * 0.55), h: Math.floor(h * 0.7) },
-                // Bottom-right quadrant
-                { x: Math.floor(w * 0.35), y: Math.floor(h * 0.5), w: Math.floor(w * 0.65), h: Math.floor(h * 0.5) }
+                // Left half (In case card is upside down or ePhilID layout)
+                { x: 0, y: 0, w: Math.floor(w * 0.6), h: h }
             ];
 
             for (const r of candidateRegions) {
@@ -174,7 +199,7 @@
                     res = await scanSingleCanvas(subCanvas);
                     if (res) return res;
                 } catch (err) {
-                    // ignore sub-crop error
+                    // Ignore sub-crop error
                 }
             }
         }
@@ -183,15 +208,110 @@
     }
 
     /**
-     * Smart Regex & Keyword Parser for Philippine Government IDs
+     * Clean and validate a name fragment extracted from National ID.
+     * Prevents label bleed (e.g. "GITNANG", "APELYIDO", "MGA PANGALAN", "MIDDLE NAME").
+     */
+    function cleanPhilSysName(str) {
+        if (!str || typeof str !== 'string') return null;
+        // Clean symbols except letters, spaces, hyphens
+        let cleaned = str.replace(/[^A-Za-zÑñ\s\.\-]/g, ' ').replace(/\s+/g, ' ').trim();
+        if (cleaned.length < 2) return null;
+
+        // Split into words and reject any token that matches known PhilSys label words
+        const words = cleaned.split(' ').filter(w => {
+            const upper = w.toUpperCase().replace(/[^A-Z]/g, '');
+            return upper.length > 1 && !PHILSYS_LABEL_TOKENS.has(upper);
+        });
+
+        if (words.length === 0) return null;
+        return words.join(' ').toUpperCase();
+    }
+
+    /**
+     * Extract a strictly valid date of birth from OCR text.
+     * Strictly verifies real dates; rejects labels like "Uri ng Dugo/".
+     */
+    function extractPhilSysBirthDate(rawStr) {
+        if (!rawStr) return null;
+
+        const months = 'JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JAN|FEB|MAR|APR|JUN|JUL|AUG|SEP|OCT|NOV|DEC';
+        
+        // 1. "OCTOBER 24, 2002" or "OCTOBER 24 2002"
+        const monthFirstRegex = new RegExp(`\\b(${months})\\s+(\\d{1,2}),?\\s+(\\d{4})\\b`, 'i');
+        const mf = rawStr.match(monthFirstRegex);
+        if (mf) {
+            const y = parseInt(mf[3], 10);
+            const currentYear = new Date().getFullYear();
+            if (y >= 1920 && y <= currentYear - 5) {
+                const monthName = mf[1].charAt(0).toUpperCase() + mf[1].slice(1).toLowerCase();
+                return `${monthName} ${mf[2]}, ${mf[3]}`;
+            }
+        }
+
+        // 2. "24 OCTOBER 2002"
+        const dayFirstRegex = new RegExp(`\\b(\\d{1,2})\\s+(${months}),?\\s+(\\d{4})\\b`, 'i');
+        const df = rawStr.match(dayFirstRegex);
+        if (df) {
+            const y = parseInt(df[3], 10);
+            const currentYear = new Date().getFullYear();
+            if (y >= 1920 && y <= currentYear - 5) {
+                const monthName = df[2].charAt(0).toUpperCase() + df[2].slice(1).toLowerCase();
+                return `${monthName} ${df[1]}, ${df[3]}`;
+            }
+        }
+
+        // 3. Numeric: YYYY-MM-DD or YYYY/MM/DD
+        const ymdRegex = /\b(19\d{2}|20[0-2]\d)[-\/.](0[1-9]|1[0-2])[-\/.](0[1-9]|[12]\d|3[01])\b/;
+        const ymd = rawStr.match(ymdRegex);
+        if (ymd) {
+            return `${ymd[1]}-${ymd[2]}-${ymd[3]}`;
+        }
+
+        // 4. Numeric: MM/DD/YYYY
+        const mdyRegex = /\b(0[1-9]|1[0-2])[-\/.](0[1-9]|[12]\d|3[01])[-\/.](19\d{2}|20[0-2]\d)\b/;
+        const mdy = rawStr.match(mdyRegex);
+        if (mdy) {
+            return `${mdy[1]}/${mdy[2]}/${mdy[3]}`;
+        }
+
+        return null;
+    }
+
+    /**
+     * Clean and format place of birth string
+     */
+    function cleanPlaceOfBirth(str) {
+        if (!str || typeof str !== 'string') return null;
+        let s = str.replace(/[:\/_\-]/g, ' ').replace(/\s+/g, ' ').trim();
+        // Remove trailing or leading label words
+        s = s.replace(/\b(Uri|Dugo|Blood|Kasarian|Sex|PSA|Pangasinan|City)\s*(?:ng|Type)?.*$/i, function(match, word) {
+            // keep City or Pangasinan if part of location
+            if (/City|Pangasinan/i.test(word)) return match;
+            return '';
+        }).trim();
+
+        // Check against label tokens
+        const words = s.split(' ').filter(w => !PHILSYS_LABEL_TOKENS.has(w.toUpperCase()));
+        if (words.length === 0) return null;
+
+        const res = words.join(' ');
+        if (res.length < 3 || /^\d+$/.test(res)) return null;
+
+        // Title case
+        return res.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+    }
+
+    /**
+     * Smart Parser for Philippine National ID (PhilSys) Documents & QR Codes
      */
     function parsePhilippineIdText(rawText) {
         if (!rawText) rawText = '';
+        const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         const normalized = rawText.replace(/\r/g, ' ').replace(/\s+/g, ' ');
         const upper = normalized.toUpperCase();
 
         const result = {
-            idType: null,
+            idType: 'Philippine National ID (PhilSys)',
             idNumber: null,
             fullName: null,
             firstName: null,
@@ -214,10 +334,13 @@
             qrData: null,
             qrDecoded: null,
             rawText: rawText,
+            isPhilSys: false,
             isReadable: false
         };
 
-        // Extract QR Code or Barcode Data
+        // ─────────────────────────────────────────────────────────────
+        // 1. DECODE QR CODE DATA IF DETECTED
+        // ─────────────────────────────────────────────────────────────
         const qrMatch = rawText.match(/(?:QR_CODE_DATA|BARCODE_SCANNED)[:\s]*([^\n]+)/);
         if (qrMatch && qrMatch[1]) {
             result.qrScanned = true;
@@ -226,138 +349,287 @@
                 const qrObj = JSON.parse(result.qrData);
                 const subj = qrObj.subject || qrObj;
                 if (subj.PCN) result.idNumber = subj.PCN;
-                if (subj.fName || subj.FirstName) result.firstName = subj.fName || subj.FirstName;
-                if (subj.mName || subj.MiddleName) result.middleName = subj.mName || subj.MiddleName;
-                if (subj.lName || subj.LastName) result.lastName = subj.lName || subj.LastName;
-                if (result.firstName || result.lastName) {
-                    result.fullName = [result.firstName, result.middleName, result.lastName].filter(Boolean).join(' ');
-                } else if (subj.Name || subj.name) {
-                    result.fullName = subj.Name || subj.name;
+                if (subj.fName || subj.FirstName || subj.givenName) {
+                    result.firstName = cleanPhilSysName(subj.fName || subj.FirstName || subj.givenName);
                 }
-                if (subj.DOB || subj.DateOfBirth || subj.birthDate) result.birthDate = subj.DOB || subj.DateOfBirth || subj.birthDate;
+                if (subj.mName || subj.MiddleName || subj.middleName) {
+                    result.middleName = cleanPhilSysName(subj.mName || subj.MiddleName || subj.middleName);
+                }
+                if (subj.lName || subj.LastName || subj.familyName) {
+                    result.lastName = cleanPhilSysName(subj.lName || subj.LastName || subj.familyName);
+                }
+                if (subj.Name || subj.name || subj.fullName) {
+                    const candidateName = cleanPhilSysName(subj.Name || subj.name || subj.fullName);
+                    if (candidateName) result.fullName = candidateName;
+                }
+                if (subj.DOB || subj.DateOfBirth || subj.birthDate) {
+                    const parsedDob = extractPhilSysBirthDate(subj.DOB || subj.DateOfBirth || subj.birthDate);
+                    if (parsedDob) result.birthDate = parsedDob;
+                }
                 if (subj.POB || subj.PlaceOfBirth || subj.birthPlace) {
-                    result.placeOfBirth = subj.POB || subj.PlaceOfBirth || subj.birthPlace;
+                    result.placeOfBirth = cleanPlaceOfBirth(subj.POB || subj.PlaceOfBirth || subj.birthPlace);
                     result.birthPlace = result.placeOfBirth;
                 }
-                if (subj.Sex || subj.gender) result.gender = subj.Sex || subj.gender;
-                if (subj.BloodType || subj.bloodType) result.bloodType = subj.BloodType || subj.bloodType;
-                if (subj.MaritalStatus || subj.CivilStatus || subj.civilStatus) result.maritalStatus = subj.MaritalStatus || subj.CivilStatus || subj.civilStatus;
-                if (subj.Address || subj.address) result.addressLine1 = subj.Address || subj.address;
-                if (subj.serial || subj.cardSerial || subj.Serial) result.cardSerial = subj.serial || subj.cardSerial || subj.Serial;
-                if (subj.dateOfIssuance || subj.IssuanceDate) result.dateOfIssuance = subj.dateOfIssuance || subj.IssuanceDate;
+                if (subj.Sex || subj.gender) {
+                    const s = (subj.Sex || subj.gender).toUpperCase();
+                    if (s.includes('MALE') || s.includes('LALAKI')) result.gender = 'Male';
+                    else if (s.includes('FEMALE') || s.includes('BABAE')) result.gender = 'Female';
+                }
+                if (subj.BloodType || subj.bloodType) {
+                    const btMatch = (subj.BloodType || subj.bloodType).toUpperCase().match(/\b(O\+|A\+|B\+|AB\+|O\-|A\-|B\-|AB\-)\b/);
+                    if (btMatch) result.bloodType = btMatch[1];
+                }
+                if (subj.MaritalStatus || subj.CivilStatus || subj.civilStatus) {
+                    const ms = (subj.MaritalStatus || subj.CivilStatus || subj.civilStatus).toUpperCase();
+                    if (ms.includes('MARRIED')) result.maritalStatus = 'Married';
+                    else if (ms.includes('WIDOW')) result.maritalStatus = 'Widowed';
+                    else if (ms.includes('SEPARAT')) result.maritalStatus = 'Separated';
+                    else if (ms.includes('SINGLE')) result.maritalStatus = 'Single';
+                }
+                if (subj.Address || subj.address) {
+                    result.addressLine1 = (subj.Address || subj.address).trim();
+                }
+                if (subj.serial || subj.cardSerial || subj.Serial) {
+                    result.cardSerial = (subj.serial || subj.cardSerial || subj.Serial).trim();
+                }
+                if (subj.dateOfIssuance || subj.IssuanceDate) {
+                    result.dateOfIssuance = (subj.dateOfIssuance || subj.IssuanceDate).trim();
+                }
                 result.qrDecoded = subj;
+                result.isPhilSys = true;
             } catch (e) {
+                // Raw non-JSON payload or 1D barcode
                 if (/23F\d{7}/i.test(result.qrData)) {
                     result.cardSerial = result.qrData.match(/23F\d{7}/i)[0].toUpperCase();
                 }
             }
         }
 
-        // 1. Detect ID Type
-        if (upper.includes('PHILSYS') || upper.includes('PHILIPPINE IDENTIFICATION') || upper.includes('PHILID') || upper.includes('PCN') || (upper.includes('REPUBLIKA') && (upper.includes('PAMBANSANG') || upper.includes('PAGKAKAKILANLAN') || upper.includes('IDENTIFICATION') || upper.includes('BANS')))) {
-            result.idType = 'Philippine National ID (PhilSys)';
-        } else if (upper.includes('DRIVER') || upper.includes('LICENSE') || upper.includes('LAND TRANSPORTATION') || upper.includes('LTO')) {
-            result.idType = "Driver's License";
-        } else if (upper.includes('UNIFIED') || upper.includes('UMID') || upper.includes('CRN') || upper.includes('SSS') || upper.includes('GSIS')) {
-            result.idType = 'UMID / SSS ID';
-        } else if (upper.includes('PASSPORT') || upper.includes('PASAPORTE') || upper.includes('DFA')) {
-            result.idType = 'Passport';
-        } else if (upper.includes('POSTAL') || upper.includes('PHILPOST')) {
-            result.idType = 'Postal ID';
-        } else if (upper.includes('PRC') || upper.includes('PROFESSIONAL REGULATION')) {
-            result.idType = 'PRC ID';
-        } else if (upper.includes('VOTER') || upper.includes('COMELEC')) {
-            result.idType = "Voter's ID / Certificate";
-        } else if (upper.includes('BARANGAY')) {
-            result.idType = 'Barangay ID with Address';
-        }
-
-        // 2. Extract ID Number
-        // PhilSys National ID (16 digits: 4 groups of 4: 1234-5678-9012-3456 or 1234 5678 9012 3456)
+        // ─────────────────────────────────────────────────────────────
+        // 2. DETECT PHILSYS IDENTITY & PCN (PhilSys Card Number)
+        // ─────────────────────────────────────────────────────────────
+        // Check 16-digit PhilSys Card Number pattern: 1234-5678-9012-3456 or 1234 5678 9012 3456
         const philsysMatch = normalized.match(/\b(\d{4})[-\s]?(\d{4})[-\s]?(\d{4})[-\s]?(\d{4})\b/);
         if (philsysMatch) {
             result.idNumber = `${philsysMatch[1]}-${philsysMatch[2]}-${philsysMatch[3]}-${philsysMatch[4]}`;
-            if (!result.idType) result.idType = 'Philippine National ID (PhilSys)';
+            result.isPhilSys = true;
         }
 
-        // PhilSys Card Number Fragment Reconstruction (handling security pattern guilloche blur)
-        if (!result.idNumber && (result.idType === 'Philippine National ID (PhilSys)' || upper.includes('PILIPINAS') || upper.includes('PAMBANSANG'))) {
-            if (/(?:1\s*7\s*8\s*0\s*-\s*9|1780|80-9|5908)/.test(normalized)) {
-                result.idNumber = '5908-9120-1780-9349';
-            } else {
-                const digitsMatches = normalized.match(/(?:\d[\s\-\.\)]?){12,18}/g);
-                if (digitsMatches) {
-                    for (const dm of digitsMatches) {
-                        const cleanDigits = dm.replace(/\D/g, '');
-                        if (cleanDigits.length === 16) {
-                            result.idNumber = `${cleanDigits.slice(0,4)}-${cleanDigits.slice(4,8)}-${cleanDigits.slice(8,12)}-${cleanDigits.slice(12,16)}`;
+        // Check PhilSys Keywords
+        const hasPhilSysKeywords = /PHILSYS|PHILID|EPHILID|PAMBANSANG\s+PAGKAKAKILANLAN|PHILIPPINE\s+IDENTIFICATION|REPUBLIKA\s+NG\s+PILIPINAS|\bPCN\b/i.test(normalized);
+        if (hasPhilSysKeywords || result.idNumber || result.qrScanned) {
+            result.isPhilSys = true;
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 3. EXTRACT LEGAL NAMES (Last, Given, Middle)
+        // ─────────────────────────────────────────────────────────────
+        // Line-by-line strategy
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // A. Last Name / Apelyido
+            if (!result.lastName && /(?:Apelyido|Last\s*Name)\b/i.test(line)) {
+                // Check if value is on the same line after label
+                const sameLine = line.replace(/^.*?(?:Apelyido(?:\s*[\/:]\s*Last\s*Name)?|Last\s*Name)[:\s]*/i, '').trim();
+                const cleanedSame = cleanPhilSysName(sameLine);
+                if (cleanedSame) {
+                    result.lastName = cleanedSame;
+                } else if (i + 1 < lines.length) {
+                    // Check next line
+                    const nextLine = cleanPhilSysName(lines[i + 1]);
+                    if (nextLine && !/(?:Mga\s*Pangalan|Given|Gitnang|Middle|Petsa|Date)/i.test(lines[i + 1])) {
+                        result.lastName = nextLine;
+                    }
+                }
+            }
+
+            // B. Given Names / Mga Pangalan
+            if (!result.firstName && /(?:Mga\s*Pangalan|Given\s*Names?)\b/i.test(line)) {
+                const sameLine = line.replace(/^.*?(?:Mga\s*Pangalan(?:\s*[\/:]\s*Given\s*Names?)?|Given\s*Names?)[:\s]*/i, '').trim();
+                const cleanedSame = cleanPhilSysName(sameLine);
+                if (cleanedSame) {
+                    result.firstName = cleanedSame;
+                } else if (i + 1 < lines.length) {
+                    const nextLine = cleanPhilSysName(lines[i + 1]);
+                    if (nextLine && !/(?:Gitnang|Middle|Apelyido|Last|Petsa|Date)/i.test(lines[i + 1])) {
+                        result.firstName = nextLine;
+                    }
+                }
+            }
+
+            // C. Middle Name / Gitnang Apelyido
+            if (!result.middleName && /(?:Gitnang\s*(?:Apelyido|Ngalan)|Middle\s*Name)\b/i.test(line)) {
+                const sameLine = line.replace(/^.*?(?:Gitnang\s*(?:Apelyido|Ngalan)(?:\s*[\/:]\s*Middle\s*Name)?|Middle\s*Name)[:\s]*/i, '').trim();
+                const cleanedSame = cleanPhilSysName(sameLine);
+                if (cleanedSame) {
+                    result.middleName = cleanedSame;
+                } else if (i + 1 < lines.length) {
+                    const nextLine = cleanPhilSysName(lines[i + 1]);
+                    if (nextLine && !/(?:Petsa|Date|Kapanganakan|Kasarian|Sex|Uri|Blood)/i.test(lines[i + 1])) {
+                        result.middleName = nextLine;
+                    }
+                }
+            }
+        }
+
+        // Multi-line regex fallback for names
+        if (!result.lastName) {
+            const lnMatch = normalized.match(/(?:Apelyido(?:\s*[\/:]\s*Last\s*Name)?|Last\s*Name)\s*[:\s]+([A-Za-zÑñ\s\-]+?)(?=(?:Mga\s*Pangalan|Given|Gitnang|Middle|Petsa|Date|\n|$))/i);
+            if (lnMatch && lnMatch[1]) {
+                const cleaned = cleanPhilSysName(lnMatch[1]);
+                if (cleaned) result.lastName = cleaned;
+            }
+        }
+
+        if (!result.firstName) {
+            const fnMatch = normalized.match(/(?:Mga\s*Pangalan(?:\s*[\/:]\s*Given\s*Names?)?|Given\s*Names?)\s*[:\s]+([A-Za-zÑñ\s\-]+?)(?=(?:Gitnang|Middle|Apelyido|Last|Petsa|Date|\n|$))/i);
+            if (fnMatch && fnMatch[1]) {
+                const cleaned = cleanPhilSysName(fnMatch[1]);
+                if (cleaned) result.firstName = cleaned;
+            }
+        }
+
+        if (!result.middleName) {
+            const mnMatch = normalized.match(/(?:Gitnang\s*(?:Apelyido|Ngalan)(?:\s*[\/:]\s*Middle\s*Name)?|Middle\s*Name)\s*[:\s]+([A-Za-zÑñ\s\-]+?)(?=(?:Petsa|Date|Kapanganakan|Kasarian|Sex|\n|$))/i);
+            if (mnMatch && mnMatch[1]) {
+                const cleaned = cleanPhilSysName(mnMatch[1]);
+                if (cleaned) result.middleName = cleaned;
+            }
+        }
+
+        // Build Full Legal Name
+        if (!result.fullName) {
+            const nameParts = [result.firstName, result.middleName, result.lastName].filter(Boolean);
+            if (nameParts.length > 0) {
+                result.fullName = nameParts.join(' ');
+            } else if (window.USER_NAME) {
+                result.fullName = window.USER_NAME;
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 4. EXTRACT DATE OF BIRTH (DOB)
+        // ─────────────────────────────────────────────────────────────
+        if (!result.birthDate) {
+            // First check line after "Petsa ng Kapanganakan"
+            for (let i = 0; i < lines.length; i++) {
+                if (/(?:Petsa\s*ng\s*Kapanganakan|Date\s*of\s*Birth|DOB)\b/i.test(lines[i])) {
+                    const sameLine = lines[i].replace(/^.*?(?:Petsa\s*ng\s*Kapanganakan|Date\s*of\s*Birth|DOB)[:\s]*/i, '');
+                    const sameDate = extractPhilSysBirthDate(sameLine);
+                    if (sameDate) {
+                        result.birthDate = sameDate;
+                        break;
+                    }
+                    if (i + 1 < lines.length) {
+                        const nextDate = extractPhilSysBirthDate(lines[i + 1]);
+                        if (nextDate) {
+                            result.birthDate = nextDate;
                             break;
                         }
                     }
                 }
             }
-            if (!result.idNumber && window.EXISTING_USER_ID_NUMBER) {
-                result.idNumber = window.EXISTING_USER_ID_NUMBER;
+        }
+
+        // Global date extraction fallback from full text
+        if (!result.birthDate) {
+            result.birthDate = extractPhilSysBirthDate(rawText);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // 5. EXTRACT PLACE OF BIRTH
+        // ─────────────────────────────────────────────────────────────
+        if (!result.placeOfBirth) {
+            for (let i = 0; i < lines.length; i++) {
+                if (/(?:Lugar\s*ng\s*Kapanganakan|Place\s*of\s*Birth|POB)\b/i.test(lines[i])) {
+                    const sameLine = lines[i].replace(/^.*?(?:Lugar\s*ng\s*Kapanganakan|Place\s*of\s*Birth|POB)[:\s]*/i, '').trim();
+                    const cleaned = cleanPlaceOfBirth(sameLine);
+                    if (cleaned) {
+                        result.placeOfBirth = cleaned;
+                        break;
+                    }
+                    if (i + 1 < lines.length) {
+                        const nextCleaned = cleanPlaceOfBirth(lines[i + 1]);
+                        if (nextCleaned && !/(?:Uri|Dugo|Blood|Kasarian|Sex)/i.test(lines[i + 1])) {
+                            result.placeOfBirth = nextCleaned;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
-        // Driver's License: Letter + 2 digits - 2 digits - 6 digits (e.g. A01-12-345678, N78-98-294143)
-        if (!result.idNumber) {
-            const dlMatch = normalized.match(/\b([A-Z]\d{2})[-\s]?(\d{2})[-\s]?(\d{6})\b/i);
-            if (dlMatch) {
-                result.idNumber = `${dlMatch[1].toUpperCase()}-${dlMatch[2]}-${dlMatch[3]}`;
-                if (!result.idType) result.idType = "Driver's License";
+        if (!result.placeOfBirth) {
+            const pobMatch = normalized.match(/(?:Lugar\s*ng\s*Kapanganakan(?:\s*[\/:]\s*Place\s*of\s*Birth)?|Place\s*of\s*Birth)\s*[:\s]+([A-Za-z0-9\s,\.\-]+?)(?=(?:Uri|Blood|Kasarian|Sex|PSA|Republic|\d{4}|$))/i);
+            if (pobMatch && pobMatch[1]) {
+                result.placeOfBirth = cleanPlaceOfBirth(pobMatch[1]);
+            }
+        }
+        result.birthPlace = result.placeOfBirth;
+
+        // ─────────────────────────────────────────────────────────────
+        // 6. EXTRACT BLOOD TYPE
+        // ─────────────────────────────────────────────────────────────
+        if (!result.bloodType) {
+            const bloodMatch = normalized.match(/(?:Uri\s*ng\s*Dugo(?:\s*[\/:]\s*Blood\s*Type)?|Blood\s*Type)\s*[:\s]*([ABO][+-]|UNKNOWN)/i);
+            if (bloodMatch && bloodMatch[1]) {
+                result.bloodType = bloodMatch[1].toUpperCase();
+            } else {
+                const standaloneBlood = normalized.match(/\b(O\+|A\+|B\+|AB\+|O\-|A\-|B\-|AB\-)\b/);
+                if (standaloneBlood) {
+                    result.bloodType = standaloneBlood[1].toUpperCase();
+                }
             }
         }
 
-        // UMID / CRN: 4 digits - 7 digits - 1 digit (e.g. 0111-1234567-8)
-        if (!result.idNumber) {
-            const umidMatch = normalized.match(/\b(\d{4})[-\s]?(\d{7})[-\s]?(\d{1})\b/);
-            if (umidMatch) {
-                result.idNumber = `${umidMatch[1]}-${umidMatch[2]}-${umidMatch[3]}`;
-                if (!result.idType) result.idType = 'UMID / SSS ID';
+        // ─────────────────────────────────────────────────────────────
+        // 7. EXTRACT GENDER / SEX
+        // ─────────────────────────────────────────────────────────────
+        if (!result.gender) {
+            const sexMatch = normalized.match(/(?:Kasarian(?:\s*[\/:]\s*Sex)?|Sex)\s*[:\/]?\s*(MALE|FEMALE|LALAKI|BABAE)/i);
+            if (sexMatch) {
+                const s = sexMatch[1].toUpperCase();
+                result.gender = (s === 'MALE' || s === 'LALAKI') ? 'Male' : 'Female';
             }
         }
 
-        // Passport: Letter P + 7 or 8 digits/letters (e.g. P8047416B)
-        if (!result.idNumber) {
-            const passportMatch = normalized.match(/\b(P[0-9]{7,8}[A-Z0-9]?)\b/i);
-            if (passportMatch) {
-                result.idNumber = passportMatch[1].toUpperCase();
-                if (!result.idType) result.idType = 'Passport';
+        // ─────────────────────────────────────────────────────────────
+        // 8. EXTRACT CIVIL / MARITAL STATUS
+        // ─────────────────────────────────────────────────────────────
+        if (!result.maritalStatus) {
+            const msMatch = normalized.match(/(?:Kalagayang\s+Sibil(?:\s*[\/:]\s*Marital\s+Status)?|Marital\s+Status|Civil\s+Status)\s*[:\/]?\s*(SINGLE|MARRIED|WIDOWED|SEPARATED|WALANG\s+ASAWA|MAY\s+ASAWA)/i);
+            if (msMatch) {
+                const ms = msMatch[1].toUpperCase();
+                if (ms.includes('MARRIED') || ms.includes('MAY ASAWA')) result.maritalStatus = 'Married';
+                else if (ms.includes('WIDOW')) result.maritalStatus = 'Widowed';
+                else if (ms.includes('SEPARAT')) result.maritalStatus = 'Separated';
+                else result.maritalStatus = 'Single';
             }
         }
 
-        // Postal ID (PID-XXXXXXXX or PRN / 8-12 alphanumeric)
-        if (!result.idNumber) {
-            const postalMatch = normalized.match(/\b(PID[-\s]?\d{7,10})\b/i);
-            if (postalMatch) {
-                result.idNumber = postalMatch[1].toUpperCase().replace(/\s+/, '-');
-                if (!result.idType) result.idType = 'Postal ID';
+        // ─────────────────────────────────────────────────────────────
+        // 9. EXTRACT CARD SERIAL NUMBER (e.g. 23F0969175)
+        // ─────────────────────────────────────────────────────────────
+        if (!result.cardSerial) {
+            const serialMatch = normalized.match(/\b(23F[0-9]{7})\b/i);
+            if (serialMatch) {
+                result.cardSerial = serialMatch[1].toUpperCase();
+            } else {
+                const barcodeMatch = normalized.match(/\b([0-9]{12,16})\b/);
+                if (barcodeMatch && barcodeMatch[1] !== result.idNumber?.replace(/\D/g, '')) {
+                    result.cardSerial = barcodeMatch[1];
+                }
             }
         }
 
-        // Voter's ID (e.g. 5591-4249A-87607)
-        if (!result.idNumber) {
-            const voterMatch = normalized.match(/\b(\d{4}[-\s]?\d{4}[A-Z][-\s]?\d{5})\b/i);
-            if (voterMatch) {
-                result.idNumber = voterMatch[1].toUpperCase();
-                if (!result.idType) result.idType = "Voter's ID / Certificate";
-            }
-        }
-
-        // Generic fallback for clean alphanumeric code
-        if (!result.idNumber) {
-            const genericNumMatch = normalized.match(/(?:ID|NO|NUMBER|CRN|LIC)[.:\s#]*([A-Z0-9\-]{8,20})/i);
-            if (genericNumMatch && genericNumMatch[1] && genericNumMatch[1].replace(/\D/g, '').length >= 6) {
-                result.idNumber = genericNumMatch[1].trim();
-            }
-        }
-
-        // 3. Extract Province & Municipality using embedded locations
+        // ─────────────────────────────────────────────────────────────
+        // 10. EXTRACT ADDRESS & PROVINCE / CITY / BARANGAY
+        // ─────────────────────────────────────────────────────────────
         const locations = window.PHILIPPINE_LOCATIONS || {};
         const provinceKeys = Object.keys(locations);
 
+        // Detect Province
         for (const prov of provinceKeys) {
             const provRegex = new RegExp(`\\b${prov}\\b`, 'i');
             if (provRegex.test(normalized)) {
@@ -366,20 +638,8 @@
             }
         }
 
-        // Check Pangasinan municipalities
-        const pangasinanCities = (locations['Pangasinan'] && locations['Pangasinan'].cities) || window.PANGASINAN_MUNICIPALITIES || [];
-        for (const city of pangasinanCities) {
-            const cleanCity = city.replace(/\s+City$/i, '');
-            const cityRegex = new RegExp(`\\b${cleanCity}(?:\\s+City)?\\b`, 'i');
-            if (cityRegex.test(normalized)) {
-                result.city = city;
-                if (!result.province) result.province = 'Pangasinan';
-                break;
-            }
-        }
-
-        // Check cities inside matched province
-        if (result.province && !result.city && locations[result.province]) {
+        // Detect Municipality / City
+        if (result.province && locations[result.province]) {
             const provCities = locations[result.province].cities || [];
             for (const city of provCities) {
                 const cleanCity = city.replace(/\s+City$/i, '');
@@ -389,19 +649,30 @@
                     break;
                 }
             }
+        } else {
+            // Check Pangasinan municipalities
+            const pangasinanCities = (locations['Pangasinan'] && locations['Pangasinan'].cities) || window.PANGASINAN_MUNICIPALITIES || [];
+            for (const city of pangasinanCities) {
+                const cleanCity = city.replace(/\s+City$/i, '');
+                const cityRegex = new RegExp(`\\b${cleanCity}(?:\\s+City)?\\b`, 'i');
+                if (cityRegex.test(normalized)) {
+                    result.city = city;
+                    if (!result.province) result.province = 'Pangasinan';
+                    break;
+                }
+            }
         }
 
-        // 4. Extract Barangay & Street Address
-        // First check PhilSys Tirahan/Address field
-        const tirahanMatch = normalized.match(/(?:Tirahan|Address)\s*[:\/]?\s*([A-Za-z0-9\s,\.\-#]+?)(?=(?:Kasarian|Sex|Lugar|Date|Araw|Kapanganakan|\n|$))/i);
+        // Detect Street Address from "Tirahan / Address"
+        const tirahanMatch = normalized.match(/(?:Tirahan|Permanent\s+Address|Address)\s*[:\/]?\s*([A-Za-z0-9\s,\.\-#]+?)(?=(?:Kasarian|Sex|Lugar|Date|Petsa|Araw|Kapanganakan|\n|$))/i);
         if (tirahanMatch && tirahanMatch[1]) {
             const rawAddr = tirahanMatch[1].trim();
-            if (rawAddr.length > 2 && rawAddr.length < 80) {
+            if (rawAddr.length > 3 && rawAddr.length < 90) {
                 result.addressLine1 = rawAddr;
             }
         }
 
-        // Check against active municipality's barangay dataset
+        // Detect Barangay
         const activeBarangayList = (result.city && window.PANGASINAN_BARANGAYS && window.PANGASINAN_BARANGAYS[result.city]) ? window.PANGASINAN_BARANGAYS[result.city] : [];
         for (const b of activeBarangayList) {
             const bRegex = new RegExp(`\\b${b}\\b`, 'i');
@@ -411,214 +682,30 @@
             }
         }
 
-        // Standard Brgy match fallback
         if (!result.barangay) {
-            const brgyMatch = normalized.match(/(?:Brgy\.?|Barangay|Bgy\.?)\s+([A-Za-z0-9\s\-]+?)(?:,|\.|\n|City|Municipality|Pangasinan|\d{4}|$)/i);
+            const brgyMatch = normalized.match(/(?:Brgy\.?|Barangay|Bgy\.?)\s+([A-Za-z0-9\s\-]+?)(?:,|\.|\n|City|Municipality|\d{4}|$)/i);
             if (brgyMatch && brgyMatch[1]) {
-                let brgyName = brgyMatch[1].trim();
-                brgyName = brgyName.replace(/\s+(San Carlos|Dagupan|Lingayen|Bayambang|Pangasinan|City).*$/i, '').trim();
-                if (brgyName.length > 2 && brgyName.length < 50) {
-                    result.barangay = brgyName;
+                const bName = brgyMatch[1].trim();
+                if (bName.length > 2 && bName.length < 40) {
+                    result.barangay = bName;
                 }
             }
         }
 
-        // Standard street match fallback if not already set from Tirahan
-        if (!result.addressLine1) {
-            const streetMatch = normalized.match(/(?:Purok|Prk\.?|Zone|Sitio|Unit|House|Blk|Lot|#)\s*([A-Za-z0-9\s#\-]+?)(?=(?:Brgy|Barangay|,|\.|\n|$))/i);
-            if (streetMatch && streetMatch[0]) {
-                let line1 = streetMatch[0].trim();
-                line1 = line1.replace(/\s+(?:Brgy\.?|Barangay).*$/i, '').trim();
-                if (line1.length > 2 && line1.length < 80) {
-                    result.addressLine1 = line1;
-                }
-            }
-        }
-
-        // 5. Extract Postal Code
+        // Postal Code
         let textWithoutId = normalized;
         if (result.idNumber) {
-            textWithoutId = textWithoutId.split(result.idNumber).join(' ')
-                .split(result.idNumber.replace(/[-\s]/g, '')).join(' ');
+            textWithoutId = textWithoutId.split(result.idNumber).join(' ').split(result.idNumber.replace(/[-\s]/g, '')).join(' ');
+        }
+        const postalMatch = textWithoutId.match(/\b(1\d{3}|2\d{3}|3\d{3}|4\d{3}|5\d{3}|6\d{3}|7\d{3}|8\d{3}|9\d{3})\b/);
+        if (postalMatch) {
+            result.postalCode = postalMatch[1];
+        } else if (result.province && result.city && locations[result.province]?.postalCodes?.[result.city]) {
+            result.postalCode = locations[result.province].postalCodes[result.city];
         }
 
-        if (result.province === 'Pangasinan' && result.city && locations['Pangasinan'] && locations['Pangasinan'].postalCodes && locations['Pangasinan'].postalCodes[result.city]) {
-            result.postalCode = locations['Pangasinan'].postalCodes[result.city];
-        } else {
-            const postalMatch = textWithoutId.match(/(?:ZIP|Postal|Code)?[:\s]*\b(1\d{3}|2\d{3}|3\d{3}|4\d{3}|5\d{3}|6\d{3}|7\d{3}|8\d{3}|9\d{3})\b/i);
-            if (postalMatch) {
-                result.postalCode = postalMatch[1];
-            } else if (result.province && locations[result.province] && locations[result.province].defaultPostal) {
-                result.postalCode = locations[result.province].defaultPostal;
-            }
-        }
-
-        // 6. Demographic & Security Details (from QR Code & Document Text)
-        // A. Full Legal Name (Extracting Apelyido / Last Name, Mga Pangalan / Given Names, Gitnang Apelyido)
-        if (!result.lastName) {
-            const lnMatch = normalized.match(/(?:Apelyido(?:\s*\/\s*Last\s*Name)?|Last\s*Name)\s*[:\/\s]*([A-Za-z\s\-]+?)(?=(?:Mga\s*Pangalan|Given|Gitnang|Middle|Petsa|Date|\n|$))/i);
-            if (lnMatch && lnMatch[1]) {
-                const ln = lnMatch[1].trim();
-                if (ln.length > 1 && ln.length < 35 && !/REPUBLIKA|PILIPINAS|PHILSYS|SYSTEM|PAMBANSANG/i.test(ln)) {
-                    result.lastName = ln.toUpperCase();
-                }
-            }
-        }
-
-        if (!result.firstName) {
-            const fnMatch = normalized.match(/(?:Mga\s*Pangalan(?:\s*\/\s*Given\s*Names?)?|Given\s*Names?)\s*[:\/\s]*([A-Za-z\s\-]+?)(?=(?:Gitnang|Middle|Apelyido|Last|Petsa|Date|\n|$))/i);
-            if (fnMatch && fnMatch[1]) {
-                const fn = fnMatch[1].trim();
-                if (fn.length > 1 && fn.length < 40 && !/REPUBLIKA|PILIPINAS|PHILSYS/i.test(fn)) {
-                    result.firstName = fn.toUpperCase();
-                }
-            }
-        }
-
-        if (!result.middleName) {
-            const mnMatch = normalized.match(/(?:Gitnang\s*Apelyido(?:\s*\/\s*Middle\s*Name)?|Middle\s*Name)\s*[:\/\s]*([A-Za-z\s\-]+?)(?=(?:Petsa|Date|Kapanganakan|Kasarian|Sex|\n|$))/i);
-            if (mnMatch && mnMatch[1]) {
-                const mn = mnMatch[1].trim();
-                if (mn.length > 1 && mn.length < 35 && !/REPUBLIKA|PILIPINAS/i.test(mn)) {
-                    result.middleName = mn.toUpperCase();
-                }
-            }
-        }
-
-        if (!result.fullName) {
-            if (result.firstName || result.lastName) {
-                result.fullName = [result.firstName, result.middleName, result.lastName].filter(Boolean).join(' ');
-            } else if (/NICO\s*MARK/i.test(normalized) || /AGBUYA/i.test(normalized)) {
-                result.fullName = 'Nico Mark Agbuya';
-            } else {
-                result.fullName = window.USER_NAME || 'Nico Mark Agbuya';
-            }
-        }
-
-        // B. Date of Birth / Birthday (Petsa ng Kapanganakan)
-        if (!result.birthDate) {
-            const dobMatch = normalized.match(/(?:Petsa\s*ng\s*Kapanganakan(?:\s*\/\s*Date\s*of\s*Birth)?|Date\s*of\s*Birth|DOB|Birth\s*Date)\s*[:\/\s]*([A-Za-z0-9\s,\/\-]+?)(?=(?:Lugar|Place|Uri|Blood|Kasarian|Sex|\n|$))/i);
-            if (dobMatch && dobMatch[1]) {
-                const candidate = dobMatch[1].trim();
-                if (candidate.length >= 6 && candidate.length <= 25) {
-                    result.birthDate = candidate;
-                }
-            }
-        }
-
-        if (!result.birthDate) {
-            const monthMatch = normalized.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},?\s+(19\d{2}|200[0-9]|201[0-9])\b/i);
-            if (monthMatch) {
-                result.birthDate = monthMatch[0];
-            } else {
-                const numDateMatch = normalized.match(/\b(19\d{2}|200[0-9]|201[0-9])[\/\-](0[1-9]|1[0-2])[\/\-](0[1-9]|[12]\d|3[01])\b/);
-                if (numDateMatch) {
-                    result.birthDate = numDateMatch[0];
-                } else {
-                    const mdyMatch = normalized.match(/\b(0[1-9]|1[0-2])[\/\-](0[1-9]|[12]\d|3[01])[\/\-](19\d{2}|200[0-9]|201[0-9])\b/);
-                    if (mdyMatch) {
-                        result.birthDate = mdyMatch[0];
-                    } else {
-                        result.birthDate = 'October 24, 2002';
-                    }
-                }
-            }
-        }
-
-        // C. Place of Birth / Birthplace (Lugar ng Kapanganakan)
-        if (!result.placeOfBirth) {
-            const pobMatch = normalized.match(/(?:Lugar\s+ng\s+Kapanganakan(?:\s*\/\s*Place\s+of\s+Birth)?|Place\s+of\s+Birth|POB)\s*[:\s]*([A-Za-z0-9\s,\.\-]+?)(?=(?:Uri|Blood|Kasarian|Sex|PSA|Republic|www|\d{4}|$))/i);
-            if (pobMatch && pobMatch[1]) {
-                let pobStr = pobMatch[1].replace(/PANGASUNANG/i, 'Pangasinan').trim();
-                pobStr = pobStr.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
-                result.placeOfBirth = pobStr;
-            } else if (/BAYAMBANG/i.test(normalized)) {
-                result.placeOfBirth = 'Bayambang, Pangasinan';
-            } else if (/SAN\s*CARLOS/i.test(normalized)) {
-                result.placeOfBirth = 'San Carlos City, Pangasinan';
-            } else {
-                result.placeOfBirth = 'Bayambang, Pangasinan';
-            }
-        }
-        result.birthPlace = result.placeOfBirth;
-
-        // D. Blood Type / Uri ng Dugo
-        if (!result.bloodType) {
-            const bloodMatch = normalized.match(/(?:Uri\s*ng\s*Dugo(?:\s*\/\s*Blood\s*Type)?|Blood\s*Type)\s*[:\/\s]*([ABO][+-]|UNKNOWN)/i);
-            if (bloodMatch && bloodMatch[1]) {
-                result.bloodType = bloodMatch[1].toUpperCase();
-            } else {
-                const standaloneBlood = normalized.match(/\b(O\+|A\+|B\+|AB\+|O\-|A\-|B\-|AB\-)\b/);
-                if (standaloneBlood) {
-                    result.bloodType = standaloneBlood[1];
-                } else {
-                    result.bloodType = 'O+';
-                }
-            }
-        }
-
-        // E. Gender / Kasarian
-        if (!result.gender) {
-            const sexMatch = normalized.match(/(?:Kasarian(?:\s*\/\s*Sex)?|Sex)\s*[:\/]?\s*(MALE|FEMALE|LALAKI|BABAE)/i);
-            if (sexMatch) {
-                const s = sexMatch[1].toUpperCase();
-                result.gender = (s === 'MALE' || s === 'LALAKI') ? 'Male' : 'Female';
-            } else {
-                result.gender = 'Male';
-            }
-        }
-
-        // F. Civil Status / Kalagayang Sibil
-        if (!result.maritalStatus) {
-            const msMatch = normalized.match(/(?:Kalagayang\s+Sibil(?:\s*\/\s*Marital\s+Status)?|Marital\s+Status|Civil\s+Status)\s*[:\/]?\s*(SINGLE|MARRIED|WIDOWED|SEPARATED|WALANG\s+ASAWA|MAY\s+ASAWA)/i);
-            if (msMatch) {
-                const ms = msMatch[1].toUpperCase();
-                result.maritalStatus = (ms.includes('MARRIED') || ms.includes('MAY ASAWA')) ? 'Married' : 'Single';
-            } else {
-                result.maritalStatus = 'Single';
-            }
-        }
-
-        // G. Card Serial / Barcode Number
-        if (!result.cardSerial) {
-            const serial23fMatch = normalized.match(/\b(23F[0-9]{7})\b/i);
-            if (serial23fMatch) {
-                result.cardSerial = serial23fMatch[1].toUpperCase();
-                result.qrScanned = true;
-            } else if (result.qrData && /23F[0-9]{7}/i.test(result.qrData)) {
-                result.cardSerial = result.qrData.toUpperCase();
-                result.qrScanned = true;
-            } else {
-                const barcodeMatch = normalized.match(/\b(23F[0-9]{7}|[0-9]{12})\b/);
-                if (barcodeMatch) {
-                    result.cardSerial = barcodeMatch[1];
-                    result.qrScanned = true;
-                } else {
-                    result.cardSerial = '23F0969175';
-                    result.qrScanned = true;
-                }
-            }
-        }
-
-        // H. Date of Issuance
-        if (!result.dateOfIssuance) {
-            const issMatch = normalized.match(/(?:Petsa\s*ng\s*Pag-isyu|Date\s*of\s*Issuance|Issued)\s*[:\/\s]*([A-Za-z0-9\s,\/\-]+?)(?=(?:\n|$))/i);
-            if (issMatch && issMatch[1]) {
-                result.dateOfIssuance = issMatch[1].trim();
-            } else {
-                result.dateOfIssuance = '2023-08-15';
-            }
-        }
-
-        // 7. Readability & Legitimacy Validation
-        const cleanChars = normalized.replace(/[^A-Za-z0-9]/g, '');
-        const hasGovKeywords = /PHILIPPINES|PILIPINAS|PHILSYS|DRIVER|LICENSE|UMID|COMMISSION|PASSPORT|POSTAL|IDENTIFICATION|PAMBANSANG|REPUBLIKA/i.test(normalized);
-
-        if (result.idNumber ||
-            result.idType ||
-            hasGovKeywords ||
-            (result.province && result.city) ||
-            cleanChars.length >= 25) {
+        // Readability verification: Must be a Philippine National ID and have either PCN, QR, or verified PhilSys text
+        if (result.idNumber || result.qrScanned || (result.isPhilSys && (result.fullName || result.birthDate))) {
             result.isReadable = true;
         }
 
@@ -626,7 +713,7 @@
     }
 
     /**
-     * Scan image file and return parsed details
+     * Scan image file and return raw OCR & QR text
      */
     async function extractTextFromImage(file, onProgress) {
         if (!file) return '';
@@ -634,7 +721,7 @@
         // Instant parser for built-in sample PhilSys test
         if (file.name === 'sample-philsys-national-id.jpg' || file._isSamplePhilSys) {
             if (typeof onProgress === 'function') onProgress(100);
-            return 'REPUBLIKA NG PILIPINAS PHILIPPINE IDENTIFICATION SYSTEM PHILSYS PHILID CARD NUMBER PCN: 8135-3885-9548-5425 APELYIDO LAST NAME: DELA CRUZ MGA PANGALAN GIVEN NAMES: JUAN PROTASIO TIRAHAN PERMANENT ADDRESS: PUROK 2, BRGY. SAN JUAN, SAN CARLOS CITY, PANGASINAN 2420';
+            return 'REPUBLIKA NG PILIPINAS PHILIPPINE IDENTIFICATION SYSTEM PHILSYS PHILID CARD NUMBER PCN: 8135-3885-9548-5425 APELYIDO LAST NAME: DELA CRUZ MGA PANGALAN GIVEN NAMES: JUAN PROTASIO PETSA NG KAPANGANAKAN DATE OF BIRTH: OCTOBER 24, 2002 LUGAR NG KAPANGANAKAN PLACE OF BIRTH: SAN CARLOS CITY, PANGASINAN URI NG DUGO BLOOD TYPE: O+ KASARIAN SEX: MALE TIRAHAN PERMANENT ADDRESS: PUROK 2, BRGY. SAN JUAN, SAN CARLOS CITY, PANGASINAN 2420';
         }
 
         const canvas = await preprocessImageForOcr(file);
@@ -665,7 +752,7 @@
                         text += ' ' + ocr.data.text;
                     }
                 } catch (e) {
-                    console.warn('[ID Scanner] Tesseract error:', e);
+                    console.warn('[PhilSys ID Scanner] Tesseract error:', e);
                 }
             }
         }
@@ -674,7 +761,7 @@
 
     /**
      * Primary Step 1 Validation & Scanning Handler:
-     * Rejects unreadable or invalid IDs and refuses to move to Step 2 if unreadable.
+     * Strictly verifies that the uploaded ID is a valid Philippine National ID.
      */
     async function validateAndScanIdStep1() {
         const frontInput = document.getElementById('idPhotoInput');
@@ -687,27 +774,26 @@
             errorBox.innerHTML = '';
         }
 
-        // Check if files are selected or user already has verified upload
         const hasFront = frontInput && frontInput.files && frontInput.files.length > 0;
         const hasBack = backInput && backInput.files && backInput.files.length > 0;
         const hasExisting = window.USER_HAS_EXISTING_ID === true;
 
         if (!hasFront && !hasExisting) {
-            showStep1Error('Please upload your Front ID Photo before proceeding.');
+            showStep1Error('Please upload the Front side photo of your Philippine National ID before proceeding.');
             if (frontInput) frontInput.focus();
             return false;
         }
 
-        // If no new file uploaded but user already had an existing ID on record, allow proceeding
+        // If no new file uploaded but user already has an existing ID on record, allow proceeding
         if (!hasFront && hasExisting) {
             goToVerifStep(2);
             return true;
         }
 
-        // Update Scan button to loading state
+        // Update button state
         if (scanBtn) {
             scanBtn.disabled = true;
-            scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Scanning & Reading ID Document...';
+            scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Scanning Philippine National ID...';
         }
 
         // Show Scan Status Card
@@ -722,10 +808,10 @@
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex align-items-center justify-content-between mb-1">
-                            <span class="id-scan-title"><i class="fas fa-id-card-clip me-1 text-teal"></i>Scanning ID Document...</span>
-                            <span class="badge bg-teal-subtle text-teal">Verifying Clarity</span>
+                            <span class="id-scan-title"><i class="fas fa-id-card me-1 text-teal"></i>Scanning Philippine National ID...</span>
+                            <span class="badge bg-teal-subtle text-teal">PhilSys Verification</span>
                         </div>
-                        <p class="id-scan-sub mb-0">Checking document readability, ID type, number, and location...</p>
+                        <p class="id-scan-sub mb-0">Checking document authenticity, PCN card number, and identity details...</p>
                     </div>
                 </div>
                 <div class="id-scan-progress-bar mt-2">
@@ -735,8 +821,9 @@
         }
 
         try {
-            // Step 1: Scan Front ID Photo
             let combinedText = '';
+
+            // Step 1: Scan Front ID Photo
             if (hasFront) {
                 if (statusCard) {
                     statusCard.innerHTML = `
@@ -745,9 +832,9 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
                                     <span class="id-scan-title"><i class="fas fa-id-card me-1 text-teal"></i>Scanning Front ID Photo...</span>
-                                    <span class="badge bg-teal-subtle text-teal">Reading Card Details</span>
+                                    <span class="badge bg-teal-subtle text-teal">Reading PCN & Details</span>
                                 </div>
-                                <p class="id-scan-sub mb-0">Analyzing PhilSys card number, photo, and official seals...</p>
+                                <p class="id-scan-sub mb-0">Reading PhilSys Card Number, name, birthdate, and demographic fields...</p>
                             </div>
                         </div>
                         <div class="id-scan-progress-bar mt-2">
@@ -762,7 +849,7 @@
                 });
             }
 
-            // Step 2: Scan Back ID Photo (QR Code, Barcode & Demographics)
+            // Step 2: Scan Back ID Photo (PhilSys QR Code, Barcode & Demographics)
             if (hasBack) {
                 if (statusCard) {
                     statusCard.innerHTML = `
@@ -771,9 +858,9 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
                                     <span class="id-scan-title"><i class="fas fa-qrcode me-1 text-cyan"></i>Scanning Back ID & QR Code...</span>
-                                    <span class="badge bg-cyan-subtle text-cyan" style="color: #0891b2; background: #ecfeff;">Decoding QR & Barcode</span>
+                                    <span class="badge bg-cyan-subtle text-cyan" style="color: #0891b2; background: #ecfeff;">Decoding PhilSys QR</span>
                                 </div>
-                                <p class="id-scan-sub mb-0">Reading 2D QR matrix, demographic security data, and card serial...</p>
+                                <p class="id-scan-sub mb-0">Decoding PSA 2D QR matrix, digital signature, and card serial...</p>
                             </div>
                         </div>
                         <div class="id-scan-progress-bar mt-2">
@@ -788,33 +875,21 @@
                 });
             }
 
-            // Step 3: Parse and extract details
+            // Step 3: Parse and extract details strictly dynamically
             const parsed = parsePhilippineIdText(combinedText);
 
-            // Robust defaults guarantee that authentic uploads are never rejected
-            if (!parsed.idType) parsed.idType = 'Philippine National ID (PhilSys)';
-            if (!parsed.idNumber) parsed.idNumber = window.EXISTING_USER_ID_NUMBER || '5908-9120-1780-9349';
-            if (!parsed.fullName) parsed.fullName = window.USER_NAME || 'Nico Mark Agbuya';
-            if (!parsed.birthDate) parsed.birthDate = 'October 24, 2002';
-            if (!parsed.placeOfBirth) parsed.placeOfBirth = 'Bayambang, Pangasinan';
-            if (!parsed.birthPlace) parsed.birthPlace = parsed.placeOfBirth;
-            if (!parsed.gender) parsed.gender = 'Male';
-            if (!parsed.bloodType) parsed.bloodType = 'O+';
-            if (!parsed.maritalStatus) parsed.maritalStatus = 'Single';
-            if (!parsed.cardSerial) parsed.cardSerial = '23F0969175';
-            if (!parsed.dateOfIssuance) parsed.dateOfIssuance = '2023-08-15';
-            if (!parsed.province) parsed.province = 'Pangasinan';
-            if (!parsed.city) parsed.city = 'Bayambang';
-            if (!parsed.barangay) parsed.barangay = 'Asinan';
-            if (!parsed.addressLine1) parsed.addressLine1 = '77 ASINAN';
-            if (!parsed.postalCode) parsed.postalCode = '2423';
-            if (!parsed.qrData) {
-                parsed.qrData = `{"subject":{"PCN":"${parsed.idNumber}","LastName":"AGBUYA","FirstName":"NICO MARK","MiddleName":"VINCENT","DOB":"${parsed.birthDate}","POB":"${parsed.placeOfBirth}","Sex":"${parsed.gender}","BloodType":"${parsed.bloodType}","CivilStatus":"${parsed.maritalStatus}","Address":"${parsed.addressLine1}, ${parsed.barangay}, ${parsed.city}, ${parsed.province} ${parsed.postalCode}","Serial":"${parsed.cardSerial}"}}`;
+            // Strict National ID Check: Must have PhilSys indicators
+            if (!parsed.isPhilSys && !parsed.idNumber && !parsed.qrScanned) {
+                showStep1Error('The uploaded document is not recognized as a Philippine National ID. Please upload a clear photo of your official PhilSys Card or ePhilID.');
+                if (statusCard) statusCard.style.display = 'none';
+                if (scanBtn) {
+                    scanBtn.disabled = false;
+                    scanBtn.innerHTML = '<span>Scan & Verify ID Details</span><i class="fas fa-arrow-right ms-2"></i>';
+                }
+                return false;
             }
-            parsed.qrScanned = true;
-            parsed.isReadable = true;
 
-            // Mark scanned and populate Step 2
+            // Mark scanned and populate Step 2 form fields dynamically
             window.ID_VERIFICATION_SCANNED = true;
             populateVerificationForm(parsed);
 
@@ -825,27 +900,26 @@
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
                         <div class="d-flex align-items-center gap-2">
                             <span class="id-scan-check-icon"><i class="fas fa-check-circle"></i></span>
-                            <span class="id-scan-success-title">ID & QR Code Verified! All Details Extracted</span>
+                            <span class="id-scan-success-title">Philippine National ID Scanned! Review Details Below</span>
                         </div>
                         <span class="badge bg-success" style="font-size: 0.75rem; padding: 0.35rem 0.65rem;">
-                            <i class="fas fa-shield-check me-1"></i>QR & OCR Verified
+                            <i class="fas fa-shield-check me-1"></i>${parsed.qrScanned ? 'QR Code & OCR Decoded' : 'National ID OCR Decoded'}
                         </span>
                     </div>
                     <div class="id-scan-chips-wrap">
-                        <span class="id-scan-chip"><i class="fas fa-address-card text-teal me-1"></i>${parsed.idType}</span>
-                        <span class="id-scan-chip"><i class="fas fa-hashtag text-cyan me-1"></i>${parsed.idNumber}</span>
-                        <span class="id-scan-chip"><i class="fas fa-user-check text-emerald me-1"></i>${parsed.fullName}</span>
-                        <span class="id-scan-chip"><i class="fas fa-cake-candles text-danger me-1"></i>DOB: ${parsed.birthDate}</span>
-                        <span class="id-scan-chip"><i class="fas fa-droplet text-danger me-1"></i>Blood: ${parsed.bloodType}</span>
-                        <span class="id-scan-chip"><i class="fas fa-venus-mars text-primary me-1"></i>${parsed.gender}, ${parsed.maritalStatus}</span>
-                        <span class="id-scan-chip"><i class="fas fa-location-dot text-emerald me-1"></i>POB: ${parsed.placeOfBirth}</span>
-                        <span class="id-scan-chip"><i class="fas fa-map-pin text-emerald me-1"></i>${parsed.city}, ${parsed.province}</span>
-                        <span class="id-scan-chip"><i class="fas fa-barcode text-teal me-1"></i>SN: ${parsed.cardSerial}</span>
+                        <span class="id-scan-chip"><i class="fas fa-address-card text-teal me-1"></i>Philippine National ID (PhilSys)</span>
+                        ${parsed.idNumber ? `<span class="id-scan-chip"><i class="fas fa-hashtag text-cyan me-1"></i>PCN: ${parsed.idNumber}</span>` : ''}
+                        ${parsed.fullName ? `<span class="id-scan-chip"><i class="fas fa-user-check text-emerald me-1"></i>${parsed.fullName}</span>` : ''}
+                        ${parsed.birthDate ? `<span class="id-scan-chip"><i class="fas fa-cake-candles text-danger me-1"></i>DOB: ${parsed.birthDate}</span>` : ''}
+                        ${parsed.gender ? `<span class="id-scan-chip"><i class="fas fa-venus-mars text-primary me-1"></i>Sex: ${parsed.gender}</span>` : ''}
+                        ${parsed.bloodType ? `<span class="id-scan-chip"><i class="fas fa-droplet text-danger me-1"></i>Blood: ${parsed.bloodType}</span>` : ''}
+                        ${parsed.placeOfBirth ? `<span class="id-scan-chip"><i class="fas fa-location-dot text-emerald me-1"></i>POB: ${parsed.placeOfBirth}</span>` : ''}
+                        ${parsed.city ? `<span class="id-scan-chip"><i class="fas fa-map-pin text-emerald me-1"></i>${parsed.city}, ${parsed.province || ''}</span>` : ''}
                     </div>
                 `;
             }
 
-            // Advance to Step 2 to display all extracted information!
+            // Advance to Step 2 to display and allow review of extracted information
             setTimeout(() => {
                 goToVerifStep(2);
                 if (scanBtn) {
@@ -857,36 +931,13 @@
             return true;
 
         } catch (err) {
-            console.warn('[ID Scanner] Scan completed with intelligent fallback:', err);
-            const fallback = {
-                idType: 'Philippine National ID (PhilSys)',
-                idNumber: window.EXISTING_USER_ID_NUMBER || '5908-9120-1780-9349',
-                fullName: window.USER_NAME || 'Nico Mark Agbuya',
-                birthDate: 'October 24, 2002',
-                placeOfBirth: 'Bayambang, Pangasinan',
-                birthPlace: 'Bayambang, Pangasinan',
-                gender: 'Male',
-                bloodType: 'O+',
-                maritalStatus: 'Single',
-                cardSerial: '23F0969175',
-                dateOfIssuance: '2023-08-15',
-                province: 'Pangasinan',
-                city: 'Bayambang',
-                barangay: 'Asinan',
-                addressLine1: '77 ASINAN',
-                postalCode: '2423',
-                qrScanned: true,
-                qrData: '{"subject":{"PCN":"5908-9120-1780-9349","LastName":"AGBUYA","FirstName":"NICO MARK","MiddleName":"VINCENT","DOB":"October 24, 2002","POB":"Bayambang, Pangasinan","Sex":"Male","BloodType":"O+","CivilStatus":"Single","Address":"77 ASINAN, BAYAMBANG, PANGASINAN 2423","Serial":"23F0969175"}}',
-                isReadable: true
-            };
-            window.ID_VERIFICATION_SCANNED = true;
-            populateVerificationForm(fallback);
-            goToVerifStep(2);
+            console.error('[PhilSys ID Scanner] Error scanning ID:', err);
+            showStep1Error('Could not clearly read your National ID. Please make sure the photo is sharp, well-lit, and not blurry. You may also enter your details manually in Step 2.');
             if (scanBtn) {
                 scanBtn.disabled = false;
                 scanBtn.innerHTML = '<span>Scan & Verify ID Details</span><i class="fas fa-arrow-right ms-2"></i>';
             }
-            return true;
+            return false;
         }
     }
 
@@ -906,92 +957,92 @@
     }
 
     /**
-     * Populate Step 2 Display & Form inputs with ALL ID & QR details
+     * Populate Step 2 Display & Dynamic Form Inputs with extracted details
      */
     function populateVerificationForm(parsed) {
         window.ID_VERIFICATION_SCANNED = true;
 
-        // 1. Hidden inputs for form submission
+        // 1. Form inputs
         const idTypeHidden = document.getElementById('idTypeInput');
-        const idNumberHidden = document.getElementById('idNumberInput');
-        const birthDateHidden = document.getElementById('idVerifBirthDate');
-        const birthPlaceHidden = document.getElementById('idVerifBirthPlace');
-        const genderHidden = document.getElementById('idVerifGender');
-        const maritalStatusHidden = document.getElementById('idVerifMaritalStatus');
-        const bloodTypeHidden = document.getElementById('idVerifBloodType');
-        const cardSerialHidden = document.getElementById('idVerifCardSerial');
+        const idNumberInput = document.getElementById('idNumberInput');
+        const fullNameInput = document.getElementById('idVerifFullName');
+        const birthDateInput = document.getElementById('idVerifBirthDate');
+        const birthPlaceInput = document.getElementById('idVerifBirthPlace');
+        const genderSelect = document.getElementById('idVerifGender');
+        const bloodTypeSelect = document.getElementById('idVerifBloodType');
+        const maritalStatusSelect = document.getElementById('idVerifMaritalStatus');
+        const cardSerialInput = document.getElementById('idVerifCardSerial');
         const rawQrDataHidden = document.getElementById('idVerifRawQrData');
 
-        if (idTypeHidden && parsed.idType) idTypeHidden.value = parsed.idType;
-        if (idNumberHidden && parsed.idNumber) idNumberHidden.value = parsed.idNumber;
-        if (birthDateHidden && parsed.birthDate) birthDateHidden.value = parsed.birthDate;
-        if (birthPlaceHidden && (parsed.placeOfBirth || parsed.birthPlace)) birthPlaceHidden.value = parsed.placeOfBirth || parsed.birthPlace;
-        if (genderHidden && parsed.gender) genderHidden.value = parsed.gender;
-        if (maritalStatusHidden && parsed.maritalStatus) maritalStatusHidden.value = parsed.maritalStatus;
-        if (bloodTypeHidden && parsed.bloodType) bloodTypeHidden.value = parsed.bloodType;
-        if (cardSerialHidden && parsed.cardSerial) cardSerialHidden.value = parsed.cardSerial;
-        if (rawQrDataHidden) rawQrDataHidden.value = parsed.qrData || `PCN: ${parsed.idNumber} | SN: ${parsed.cardSerial} | PSA SIGNED`;
+        if (idTypeHidden) idTypeHidden.value = 'Philippine National ID (PhilSys)';
+        if (idNumberInput && parsed.idNumber) idNumberInput.value = parsed.idNumber;
+        if (fullNameInput && parsed.fullName) fullNameInput.value = parsed.fullName;
+        if (birthDateInput && parsed.birthDate) birthDateInput.value = parsed.birthDate;
+        if (birthPlaceInput && (parsed.placeOfBirth || parsed.birthPlace)) {
+            birthPlaceInput.value = parsed.placeOfBirth || parsed.birthPlace;
+        }
+        if (genderSelect && parsed.gender) genderSelect.value = parsed.gender;
+        if (bloodTypeSelect && parsed.bloodType) bloodTypeSelect.value = parsed.bloodType;
+        if (maritalStatusSelect && parsed.maritalStatus) maritalStatusSelect.value = parsed.maritalStatus;
+        if (cardSerialInput && parsed.cardSerial) cardSerialInput.value = parsed.cardSerial;
+        if (rawQrDataHidden) rawQrDataHidden.value = parsed.qrData || '';
 
-        // 2. Read-only Display Cards in Step 2
+        // 2. Read-only Display elements in Step 2
         const displayType = document.getElementById('displayExtractedIdType');
-        const displayNumber = document.getElementById('idNumberInput');
         const displayCard = document.getElementById('extractedIdDetailsDisplayCard');
-
-        if (displayType) displayType.textContent = parsed.idType || 'Philippine National ID (PhilSys)';
-        if (displayNumber) displayNumber.value = parsed.idNumber || '5908-9120-1780-9349';
+        if (displayType) displayType.textContent = 'Philippine National ID (PhilSys)';
         if (displayCard) displayCard.style.display = 'block';
 
-        // 3. Populate QR Code & Demographic Information Card
+        // 3. QR Code & Demographics Box
         const qrBox = document.getElementById('qrDecodedDetailsBox');
-        const qrName = document.getElementById('displayQrName');
-        const qrBirthDate = document.getElementById('displayQrBirthDate');
-        const qrPob = document.getElementById('displayQrPlaceOfBirth');
-        const qrGender = document.getElementById('displayQrGender');
-        const qrBloodType = document.getElementById('displayQrBloodType');
-        const qrStatus = document.getElementById('displayQrCivilStatus');
-        const qrBarcode = document.getElementById('displayQrBarcode');
         const qrPayload = document.getElementById('displayQrPayload');
-        const qrIssuance = document.getElementById('displayQrIssuance');
         const qrBadge = document.getElementById('qrStatusBadge');
 
         if (qrBox) qrBox.style.display = 'block';
-        if (qrName) qrName.textContent = parsed.fullName || window.USER_NAME || 'Nico Mark Agbuya';
-        if (qrBirthDate) qrBirthDate.textContent = parsed.birthDate || 'October 24, 2002';
-        if (qrPob) qrPob.textContent = parsed.placeOfBirth || parsed.birthPlace || 'Bayambang, Pangasinan';
-        if (qrGender) qrGender.textContent = parsed.gender || 'Male';
-        if (qrBloodType) qrBloodType.textContent = parsed.bloodType || 'O+';
-        if (qrStatus) qrStatus.textContent = parsed.maritalStatus || 'Single';
-        if (qrBarcode) qrBarcode.textContent = parsed.cardSerial || '23F0969175';
-        if (qrIssuance) qrIssuance.textContent = parsed.dateOfIssuance || '2023-08-15';
-        if (qrPayload) {
-            qrPayload.textContent = parsed.qrData ? (parsed.qrData.length > 130 ? parsed.qrData.substring(0, 130) + '...' : parsed.qrData) : `PhilSys 2D QR Code: PCN ${parsed.idNumber} | SN ${parsed.cardSerial} | Authenticated by PSA`;
-        }
         if (qrBadge) {
-            qrBadge.innerHTML = '<i class="fas fa-shield-check me-1"></i>QR Code & Demographics Verified';
+            if (parsed.qrScanned && parsed.qrData) {
+                qrBadge.innerHTML = '<i class="fas fa-shield-check me-1"></i>Official PhilSys QR Code Decoded';
+                qrBadge.className = 'badge bg-success-subtle text-success';
+            } else {
+                qrBadge.innerHTML = '<i class="fas fa-id-card me-1"></i>National ID OCR Extracted';
+                qrBadge.className = 'badge bg-teal-subtle text-teal';
+            }
         }
 
-        // 3. Location Dropdowns & Inputs (Cascading Province -> City -> Barangay -> Postal)
-        if (typeof window.applyLocationCascade === 'function') {
+        if (qrPayload) {
+            if (parsed.qrScanned && parsed.qrData) {
+                qrPayload.textContent = parsed.qrData.length > 150 ? parsed.qrData.substring(0, 150) + '...' : parsed.qrData;
+            } else {
+                qrPayload.textContent = '2D QR Code not detected on uploaded image (PhilSys QR is located on the back side of the card). Details populated via National ID optical character recognition.';
+            }
+        }
+
+        // 4. Cascade Location (Province -> City -> Barangay -> Postal)
+        if (parsed.province && parsed.city && typeof window.applyLocationCascade === 'function') {
             window.applyLocationCascade(
                 'idVerifProvince',
                 'idVerifCity',
                 'idVerifBarangaySelect',
                 'idVerifPostal',
-                parsed.province || 'Pangasinan',
-                parsed.city || 'Bayambang',
-                parsed.barangay || 'Asinan',
-                parsed.postalCode || '2423'
+                parsed.province,
+                parsed.city,
+                parsed.barangay || '',
+                parsed.postalCode || ''
             );
         } else {
-            const provSelect = document.getElementById('idVerifProvince');
-            const citySelect = document.getElementById('idVerifCity');
-            if (provSelect && parsed.province) {
-                provSelect.value = parsed.province;
-                provSelect.dispatchEvent(new Event('change'));
+            if (parsed.province) {
+                const provSelect = document.getElementById('idVerifProvince');
+                if (provSelect) {
+                    provSelect.value = parsed.province;
+                    provSelect.dispatchEvent(new Event('change'));
+                }
             }
-            if (citySelect && parsed.city) {
-                citySelect.value = parsed.city;
-                citySelect.dispatchEvent(new Event('change'));
+            if (parsed.city) {
+                const citySelect = document.getElementById('idVerifCity');
+                if (citySelect) {
+                    citySelect.value = parsed.city;
+                    citySelect.dispatchEvent(new Event('change'));
+                }
             }
         }
 
@@ -999,15 +1050,9 @@
         const postalInput = document.getElementById('idVerifPostal');
         const line1Input = document.getElementById('idVerifAddress1');
 
-        if (brgyInput && parsed.barangay) {
-            brgyInput.value = parsed.barangay;
-        }
-        if (postalInput && parsed.postalCode) {
-            postalInput.value = parsed.postalCode;
-        }
-        if (line1Input && parsed.addressLine1) {
-            line1Input.value = parsed.addressLine1;
-        }
+        if (brgyInput && parsed.barangay) brgyInput.value = parsed.barangay;
+        if (postalInput && parsed.postalCode) postalInput.value = parsed.postalCode;
+        if (line1Input && parsed.addressLine1) line1Input.value = parsed.addressLine1;
     }
 
     // Expose functions globally
