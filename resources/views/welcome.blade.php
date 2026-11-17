@@ -823,8 +823,8 @@
                             <div class="row g-2 text-center">
                                 <div class="col-4">
                                     <div style="background: #f8fafc; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
-                                        <small style="color: #64748b; font-size: 0.72rem; display: block; font-weight: 700;">CO₂ SAVED</small>
-                                        <strong style="color: #0d9488; font-size: 1.05rem;">{{ number_format($totalCarbonSaved, 1) }} kg</strong>
+                                        <small style="color: #64748b; font-size: 0.72rem; display: block; font-weight: 700;">CIRCULAR LISTINGS</small>
+                                        <strong style="color: #0d9488; font-size: 1.05rem;">{{ number_format($totalListings) }}</strong>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -1044,9 +1044,9 @@
                                                 <span style="font-size: 0.75rem; font-weight: 800; color: var(--eco-primary); text-transform: uppercase;">
                                                     {{ $listing->category ?: ($listing->deviceType?->name ?: 'Device') }}
                                                 </span>
-                                                @if($listing->carbon_footprint)
-                                                    <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">
-                                                        <i class="fas fa-leaf me-1"></i>-{{ $listing->carbon_footprint }}kg CO₂
+                                                @if($listing->estimated_weight)
+                                                    <span style="font-size: 0.75rem; color: #0284c7; font-weight: 700;">
+                                                        <i class="fas fa-weight-hanging me-1"></i>{{ number_format($listing->estimated_weight, 2) }} kg
                                                     </span>
                                                 @endif
                                             </div>
@@ -1203,7 +1203,7 @@
                         </div>
                         <div>
                             <h6 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 0.95rem;">Eco-Impact Certificate</h6>
-                            <small style="color: #64748b; font-size: 0.8rem;">Official CO₂ & landfill diversion proof</small>
+                            <small style="color: #64748b; font-size: 0.8rem;">Official e-waste & landfill diversion proof</small>
                         </div>
                     </div>
                 </div>
@@ -1223,7 +1223,7 @@
         </div>
     </section>
 
-    <!-- 4. INTERACTIVE E-WASTE VALUATION & CARBON CALCULATOR -->
+    <!-- 4. INTERACTIVE E-WASTE VALUATION & ESTIMATOR -->
     <section class="py-5" id="calculator" style="background: #ffffff;">
         <div class="container py-4">
             <div class="eb-calc-wrapper">
@@ -1236,7 +1236,7 @@
                             Calculate Your Device's <span class="gradient-text">Cash & Eco Impact</span>
                         </h2>
                         <p style="color: #94a3b8; font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
-                            Select your device category and physical condition. See instant fair-market cash estimates and real carbon emissions saved from entering landfills.
+                            Select your device category and physical condition. See instant fair-market cash estimates and certified scrap weight diverted from landfills.
                         </p>
 
                         <!-- Calculator Inputs -->
@@ -1282,14 +1282,14 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-6">
                                     <div style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.08);">
-                                        <div style="color: #34d399; font-size: 1.4rem; font-weight: 900;" id="calc-res-co2">50 kg</div>
-                                        <small style="color: #cbd5e1; font-size: 0.8rem; font-weight: 600;"><i class="fas fa-leaf me-1"></i>CO₂ Footprint Prevented</small>
+                                        <div style="color: #38bdf8; font-size: 1.4rem; font-weight: 900;" id="calc-res-weight">0.25 kg</div>
+                                        <small style="color: #cbd5e1; font-size: 0.8rem; font-weight: 600;"><i class="fas fa-weight-hanging me-1"></i>E-Waste Diverted</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.08);">
-                                        <div style="color: #38bdf8; font-size: 1.4rem; font-weight: 900;" id="calc-res-weight">0.25 kg</div>
-                                        <small style="color: #cbd5e1; font-size: 0.8rem; font-weight: 600;"><i class="fas fa-weight-hanging me-1"></i>E-Waste Diverted</small>
+                                        <div style="color: #34d399; font-size: 1.4rem; font-weight: 900;" id="calc-res-status">100% Recyclable</div>
+                                        <small style="color: #cbd5e1; font-size: 0.8rem; font-weight: 600;"><i class="fas fa-recycle me-1"></i>Recovery Potential</small>
                                     </div>
                                 </div>
                             </div>
@@ -1433,9 +1433,9 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="eb-step-card">
                         <div class="eb-step-num">4</div>
-                        <h4 style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin-bottom: 0.75rem;">Payout & Carbon Log</h4>
+                        <h4 style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin-bottom: 0.75rem;">Payout & Recycling Log</h4>
                         <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">
-                            Receive your payment, track your carbon savings, and get your environmental certificate.
+                            Receive your payment, track your e-waste diversion, and get your environmental certificate.
                         </p>
                     </div>
                 </div>
@@ -1455,11 +1455,11 @@
             <div class="row g-4 text-center">
                 <div class="col-md-6 col-lg-3">
                     <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 1.5rem; padding: 2.25rem 1.5rem; backdrop-filter: blur(10px);">
-                        <div style="font-size: 2.5rem; color: #34d399; margin-bottom: 0.75rem;"><i class="fas fa-cloud-arrow-down"></i></div>
+                        <div style="font-size: 2.5rem; color: #34d399; margin-bottom: 0.75rem;"><i class="fas fa-boxes-stacked"></i></div>
                         <div style="font-size: 2.4rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;">
-                            {{ number_format($totalCarbonSaved, 0) }} kg
+                            {{ number_format($totalListings, 0) }}
                         </div>
-                        <span style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">CO₂ Emissions Prevented</span>
+                        <span style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">E-Waste Devices Cataloged</span>
                     </div>
                 </div>
 
@@ -1595,42 +1595,42 @@
         // Pricing Matrix (in PHP)
         const pricingMatrix = {
             'smartphone': {
-                'working': { cash: '₱3,500 - ₱12,000', co2: '50 kg', weight: '0.22 kg' },
-                'minor_damage': { cash: '₱1,800 - ₱6,000', co2: '45 kg', weight: '0.22 kg' },
-                'major_damage': { cash: '₱800 - ₱2,500', co2: '35 kg', weight: '0.22 kg' },
-                'non_functional': { cash: '₱300 - ₱1,000', co2: '25 kg', weight: '0.22 kg' }
+                'working': { cash: '₱3,500 - ₱12,000', recovery: '100% Reusable', weight: '0.22 kg' },
+                'minor_damage': { cash: '₱1,800 - ₱6,000', recovery: 'Screen / Battery Harvest', weight: '0.22 kg' },
+                'major_damage': { cash: '₱800 - ₱2,500', recovery: 'Board & Component Salvage', weight: '0.22 kg' },
+                'non_functional': { cash: '₱300 - ₱1,000', recovery: 'Precious Metals Recovery', weight: '0.22 kg' }
             },
             'laptop': {
-                'working': { cash: '₱8,000 - ₱25,000', co2: '250 kg', weight: '1.85 kg' },
-                'minor_damage': { cash: '₱4,500 - ₱12,000', co2: '210 kg', weight: '1.85 kg' },
-                'major_damage': { cash: '₱2,000 - ₱5,500', co2: '160 kg', weight: '1.85 kg' },
-                'non_functional': { cash: '₱800 - ₱2,500', co2: '120 kg', weight: '1.85 kg' }
+                'working': { cash: '₱8,000 - ₱25,000', recovery: '100% Reusable', weight: '1.85 kg' },
+                'minor_damage': { cash: '₱4,500 - ₱12,000', recovery: 'RAM / SSD / Screen Harvest', weight: '1.85 kg' },
+                'major_damage': { cash: '₱2,000 - ₱5,500', recovery: 'Chassis & Motherboard Salvage', weight: '1.85 kg' },
+                'non_functional': { cash: '₱800 - ₱2,500', recovery: 'Copper & Precious Metals', weight: '1.85 kg' }
             },
             'desktop': {
-                'working': { cash: '₱10,000 - ₱30,000', co2: '400 kg', weight: '7.50 kg' },
-                'minor_damage': { cash: '₱5,000 - ₱15,000', co2: '320 kg', weight: '7.50 kg' },
-                'major_damage': { cash: '₱2,500 - ₱7,000', co2: '250 kg', weight: '7.50 kg' },
-                'non_functional': { cash: '₱1,200 - ₱3,500', co2: '180 kg', weight: '7.50 kg' }
+                'working': { cash: '₱10,000 - ₱30,000', recovery: '100% Reusable', weight: '7.50 kg' },
+                'minor_damage': { cash: '₱5,000 - ₱15,000', recovery: 'GPU / PSU / Storage Harvest', weight: '7.50 kg' },
+                'major_damage': { cash: '₱2,500 - ₱7,000', recovery: 'Steel & Circuit Salvage', weight: '7.50 kg' },
+                'non_functional': { cash: '₱1,200 - ₱3,500', recovery: 'Bulk Electronic Scrap', weight: '7.50 kg' }
             },
             'tablet': {
-                'working': { cash: '₱4,000 - ₱14,000', co2: '80 kg', weight: '0.48 kg' },
-                'minor_damage': { cash: '₱2,000 - ₱7,000', co2: '65 kg', weight: '0.48 kg' },
-                'major_damage': { cash: '₱1,000 - ₱3,000', co2: '50 kg', weight: '0.48 kg' },
-                'non_functional': { cash: '₱400 - ₱1,200', co2: '35 kg', weight: '0.48 kg' }
+                'working': { cash: '₱4,000 - ₱14,000', recovery: '100% Reusable', weight: '0.48 kg' },
+                'minor_damage': { cash: '₱2,000 - ₱7,000', recovery: 'Display / Battery Harvest', weight: '0.48 kg' },
+                'major_damage': { cash: '₱1,000 - ₱3,000', recovery: 'Component Salvage', weight: '0.48 kg' },
+                'non_functional': { cash: '₱400 - ₱1,200', recovery: 'Certified Recycling', weight: '0.48 kg' }
             },
             'bulk_lot': {
-                'working': { cash: '₱15,000 - ₱50,000+', co2: '650 kg', weight: '12.00 kg' },
-                'minor_damage': { cash: '₱8,000 - ₱25,000', co2: '520 kg', weight: '12.00 kg' },
-                'major_damage': { cash: '₱4,000 - ₱12,000', co2: '400 kg', weight: '12.00 kg' },
-                'non_functional': { cash: '₱2,500 - ₱8,000', co2: '300 kg', weight: '12.00 kg' }
+                'working': { cash: '₱15,000 - ₱50,000+', recovery: 'Multi-Unit Refurbish', weight: '12.00 kg' },
+                'minor_damage': { cash: '₱8,000 - ₱25,000', recovery: 'Wholesale Parts Harvest', weight: '12.00 kg' },
+                'major_damage': { cash: '₱4,000 - ₱12,000', recovery: 'Industrial Scrap Recovery', weight: '12.00 kg' },
+                'non_functional': { cash: '₱2,500 - ₱8,000', recovery: 'Certified Smelting & Refining', weight: '12.00 kg' }
             }
         };
 
         const result = pricingMatrix[device] ? pricingMatrix[device][condition] : null;
         if (result) {
-            document.getElementById('calc-res-cash').textContent = result.cash;
-            document.getElementById('calc-res-co2').textContent = result.co2;
-            document.getElementById('calc-res-weight').textContent = result.weight;
+            if (document.getElementById('calc-res-cash')) document.getElementById('calc-res-cash').textContent = result.cash;
+            if (document.getElementById('calc-res-status')) document.getElementById('calc-res-status').textContent = result.recovery;
+            if (document.getElementById('calc-res-weight')) document.getElementById('calc-res-weight').textContent = result.weight;
         }
     }
 

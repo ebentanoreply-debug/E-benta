@@ -560,8 +560,14 @@ class ListingController extends Controller
     /**
      * Show a single listing.
      */
-    public function show(Listing $listing)
+    public function show($listing)
     {
+        $listingModel = $listing instanceof Listing ? $listing : Listing::find($listing);
+        if (!$listingModel) {
+            return redirect()->route('listings.index')->with('error', 'Listing not found.');
+        }
+        $listing = $listingModel;
+
         $userId = Auth::id();
         $isOwner = $userId && $userId === $listing->user_id;
         $isAdmin = Auth::user()?->isAdmin() ?? false;

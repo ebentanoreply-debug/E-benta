@@ -261,10 +261,10 @@
         color: #0f172a;
         line-height: 1;
     }
-    .m-card-co2 {
+    .m-card-weight {
         font-size: 0.72rem;
         font-weight: 700;
-        color: #10b981;
+        color: #0284c7;
     }
 
     /* List View Format */
@@ -516,7 +516,7 @@
                                 <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Newest Arrivals</option>
                                 <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                                 <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="co2_high" {{ request('sort') == 'co2_high' ? 'selected' : '' }}>Highest CO₂ Saved</option>
+                                <option value="weight_high" {{ request('sort') == 'weight_high' ? 'selected' : '' }}>Highest Weight Rescued</option>
                                 <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
                             </select>
                         </form>
@@ -587,9 +587,9 @@
                                                 {{ $listing->category ?: ($listing->deviceType?->name ?: 'Hardware') }}
                                             @endif
                                         </span>
-                                        @if($listing->carbon_footprint)
-                                            <span class="m-card-co2">
-                                                <i class="fas fa-leaf me-1"></i>-{{ $listing->carbon_footprint }}kg CO₂
+                                        @if($listing->estimated_weight)
+                                            <span class="m-card-weight" style="font-size: 0.72rem; font-weight: 700; color: #0284c7;">
+                                                <i class="fas fa-weight-hanging me-1"></i>{{ number_format($listing->estimated_weight, 2) }} kg
                                             </span>
                                         @endif
                                     </div>

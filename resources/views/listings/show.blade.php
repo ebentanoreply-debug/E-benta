@@ -291,11 +291,7 @@
                             </span>
                         @endif
 
-                        @if($listing->carbon_footprint > 0)
-                            <span class="pdp-badge-pill" style="background: rgba(13, 148, 136, 0.92); color: #fff;">
-                                <i class="fas fa-leaf me-1"></i>-{{ $listing->carbon_footprint }} kg CO₂ Impact
-                            </span>
-                        @endif
+
                     </div>
 
                     @if(!empty($photosList))
@@ -526,17 +522,17 @@
                             <div class="row g-3 text-center">
                                 <div class="col-sm-6">
                                     <div class="p-3 rounded-3 bg-white shadow-sm border border-success-subtle">
-                                        <small class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.75rem;">CO₂ Footprint Avoided</small>
+                                        <small class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.75rem;">Landfill E-Waste Diverted</small>
                                         <span class="fs-2 fw-bolder text-emerald" style="color: #10b981;">
-                                            {{ number_format($listing->carbon_footprint ?? 0, 1) }} <span class="fs-6 text-muted">kg</span>
+                                            {{ number_format($listing->estimated_weight ?? 0, 1) }} <span class="fs-6 text-muted">kg</span>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="p-3 rounded-3 bg-white shadow-sm border border-info-subtle">
-                                        <small class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.75rem;">E-Scrap Mass Rescued</small>
+                                        <small class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.75rem;">Circular Disposal Grade</small>
                                         <span class="fs-2 fw-bolder text-info" style="color: #0284c7;">
-                                            {{ number_format($listing->estimated_weight ?? 0, 1) }} <span class="fs-6 text-muted">kg</span>
+                                            {{ strtoupper($listing->condition ?? 'Salvage') }}
                                         </span>
                                     </div>
                                 </div>
@@ -870,7 +866,7 @@
                     <div class="pdp-trust-item">
                         <i class="fas fa-certificate text-primary fs-5 mt-1" style="color: #6366f1;"></i>
                         <div>
-                            <span class="fw-bold d-block" style="font-size: 0.88rem; color: #0f172a;">Certified Carbon Credits</span>
+                            <span class="fw-bold d-block" style="font-size: 0.88rem; color: #0f172a;">Certified E-Waste Recycling</span>
                             <small class="text-muted">Receive verifiable ESG e-waste diversion certificate upon completion.</small>
                         </div>
                     </div>

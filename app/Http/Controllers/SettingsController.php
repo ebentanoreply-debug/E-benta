@@ -23,6 +23,7 @@ class SettingsController extends Controller
                 'active_listings' => $user->listings()->where('status', 'available')->count(),
                 'sold_items' => $user->listings()->where('status', 'matched')->orWhere('status', 'processed')->count(),
                 'co2_saved' => round($user->total_co2_saved ?? 0, 2),
+                'weight_diverted' => round($user->total_weight_diverted ?? 0, 2),
                 'items_processed' => $user->items_processed ?? 0,
             ];
         }
