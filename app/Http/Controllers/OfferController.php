@@ -225,8 +225,40 @@ class OfferController extends Controller
     /**
      * Show a specific offer.
      */
-    public function show(Offer $offer, PayMongoService $payMongo, SellerWalletService $wallets)
+    public function show($offer, PayMongoService $payMongo, SellerWalletService $wallets)
     {
+        $offerModel = $offer instanceof Offer ? $offer : Offer::find($offer);
+
+        if (!$offerModel) {
+            // Check if the parameter passed was actually a listing ID (e.g. /offers/330006)
+            $listing = Listing::find($offer);
+            if ($listing) {
+                // If the user is the seller of this listing, take them to the offers list for this listing
+                if (Auth::check() && Auth::id() === $listing->user_id) {
+                    return redirect()->route('listings.offers', $listing);
+                }
+
+                // If user is a buyer, take them to their offer on this listing if one exists, or to create an offer
+                if (Auth::check() && Auth::user()->isBuyer()) {
+                    $existingOffer = Offer::where('listing_id', $listing->id)
+                        ->where('buyer_id', Auth::id())
+                        ->latest()
+                        ->first();
+                    if ($existingOffer) {
+                        return redirect()->route('offers.show', $existingOffer);
+                    }
+                    return redirect()->route('offers.create', $listing);
+                }
+
+                // Default to the listing PDP
+                return redirect()->route('listings.show', $listing);
+            }
+
+            return redirect()->route('listings.index')->with('error', 'The requested offer or listing was not found.');
+        }
+
+        $offer = $offerModel;
+
         // Only seller, buyer, or admin can view
         if (
             Auth::id() !== $offer->buyer_id &&

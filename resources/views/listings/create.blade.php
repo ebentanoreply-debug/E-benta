@@ -346,7 +346,7 @@
                             <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
                                 <i class="fas fa-shield-alt" style="color: var(--light-green); font-size: 1.25rem; margin-top: 0.2rem;"></i>
                                 <div style="color: #475569; font-size: 0.9rem;">
-                                    <strong style="color: #1e293b;">E-Benta Responsible Guarantee:</strong> Carbon footprint reduction is automatically recorded. Once transaction is complete, you will receive a verifiable <strong>Digital Certificate of Responsible Disposal</strong>.
+                                    <strong style="color: #1e293b;">E-Benta Responsible Guarantee:</strong> E-waste diversion is automatically recorded. Once transaction is complete, you will receive a verifiable <strong>Digital Certificate of Responsible Disposal</strong>.
                                 </div>
                             </div>
                         </div>

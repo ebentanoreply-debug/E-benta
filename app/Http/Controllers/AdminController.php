@@ -552,8 +552,7 @@ class AdminController extends Controller
         $csv .= "=== ENVIRONMENTAL IMPACT ===\n";
         $csv .= "Total E-waste Collected (kg)," . number_format($analytics['total_waste_diverted'] ?? 0, 2) . "\n";
         $csv .= "Total E-waste Collected (tons)," . number_format(($analytics['total_waste_diverted'] ?? 0) / 1000, 2) . "\n";
-        $csv .= "Carbon Emissions Reduced (kg)," . number_format($analytics['total_co2_saved'] ?? 0, 2) . "\n";
-        $csv .= "Carbon Emissions Reduced (metric tons)," . number_format(($analytics['total_co2_saved'] ?? 0) / 1000, 2) . "\n";
+
         $csv .= "Materials Recovered (kg)," . number_format($analytics['total_materials_recovered'] ?? 0, 2) . "\n\n";
 
         $csv .= "=== MATERIAL BREAKDOWN ===\n";

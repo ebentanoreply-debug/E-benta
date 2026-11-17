@@ -650,7 +650,7 @@
                         <i class="fas fa-recycle"></i>
                     </div>
                     <h5>Eco-Impact Tracking</h5>
-                    <p>Your approved account gains access to carbon reduction & e-waste sustainability certificates.</p>
+                    <p>Your approved account gains access to verified e-waste sustainability certificates.</p>
                 </div>
             </div>
         </div>

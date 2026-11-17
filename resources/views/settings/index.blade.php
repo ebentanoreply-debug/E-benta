@@ -2044,8 +2044,8 @@
                             <span class="stt-stat-label">Processed</span>
                         </div>
                         <div class="stt-stat">
-                            <span class="stt-stat-value">{{ $stats['co2_saved'] }}</span>
-                            <span class="stt-stat-label">kg CO₂ Saved</span>
+                            <span class="stt-stat-value">{{ $stats['weight_diverted'] ?? $stats['co2_saved'] ?? 0 }}</span>
+                            <span class="stt-stat-label">kg Diverted</span>
                         </div>
                     </div>
                     @endif

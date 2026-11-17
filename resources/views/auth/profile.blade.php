@@ -686,8 +686,8 @@
                                     <div class="stat-value">{{ auth()->user()->total_weight_diverted ?? 0 }}<span class="stat-unit">kg</span></div>
                                 </div>
                                 <div class="stat-item">
-                                    <div class="stat-label"><i class="fas fa-wind"></i>CO₂ Saved</div>
-                                    <div class="stat-value">{{ auth()->user()->total_co2_saved ?? 0 }}<span class="stat-unit">kg</span></div>
+                                    <div class="stat-label"><i class="fas fa-leaf"></i>Eco Score</div>
+                                    <div class="stat-value">{{ auth()->user()->total_impact_score ?? 0 }}<span class="stat-unit">pts</span></div>
                                 </div>
                                 <div class="stat-item">
                                     <div class="stat-label"><i class="fas fa-calendar"></i>Member Since</div>

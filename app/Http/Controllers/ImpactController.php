@@ -198,8 +198,8 @@ class ImpactController extends Controller
             <div class="impact-metrics">
                 <h3 style="text-align: center; color: #1a7a4d; margin-top: 0;">Environmental Impact Summary</h3>
                 <div class="metric">
-                    <span class="label">CO₂ Diverted from Atmosphere:</span>
-                    <span class="value">{$co2Saved} kg CO₂</span>
+                    <span class="label">Total Device Mass Managed:</span>
+                    <span class="value">{$deviceWeight} kg</span>
                 </div>
                 <div class="metric">
                     <span class="label">E-Waste Diverted from Landfill:</span>
